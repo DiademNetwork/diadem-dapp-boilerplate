@@ -1,0 +1,11 @@
+{
+  "extends": ["standard", "standard-react"],
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "plugins": ["react"],
+  "rules": {
+    "jsx-quotes": 0
+  }
+}

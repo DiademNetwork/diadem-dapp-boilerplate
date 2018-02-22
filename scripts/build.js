@@ -1,0 +1,53 @@
+#! /usr/bin/env node
+// Do not remove line above. Use to call this script without having to specify 'node'
+
+/*
+  Webpack build with development as default environment
+*/
+
+const fs = require('fs-extra')
+const webpack = require('webpack')
+const chalk = require('chalk')
+const path = require('path')
+
+const args = process.argv.slice(2)
+const env = args[0] || 'development'
+const DEFAULT_ENV = 'development'
+
+const getWebpackConfig = () => {
+  let target = path.join(__dirname, `../config/webpack.${env}.js`)
+  if (!fs.existsSync(target)) {
+    console.log(
+      chalk.yellow(`WARNING: No webpack.${env}, using webpack.${DEFAULT_ENV}`)
+    )
+    target = path.join(__dirname, `../config/webpack.${DEFAULT_ENV}`)
+  }
+  return require(target)
+}
+
+const buildWithWebpack = () => {
+  const webpackConfig = getWebpackConfig()
+  webpack(webpackConfig, (err, stats) => {
+    if (err) {
+      console.error(err.stack || err)
+      if (err.details) {
+        console.error(err.details)
+      }
+      return
+    }
+
+    const info = stats.toJson()
+
+    if (stats.hasErrors()) {
+      console.error(info.errors)
+    }
+
+    if (stats.hasWarnings()) {
+      console.warn(info.warnings)
+    }
+
+    console.log(chalk.green(`Webpack build successful`))
+  })
+}
+
+buildWithWebpack()

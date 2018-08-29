@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import stream from 'getstream'
 import { Contract, QtumRPC } from 'qtumjs'
+import FacebookLogin from 'react-facebook-login'
 import repoData from '../../../solar.development.json'
 
 const Wrapper = styled.div`
@@ -54,20 +55,35 @@ export class App extends Component {
     this.setState({ message })
   }
 
+  onLogin = ({ name }) => { // accessToken can be found here too if needed
+    this.setState({ user: name })
+  }
+
   render () {
     return (
       <Wrapper>
         <p>
           GetStream status: {this.client ? 'connected' : 'pending'}<br />
           Message from contract: {this.state.message}
+          <br />
+          <br />
+          <FacebookLogin
+            appId="2107292709536080"
+            autoLoad
+            fields="name,email,picture"
+            callback={this.onLogin} />
         </p>
+        <br />
+        <br />
+        User logged: {this.state.user}
       </Wrapper>
     )
   }
 }
 
 App.defaultProps = {
-  message: ''
+  message: '',
+  user: 'nobody'
 }
 
 export default App

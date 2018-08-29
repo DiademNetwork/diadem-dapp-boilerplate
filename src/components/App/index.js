@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import stream from 'getstream'
 import { Contract, QtumRPC } from 'qtumjs'
 import FacebookLogin from 'react-facebook-login'
-import repoData from '../../../solar.development.json'
+import repoData from '../../../solar.testnet.json'
 
 const Wrapper = styled.div`
   align-items: center;

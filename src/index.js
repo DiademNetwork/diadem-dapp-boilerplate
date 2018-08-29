@@ -1,5 +1,7 @@
+import '@babel/polyfill'
 import React from 'react'
 import App from './components/App'
+import ErrorBoundary from './components/ErrorBoundary'
 import ReactDOM from 'react-dom'
 import store from './store'
 import { Provider } from 'react-redux'
@@ -11,7 +13,9 @@ if (process.env.NODE_ENV !== 'production') {
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <ErrorBoundary>
+      <App />
+    </ErrorBoundary>
   </Provider>,
   document.getElementById('root-app')
 )

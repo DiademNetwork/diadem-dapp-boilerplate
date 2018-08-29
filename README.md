@@ -1,10 +1,10 @@
-# react-modern-boilerplate
+# diadem-network-client
 
-An **opiniated** (in term of technologies used) boilerplate for any modern React App.
+A client for diadem-network project
 
-View [DEMO](https://clement-bresson.github.io/react-modern-boilerplate/)
+Based on https://github.com/Clement-Bresson/react-modern-boilerplate.git boilerplate.
 
-## This boilerplate includes :
+## Boilerplate techs :
 
 * React 16
 * Redux (with a simple example)
@@ -15,16 +15,17 @@ View [DEMO](https://clement-bresson.github.io/react-modern-boilerplate/)
 * Eslint (Standard config)
 * Styled-components
 
-## Getting started
+## Develop
 
-1 - `git clone https://github.com/Clement-Bresson/react-modern-boilerplate.git`  
-2 - `cd react-modern-boilerplate`  
-3 - `npm install` or `yarn install`  
-4 - `npm start` or `yarn start`
+1 - `git clone https://github.com/Clement-Bresson/diadem-network-client`  
+2 - `cd diadem-network-client`  
+3 - `yarn install`  
+4 - `yarn start`
+5 - Go to `localhost:9000`
 
 ## Available scripts
 
-* `start` : start a development version of your app on `localhost9000`, in watch mode
+* `start` : start a development version of your app on `localhost:9000`, in watch mode
 * `build`: build a development version of you app in `dist` folder
 * `build-production`: build an optimized version of your app in `dist` folder
 * `lint` : run eslint for you project

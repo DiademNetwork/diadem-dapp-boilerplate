@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import stream from 'getstream'
 import { Contract, QtumRPC } from 'qtumjs'
 import FacebookLogin from 'react-facebook-login'
-import repoData from '../../../solar.testnet.json'
+import repoData from '../../../solar.development.json'
 
 const Wrapper = styled.div`
   align-items: center;
@@ -37,7 +37,7 @@ export class App extends Component {
   }
 
   initQtum () {
-    const rpc = new QtumRPC('http://localhost:9888')
+    const rpc = new QtumRPC('https://qtum-testnet.iame.io/qtum-rpc/?apiKey=1073fc8109d1f784d6f6ed203c961fbf')
     const contract = new Contract(rpc, repoData.contracts.helloworld)
     this.rpc = rpc
     this.contract = contract

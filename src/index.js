@@ -1,8 +1,10 @@
 import '@babel/polyfill'
 import React from 'react'
 import Nav from './components/Nav'
+import Wallet from './components/Wallet'
 import Challenges from './components/Challenges'
 import ErrorBoundary from './components/ErrorBoundary'
+import { Divider } from 'semantic-ui-react'
 import ReactDOM from 'react-dom'
 import store from './store'
 import { Provider } from 'react-redux'
@@ -19,6 +21,9 @@ ReactDOM.render(
     <ErrorBoundary>
       <div>
         <Nav />
+        <Divider />
+        <Wallet />
+        <Divider />
         <Challenges />
       </div>
     </ErrorBoundary>

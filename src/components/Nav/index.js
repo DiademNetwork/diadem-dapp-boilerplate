@@ -46,7 +46,7 @@ export default class Nav extends Component {
         >
           <Menu
             borderless
-            fixed={menuFixed && 'top'}
+            fixed={menuFixed ? 'top' : null}
             style={menuFixed ? fixedMenuStyle : menuStyle}
             fluid
           >

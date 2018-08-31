@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
+import { PropTypes as T } from 'prop-types'
 import WalletGenerator from './components/WalletGenerator'
 import WalletDisplay from './components/WalletDisplay'
 import { Dimmer, Container, Loader } from 'semantic-ui-react'
 import { networks } from 'qtumjs-wallet'
+import withContainer from './container'
 
-export default class Wallet extends Component {
+class Wallet extends Component {
   state = {
-    status: 'loading',
-    walletInfo: null
+    status: 'loading'
   }
 
   async componentDidMount () {
+    const { storeWalletInfo, walletInfo } = this.props
+    if (walletInfo) { return }
     if (!window.localStorage) {
       this.setState({ status: 'no-local-storage' })
       return
@@ -21,36 +24,34 @@ export default class Wallet extends Component {
       return
     }
     const wallet = networks.testnet.fromWIF(storedPrivateKey)
-    this.displayWalletInfo(await wallet.getInfo())
-  }
-
-  displayWalletInfo = walletInfo => {
-    this.setState({ walletInfo, status: 'wallet-retrieved' })
+    storeWalletInfo({ wallet, walletInfo: await wallet.getInfo() })
   }
 
   render () {
-    const { status, walletInfo } = this.state
-    const loader = (
-      <Dimmer active inverted>
-        <Loader />
-      </Dimmer>
-    )
+    const { status } = this.state
     let renderedComponent
-    switch (status) {
-      case 'loading':
-        renderedComponent = loader
-        break
-      case 'no-local-storage':
-        renderedComponent = <p>Please update your browser</p>
-        break
-      case 'no-stored-privateKey':
-        renderedComponent = <WalletGenerator onConfirm={this.displayWalletInfo} />
-        break
-      case 'wallet-retrieved':
-        renderedComponent = <WalletDisplay walletInfo={walletInfo} />
-        break
-      default:
-        break
+    if (this.props.walletInfo) {
+      console.log(this.props.walletInfo)
+      renderedComponent = <WalletDisplay />
+    } else {
+      const loader = (
+        <Dimmer active inverted>
+          <Loader />
+        </Dimmer>
+      )
+      switch (status) {
+        case 'loading':
+          renderedComponent = loader
+          break
+        case 'no-local-storage':
+          renderedComponent = <p>Please update your browser</p>
+          break
+        case 'no-stored-privateKey':
+          renderedComponent = <WalletGenerator />
+          break
+        default:
+          break
+      }
     }
     return (
       <Container>
@@ -59,3 +60,10 @@ export default class Wallet extends Component {
     )
   }
 }
+
+Wallet.propTypes = {
+  storeWalletInfo: T.func.isRequired,
+  walletInfo: T.object
+}
+
+export default withContainer(Wallet)

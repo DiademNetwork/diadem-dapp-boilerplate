@@ -1,19 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { PropTypes as T } from 'prop-types'
 import { List } from 'semantic-ui-react'
+import withContainer from './container'
 
-export default class WalletDisplay extends Component {
-  render () {
-    const { walletInfo } = this.props
-    return (
-      <List>
-        <List.Item>Address: {walletInfo.addrStr}</List.Item>
-        <List.Item>Balance: {walletInfo.balance}</List.Item>
-      </List>
-    )
-  }
-}
+const WalletDisplay = ({ walletInfo }) => (
+  <List>
+    <List.Item>Address: {walletInfo.addrStr}</List.Item>
+    <List.Item>Balance: {walletInfo.balance}</List.Item>
+  </List>
+)
 
 WalletDisplay.propTypes = {
   walletInfo: T.object
 }
+
+export default withContainer(WalletDisplay)

@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import { Button, Message } from 'semantic-ui-react'
 import { PropTypes as T } from 'prop-types'
+import withContainer from './container'
 
-export default class WalletGenerator extends Component {
+class WalletGenerator extends Component {
   state = {}
 
   generateWallet = async () => {
@@ -20,7 +21,8 @@ export default class WalletGenerator extends Component {
   }
 
   handleConfirm = () => {
-    this.props.onConfirm(this.state.walletInfo)
+    const { walletInfo } = this.state
+    this.props.storeWalletInfo({ walletInfo })
   }
 
   render () {
@@ -43,5 +45,7 @@ export default class WalletGenerator extends Component {
 }
 
 WalletGenerator.propTypes = {
-  onConfirm: T.func.isRequired
+  storeWalletInfo: T.func.isRequired
 }
+
+export default withContainer(WalletGenerator)

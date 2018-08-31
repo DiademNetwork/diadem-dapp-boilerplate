@@ -7,7 +7,13 @@ module.exports = merge(commonWebpackConfig, {
   devtool: 'source-map',
   plugins: [
     new UglifyJsPlugin({
-      sourceMap: true
+      sourceMap: true,
+      uglifyOptions: {
+        mangle: {
+          safari10: true,
+          keep_fnames: true
+        }
+      }
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')

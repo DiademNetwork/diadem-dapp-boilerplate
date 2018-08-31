@@ -14,7 +14,7 @@ export const sendSupport = (payload) => async dispatch => {
   try {
     dispatch({ type: SUPPORT_SEND_REQUESTED })
     const { wallet, author, amount } = payload
-    await wallet.send(author, amount * 1e8)
+    await wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
     dispatch({ type: SUPPORT_SEND_SUCCEEDED })
   } catch (error) {
     console.log({ error })

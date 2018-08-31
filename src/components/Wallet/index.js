@@ -31,7 +31,6 @@ class Wallet extends Component {
     const { status } = this.state
     let renderedComponent
     if (this.props.walletInfo) {
-      console.log(this.props.walletInfo)
       renderedComponent = <WalletDisplay />
     } else {
       const loader = (

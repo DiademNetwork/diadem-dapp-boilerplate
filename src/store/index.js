@@ -1,11 +1,15 @@
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
+import thunkMiddleware from 'redux-thunk'
 import rootReducer from '../reducers'
 
-const store = createStore(
-  rootReducer,
-  process.env.NODE_ENV !== 'production' && window.devToolsExtension
-    ? window.devToolsExtension()
-    : f => f
-)
+const getStore = () => {
+  const store = createStore(
+    rootReducer,
+    applyMiddleware(thunkMiddleware)
+  )
+  return store
+}
+
+const store = getStore()
 
 export default store

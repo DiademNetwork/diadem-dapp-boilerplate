@@ -1,6 +1,7 @@
 import React from 'react'
 import { PropTypes as T } from 'prop-types'
-import { Button, Card, Modal, Form } from 'semantic-ui-react'
+import Support from './components/Support'
+import { Card } from 'semantic-ui-react'
 
 const Challenge = ({ title, author, link }) => (
   <Card raised fluid>
@@ -10,26 +11,7 @@ const Challenge = ({ title, author, link }) => (
       <Card.Description><a target='_blank' href={link}>{link}</a></Card.Description>
     </Card.Content>
     <Card.Content extra textAlign='right'>
-      <Modal
-        trigger={
-          <Button basic color='green'>
-            Support
-          </Button>
-        }
-      >
-        <Modal.Header>Support - {title}</Modal.Header>
-        <Modal.Content>
-          <Modal.Description>
-            <Form>
-              <Form.Field>
-                <label>Please enter an amount</label>
-                <input placeholder='Amount' />
-              </Form.Field>
-              <Button type='submit'>Submit</Button>
-            </Form>
-          </Modal.Description>
-        </Modal.Content>
-      </Modal>
+      <Support author={author} title={title} />
     </Card.Content>
   </Card>
 )

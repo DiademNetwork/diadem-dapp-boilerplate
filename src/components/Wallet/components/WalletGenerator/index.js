@@ -27,11 +27,13 @@ export default class WalletGenerator extends Component {
     const { mnemonic } = this.state
     return [
       <Message
+        key='message'
         warning
         header='A wallet has been created for you! Please store this mnemonic somewhere safe'
         content={mnemonic}
       />,
       <Button
+        key='confirmButton'
         onClick={this.handleConfirm}
       >
         I have copied it somewhere safe

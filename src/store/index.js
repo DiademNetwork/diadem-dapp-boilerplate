@@ -5,6 +5,7 @@ import rootReducer from '../reducers'
 const getStore = () => {
   const store = createStore(
     rootReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
     applyMiddleware(thunkMiddleware)
   )
   return store

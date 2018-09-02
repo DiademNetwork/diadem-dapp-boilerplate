@@ -69,8 +69,11 @@
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
     "@material-ui/core": "^3.0.1",
+    "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "dotenv-webpack": "^1.5.7",
+    "fb": "^2.0.0",
     "getstream": "^3.20.0",
     "qtumjs": "^1.9.1",
     "qtumjs-wallet": "^0.1.5",

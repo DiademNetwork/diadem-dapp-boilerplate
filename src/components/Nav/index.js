@@ -3,10 +3,10 @@ import Login from '../Login'
 
 import {
   Container,
-  Button,
+  // Button,
   Menu,
-  Visibility,
-  Modal
+  Visibility
+  // Modal
 } from 'semantic-ui-react'
 
 const menuStyle = {
@@ -56,22 +56,22 @@ export default class Nav extends Component {
                 <Menu.Item>
                   <Login />
                 </Menu.Item>
-                <Menu.Item position='right'>
+                {/* <Menu.Item position='right'>
                   <Modal
                     trigger={
                       <Button color='teal'>
-                        Create a challenge
+                        Create a Achievement
                       </Button>
                     }
                   >
-                    <Modal.Header>Create a challenge</Modal.Header>
+                    <Modal.Header>Create an Achievement</Modal.Header>
                     <Modal.Content>
                       <Modal.Description>
-                        Create challenge form here
+                        Create Achievement form here
                       </Modal.Description>
                     </Modal.Content>
                   </Modal>
-                </Menu.Item>
+                </Menu.Item> */}
               </Menu.Menu>
             </Container>
           </Menu>

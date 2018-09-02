@@ -2,6 +2,7 @@ const merge = require('webpack-merge')
 const webpack = require('webpack')
 const commonWebpackConfig = require('./webpack.common')
 const path = require('path')
+const Dotenv = require('dotenv-webpack')
 
 module.exports = merge(commonWebpackConfig, {
   devtool: 'inline-source-map',
@@ -15,7 +16,8 @@ module.exports = merge(commonWebpackConfig, {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('develoment')
-    })
+      'process.env.NODE_ENV': JSON.stringify('development')
+    }),
+    new Dotenv()
   ]
 })

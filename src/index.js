@@ -1,8 +1,9 @@
 import '@babel/polyfill'
+import dotenv from 'dotenv'
 import React from 'react'
 import Nav from './components/Nav'
 import Wallet from './components/Wallet'
-import Challenges from './components/Challenges'
+import Achievements from './components/Achievements'
 import ErrorBoundary from './components/ErrorBoundary'
 import { Divider } from 'semantic-ui-react'
 import ReactDOM from 'react-dom'
@@ -11,6 +12,8 @@ import './reset.css'
 import './main.css'
 import 'semantic-ui-css/semantic.min.css'
 import store from './store'
+
+dotenv.config()
 
 if (process.env.NODE_ENV !== 'production') {
   console.log('Looks like we are in development mode!')
@@ -24,7 +27,7 @@ ReactDOM.render(
         <Divider />
         <Wallet />
         <Divider />
-        <Challenges />
+        <Achievements />
       </div>
     </ErrorBoundary>
   </Provider>,

@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
+import { PropTypes as T } from 'prop-types'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import { Button } from 'semantic-ui-react'
+import withContainer from './container'
 
-export default class Login extends Component {
-  state = {
-    user: null
-  }
-
-  onLogin = ({ name }) => { // accessToken can be found here too if needed
-    this.setState({ user: name })
+class Login extends Component {
+  onLogin = (fbInfo) => {
+    this.props.storeFacebookInfo({ fbInfo })
   }
 
   render () {
-    if (this.state.user) {
-      return <p>{this.state.user}</p>
+    if (this.props.fbInfo) {
+      return <p>{this.props.fbInfo.name}</p>
     }
     return (
       <FacebookLogin
@@ -33,3 +31,10 @@ export default class Login extends Component {
     )
   }
 }
+
+Login.propTypes = {
+  fbInfo: T.object,
+  storeFacebookInfo: T.func.isRequired
+}
+
+export default withContainer(Login)

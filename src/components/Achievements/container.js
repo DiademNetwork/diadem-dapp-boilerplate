@@ -1,12 +1,7 @@
 import { connect } from 'react-redux'
 import { fetchAchievements } from '../../actions'
 
-const mapStateToProps = ({ achievements: { data } }) => {
-  const achievements = data.filter(achievement => achievement.verb === 'create')
-  return {
-    achievements
-  }
-}
+const mapStateToProps = ({ achievements }) => ({ achievementsData: achievements.data })
 
 const mapDispatchToProps = { fetchAchievements }
 

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { confirmAchievement } from '../../../../actions'
+import { confirmAchievement } from '../../../../../../actions'
 
 const mapStateToProps = ({ fbInfo }) => ({ fbInfo })
 

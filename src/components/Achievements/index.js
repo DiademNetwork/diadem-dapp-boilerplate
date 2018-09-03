@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import stream from 'getstream'
 import { Container } from 'semantic-ui-react'
-import Achievement from '../Achievement'
+import Achievement from './components/Achievement'
 import withContainer from './container'
+import * as R from 'ramda'
 
 class Achievements extends Component {
   state = {
@@ -19,21 +20,51 @@ class Achievements extends Component {
     this.fetchAchievements()
   }
 
+  extractCreatedAchievements = R.compose(
+    R.reduce((acc, curr) => ({ ...acc, [curr.object]: curr }), {}),
+    R.reduce(R.concat, []),
+    R.map(R.prop('activities')),
+    R.filter(R.propEq('group', 'create'))
+  )
+
+  aggregate = (singular, plural) => achievementsData => createdAchievements => {
+    return R.keys(createdAchievements).reduce((acc, curr) => {
+      const actions = R.compose(
+        R.reduce(R.concat, []),
+        R.map(R.prop('activities')),
+        R.filter(R.propEq('group', `${singular}_${curr}`))
+      )(achievementsData)
+      return {
+        ...acc,
+        [curr]: {
+          ...createdAchievements[curr],
+          [plural]: actions
+        }
+      }
+    }, {})
+  }
+
   render () {
+    const { achievementsData } = this.props
+    console.log(achievementsData)
+    const achievements = R.compose(
+      this.aggregate('confirm', 'confirms')(achievementsData),
+      this.aggregate('reward', 'rewards')(achievementsData),
+      this.extractCreatedAchievements
+    )(achievementsData)
+    console.log(achievements)
     return (
       <Container>
-        {this.props.achievements.map(achievement => {
-          const { activities, id } = achievement
-          const lastActivity = activities[activities.length - 1]
-          return <Achievement key={id} {...lastActivity} />
-        })}
+        {R.keys(achievements).map(name => (
+          <Achievement key={name} {...achievements[name]} />
+        ))}
       </Container>
     )
   }
 }
 
 Achievements.propTypes = {
-  achievements: T.array.isRequired,
+  achievementsData: T.array.isRequired,
   fetchAchievements: T.func.isRequired
 }
 

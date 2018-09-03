@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { sendSupport } from '../../../../actions'
+import { sendSupport } from '../../../../../../actions'
 
 const mapStateToProps = ({ wallet, walletInfo, support }) => ({ wallet, walletInfo, support })
 

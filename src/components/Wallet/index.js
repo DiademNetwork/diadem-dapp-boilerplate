@@ -3,7 +3,7 @@ import { PropTypes as T } from 'prop-types'
 import WalletGenerated from './components/WalletGenerated'
 import WalletDisplay from './components/WalletDisplay'
 import WalletRecover from './components/WalletRecover'
-import { Dimmer, Container, Message, Loader } from 'semantic-ui-react'
+import { Container, Message } from 'semantic-ui-react'
 import withContainer from './container'
 
 class Wallet extends Component {
@@ -15,11 +15,7 @@ class Wallet extends Component {
     } else {
       switch (walletStatus) {
         case 'none':
-          renderedComponent = (
-            <Dimmer active inverted>
-              <Loader />
-            </Dimmer>
-          )
+          renderedComponent = <Message info>Loading...</Message>
           break
         case 'generated':
           renderedComponent = <WalletGenerated />
@@ -31,10 +27,14 @@ class Wallet extends Component {
         case 'restoring-info-saved':
           renderedComponent = <WalletDisplay />
           break
+        case 'error':
+        default:
+          renderedComponent = <Message error>Sorry, and error happenned when trying to retrieve your wallet.</Message>
+          break
       }
     }
     return (
-      <Container style={{ backgroundColor: '#FFF', paddingTop: '3em' }}>
+      <Container style={{ backgroundColor: '#FFF', marginTop: '3em' }}>
         {renderedComponent}
       </Container>
     )

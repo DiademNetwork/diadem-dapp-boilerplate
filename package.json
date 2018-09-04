@@ -12,7 +12,7 @@
     "lint": "eslint src/ scripts/ config/",
     "predeploy": "yarn build-production",
     "deploy": "gh-pages -d dist",
-    "start": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./config/webpack.development.js",
+    "start": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./config/webpack.development.js --https",
     "storybook": "start-storybook -p 6006",
     "test": "jest --coverage"
   },

@@ -9,6 +9,7 @@ module.exports = merge(commonWebpackConfig, {
   devServer: {
     contentBase: path.join(__dirname, '../dist'),
     compress: true,
+    disableHostCheck: true,
     headers: { 'Cache-Control': 'no-cache, no-store, must-revalidate' },
     historyApiFallback: true,
     open: true,

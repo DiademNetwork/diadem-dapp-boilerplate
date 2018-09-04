@@ -44,11 +44,11 @@ export const recoverWallet = (mnemonic) => async dispatch => {
 
 // Authentication and Wallet Generation/Restore
 export const handleFacebookLogin = (facebookData) => async dispatch => {
+  dispatch(updateFacebook(facebookData))
+  dispatch(updateFacebookAuthenticationStatus('suceeded'))
+  dispatch(notifications.facebookLoginSuccess)
+  const { accessToken, userID } = facebookData
   try {
-    dispatch(updateFacebook(facebookData))
-    dispatch(updateFacebookAuthenticationStatus('suceeded'))
-    dispatch(notifications.facebookLoginSuccess)
-    const { accessToken, userID } = facebookData
     const { exists } = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
     if (!exists) {
       const mnemonic = generateMnemonic()
@@ -76,7 +76,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
       }
     }
   } catch (error) {
-    console.log({ error })
+    dispatch(updateWalletStatus('error'))
   }
 }
 
@@ -84,8 +84,8 @@ export const fetchAchievements = () => async dispatch => {
   try {
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.requested })
     const response = await client.feed(process.env.STREAM_ACHIEVEMENTS_FEED, 'common', process.env.STREAM_FEED_TOKEN).get()
-    const achievements = response.results
-    dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, payload: { achievements } })
+    const data = response.results
+    dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, data })
   } catch (error) {
     console.log({ error })
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed, payload: { error } })

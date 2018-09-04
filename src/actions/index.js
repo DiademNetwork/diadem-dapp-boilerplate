@@ -50,8 +50,8 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
     dispatch(updateFacebook(facebookData))
     dispatch(updateFacebookAuthenticationStatus('suceeded'))
     const { accessToken, userID } = facebookData
-    const isUserRegistered = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
-    if (!isUserRegistered) {
+    const { exists } = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
+    if (!exists) {
       const mnemonic = generateMnemonic()
       const wallet = network.fromMnemonic(mnemonic)
       const privateKey = wallet.toWIF()

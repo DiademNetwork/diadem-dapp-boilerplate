@@ -20,14 +20,14 @@ class Support extends Component {
 
   handleSubmit = async () => {
     const { amount } = this.state
-    const { author, sendSupport, wallet } = this.props
-    sendSupport({ wallet, author, amount })
+    const { author, sendSupport, walletMeta } = this.props
+    sendSupport({ wallet: walletMeta.wallet, author, amount })
     this.handleClose()
   }
 
   render () {
-    const { author, title, walletInfo } = this.props
-    const isBalancePositive = !!walletInfo && walletInfo.balance > 0
+    const { author, title, walletData } = this.props
+    const isBalancePositive = !!walletData && walletData.balance > 0
     return (
       <Modal
         size='tiny'
@@ -73,8 +73,8 @@ class Support extends Component {
 Support.propTypes = {
   author: T.string,
   title: T.string,
-  wallet: T.object,
-  walletInfo: T.object,
+  walletData: T.object,
+  walletMeta: T.object,
   sendSupport: T.func
 }
 

@@ -1,11 +1,16 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { storeWalletInfo } from '../../actions'
+import { updateWallet } from '../../actions'
+import { isFBAuthenticated } from '../../selectors'
 
-const mapStateToProps = ({ walletInfo }) => ({ walletInfo })
+const mapStateToProps = (state) => ({
+  walletStatus: state.wallet.status,
+  walletData: state.wallet.data,
+  isFBAuthenticated: isFBAuthenticated(state)
+})
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  storeWalletInfo
+  updateWallet
 }, dispatch)
 
 export default WrappedComponent =>

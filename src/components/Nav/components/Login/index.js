@@ -5,20 +5,20 @@ import { Button } from 'semantic-ui-react'
 import withContainer from './container'
 
 class Login extends Component {
-  onLogin = (fbInfo) => {
-    this.props.storeFacebookInfo({ fbInfo })
+  onFacebookLogin = (facebookData) => {
+    this.props.handleFacebookLogin(facebookData)
   }
 
   render () {
-    if (this.props.fbInfo) {
-      return <p>{this.props.fbInfo.name}</p>
+    const { isFBAuthenticated, name } = this.props
+    if (isFBAuthenticated) {
+      return <p>{name}</p>
     }
     return (
       <FacebookLogin
         appId="2107292709536080"
-        autoLoad
         fields="name,email,picture"
-        callback={this.onLogin}
+        callback={this.onFacebookLogin}
         render={renderProps => (
           <Button
             color='blue'
@@ -33,8 +33,9 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-  fbInfo: T.object,
-  storeFacebookInfo: T.func.isRequired
+  name: T.string,
+  isFBAuthenticated: T.bool,
+  handleFacebookLogin: T.func.isRequired
 }
 
 export default withContainer(Login)

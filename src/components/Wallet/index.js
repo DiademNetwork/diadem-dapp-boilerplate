@@ -1,54 +1,35 @@
 import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
-import WalletGenerator from './components/WalletGenerator'
+import WalletGenerated from './components/WalletGenerated'
 import WalletDisplay from './components/WalletDisplay'
-import { Dimmer, Container, Loader } from 'semantic-ui-react'
-import { networks } from 'qtumjs-wallet'
+import WalletRecover from './components/WalletRecover'
+import { Dimmer, Container, Message, Loader } from 'semantic-ui-react'
 import withContainer from './container'
 
 class Wallet extends Component {
-  state = {
-    status: 'loading'
-  }
-
-  async componentDidMount () {
-    const { storeWalletInfo, walletInfo } = this.props
-    if (walletInfo) { return }
-    if (!window.localStorage) {
-      this.setState({ status: 'no-local-storage' })
-      return
-    }
-    const storedPrivateKey = window.localStorage.getItem('privateKey')
-    if (!storedPrivateKey) {
-      this.setState({ status: 'no-stored-privateKey' })
-      return
-    }
-    const wallet = networks.testnet.fromWIF(storedPrivateKey)
-    storeWalletInfo({ wallet, walletInfo: await wallet.getInfo() })
-  }
-
   render () {
-    const { status } = this.state
+    const { isFBAuthenticated, walletStatus } = this.props
     let renderedComponent
-    if (this.props.walletInfo) {
-      renderedComponent = <WalletDisplay />
+    if (!isFBAuthenticated) {
+      renderedComponent = <Message warning>You need to be authenticated with Facebook to use application</Message>
     } else {
-      const loader = (
-        <Dimmer active inverted>
-          <Loader />
-        </Dimmer>
-      )
-      switch (status) {
-        case 'loading':
-          renderedComponent = loader
+      switch (walletStatus) {
+        case 'none':
+          renderedComponent = (
+            <Dimmer active inverted>
+              <Loader />
+            </Dimmer>
+          )
           break
-        case 'no-local-storage':
-          renderedComponent = <p>Please update your browser</p>
+        case 'generated':
+          renderedComponent = <WalletGenerated />
           break
-        case 'no-stored-privateKey':
-          renderedComponent = <WalletGenerator />
+        case 'needs-recovering':
+          renderedComponent = <WalletRecover />
           break
-        default:
+        case 'restored':
+        case 'restoring-info-saved':
+          renderedComponent = <WalletDisplay />
           break
       }
     }
@@ -61,8 +42,8 @@ class Wallet extends Component {
 }
 
 Wallet.propTypes = {
-  storeWalletInfo: T.func.isRequired,
-  walletInfo: T.object
+  isFBAuthenticated: T.bool,
+  walletStatus: T.string
 }
 
 export default withContainer(Wallet)

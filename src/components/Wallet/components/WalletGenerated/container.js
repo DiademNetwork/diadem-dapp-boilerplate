@@ -1,13 +1,14 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { storeFacebookInfo } from '../../actions'
+import { updateWalletMeta, updateWalletStatus } from '../../../../actions'
 
-const mapStateToProps = ({ fbInfo }) => ({
-  fbInfo
+const mapStateToProps = (state) => ({
+  walletMeta: state.wallet.meta
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  storeFacebookInfo
+  updateWalletMeta,
+  updateWalletStatus
 }, dispatch)
 
 export default WrappedComponent =>

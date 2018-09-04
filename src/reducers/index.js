@@ -8,14 +8,23 @@ import {
   SUPPORT_SEND_REQUESTED,
   SUPPORT_SEND_SUCCEEDED,
   SUPPORT_SEND_FAILED,
-  STORE_WALLET_INFO,
-  STORE_FACEBOOK_INFO
+  WALLET_UPDATE_DATA,
+  WALLET_UPDATE_META,
+  WALLET_UPDATE_STATUS,
+  FACEBOOK_UPDATE_DATA,
+  FACEBOOK_UPDATE_AUTHENTICATION_STATUS
 } from './../actions/types'
 
 const intialState = {
-  fbInfo: null,
-  walletInfo: null,
-  wallet: null,
+  facebook: {
+    authenticationStatus: 'none',
+    data: {}
+  },
+  wallet: {
+    status: 'none',
+    data: {},
+    meta: {}
+  },
   achievements: {
     confirmStatus: 'none',
     fetchStatus: 'none',
@@ -26,19 +35,23 @@ const intialState = {
   }
 }
 
-const reducers = (state, { type, payload }) => {
+const reducers = (state, action) => {
   if (typeof state === 'undefined') {
     return intialState
   }
 
-  switch (type) {
-    case STORE_WALLET_INFO:
-      const { wallet, walletInfo } = payload
-      return { ...state, wallet, walletInfo }
+  switch (action.type) {
+    case WALLET_UPDATE_DATA:
+      return { ...state, wallet: { ...state.wallet, data: action.data } }
+    case WALLET_UPDATE_META:
+      return { ...state, wallet: { ...state.wallet, meta: action.meta } }
+    case WALLET_UPDATE_STATUS:
+      return { ...state, wallet: { ...state.wallet, status: action.status } }
 
-    case STORE_FACEBOOK_INFO:
-      const { fbInfo } = payload
-      return { ...state, fbInfo }
+    case FACEBOOK_UPDATE_DATA:
+      return { ...state, facebook: { ...state.facebook, data: action.data } }
+    case FACEBOOK_UPDATE_AUTHENTICATION_STATUS:
+      return { ...state, facebook: { ...state.facebook, authenticationStatus: 'succeeded' } }
 
     case SUPPORT_SEND_REQUESTED:
       return { ...state, support: { ...state.support, status: 'requested' } }
@@ -50,7 +63,7 @@ const reducers = (state, { type, payload }) => {
     case STREAM_FETCH_ACHIEVEMENTS_REQUESTED:
       return { ...state, achievements: { ...state.achievements, fetchStatus: 'requested' } }
     case STREAM_FETCH_ACHIEVEMENTS_SUCCEEDED:
-      return { ...state, achievements: { ...state.achievements, fetchStatus: 'succeeded', data: payload.achievements } }
+      return { ...state, achievements: { ...state.achievements, fetchStatus: 'succeeded', data: action.payload.achievements } }
     case STREAM_FETCH_ACHIEVEMENTS_FAILED:
       return { ...state, achievements: { ...state.achievements, fetchStatus: 'failed' } }
 

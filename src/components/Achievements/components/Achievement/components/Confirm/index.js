@@ -5,8 +5,7 @@ import withContainer from './container'
 
 class Confirm extends Component {
   handleConfirm = () => {
-    const { target, fbInfo } = this.props
-    const { accessToken, userID } = fbInfo
+    const { accessToken, target, userID } = this.props
     this.props.confirmAchievement({
       target,
       token: accessToken,
@@ -15,20 +14,22 @@ class Confirm extends Component {
   }
 
   render () {
-    const { fbInfo } = this.props
+    const { isFBAuthenticated } = this.props
     return (
       <Button
-        disabled={!fbInfo}
+        disabled={!isFBAuthenticated}
         onClick={this.handleConfirm}
       >
-        {!fbInfo ? 'Confirm needs FB login' : 'Confirm'}
+        {!isFBAuthenticated ? 'Confirm needs FB login' : 'Confirm'}
       </Button>
     )
   }
 }
 
 Confirm.propTypes = {
-  fbInfo: T.object,
+  accessToken: T.string,
+  isFBAuthenticated: T.bool,
+  userID: T.string,
   target: T.string,
   confirmAchievement: T.func
 }

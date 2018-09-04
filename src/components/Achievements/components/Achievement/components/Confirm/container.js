@@ -1,7 +1,12 @@
 import { connect } from 'react-redux'
 import { confirmAchievement } from '../../../../../../actions'
+import { getFacebook, isFBAuthenticated } from '../../../../../../selectors'
 
-const mapStateToProps = ({ fbInfo }) => ({ fbInfo })
+const mapStateToProps = (state) => ({
+  accessToken: getFacebook('accessToken')(state),
+  isFBAuthenticated: isFBAuthenticated(state),
+  userID: getFacebook('userID')(state)
+})
 
 const mapDispatchToProps = { confirmAchievement }
 

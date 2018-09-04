@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { networks, generateMnemonic } from 'qtumjs-wallet'
+
 import {
   ACHIEVEMENT_CONFIRM_REQUESTED,
   ACHIEVEMENT_CONFIRM_SUCCEEDED,
@@ -9,19 +11,70 @@ import {
   SUPPORT_SEND_REQUESTED,
   SUPPORT_SEND_SUCCEEDED,
   SUPPORT_SEND_FAILED,
-  STORE_WALLET_INFO,
-  STORE_FACEBOOK_INFO
+  WALLET_UPDATE_DATA,
+  WALLET_UPDATE_META,
+  WALLET_UPDATE_STATUS,
+  FACEBOOK_UPDATE_DATA,
+  FACEBOOK_UPDATE_AUTHENTICATION_STATUS
 } from './types'
 
-export const storeWalletInfo = (payload) => ({
-  type: STORE_WALLET_INFO,
-  payload
-})
+const network = networks.testnet
 
-export const storeFacebookInfo = (payload) => ({
-  type: STORE_FACEBOOK_INFO,
-  payload
-})
+// Facebook
+export const updateFacebook = (data) => ({ type: FACEBOOK_UPDATE_DATA, data })
+export const updateFacebookAuthenticationStatus = (status) => ({ type: FACEBOOK_UPDATE_AUTHENTICATION_STATUS, status })
+
+// Wallet
+export const updateWallet = (data) => ({ type: WALLET_UPDATE_DATA, data })
+export const updateWalletMeta = (meta) => ({ type: WALLET_UPDATE_META, meta })
+export const updateWalletStatus = (status) => ({ type: WALLET_UPDATE_STATUS, status })
+
+export const refreshWallet = (wallet) => async dispatch => {
+  const walletData = await wallet.getInfo()
+  dispatch(updateWallet(walletData))
+}
+
+export const recoverWallet = (mnemonic) => async dispatch => {
+  const wallet = network.fromMnemonic(mnemonic)
+  const privateKey = wallet.toWIF()
+  window.localStorage.setItem('privateKey', privateKey)
+  const walletData = await wallet.getInfo()
+  dispatch(updateWallet(walletData))
+  dispatch(updateWalletMeta({ wallet }))
+  dispatch(updateWalletStatus('restored'))
+}
+
+// Authentication and Wallet Generation/Restore
+export const handleFacebookLogin = (facebookData) => async dispatch => {
+  try {
+    dispatch(updateFacebook(facebookData))
+    dispatch(updateFacebookAuthenticationStatus('suceeded'))
+    const { userID } = facebookData
+    const isUserRegistered = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
+    if (!isUserRegistered) {
+      const mnemonic = generateMnemonic()
+      const wallet = network.fromMnemonic(mnemonic)
+      const privateKey = wallet.toWIF()
+      window.localStorage.setItem('privateKey', privateKey)
+      dispatch(updateWalletMeta({ mnemonic, privateKey }))
+      const walletData = await wallet.getInfo()
+      dispatch(updateWallet(walletData))
+      dispatch(updateWalletStatus('generated'))
+    } else {
+      const storedPrivateKey = window.localStorage.getItem('privateKey')
+      if (!storedPrivateKey) {
+        dispatch(updateWalletStatus('needs-recovering'))
+      } else {
+        const wallet = network.fromWIF(storedPrivateKey)
+        dispatch(updateWalletMeta({ wallet }))
+        await refreshWallet(wallet)(dispatch)
+        dispatch(updateWalletStatus('restored'))
+      }
+    }
+  } catch (error) {
+    console.log({ error })
+  }
+}
 
 export const fetchAchievements = ({ client }) => async dispatch => {
   try {

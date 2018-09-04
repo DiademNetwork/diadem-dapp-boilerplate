@@ -4,8 +4,9 @@ import React from 'react'
 import Nav from './components/Nav'
 import Wallet from './components/Wallet'
 import Achievements from './components/Achievements'
+import Timeline from './components/Timeline'
 import ErrorBoundary from './components/ErrorBoundary'
-import { Divider } from 'semantic-ui-react'
+import { Container, Divider, Tab } from 'semantic-ui-react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import './reset.css'
@@ -27,7 +28,16 @@ ReactDOM.render(
         <Divider />
         <Wallet />
         <Divider />
-        <Achievements />
+        <Container>
+          <Tab
+            menu={{ fluid: true, vertical: true }}
+            menuPosition='left'
+            panes={[
+              { menuItem: 'Achievements', render: () => <Tab.Pane><Achievements /></Tab.Pane> },
+              { menuItem: 'Timeline', render: () => <Tab.Pane><Timeline /></Tab.Pane> }
+            ]}
+          />
+        </Container>
       </div>
     </ErrorBoundary>
   </Provider>,

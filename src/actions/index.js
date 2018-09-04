@@ -49,7 +49,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
   try {
     dispatch(updateFacebook(facebookData))
     dispatch(updateFacebookAuthenticationStatus('suceeded'))
-    const { userID } = facebookData
+    const { accessToken, userID } = facebookData
     const isUserRegistered = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
     if (!isUserRegistered) {
       const mnemonic = generateMnemonic()
@@ -58,6 +58,11 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
       window.localStorage.setItem('privateKey', privateKey)
       dispatch(updateWalletMeta({ mnemonic, privateKey }))
       const walletData = await wallet.getInfo()
+      await axios.post(`${process.env.BACKEND_URL}/register`, {
+        address: walletData.addrStr,
+        user: userID,
+        token: accessToken
+      })
       dispatch(updateWallet(walletData))
       dispatch(updateWalletStatus('generated'))
     } else {

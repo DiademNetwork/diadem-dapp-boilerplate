@@ -10,6 +10,7 @@ class WalletDisplay extends Component {
   }
 
   componentDidMount () {
+    this.refreshWallet()
     this.refreshInterval = setInterval(this.refreshWallet, 5000)
   }
 

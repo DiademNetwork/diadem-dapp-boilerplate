@@ -11,7 +11,7 @@ class Wallet extends Component {
     const { isFBAuthenticated, walletStatus } = this.props
     let renderedComponent
     if (!isFBAuthenticated) {
-      renderedComponent = <Message warning>You need to be authenticated with Facebook to use application</Message>
+      renderedComponent = <Message warning>You must be logged with Facebook to use your wallet</Message>
     } else {
       switch (walletStatus) {
         case 'none':

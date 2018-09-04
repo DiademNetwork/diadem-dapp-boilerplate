@@ -1,19 +1,15 @@
-import {
-  ACHIEVEMENT_CONFIRM_REQUESTED,
-  ACHIEVEMENT_CONFIRM_SUCCEEDED,
-  ACHIEVEMENT_CONFIRM_FAILED,
-  STREAM_FETCH_ACHIEVEMENTS_REQUESTED,
-  STREAM_FETCH_ACHIEVEMENTS_SUCCEEDED,
-  STREAM_FETCH_ACHIEVEMENTS_FAILED,
-  SUPPORT_SEND_REQUESTED,
-  SUPPORT_SEND_SUCCEEDED,
-  SUPPORT_SEND_FAILED,
+import types from '../actions/types'
+const {
+  ASYNC_ACHIEVEMENT_CONFIRM,
+  ASYNC_STREAM_FETCH_ACHIEVEMENTS,
+  ASYNC_STREAM_FETCH_USER_TRANSACTIONS,
+  ASYNC_SUPPORT_SEND,
   WALLET_UPDATE_DATA,
   WALLET_UPDATE_META,
   WALLET_UPDATE_STATUS,
   FACEBOOK_UPDATE_DATA,
   FACEBOOK_UPDATE_AUTHENTICATION_STATUS
-} from './../actions/types'
+} = types
 
 const intialState = {
   facebook: {
@@ -32,6 +28,10 @@ const intialState = {
   },
   support: {
     status: 'none'
+  },
+  userTransactions: {
+    fetchStatus: 'none',
+    data: []
   }
 }
 
@@ -53,25 +53,32 @@ const reducers = (state, action) => {
     case FACEBOOK_UPDATE_AUTHENTICATION_STATUS:
       return { ...state, facebook: { ...state.facebook, authenticationStatus: 'succeeded' } }
 
-    case SUPPORT_SEND_REQUESTED:
+    case ASYNC_SUPPORT_SEND.request:
       return { ...state, support: { ...state.support, status: 'requested' } }
-    case SUPPORT_SEND_SUCCEEDED:
+    case ASYNC_SUPPORT_SEND.succeeded:
       return { ...state, support: { ...state.support, status: 'succeeded' } }
-    case SUPPORT_SEND_FAILED:
+    case ASYNC_SUPPORT_SEND.failed:
       return { ...state, support: { ...state.support, status: 'failed' } }
 
-    case STREAM_FETCH_ACHIEVEMENTS_REQUESTED:
+    case ASYNC_STREAM_FETCH_ACHIEVEMENTS.requested:
       return { ...state, achievements: { ...state.achievements, fetchStatus: 'requested' } }
-    case STREAM_FETCH_ACHIEVEMENTS_SUCCEEDED:
+    case ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded:
       return { ...state, achievements: { ...state.achievements, fetchStatus: 'succeeded', data: action.payload.achievements } }
-    case STREAM_FETCH_ACHIEVEMENTS_FAILED:
+    case ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed:
       return { ...state, achievements: { ...state.achievements, fetchStatus: 'failed' } }
 
-    case ACHIEVEMENT_CONFIRM_REQUESTED:
+    case ASYNC_STREAM_FETCH_USER_TRANSACTIONS.requested:
+      return { ...state, userTransactions: { ...state.userTransactions, fetchStatus: 'requested' } }
+    case ASYNC_STREAM_FETCH_USER_TRANSACTIONS.succeeded:
+      return { ...state, userTransactions: { ...state.userTransactions, fetchStatus: 'succeeded', data: action.payload.userTransactions } }
+    case ASYNC_STREAM_FETCH_USER_TRANSACTIONS.failed:
+      return { ...state, userTransactions: { ...state.userTransactions, fetchStatus: 'failed' } }
+
+    case ASYNC_ACHIEVEMENT_CONFIRM.requested:
       return { ...state, achievements: { ...state.achievements, confirmStatus: 'requested' } }
-    case ACHIEVEMENT_CONFIRM_SUCCEEDED:
+    case ASYNC_ACHIEVEMENT_CONFIRM.succeeded:
       return { ...state, achievements: { ...state.achievements, confirmStatus: 'succeeded' } }
-    case ACHIEVEMENT_CONFIRM_FAILED:
+    case ASYNC_ACHIEVEMENT_CONFIRM.failed:
       return { ...state, achievements: { ...state.achievements, confirmStatus: 'failed' } }
     default:
       return state

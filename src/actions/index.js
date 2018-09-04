@@ -1,24 +1,22 @@
 import axios from 'axios'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
+import stream from 'getstream'
 
-import {
-  ACHIEVEMENT_CONFIRM_REQUESTED,
-  ACHIEVEMENT_CONFIRM_SUCCEEDED,
-  ACHIEVEMENT_CONFIRM_FAILED,
-  STREAM_FETCH_ACHIEVEMENTS_REQUESTED,
-  STREAM_FETCH_ACHIEVEMENTS_SUCCEEDED,
-  STREAM_FETCH_ACHIEVEMENTS_FAILED,
-  SUPPORT_SEND_REQUESTED,
-  SUPPORT_SEND_SUCCEEDED,
-  SUPPORT_SEND_FAILED,
+import types from './types'
+const {
+  ASYNC_ACHIEVEMENT_CONFIRM,
+  ASYNC_STREAM_FETCH_ACHIEVEMENTS,
+  ASYNC_STREAM_FETCH_USER_TRANSACTIONS,
+  ASYNC_SUPPORT_SEND,
   WALLET_UPDATE_DATA,
   WALLET_UPDATE_META,
   WALLET_UPDATE_STATUS,
   FACEBOOK_UPDATE_DATA,
   FACEBOOK_UPDATE_AUTHENTICATION_STATUS
-} from './types'
+} = types
 
 const network = networks.testnet
+const client = stream.connect(process.env.STREAM_KEY, null, process.env.STREAM_APPID)
 
 // Facebook
 export const updateFacebook = (data) => ({ type: FACEBOOK_UPDATE_DATA, data })
@@ -81,37 +79,46 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
   }
 }
 
-export const fetchAchievements = ({ client }) => async dispatch => {
+export const fetchAchievements = () => async dispatch => {
   try {
-    dispatch({ type: STREAM_FETCH_ACHIEVEMENTS_REQUESTED })
-    const response = await client.feed(process.env.STREAM_FEED, 'common', process.env.STREAM_FEED_TOKEN).get()
+    dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.requested })
+    const response = await client.feed(process.env.STREAM_ACHIEVEMENTS_FEED, 'common', process.env.STREAM_FEED_TOKEN).get()
     const achievements = response.results
-    dispatch({ type: STREAM_FETCH_ACHIEVEMENTS_SUCCEEDED, payload: { achievements } })
+    dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, payload: { achievements } })
   } catch (error) {
     console.log({ error })
-    dispatch({ type: STREAM_FETCH_ACHIEVEMENTS_FAILED, payload: { error } })
+    dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed, payload: { error } })
+  }
+}
+
+export const fetchUserTransactions = (userID) => async dispatch => {
+  try {
+    dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.requested })
+    const response = await client.feed(process.env.STREAM_TRANSACTIONS_FEED, userID, process.env.STREAM_FEED_TOKEN).get()
+    const userTransactions = response.results
+    dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.succeeded, payload: { userTransactions } })
+  } catch (error) {
+    dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.failed, payload: { error } })
   }
 }
 
 export const confirmAchievement = ({ token, user, target }) => async dispatch => {
   try {
-    dispatch({ type: ACHIEVEMENT_CONFIRM_REQUESTED })
+    dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.requested })
     await axios.post(`${process.env.BACKEND_URL}/confirm`, { token, user, target })
-    dispatch({ type: ACHIEVEMENT_CONFIRM_SUCCEEDED })
+    dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
   } catch (error) {
-    console.log({ error })
-    dispatch({ type: ACHIEVEMENT_CONFIRM_FAILED, payload: { error } })
+    dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
   }
 }
 
 export const sendSupport = (payload) => async dispatch => {
   try {
-    dispatch({ type: SUPPORT_SEND_REQUESTED })
+    dispatch({ type: ASYNC_SUPPORT_SEND.requested })
     const { wallet, author, amount } = payload
     await wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
-    dispatch({ type: SUPPORT_SEND_SUCCEEDED })
+    dispatch({ type: ASYNC_SUPPORT_SEND.succeeded })
   } catch (error) {
-    console.log({ error })
-    dispatch({ type: SUPPORT_SEND_FAILED, payload: { error } })
+    dispatch({ type: ASYNC_SUPPORT_SEND.failed, payload: { error } })
   }
 }

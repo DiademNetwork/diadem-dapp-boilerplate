@@ -6,7 +6,7 @@ import Wallet from './components/Wallet'
 import Achievements from './components/Achievements'
 import Timeline from './components/Timeline'
 import ErrorBoundary from './components/ErrorBoundary'
-import { Container, Divider, Tab } from 'semantic-ui-react'
+import { Container, Tab, Segment } from 'semantic-ui-react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import './reset.css'
@@ -25,9 +25,9 @@ ReactDOM.render(
     <ErrorBoundary>
       <div>
         <Nav />
-        <Divider />
-        <Wallet />
-        <Divider />
+        <Segment>
+          <Wallet />
+        </Segment>
         <Container>
           <Tab
             menu={{ fluid: true, vertical: true }}

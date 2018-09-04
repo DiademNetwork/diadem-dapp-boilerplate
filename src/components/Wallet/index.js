@@ -34,7 +34,7 @@ class Wallet extends Component {
       }
     }
     return (
-      <Container>
+      <Container style={{ backgroundColor: '#FFF', paddingTop: '3em' }}>
         {renderedComponent}
       </Container>
     )

@@ -6,6 +6,9 @@ import withContainer from './container'
 
 class Login extends Component {
   onFacebookLogin = (facebookData) => {
+    if (!facebookData.userID) { // facebookLogin failed
+      return
+    }
     this.props.handleFacebookLogin(facebookData)
   }
 

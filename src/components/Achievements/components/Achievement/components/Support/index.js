@@ -20,8 +20,8 @@ class Support extends Component {
 
   handleSubmit = async () => {
     const { amount } = this.state
-    const { author, sendSupport, walletMeta } = this.props
-    sendSupport({ wallet: walletMeta.wallet, author, amount })
+    const { author, supportAchievement, walletMeta } = this.props
+    supportAchievement({ wallet: walletMeta.wallet, author, amount })
     this.handleClose()
   }
 
@@ -75,7 +75,7 @@ Support.propTypes = {
   title: T.string,
   walletData: T.object,
   walletMeta: T.object,
-  sendSupport: T.func
+  supportAchievement: T.func
 }
 
 export default withContainer(Support)

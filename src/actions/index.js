@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import stream from 'getstream'
-
+import notifications from '../notifications'
 import types from './types'
 const {
   ASYNC_ACHIEVEMENT_CONFIRM,
+  ASYNC_ACHIEVEMENT_SUPPORT,
   ASYNC_STREAM_FETCH_ACHIEVEMENTS,
   ASYNC_STREAM_FETCH_USER_TRANSACTIONS,
-  ASYNC_SUPPORT_SEND,
   WALLET_UPDATE_DATA,
   WALLET_UPDATE_META,
   WALLET_UPDATE_STATUS,
@@ -47,6 +47,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
   try {
     dispatch(updateFacebook(facebookData))
     dispatch(updateFacebookAuthenticationStatus('suceeded'))
+    dispatch(notifications.facebookLoginSuccess)
     const { accessToken, userID } = facebookData
     const { exists } = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
     if (!exists) {
@@ -112,13 +113,13 @@ export const confirmAchievement = ({ token, user, target }) => async dispatch =>
   }
 }
 
-export const sendSupport = (payload) => async dispatch => {
+export const supportAchievement = (payload) => async dispatch => {
   try {
-    dispatch({ type: ASYNC_SUPPORT_SEND.requested })
+    dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
     const { wallet, author, amount } = payload
     await wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
-    dispatch({ type: ASYNC_SUPPORT_SEND.succeeded })
+    dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
   } catch (error) {
-    dispatch({ type: ASYNC_SUPPORT_SEND.failed, payload: { error } })
+    dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
 }

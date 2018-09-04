@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { sendSupport } from '../../../../../../actions'
+import { supportAchievement } from '../../../../../../actions'
 
 const mapStateToProps = (state) => ({
   walletData: state.wallet.data,
@@ -7,7 +7,7 @@ const mapStateToProps = (state) => ({
   support: state.support
 })
 
-const mapDispatchToProps = { sendSupport }
+const mapDispatchToProps = { supportAchievement }
 
 export default WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)

@@ -6,6 +6,7 @@ import Wallet from './components/Wallet'
 import Achievements from './components/Achievements'
 import Timeline from './components/Timeline'
 import ErrorBoundary from './components/ErrorBoundary'
+import Notifications from './components/Notifications'
 import { Container, Tab, Segment } from 'semantic-ui-react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -38,6 +39,7 @@ ReactDOM.render(
             ]}
           />
         </Container>
+        <Notifications />
       </div>
     </ErrorBoundary>
   </Provider>,

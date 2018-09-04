@@ -19,7 +19,7 @@ export default (state, action) => {
     case WALLET_UPDATE_DATA:
       return { ...state, data: action.data }
     case WALLET_UPDATE_META:
-      return { ...state, meta: action.meta }
+      return { ...state, meta: { ...state.meta, ...action.meta } }
     case WALLET_UPDATE_STATUS:
       return { ...state, status: action.status }
     default:

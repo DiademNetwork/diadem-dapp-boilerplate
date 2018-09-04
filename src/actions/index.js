@@ -62,6 +62,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
         user: userID,
         token: accessToken
       })
+      dispatch(updateWalletMeta({ wallet }))
       dispatch(updateWallet(walletData))
       dispatch(updateWalletStatus('generated'))
     } else {

@@ -49,7 +49,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
   dispatch(notifications.facebookLoginSuccess)
   const { accessToken, userID } = facebookData
   try {
-    const { exists } = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
+    const { data: { exists } } = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
     if (!exists) {
       const mnemonic = generateMnemonic()
       const wallet = network.fromMnemonic(mnemonic)

@@ -75,6 +75,7 @@
     "dotenv-webpack": "^1.5.7",
     "fb": "^2.0.0",
     "getstream": "^3.20.0",
+    "moment": "^2.22.2",
     "qtumjs": "^1.9.1",
     "qtumjs-wallet": "^0.1.5",
     "ramda": "^0.25.0",

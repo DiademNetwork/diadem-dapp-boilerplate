@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Container, Message } from 'semantic-ui-react'
+import { Container, Feed, Message } from 'semantic-ui-react'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
+import * as R from 'ramda'
+import moment from 'moment'
 
 class Timeline extends Component {
   refreshUserTransactions = () => {
@@ -19,14 +21,25 @@ class Timeline extends Component {
   }
 
   render () {
-    const { userTransactions, isFBAuthenticated } = this.props
+    const { isFBAuthenticated } = this.props
     let renderedComponent
     if (!isFBAuthenticated) {
       renderedComponent = <Message warning>You must be logged with Facebook to see your timeline</Message>
     } else {
-      renderedComponent = userTransactions.map(() => (
-        <p>Timeline item</p>
-      ))
+      renderedComponent = R.times((i) => (
+        <Feed key={i}>
+          <Feed.Event>
+            <Feed.Label icon='user' />
+            <Feed.Content>
+              <Feed.Date>Today</Feed.Date>
+              <Feed.Summary>
+                {`Confirm ${i}`}
+              </Feed.Summary>
+              <Feed.Extra text>{`Alex did this and that for achievement ${i}`}</Feed.Extra>
+            </Feed.Content>
+          </Feed.Event>
+        </Feed>
+      ), 10)
     }
     return (
       <Container>
@@ -38,7 +51,7 @@ class Timeline extends Component {
 
 Timeline.propTypes = {
   fetchUserTransactions: T.func.isRequired,
-  userTransactions: T.array,
+  // userTransactions: T.array,
   userID: T.string,
   isFBAuthenticated: T.bool.isRequired
 }

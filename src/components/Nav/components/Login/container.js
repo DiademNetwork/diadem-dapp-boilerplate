@@ -5,6 +5,7 @@ import { getFacebook, isFBAuthenticated } from '../../../../selectors'
 
 const mapStateToProps = (state) => ({
   name: getFacebook('name')(state),
+  picture: getFacebook('picture')(state),
   isFBAuthenticated: isFBAuthenticated(state)
 })
 

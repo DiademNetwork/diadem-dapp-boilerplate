@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
-import { Button } from 'semantic-ui-react'
+import { Button, Image } from 'semantic-ui-react'
 import withContainer from './container'
 
 class Login extends Component {
@@ -13,9 +13,13 @@ class Login extends Component {
   }
 
   render () {
-    const { isFBAuthenticated, name } = this.props
+    const { isFBAuthenticated, name, picture } = this.props
     if (isFBAuthenticated) {
-      return <p>{name}</p>
+      return (
+        <p style={{ lineHeight: '35px' }}>
+          <Image src={picture.data.url} size='mini' circular floated='left' /> {name}
+        </p>
+      )
     }
     return (
       <FacebookLogin
@@ -37,6 +41,7 @@ class Login extends Component {
 
 Login.propTypes = {
   name: T.string,
+  picture: T.object,
   isFBAuthenticated: T.bool,
   handleFacebookLogin: T.func.isRequired
 }

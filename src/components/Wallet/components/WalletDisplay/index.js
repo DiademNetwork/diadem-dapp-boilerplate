@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
-import { List } from 'semantic-ui-react'
+import { Message } from 'semantic-ui-react'
 import withContainer from './container'
 
 class WalletDisplay extends Component {
@@ -21,10 +21,7 @@ class WalletDisplay extends Component {
   render () {
     const { walletData } = this.props
     return (
-      <List>
-        <List.Item>Address: {walletData.addrStr}</List.Item>
-        <List.Item>Balance: {walletData.balance}</List.Item>
-      </List>
+      <Message success>Address: {walletData.addrStr} / Balance: {walletData.balance}</Message>
     )
   }
 }

@@ -3,7 +3,7 @@ import { Container, Feed, Message } from 'semantic-ui-react'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
 import * as R from 'ramda'
-import moment from 'moment'
+// import moment from 'moment'
 
 class Timeline extends Component {
   refreshUserTransactions = () => {

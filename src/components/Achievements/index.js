@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import { Container } from 'semantic-ui-react'
 import Achievement from './components/Achievement'
+import Create from './components/Create'
 import withContainer from './container'
 import * as R from 'ramda'
 
@@ -43,6 +44,7 @@ class Achievements extends Component {
     )(achievementsData)
     return (
       <Container>
+        <Create />
         {R.keys(achievements).map(name => (
           <Achievement key={name} {...achievements[name]} />
         ))}

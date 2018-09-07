@@ -1,10 +1,12 @@
-import axios from 'axios'
+import api from '../services/api'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import stream from 'getstream'
 import notifications from '../notifications'
 import types from './types'
+
 const {
   ASYNC_ACHIEVEMENT_CONFIRM,
+  ASYNC_ACHIEVEMENT_CREATE,
   ASYNC_ACHIEVEMENT_SUPPORT,
   ASYNC_STREAM_FETCH_ACHIEVEMENTS,
   ASYNC_STREAM_FETCH_USER_TRANSACTIONS,
@@ -49,7 +51,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
   dispatch(notifications.facebookLoginSuccess)
   const { accessToken, userID } = facebookData
   try {
-    const { data: { exists } } = await axios.post(`${process.env.BACKEND_URL}/check`, { user: userID })
+    const { data: { exists } } = await api.checkUser({ user: userID })
     if (!exists) {
       const mnemonic = generateMnemonic()
       const wallet = network.fromMnemonic(mnemonic)
@@ -57,7 +59,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
       window.localStorage.setItem('privateKey', privateKey)
       dispatch(updateWalletMeta({ mnemonic, privateKey }))
       const walletData = await wallet.getInfo()
-      await axios.post(`${process.env.BACKEND_URL}/register`, {
+      await api.registerUser({
         address: walletData.addrStr,
         user: userID,
         token: accessToken
@@ -77,6 +79,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
       }
     }
   } catch (error) {
+    console.log(error)
     dispatch(updateWalletStatus('error'))
   }
 }
@@ -107,7 +110,7 @@ export const fetchUserTransactions = (userID) => async dispatch => {
 export const confirmAchievement = ({ token, user, target }) => async dispatch => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.requested })
-    await axios.post(`${process.env.BACKEND_URL}/confirm`, { token, user, target })
+    await api.confirmAchievement({ token, user, target })
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
   } catch (error) {
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
@@ -122,5 +125,27 @@ export const supportAchievement = (payload) => async dispatch => {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
   } catch (error) {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
+  }
+}
+
+export const createAchievement = (payload) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.requested })
+    const { link, title, text } = payload
+    const { facebook, wallet } = getState()
+    const { accessToken, userID } = facebook.data
+    const { addrStr } = wallet.data
+    const response = await api.createAchievement({
+      link,
+      title,
+      text,
+      token: accessToken,
+      user: userID,
+      address: addrStr
+    })
+    console.log(response)
+    dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.succeeded })
+  } catch (error) {
+    dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.failed, payload: { error } })
   }
 }

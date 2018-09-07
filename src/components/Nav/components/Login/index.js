@@ -26,6 +26,7 @@ class Login extends Component {
         appId="2107292709536080"
         fields="name,email,picture"
         callback={this.onFacebookLogin}
+        version="3.1"
         render={renderProps => (
           <Button
             color='blue'

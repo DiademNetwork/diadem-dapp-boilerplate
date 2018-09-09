@@ -86,12 +86,16 @@ class CreateAchievement extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button
+            onClick={this.handleClose}
+          >
             Cancel
           </Button>
           <Button
+            color="primary"
             disabled={title === '' || link === ''}
             onClick={this.handleSubmit}
+            variant="contained"
           >
             Submit
           </Button>

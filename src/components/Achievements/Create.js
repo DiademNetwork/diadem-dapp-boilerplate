@@ -52,7 +52,7 @@ class CreateAchievement extends Component {
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Support</DialogTitle>
+        <DialogTitle id="form-dialog-title">Create</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please provide link and title for your achievement

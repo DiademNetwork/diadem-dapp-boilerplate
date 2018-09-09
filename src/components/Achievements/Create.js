@@ -54,7 +54,7 @@ class CreateAchievement extends Component {
         variant="contained"
         onClick={this.handleClickOpen}
       >
-        {isDisabled ? 'You need to be logged and have your wallet ready to create an Achievement' : 'Create Achievement'}
+        {isDisabled ? 'Create Achievement needs Facebook login and wallet ready' : 'Create Achievement'}
       </Button>,
       <Dialog
         key='create-achievement-modal'

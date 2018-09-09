@@ -30,18 +30,26 @@ export const updateWalletMeta = (meta) => ({ type: WALLET_UPDATE_META, meta })
 export const updateWalletStatus = (status) => ({ type: WALLET_UPDATE_STATUS, status })
 
 export const refreshWallet = (wallet) => async dispatch => {
-  const walletData = await wallet.getInfo()
-  dispatch(updateWallet(walletData))
+  try {
+    const walletData = await wallet.getInfo()
+    dispatch(updateWallet(walletData))
+  } catch (error) {
+    dispatch(notifications.unknownError)
+  }
 }
 
 export const recoverWallet = (mnemonic) => async dispatch => {
-  const wallet = network.fromMnemonic(mnemonic)
-  const privateKey = wallet.toWIF()
-  window.localStorage.setItem('privateKey', privateKey)
-  const walletData = await wallet.getInfo()
-  dispatch(updateWallet(walletData))
-  dispatch(updateWalletMeta({ wallet }))
-  dispatch(updateWalletStatus('restored'))
+  try {
+    const wallet = network.fromMnemonic(mnemonic)
+    const privateKey = wallet.toWIF()
+    window.localStorage.setItem('privateKey', privateKey)
+    const walletData = await wallet.getInfo()
+    dispatch(updateWallet(walletData))
+    dispatch(updateWalletMeta({ wallet }))
+    dispatch(updateWalletStatus('restored'))
+  } catch (error) {
+    dispatch(notifications.unknownError)
+  }
 }
 
 // Authentication and Wallet Generation/Restore
@@ -93,6 +101,7 @@ export const fetchAchievements = () => async dispatch => {
     const data = response.results
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, data })
   } catch (error) {
+    dispatch(notifications.unknownError)
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed, payload: { error } })
   }
 }
@@ -104,6 +113,7 @@ export const fetchUserTransactions = (userID) => async dispatch => {
     const userTransactions = response.results
     dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.succeeded, payload: { userTransactions } })
   } catch (error) {
+    dispatch(notifications.unknownError)
     dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.failed, payload: { error } })
   }
 }
@@ -114,6 +124,7 @@ export const confirmAchievement = ({ address, link, token, user }) => async disp
     await api.confirmAchievement({ address, link, token, user })
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
   } catch (error) {
+    dispatch(notifications.unknownError)
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
   }
 }
@@ -126,6 +137,7 @@ export const supportAchievement = (payload) => async (dispatch, getState) => {
     await wallet.walletMeta.wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
   } catch (error) {
+    dispatch(notifications.unknownError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
 }
@@ -147,6 +159,7 @@ export const createAchievement = (payload) => async (dispatch, getState) => {
     })
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.succeeded })
   } catch (error) {
+    dispatch(notifications.unknownError)
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.failed, payload: { error } })
   }
 }

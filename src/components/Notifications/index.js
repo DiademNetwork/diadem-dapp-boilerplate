@@ -19,6 +19,9 @@ class NotificationsWrapper extends Component {
           lineHeight: '1.5em',
           backgroundColor: '#84519c',
           margin: '10px 5px 2px 1px'
+        },
+        error: {
+          backgroundColor: '#9c518f'
         }
       },
       Title: {

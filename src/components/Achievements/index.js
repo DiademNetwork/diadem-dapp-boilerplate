@@ -41,7 +41,7 @@ class Achievements extends Component {
   }
 
   render () {
-    const { achievementsData } = this.props
+    const { achievementsData, isFacebookAuthenticated, isWalletReady } = this.props
     const achievements = R.compose(
       this.aggregate('confirm', 'confirms')(achievementsData),
       this.aggregate('reward', 'rewards')(achievementsData),
@@ -57,7 +57,10 @@ class Achievements extends Component {
         alignContent="center"
       >
         <Grid item xs={12}>
-          <Create onCreate={this.handleCreateAchievement} />
+          <Create
+            onCreate={this.handleCreateAchievement}
+            isDisabled={!isWalletReady || !isFacebookAuthenticated}
+          />
         </Grid>
         {achievementsNames.length > 0
           ? achievementsNames.map((name, idx) => (
@@ -75,7 +78,9 @@ class Achievements extends Component {
 Achievements.propTypes = {
   achievementsData: T.array,
   createAchievement: T.func,
-  fetchAchievements: T.func
+  fetchAchievements: T.func,
+  isFacebookAuthenticated: T.bool,
+  isWalletReady: T.bool
 }
 
 export default withContainer(Achievements)

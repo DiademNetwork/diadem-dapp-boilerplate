@@ -1,7 +1,12 @@
 import { connect } from 'react-redux'
 import { createAchievement, fetchAchievements } from '../../actions'
+import { isWalletReady, isFacebookAuthenticated } from '../../selectors'
 
-const mapStateToProps = ({ achievements }) => ({ achievementsData: achievements.data })
+const mapStateToProps = (state) => ({
+  achievementsData: state.achievements.data,
+  isFacebookAuthenticated: isFacebookAuthenticated(state),
+  isWalletReady: isWalletReady(state)
+})
 
 const mapDispatchToProps = { createAchievement, fetchAchievements }
 

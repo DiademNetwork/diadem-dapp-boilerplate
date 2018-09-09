@@ -20,8 +20,14 @@ class AchievementConfirm extends Component {
     this.setState({ modalOpen: false })
   }
 
+  handleConfirm = () => {
+    const { onConfirm } = this.props
+    onConfirm && onConfirm()
+    this.handleClose()
+  }
+
   render () {
-    const { className, onConfirm, isFacebookAuthenticated } = this.props
+    const { className, isFacebookAuthenticated } = this.props
     const { modalOpen } = this.state
     return [
       <Button
@@ -51,7 +57,7 @@ class AchievementConfirm extends Component {
             No
           </Button>
           <Button
-            onClick={onConfirm}
+            onClick={this.handleConfirm}
             variant="contained"
             color="primary"
           >

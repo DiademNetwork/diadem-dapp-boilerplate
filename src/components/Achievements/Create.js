@@ -7,6 +7,13 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = (theme) => ({
+  button: {
+    marginTop: theme.spacing.unit * 2
+  }
+})
 
 class CreateAchievement extends Component {
   state = {
@@ -37,14 +44,17 @@ class CreateAchievement extends Component {
 
   render () {
     const { link, modalOpen, title } = this.state
+    const { classes, isDisabled } = this.props
     return [
       <Button
+        className={classes.button}
         color="secondary"
+        disabled={isDisabled}
         key="create-achievement-button"
         variant="contained"
         onClick={this.handleClickOpen}
       >
-        Create Achievement
+        {isDisabled ? 'You need to be logged and have your wallet ready to create an Achievement' : 'Create Achievement'}
       </Button>,
       <Dialog
         key='create-achievement-modal'
@@ -92,7 +102,9 @@ class CreateAchievement extends Component {
 }
 
 CreateAchievement.propTypes = {
-  onCreate: T.func
+  classes: T.object,
+  onCreate: T.func,
+  isDisabled: T.bool
 }
 
-export default CreateAchievement
+export default withStyles(styles)(CreateAchievement)

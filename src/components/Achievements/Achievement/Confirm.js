@@ -32,7 +32,7 @@ class AchievementConfirm extends Component {
         onClick={this.handleClickOpen}
         variant="contained"
       >
-        {!isFacebookAuthenticated ? 'Confirm needs FB login' : 'Confirm'}
+        {!isFacebookAuthenticated ? 'Confirm needs Facebook login' : 'Confirm'}
       </Button>,
       <Dialog
         key='achievement-confirm-modal'

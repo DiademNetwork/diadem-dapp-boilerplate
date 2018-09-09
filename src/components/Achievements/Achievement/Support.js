@@ -47,7 +47,7 @@ class AchievementSupport extends Component {
         variant="contained"
         color="primary"
       >
-        {isBalancePositive ? 'Support' : 'Support disabled while balance is null'}
+        {isBalancePositive ? 'Support' : 'Support needs a positive balance'}
       </Button>,
       <Dialog
         key='achievement-support-modal'

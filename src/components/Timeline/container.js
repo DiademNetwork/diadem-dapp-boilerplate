@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import { fetchUserTransactions } from '../../actions'
-import { isFBAuthenticated } from '../../selectors'
+import { isFacebookAuthenticated } from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  isFBAuthenticated: isFBAuthenticated(state),
+  isFacebookAuthenticated: isFacebookAuthenticated(state),
   userTransactions: state.userTransactions.data,
   userID: state.facebook.data.userID
 })

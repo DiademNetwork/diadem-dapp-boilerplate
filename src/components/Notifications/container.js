@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-const mapStateToProps = state => ({ notifications: state.notifications })
+const mapStateToProps = ({ notifications }) => ({ notifications })
 
 export default WrappedComponent => connect(
   mapStateToProps

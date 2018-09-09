@@ -1,55 +1,30 @@
-import React, { Component } from 'react'
-import Login from './components/Login'
+import React from 'react'
+import { PropTypes as T } from 'prop-types'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+import LoginButton from '../LoginButton'
 
-import {
-  Container,
-  Menu
-} from 'semantic-ui-react'
-
-const fixedMenuStyle = {
-  backgroundColor: '#fff',
-  border: '1px solid #ddd',
-  boxShadow: '0px 3px 5px rgba(0, 0, 0, 0.2)',
-  height: '61px'
-}
-
-export default class Nav extends Component {
-  openWallet = () => {
-    console.log('open wallet')
-  }
-  render () {
-    return (
-      <Menu
-        borderless
-        fixed='top'
-        style={fixedMenuStyle}
-        fluid
-      >
-        <Container>
-          <Menu.Item header>Diadem network</Menu.Item>
-          <Menu.Menu position='right'>
-            <Menu.Item>
-              <Login />
-            </Menu.Item>
-            {/* <Menu.Item position='right'>
-              <Modal
-                trigger={
-                  <Button color='teal'>
-                    Create a Achievement
-                  </Button>
-                }
-              >
-                <Modal.Header>Create an Achievement</Modal.Header>
-                <Modal.Content>
-                  <Modal.Description>
-                    Create Achievement form here
-                  </Modal.Description>
-                </Modal.Content>
-              </Modal>
-            </Menu.Item> */}
-          </Menu.Menu>
-        </Container>
-      </Menu>
-    )
+const styles = {
+  flex: {
+    flexGrow: 1
   }
 }
+
+const Nav = ({ classes }) => (
+  <AppBar position="static" color="primary">
+    <Toolbar>
+      <Typography variant="title" color="inherit" className={classes.flex}>
+        Diadem Network
+      </Typography>
+      <LoginButton />
+    </Toolbar>
+  </AppBar>
+)
+
+Nav.propTypes = {
+  classes: T.object.isRequired
+}
+
+export default withStyles(styles)(Nav)

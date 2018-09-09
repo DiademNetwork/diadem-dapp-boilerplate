@@ -1,20 +1,34 @@
 import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
-import withContainer from './container'
-
 import Notifications from 'react-notification-system-redux'
+import withContainer from './container'
 
 class NotificationsWrapper extends Component {
   render () {
     const { notifications } = this.props
 
     const style = {
-      NotificationItem: { // Override the notification item
-        DefaultStyle: { // Applied to every notification, regardless of the notification level
-          fontFamily: ['Lato', 'Helvetica Neue', 'Arial', 'Helvetica', 'sans-serif'],
-          color: 'rgba(0,0,0,.85)',
-          backgroundColor: '#FFF',
+      NotificationItem: {
+        DefaultStyle: {
+          boxShadow: 'none',
+          borderTop: 'none',
+          color: '#FFF',
+          fontSize: '1rem',
+          fontWeight: 400,
+          fontFamily: ['Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+          lineHeight: '1.5em',
+          backgroundColor: '#84519c',
           margin: '10px 5px 2px 1px'
+        }
+      },
+      Title: {
+        DefaultStyle: {
+          color: '#FFF'
+        }
+      },
+      Dismiss: {
+        DefaultStyle: {
+          backgroundColor: '#84519c'
         }
       }
     }

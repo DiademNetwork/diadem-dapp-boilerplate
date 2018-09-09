@@ -7,7 +7,7 @@ export const createAPI = (fetcher, url) => {
   }
 
   async function createAchievement (data) {
-    return fetcher.post(getUrl('create-achievement'), data)
+    return fetcher.post(getUrl('create'), data)
   }
 
   async function checkUser (data) {

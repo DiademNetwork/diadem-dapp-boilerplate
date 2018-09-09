@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
-import { Container } from 'semantic-ui-react'
-import Achievement from './components/Achievement'
-import Create from './components/Create'
-import withContainer from './container'
 import * as R from 'ramda'
+import Grid from '@material-ui/core/Grid'
+import Paper from '@material-ui/core/Paper'
+import Achievement from './Achievement'
+import withContainer from './container'
+import Create from './Create'
 
 class Achievements extends Component {
   componentDidMount () {
@@ -35,6 +36,10 @@ class Achievements extends Component {
     }, {})
   }
 
+  handleCreateAchievement = ({ link, title }) => {
+    this.props.createAchievement({ link, title })
+  }
+
   render () {
     const { achievementsData } = this.props
     const achievements = R.compose(
@@ -42,20 +47,35 @@ class Achievements extends Component {
       this.aggregate('reward', 'rewards')(achievementsData),
       this.extractCreatedAchievements
     )(achievementsData)
-    return (
-      <Container>
-        <Create />
-        {R.keys(achievements).map(name => (
-          <Achievement key={name} {...achievements[name]} />
-        ))}
-      </Container>
-    )
+    const achievementsNames = R.keys(achievements)
+    return [
+      <Grid
+        key='list'
+        container
+        spacing={24}
+        justify="center"
+        alignContent="center"
+      >
+        <Grid item xs={12}>
+          <Create onCreate={this.handleCreateAchievement} />
+        </Grid>
+        {achievementsNames.length > 0
+          ? achievementsNames.map((name, idx) => (
+            <Grid key={idx} item xs={12}>
+              <Achievement achievement={achievements[name]} />
+            </Grid>
+          ))
+          : <Paper>No achievement</Paper>
+        }
+      </Grid>
+    ]
   }
 }
 
 Achievements.propTypes = {
-  achievementsData: T.array.isRequired,
-  fetchAchievements: T.func.isRequired
+  achievementsData: T.array,
+  createAchievement: T.func,
+  fetchAchievements: T.func
 }
 
 export default withContainer(Achievements)

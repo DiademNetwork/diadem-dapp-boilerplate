@@ -67,6 +67,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
       dispatch(updateWalletMeta({ wallet }))
       dispatch(updateWallet(walletData))
       dispatch(updateWalletStatus('generated'))
+      dispatch(notifications.walletGenerated)
     } else {
       const storedPrivateKey = window.localStorage.getItem('privateKey')
       if (!storedPrivateKey) {
@@ -75,11 +76,12 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
         const wallet = network.fromWIF(storedPrivateKey)
         dispatch(updateWalletMeta({ wallet }))
         await refreshWallet(wallet)(dispatch)
+        dispatch(notifications.walletRestored)
         dispatch(updateWalletStatus('restored'))
       }
     }
   } catch (error) {
-    console.log(error)
+    dispatch(notifications.unknownError)
     dispatch(updateWalletStatus('error'))
   }
 }
@@ -91,7 +93,6 @@ export const fetchAchievements = () => async dispatch => {
     const data = response.results
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, data })
   } catch (error) {
-    console.log({ error })
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed, payload: { error } })
   }
 }
@@ -107,21 +108,22 @@ export const fetchUserTransactions = (userID) => async dispatch => {
   }
 }
 
-export const confirmAchievement = ({ token, user, target }) => async dispatch => {
+export const confirmAchievement = ({ address, link, token, user }) => async dispatch => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.requested })
-    await api.confirmAchievement({ token, user, target })
+    await api.confirmAchievement({ address, link, token, user })
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
   } catch (error) {
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
   }
 }
 
-export const supportAchievement = (payload) => async dispatch => {
+export const supportAchievement = (payload) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
-    const { wallet, author, amount } = payload
-    await wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
+    const { author, amount } = payload
+    const { wallet } = getState()
+    await wallet.walletMeta.wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
   } catch (error) {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
@@ -131,19 +133,18 @@ export const supportAchievement = (payload) => async dispatch => {
 export const createAchievement = (payload) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.requested })
-    const { link, title, text } = payload
+    const { link, title } = payload
     const { facebook, wallet } = getState()
     const { accessToken, userID } = facebook.data
     const { addrStr } = wallet.data
-    const response = await api.createAchievement({
+    await api.createAchievement({
+      address: addrStr,
       link,
+      previousLink: '',
       title,
-      text,
       token: accessToken,
-      user: userID,
-      address: addrStr
+      user: userID
     })
-    console.log(response)
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.succeeded })
   } catch (error) {
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.failed, payload: { error } })

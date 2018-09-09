@@ -1,17 +1,25 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateWallet } from '../../actions'
-import { isFBAuthenticated } from '../../selectors'
+import { recoverWallet, updateWalletStatus } from '../../actions'
+import { isFacebookAuthenticated, getWallet, getWalletMeta, getWalletStatus } from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  walletStatus: state.wallet.status,
-  walletData: state.wallet.data,
-  isFBAuthenticated: isFBAuthenticated(state)
+  address: getWallet('addrStr')(state),
+  balance: getWallet('balance')(state),
+  mnemonic: getWalletMeta('mnemonic')(state),
+  privateKey: getWalletMeta('privateKey')(state),
+  walletStatus: getWalletStatus(state),
+  isFacebookAuthenticated: isFacebookAuthenticated(state)
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  updateWallet
+const bindedActionCreators = dispatch => bindActionCreators({
+  updateWalletStatus
 }, dispatch)
+
+const mapDispatchToProps = {
+  ...bindedActionCreators,
+  recoverWallet
+}
 
 export default WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)

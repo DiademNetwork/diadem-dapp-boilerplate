@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { createAchievement, fetchAchievements } from '../../actions'
+import { createAchievement, fetchAchievements, updateAchievement } from '../../actions'
 import { isWalletReady, isFacebookAuthenticated } from '../../selectors'
 
 const mapStateToProps = (state) => ({
@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
   isWalletReady: isWalletReady(state)
 })
 
-const mapDispatchToProps = { createAchievement, fetchAchievements }
+const mapDispatchToProps = { createAchievement, fetchAchievements, updateAchievement }
 
 export default WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)

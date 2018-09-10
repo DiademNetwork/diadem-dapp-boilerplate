@@ -39,26 +39,27 @@ class Timeline extends Component {
     } else {
       renderedComponent = (
         <List>
-          {transactions.map((transaction, idx) => {
+          {transactions.map(({ actor, verb, object, target, time }, idx) => {
             let icon
             let action
-            switch (transaction.verb) {
+            const formattedTime = moment(time).format('DD/MM/YYYY, h:mm:ss')
+            switch (verb) {
               case 'create':
                 icon = <PlusOneIcon />
-                action = 'created an achievement'
+                action = `${actor} created achievement ${object}`
                 break
               case 'confirm':
                 icon = <ThumbUpIcon />
-                action = 'confirmed an achievement'
+                action = `${actor} confirmed achievement ${object}`
                 break
               case 'register':
                 icon = <PermIdentityIcon />
-                action = 'registered'
+                action = `${actor} registered ${object}`
                 break
               case 'withdraw':
               default:
                 icon = <RemoveIcon />
-                action = 'withdrew ??'
+                action = `${actor} withdrew achievement ${object}`
                 break
             }
             return (
@@ -67,8 +68,8 @@ class Timeline extends Component {
                   {icon}
                 </Avatar>
                 <ListItemText
-                  primary={`${transaction.actor} ${action}`}
-                  secondary={moment(transaction.time).format('DD/MM/YYYY, h:mm:ss')}
+                  primary={`${formattedTime} - ${action}`}
+                  secondary={`transaction: ${target}`}
                 />
               </ListItem>
             )

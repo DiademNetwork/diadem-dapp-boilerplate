@@ -7,18 +7,12 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { withStyles } from '@material-ui/core/styles'
 
-const styles = (theme) => ({
-  button: {
-    marginRight: theme.spacing.unit * 2
-  }
-})
-
-class CreateAchievement extends Component {
+class UpdateAchievement extends Component {
   state = {
     link: '',
     modalOpen: false,
+    previousLink: '',
     title: ''
   }
 
@@ -35,42 +29,48 @@ class CreateAchievement extends Component {
   }
 
   handleSubmit = () => {
-    const { onCreate } = this.props
-    const { link, title } = this.state
-    onCreate({ link, title })
-    this.setState({ link: '', title: '' })
+    const { onUpdate } = this.props
+    const { link, title, previousLink } = this.state
+    onUpdate({ link, previousLink, title })
+    this.setState({ link: '', previousLink: '', title: '' })
     this.handleClose()
   }
 
   render () {
-    const { link, modalOpen, title } = this.state
-    const { classes } = this.props
+    const { link, modalOpen, previousLink, title } = this.state
     return [
       <Button
-        className={classes.button}
         color="secondary"
-        key="create-achievement-button"
+        key="update-achievement-button"
         variant="contained"
         onClick={this.handleClickOpen}
       >
-        Create Achievement
+        Update Achievement
       </Button>,
       <Dialog
-        key='create-achievement-modal'
+        key='update-achievement-modal'
         open={modalOpen}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Create achievement</DialogTitle>
+        <DialogTitle id="form-dialog-title">Update achievement</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please provide link and title for your achievement
+            Please provide your previous achievement link, along with new title and link.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
+            id='previousLink'
+            label="Previous Facebook link of your achievement post"
+            value={previousLink}
+            onChange={this.handleChange('previousLink')}
+            fullWidth
+          />
+          <TextField
+            margin="dense"
             id='link'
-            label="Facebook link of your achievement post"
+            label="New Facebook link of your achievement post"
             value={link}
             onChange={this.handleChange('link')}
             fullWidth
@@ -104,9 +104,8 @@ class CreateAchievement extends Component {
   }
 }
 
-CreateAchievement.propTypes = {
-  classes: T.object,
-  onCreate: T.func
+UpdateAchievement.propTypes = {
+  onUpdate: T.func
 }
 
-export default withStyles(styles)(CreateAchievement)
+export default UpdateAchievement

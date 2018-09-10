@@ -1,13 +1,14 @@
 import api from '../services/api'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import stream from 'getstream'
-import notifications from '../notifications'
+import notifications from '../services/notifications'
 import types from './types'
 
 const {
   ASYNC_ACHIEVEMENT_CONFIRM,
   ASYNC_ACHIEVEMENT_CREATE,
   ASYNC_ACHIEVEMENT_SUPPORT,
+  ASYNC_ACHIEVEMENT_UPDATE,
   ASYNC_STREAM_FETCH_ACHIEVEMENTS,
   ASYNC_STREAM_FETCH_TRANSACTIONS,
   WALLET_UPDATE_DATA,
@@ -34,7 +35,7 @@ export const refreshWallet = (wallet) => async dispatch => {
     const walletData = await wallet.getInfo()
     dispatch(updateWallet(walletData))
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.walletRefreshError)
   }
 }
 
@@ -48,7 +49,7 @@ export const recoverWallet = (mnemonic) => async dispatch => {
     dispatch(updateWalletMeta({ wallet }))
     dispatch(updateWalletStatus('restored'))
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.walletRecoverError)
   }
 }
 
@@ -89,7 +90,7 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
       }
     }
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.walletError)
     dispatch(updateWalletStatus('error'))
   }
 }
@@ -101,8 +102,7 @@ export const fetchAchievements = () => async dispatch => {
     const data = response.results
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, data })
   } catch (error) {
-    console.log(error)
-    dispatch(notifications.unknownError)
+    dispatch(notifications.fetchAchievementsError)
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed, payload: { error } })
   }
 }
@@ -114,7 +114,7 @@ export const fetchTransactions = () => async dispatch => {
     const data = response.results
     dispatch({ type: ASYNC_STREAM_FETCH_TRANSACTIONS.succeeded, data })
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.fetchTransactionsError)
     dispatch({ type: ASYNC_STREAM_FETCH_TRANSACTIONS.failed, payload: { error } })
   }
 }
@@ -125,7 +125,8 @@ export const confirmAchievement = ({ address, link, token, user }) => async disp
     await api.confirmAchievement({ address, link, token, user })
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.confirmAchievementError)
+    dispatch(notifications.confirmAchievementSuccess)
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
   }
 }
@@ -137,8 +138,9 @@ export const supportAchievement = (payload) => async (dispatch, getState) => {
     const { wallet } = getState()
     await wallet.walletMeta.wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
+    dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.supportAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
 }
@@ -159,8 +161,32 @@ export const createAchievement = (payload) => async (dispatch, getState) => {
       user: userID
     })
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.succeeded })
+    dispatch(notifications.createAchievementSuccess)
   } catch (error) {
-    dispatch(notifications.unknownError)
+    dispatch(notifications.createAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.failed, payload: { error } })
+  }
+}
+
+export const updateAchievement = (payload) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.requested })
+    const { link, title, previousLink } = payload
+    const { facebook, wallet } = getState()
+    const { accessToken, userID } = facebook.data
+    const { addrStr } = wallet.data
+    await api.updateAchievement({
+      address: addrStr,
+      link,
+      previousLink,
+      title,
+      token: accessToken,
+      user: userID
+    })
+    dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.succeeded })
+    dispatch(notifications.updateAchievementSuccess)
+  } catch (error) {
+    dispatch(notifications.updateAchievementError)
+    dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.failed, payload: { error } })
   }
 }

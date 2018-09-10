@@ -10,6 +10,10 @@ export const createAPI = (fetcher, url) => {
     return fetcher.post(getUrl('create'), data)
   }
 
+  async function updateAchievement (data) {
+    return fetcher.post(getUrl('create'), data)
+  }
+
   async function checkUser (data) {
     return fetcher.post(getUrl('check'), data)
   }
@@ -26,7 +30,8 @@ export const createAPI = (fetcher, url) => {
     checkUser,
     confirmAchievement,
     createAchievement,
-    registerUser
+    registerUser,
+    updateAchievement
   })
 }
 

@@ -3,9 +3,11 @@ import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+import Button from '@material-ui/core/Button'
 import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
+import Update from './Update'
 
 class Achievements extends Component {
   componentDidMount () {
@@ -40,6 +42,10 @@ class Achievements extends Component {
     this.props.createAchievement({ link, title })
   }
 
+  handleUpdateAchievement = ({ link, previousLink, title }) => {
+    this.props.updateAchievement({ link, previousLink, title })
+  }
+
   render () {
     const { achievementsData, isFacebookAuthenticated, isWalletReady } = this.props
     const achievements = R.compose(
@@ -48,6 +54,7 @@ class Achievements extends Component {
       this.extractCreatedAchievements
     )(achievementsData)
     const achievementsNames = R.keys(achievements)
+    const canCreateOrUpdate = isWalletReady && isFacebookAuthenticated
     return [
       <Grid
         key='list'
@@ -56,12 +63,17 @@ class Achievements extends Component {
         justify="center"
         alignContent="center"
       >
-        <Grid item xs={12}>
-          <Create
-            onCreate={this.handleCreateAchievement}
-            isDisabled={!isWalletReady || !isFacebookAuthenticated}
-          />
-        </Grid>
+        {canCreateOrUpdate &&
+          <Grid item xs={12}>
+            <Create onCreate={this.handleCreateAchievement} />
+            <Update onUpdate={this.handleUpdateAchievement} />
+          </Grid>
+        }
+        {!canCreateOrUpdate &&
+          <Grid item xs={12}>
+            <Button disabled variant="contained">Create/Update Achievement needs Facebook login and wallet ready</Button>
+          </Grid>
+        }
         {achievementsNames.length > 0
           ? achievementsNames.map((name, idx) => (
             <Grid key={idx} item xs={12}>
@@ -84,7 +96,8 @@ Achievements.propTypes = {
   createAchievement: T.func,
   fetchAchievements: T.func,
   isFacebookAuthenticated: T.bool,
-  isWalletReady: T.bool
+  isWalletReady: T.bool,
+  updateAchievement: T.func
 }
 
 export default withContainer(Achievements)

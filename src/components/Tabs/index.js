@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import { withStyles } from '@material-ui/core/styles'
 import * as R from 'ramda'
 
 const AppTabSelector = ({ label }) => (
@@ -18,6 +19,12 @@ AppTab.propTypes = {
   component: T.node
 }
 
+const styles = (theme) => ({
+  tabs: {
+    marginBottom: theme.spacing.unit * 2
+  }
+})
+
 class AppTabs extends Component {
   state = {
     tabIdx: 0
@@ -29,9 +36,10 @@ class AppTabs extends Component {
 
   render () {
     const { tabIdx } = this.state
-    const { tabs } = this.props
+    const { classes, tabs } = this.props
     return [
       <Tabs
+        className={classes.tabs}
         key='tabs'
         value={tabIdx}
         onChange={this.handleChange}
@@ -49,7 +57,8 @@ class AppTabs extends Component {
 }
 
 AppTabs.propTypes = {
+  classes: T.object,
   tabs: T.array
 }
 
-export default AppTabs
+export default withStyles(styles)(AppTabs)

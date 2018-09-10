@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import FacebookLinkHelp from './FacebookLinkHelp'
 
 class UpdateAchievement extends Component {
   state = {
@@ -56,32 +57,39 @@ class UpdateAchievement extends Component {
         <DialogTitle id="form-dialog-title">Update achievement</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please provide your previous achievement link, along with new title and link.
+            To update your achievement, please provide the previous link of your Facebook achievement post and provide a title for it
           </DialogContentText>
+          <FacebookLinkHelp />
           <TextField
             autoFocus
-            margin="dense"
+            margin="normal"
             id='previousLink'
             label="Previous Facebook link of your achievement post"
             value={previousLink}
             onChange={this.handleChange('previousLink')}
+            placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
+            helperText='Please copy full link'
           />
           <TextField
-            margin="dense"
+            margin="normal"
             id='link'
             label="New Facebook link of your achievement post"
             value={link}
             onChange={this.handleChange('link')}
+            placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
+            helperText='Please copy full link'
           />
           <TextField
-            margin="dense"
+            margin="normal"
             id='title'
             label="Title for your achievement"
             value={title}
             onChange={this.handleChange('title')}
+            placeholder='wrote the first chapter of my book'
             fullWidth
+            helperText='I ..your title..'
           />
         </DialogContent>
         <DialogActions>

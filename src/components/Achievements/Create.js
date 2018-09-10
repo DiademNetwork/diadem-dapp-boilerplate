@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
+import FacebookLinkHelp from './FacebookLinkHelp'
 
 const styles = (theme) => ({
   button: {
@@ -64,24 +65,29 @@ class CreateAchievement extends Component {
         <DialogTitle id="form-dialog-title">Create achievement</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please provide link and title for your achievement
+            To create an achievement, please provide the link to your achievement Facebook post and provide a title for it
           </DialogContentText>
+          <FacebookLinkHelp />
           <TextField
             autoFocus
-            margin="dense"
+            margin="normal"
             id='link'
             label="Facebook link of your achievement post"
             value={link}
             onChange={this.handleChange('link')}
+            placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
+            helperText='Please copy full link'
           />
           <TextField
-            margin="dense"
+            margin="normal"
             id='title'
             label="Title for your achievement"
             value={title}
             onChange={this.handleChange('title')}
+            placeholder='wrote the first chapter of my book'
             fullWidth
+            helperText='I ..your title..'
           />
         </DialogContent>
         <DialogActions>

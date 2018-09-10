@@ -1,14 +1,13 @@
 import { connect } from 'react-redux'
-import { fetchUserTransactions } from '../../actions'
-import { isFacebookAuthenticated } from '../../selectors'
+import { fetchTransactions } from '../../actions'
+import { getAllTransactionsData, isFacebookAuthenticated } from '../../selectors'
 
 const mapStateToProps = (state) => ({
   isFacebookAuthenticated: isFacebookAuthenticated(state),
-  userTransactions: state.userTransactions.data,
-  userID: state.facebook.data.userID
+  transactions: getAllTransactionsData(state)
 })
 
-const mapDispatchToProps = { fetchUserTransactions }
+const mapDispatchToProps = { fetchTransactions }
 
 export default WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)

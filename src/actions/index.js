@@ -9,7 +9,7 @@ const {
   ASYNC_ACHIEVEMENT_CREATE,
   ASYNC_ACHIEVEMENT_SUPPORT,
   ASYNC_STREAM_FETCH_ACHIEVEMENTS,
-  ASYNC_STREAM_FETCH_USER_TRANSACTIONS,
+  ASYNC_STREAM_FETCH_TRANSACTIONS,
   WALLET_UPDATE_DATA,
   WALLET_UPDATE_META,
   WALLET_UPDATE_STATUS,
@@ -97,24 +97,25 @@ export const handleFacebookLogin = (facebookData) => async dispatch => {
 export const fetchAchievements = () => async dispatch => {
   try {
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.requested })
-    const response = await client.feed(process.env.STREAM_ACHIEVEMENTS_FEED, 'common', process.env.STREAM_FEED_TOKEN).get()
+    const response = await client.feed(process.env.STREAM_ACHIEVEMENTS_FEED, 'common', process.env.STREAM_ACHIEVEMENTS_FEED_TOKEN).get()
     const data = response.results
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded, data })
   } catch (error) {
+    console.log(error)
     dispatch(notifications.unknownError)
     dispatch({ type: ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed, payload: { error } })
   }
 }
 
-export const fetchUserTransactions = (userID) => async dispatch => {
+export const fetchTransactions = () => async dispatch => {
   try {
-    dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.requested })
-    const response = await client.feed(process.env.STREAM_TRANSACTIONS_FEED, userID, process.env.STREAM_FEED_TOKEN).get()
-    const userTransactions = response.results
-    dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.succeeded, payload: { userTransactions } })
+    dispatch({ type: ASYNC_STREAM_FETCH_TRANSACTIONS.requested })
+    const response = await client.feed(process.env.STREAM_TRANSACTIONS_FEED, 'common', process.env.STREAM_TRANSACTIONS_FEED_TOKEN).get()
+    const data = response.results
+    dispatch({ type: ASYNC_STREAM_FETCH_TRANSACTIONS.succeeded, data })
   } catch (error) {
     dispatch(notifications.unknownError)
-    dispatch({ type: ASYNC_STREAM_FETCH_USER_TRANSACTIONS.failed, payload: { error } })
+    dispatch({ type: ASYNC_STREAM_FETCH_TRANSACTIONS.failed, payload: { error } })
   }
 }
 

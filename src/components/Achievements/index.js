@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Grid from '@material-ui/core/Grid'
-import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
 import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
@@ -68,7 +68,11 @@ class Achievements extends Component {
               <Achievement achievement={achievements[name]} />
             </Grid>
           ))
-          : <Paper>No achievement</Paper>
+          : (
+            <Grid key='no-item' item xs={12}>
+              <Typography color="textPrimary">No achievement</Typography>
+            </Grid>
+          )
         }
       </Grid>
     ]

@@ -64,7 +64,7 @@ class App extends Component {
             <Grid item xs={12} md={8}>
               <Tabs tabs={[
                 { label: 'Achievements', component: <Achievements /> },
-                { label: 'Your timeline', component: <Timeline /> }
+                { label: 'Timeline', component: <Timeline /> }
               ]} />
             </Grid>
           </Grid>

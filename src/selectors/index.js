@@ -21,3 +21,12 @@ export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebook
 
 // Transactions
 export const getAllTransactionsData = R.path(['transactions', 'data'])
+export const getAllTransactionsMeta = R.path(['transactions', 'meta'])
+export const getTransactionsMeta = name => createSelector([getAllTransactionsMeta], R.prop(name))
+export const getTransactionsCount = createSelector([getAllTransactionsData], R.length)
+
+// Achievements
+export const getAllAchievementsData = R.path(['achievements', 'data'])
+export const getAllAchievementsMeta = R.path(['achievements', 'meta'])
+export const getAchievementsMeta = name => createSelector([getAllAchievementsMeta], R.prop(name))
+export const getAchievementsCount = createSelector([getAllAchievementsData], R.length)

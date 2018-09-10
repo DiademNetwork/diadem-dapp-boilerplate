@@ -15,20 +15,6 @@ import RemoveIcon from '@material-ui/icons/Remove'
 import moment from 'moment'
 
 class Timeline extends Component {
-  refreshUserTransactions = () => {
-    const { fetchTransactions, isFacebookAuthenticated } = this.props
-    isFacebookAuthenticated && fetchTransactions()
-  }
-
-  componentDidMount () {
-    this.refreshUserTransactions()
-    this.refreshInterval = setInterval(this.refreshUserTransactions, 5000)
-  }
-
-  componentWillUnmount () {
-    clearInterval(this.refreshInterval)
-  }
-
   render () {
     const { isFacebookAuthenticated, transactions } = this.props
     let renderedComponent
@@ -89,7 +75,6 @@ class Timeline extends Component {
 
 Timeline.propTypes = {
   transactions: T.array,
-  fetchTransactions: T.func.isRequired,
   isFacebookAuthenticated: T.bool.isRequired
 }
 

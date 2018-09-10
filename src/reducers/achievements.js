@@ -4,15 +4,19 @@ const {
   ASYNC_ACHIEVEMENT_CONFIRM,
   ASYNC_ACHIEVEMENT_CREATE,
   ASYNC_ACHIEVEMENT_SUPPORT,
-  ASYNC_STREAM_FETCH_ACHIEVEMENTS
+  ACHIEVEMENTS_UPDATE_DATA,
+  ACHIEVEMENTS_UPDATE_META
 } = types
 
 const intialState = {
   createStatus: 'none',
   supportStatus: 'none',
   confirmStatus: 'none',
-  fetchStatus: 'none',
-  data: []
+  data: [],
+  meta: {
+    loadedOnce: false,
+    notificationCount: 0
+  }
 }
 
 export default (state, action) => {
@@ -21,9 +25,8 @@ export default (state, action) => {
   }
   const mergeState = R.merge(state)
   switch (action.type) {
-    case ASYNC_STREAM_FETCH_ACHIEVEMENTS.requested: return mergeState({ fetchStatus: 'requested' })
-    case ASYNC_STREAM_FETCH_ACHIEVEMENTS.succeeded: return mergeState({ fetchStatus: 'succeeded', data: action.data })
-    case ASYNC_STREAM_FETCH_ACHIEVEMENTS.failed: return mergeState({ fetchStatus: 'failed' })
+    case ACHIEVEMENTS_UPDATE_DATA: return mergeState({ data: action.data })
+    case ACHIEVEMENTS_UPDATE_META: return mergeState({ meta: { ...state.meta, ...action.meta } })
     case ASYNC_ACHIEVEMENT_CONFIRM.requested: return mergeState({ confirmStatus: 'requested' })
     case ASYNC_ACHIEVEMENT_CONFIRM.succeeded: return mergeState({ confirmStatus: 'succeeded' })
     case ASYNC_ACHIEVEMENT_CONFIRM.failed: return mergeState({ confirmStatus: 'failed' })

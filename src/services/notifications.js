@@ -64,5 +64,11 @@ export default {
   }),
   supportAchievementError: getNotification('error')({
     title: 'Impossible to support achievement'
+  }),
+  newAchievements: getNotification('success')({
+    title: 'New achievements'
+  }),
+  newTransactions: getNotification('success')({
+    title: 'New transactions'
   })
 }

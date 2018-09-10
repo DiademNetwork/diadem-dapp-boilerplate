@@ -10,10 +10,6 @@ import Create from './Create'
 import Update from './Update'
 
 class Achievements extends Component {
-  componentDidMount () {
-    this.props.fetchAchievements()
-  }
-
   extractCreatedAchievements = R.compose(
     R.reduce((acc, curr) => ({ ...acc, [curr.object]: curr }), {}),
     R.reduce(R.concat, []),
@@ -38,16 +34,8 @@ class Achievements extends Component {
     }, {})
   }
 
-  handleCreateAchievement = ({ link, title }) => {
-    this.props.createAchievement({ link, title })
-  }
-
-  handleUpdateAchievement = ({ link, previousLink, title }) => {
-    this.props.updateAchievement({ link, previousLink, title })
-  }
-
   render () {
-    const { achievementsData, isFacebookAuthenticated, isWalletReady } = this.props
+    const { achievementsData, createAchievement, isFacebookAuthenticated, isWalletReady, updateAchievement } = this.props
     const achievements = R.compose(
       this.aggregate('confirm', 'confirms')(achievementsData),
       this.aggregate('reward', 'rewards')(achievementsData),
@@ -65,8 +53,8 @@ class Achievements extends Component {
       >
         {canCreateOrUpdate &&
           <Grid item xs={12}>
-            <Create onCreate={this.handleCreateAchievement} />
-            <Update onUpdate={this.handleUpdateAchievement} />
+            <Create onCreate={createAchievement} />
+            <Update onUpdate={updateAchievement} />
           </Grid>
         }
         {!canCreateOrUpdate &&
@@ -94,7 +82,6 @@ class Achievements extends Component {
 Achievements.propTypes = {
   achievementsData: T.array,
   createAchievement: T.func,
-  fetchAchievements: T.func,
   isFacebookAuthenticated: T.bool,
   isWalletReady: T.bool,
   updateAchievement: T.func

@@ -41,14 +41,12 @@ const WalletDisplay = ({ classes, address, balance }) => (
           {address}
           <Tooltip
             TransitionComponent={Zoom}
-            color='primary'
             title={`This is the first address of your hot Diadem Network wallet`}
           >
             <HelpOutlineIcon className={classes.tooltipIcon} />
           </Tooltip>
           <Tooltip
             TransitionComponent={Zoom}
-            color='primary'
             title='Copy address to clipboard'
           >
             <IconButton
@@ -73,7 +71,6 @@ const WalletDisplay = ({ classes, address, balance }) => (
             {`${balance} QTUM`}
             <Tooltip
               TransitionComponent={Zoom}
-              color='primary'
               title={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`}
             >
               <HelpOutlineIcon className={classes.tooltipIcon} />

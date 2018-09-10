@@ -12,11 +12,19 @@ import PlusOneIcon from '@material-ui/icons/PlusOneOutlined'
 import ThumbUpIcon from '@material-ui/icons/ThumbUpOutlined'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import RemoveIcon from '@material-ui/icons/Remove'
+import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
+
+const styles = (theme) => ({
+  link: {
+    color: theme.palette.primary.light,
+    textDecoration: 'none'
+  }
+})
 
 class Timeline extends Component {
   render () {
-    const { isFacebookAuthenticated, transactions } = this.props
+    const { classes, isFacebookAuthenticated, transactions } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
       renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see your timeline</Typography>
@@ -48,14 +56,18 @@ class Timeline extends Component {
                 action = `${actor} withdrew achievement ${object}`
                 break
             }
+            const linkComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view on explorer</a>
             return (
               <ListItem key={idx}>
                 <Avatar>
                   {icon}
                 </Avatar>
                 <ListItemText
-                  primary={`${formattedTime} - ${action}`}
-                  secondary={`transaction: ${target}`}
+                  primary={(
+                    <Typography>
+                      {formattedTime} - {action} - {linkComponent}
+                    </Typography>
+                  )}
                 />
               </ListItem>
             )
@@ -74,8 +86,9 @@ class Timeline extends Component {
 }
 
 Timeline.propTypes = {
+  classes: T.object,
   transactions: T.array,
   isFacebookAuthenticated: T.bool.isRequired
 }
 
-export default withContainer(Timeline)
+export default withContainer(withStyles(styles)(Timeline))

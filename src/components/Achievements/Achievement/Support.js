@@ -35,7 +35,7 @@ class AchievementSupport extends Component {
   }
 
   render () {
-    const { className, author, title, walletBalance } = this.props
+    const { className, author, text, title, walletBalance } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
     const { modalOpen } = this.state
     return [
@@ -47,7 +47,7 @@ class AchievementSupport extends Component {
         variant="contained"
         color="primary"
       >
-        {isBalancePositive ? 'Support' : 'Support needs a positive balance'}
+        {isBalancePositive ? text : 'Support needs a positive balance'}
       </Button>,
       <Dialog
         key='achievement-support-modal'
@@ -95,7 +95,8 @@ AchievementSupport.propTypes = {
   className: T.string,
   onSupport: T.func,
   title: T.string,
-  walletBalance: T.number
+  walletBalance: T.number,
+  text: T.string
 }
 
 export default AchievementSupport

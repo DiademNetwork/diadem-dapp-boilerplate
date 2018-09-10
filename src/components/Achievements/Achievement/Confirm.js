@@ -27,7 +27,7 @@ class AchievementConfirm extends Component {
   }
 
   render () {
-    const { className, isFacebookAuthenticated } = this.props
+    const { className, isFacebookAuthenticated, text } = this.props
     const { modalOpen } = this.state
     return [
       <Button
@@ -38,7 +38,7 @@ class AchievementConfirm extends Component {
         onClick={this.handleClickOpen}
         variant="contained"
       >
-        {!isFacebookAuthenticated ? 'Confirm needs Facebook login' : 'Confirm'}
+        {!isFacebookAuthenticated ? 'Confirm needs Facebook login' : text}
       </Button>,
       <Dialog
         key='achievement-confirm-modal'
@@ -72,7 +72,8 @@ class AchievementConfirm extends Component {
 AchievementConfirm.propTypes = {
   className: T.string,
   onConfirm: T.func,
-  isFacebookAuthenticated: T.bool
+  isFacebookAuthenticated: T.bool,
+  text: T.string
 }
 
 export default AchievementConfirm

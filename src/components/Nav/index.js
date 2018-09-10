@@ -10,7 +10,7 @@ import LogoImage from './logo.png'
 const styles = (theme) => ({
   logo: {
     marginRight: theme.spacing.unit * 2,
-    width: '50px'
+    width: '40px'
   },
   flex: {
     flexGrow: 1

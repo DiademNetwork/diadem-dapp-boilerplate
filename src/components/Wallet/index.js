@@ -7,8 +7,21 @@ import withContainer from './container'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
+import notifications from '../../services/notifications'
 
 class Wallet extends Component {
+  handleRefreshWallet = () => {
+    const { refreshWallet, wallet } = this.props
+    refreshWallet(wallet)
+  }
+
+  componentWillReceiveProps ({ unconfirmedBalance: newUnconfirmedBalance }) {
+    const { displayNotification, unconfirmedBalance } = this.props
+    if (newUnconfirmedBalance !== unconfirmedBalance && newUnconfirmedBalance !== 0) {
+      displayNotification(notifications.incomingTokens)
+    }
+  }
+
   render () {
     const {
       address,
@@ -18,15 +31,22 @@ class Wallet extends Component {
       privateKey,
       updateWalletStatus,
       recoverWallet,
+      unconfirmedBalance,
       walletStatus
     } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
-      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to use your wallet</Typography>
+      renderedComponent = (
+        <Typography color="textPrimary">
+          You must be logged with Facebook to use your wallet
+        </Typography>
+      )
     } else {
       switch (walletStatus) {
         case 'none':
-          renderedComponent = <Typography color="textSecondary">Loading...</Typography>
+          renderedComponent = (
+            <Typography color="textSecondary">Loading...</Typography>
+          )
           break
         case 'generated':
           renderedComponent = <Generated
@@ -36,15 +56,28 @@ class Wallet extends Component {
           />
           break
         case 'needs-recovering':
-          renderedComponent = <Recover onRecover={recoverWallet} />
+          renderedComponent = (
+            <Recover onRecover={recoverWallet} />
+          )
           break
         case 'restored':
         case 'restoring-info-saved':
-          renderedComponent = <Display address={address} balance={balance} />
+          renderedComponent = (
+            <Display
+              address={address}
+              balance={balance}
+              unconfirmedBalance={unconfirmedBalance}
+              onRefreshWallet={this.handleRefreshWallet}
+            />
+          )
           break
         case 'error':
         default:
-          renderedComponent = <Typography error>Sorry, and error happenned when trying to retrieve your wallet.</Typography>
+          renderedComponent = (
+            <Typography error>
+              Sorry, and error happenned when trying to retrieve your wallet.
+            </Typography>
+          )
           break
       }
     }
@@ -62,12 +95,16 @@ class Wallet extends Component {
 Wallet.propTypes = {
   address: T.string,
   balance: T.number,
+  displayNotification: T.func,
   isFacebookAuthenticated: T.bool,
   mnemonic: T.string,
   privateKey: T.string,
   walletStatus: T.string,
   recoverWallet: T.func,
-  updateWalletStatus: T.func
+  refreshWallet: T.func,
+  unconfirmedBalance: T.number,
+  updateWalletStatus: T.func,
+  wallet: T.object
 }
 
 export default withContainer(Wallet)

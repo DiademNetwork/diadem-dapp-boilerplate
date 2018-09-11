@@ -10,9 +10,9 @@ const styles = (theme) => ({
   }
 })
 
-const Link = ({ classes, href, text, typographyProps }) => (
+const Link = ({ className, classes, href, text, typographyProps }) => (
   <Typography
-    className={classes.link}
+    className={`${classes.link} ${className}`}
     color="primary"
     component="a"
     href={href}
@@ -25,9 +25,11 @@ const Link = ({ classes, href, text, typographyProps }) => (
 )
 
 Link.propTypes = {
+  classes: T.object,
+  className: T.string,
   href: T.string,
-  typographyProps: T.object,
-  text: T.string
+  text: T.string,
+  typographyProps: T.object
 }
 
 export default withStyles(styles)(Link)

@@ -36,19 +36,25 @@ class AchievementSupport extends Component {
   }
 
   render () {
-    const { className, author, title, walletBalance } = this.props
+    const {
+      actionAlreadyDone,
+      author,
+      className,
+      title,
+      walletBalance
+    } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
     const { amount, isAmountValid, modalOpen } = this.state
     return [
       <Button
         className={className}
         key='achievement-support-button'
-        disabled={!isBalancePositive}
+        disabled={!isBalancePositive || actionAlreadyDone}
         onClick={this.handleClickOpen}
         variant="contained"
         color="primary"
       >
-        Support
+        {actionAlreadyDone ? 'You already supported' : 'Support'}
       </Button>,
       <Dialog
         key='achievement-support-modal'
@@ -59,7 +65,7 @@ class AchievementSupport extends Component {
         <DialogTitle id="form-dialog-title">Support</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter an amount you would like to send to support author <strong>{author} </strong><br />
+            Please enter an amount (max ${walletBalance} QTUM) you would like to send to support author <strong>{author} </strong><br />
             for his achievement: <strong>{title}</strong>
           </DialogContentText>
           <TextField
@@ -93,6 +99,7 @@ class AchievementSupport extends Component {
 }
 
 AchievementSupport.propTypes = {
+  actionAlreadyDone: T.bool,
   author: T.string,
   className: T.string,
   onSupport: T.func,

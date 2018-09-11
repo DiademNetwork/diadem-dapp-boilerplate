@@ -33,7 +33,7 @@ export const updateWallet = (data) => ({ type: WALLET_UPDATE_DATA, data })
 export const updateWalletMeta = (meta) => ({ type: WALLET_UPDATE_META, meta })
 export const updateWalletStatus = (status) => ({ type: WALLET_UPDATE_STATUS, status })
 
-export const refreshWallet = (wallet) => async dispatch => {
+export const refreshWallet = (wallet) => async (dispatch) => {
   try {
     const walletData = await wallet.getInfo()
     dispatch(updateWallet(walletData))
@@ -57,7 +57,7 @@ export const recoverWallet = (mnemonic) => async dispatch => {
 }
 
 // Authentication and Wallet Generation/Restore
-export const handleFacebookLogin = (facebookData) => async dispatch => {
+export const handleFacebookLogin = (facebookData) => async (dispatch, getState) => {
   dispatch(updateFacebook(facebookData))
   dispatch(updateFacebookAuthenticationStatus('suceeded'))
   dispatch(notifications.facebookLoginSuccess)

@@ -75,16 +75,19 @@ class Help extends Component {
               CONFIRM ACHIEVEMENT(S): Confirm other user(s) achievement(s). It's free!
             </Typography>
             <Typography color="textSecondary">
-              SUPPORT ACHIEVEMENT(S): Send QTUM token to achievers to show them some love
+              SUPPORT ACHIEVEMENT(S): Send QTUM token to achievers to show them some love.
             </Typography>
             <Typography paragraph color="textSecondary">
               DEPOSIT FOR ACHIEVEMENT(S): Deposit QTUM tokens which will not be sent until facebook the user YOU chose confirms the achievement
             </Typography>
             <Typography variant="body2">
-              Facebook Login is required
+              Facebook Login is required to perform most actions
+            </Typography>
+            <Typography variant="body2">
+              A hot wallet is used to manage QTUM transactions
             </Typography>
             <Typography paragraph variant="body2">
-              A hot wallet is used to manage QTUM transactions
+              Support and Deposit need a positive balance to be used
             </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel

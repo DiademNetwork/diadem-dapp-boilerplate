@@ -16,9 +16,6 @@ import Confirm from './Confirm'
 import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
-import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
-import IconButton from '@material-ui/core/IconButton'
-import copyToClipboard from '../../../services/copy-to-clipboard'
 import Link from '../../Link'
 // import HelpTooltip from '../../HelpTooltip'
 
@@ -34,6 +31,9 @@ const styles = (theme) => ({
   },
   iconButton: {
     color: theme.palette.secondary.light
+  },
+  link: {
+    marginTop: theme.spacing.unit
   },
   panelDetails: {
     flexDirection: 'column'
@@ -77,16 +77,16 @@ class Achievement extends Component {
     depositForAchievement({ amount, wallet, link: object, witnessUserID })
   }
 
-  hasUserAlreadyConfirmed = () => {
-    const { achievement: { confirmators }, userID } = this.props
-    return R.contains(userID, confirmators)
-  }
+  isUserIn = listName => R.contains(
+    this.props.userID,
+    this.props.achievement[listName]
+  )
 
   render () {
     const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { confirmators, supporters, depositors } = achievement
-    const { actor, name, title, wallet, object } = displayedHistoryItem
+    const { actor, name, title, object } = displayedHistoryItem
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={
@@ -96,17 +96,6 @@ class Achievement extends Component {
         } />
         <Divider />
         <CardContent>
-          <Typography paragraph variant="subheading" color="textSecondary">
-            Creator QTUM address: {wallet}
-            <IconButton
-              className={classes.iconButton}
-              onClick={() => copyToClipboard(wallet)}
-              aria-label="Copy"
-              color="primary"
-            >
-              <FileCopyIcon />
-            </IconButton>
-          </Typography>
           {confirmators.length > 0 &&
             <Typography variant="body1">
               It has been confirmed by {confirmators[0]}{confirmators.length - 1 > 0 ? ` and ${confirmators.length - 1} others` : ''}
@@ -123,6 +112,7 @@ class Achievement extends Component {
             </Typography>
           }
           <Link
+            className={classes.link}
             href={object}
             text="View achievement post on Facebook"
           />
@@ -134,7 +124,7 @@ class Achievement extends Component {
           <Confirm
             actor={actor}
             className={classes.actionsButtons}
-            hasAlreadyConfirmed={this.hasUserAlreadyConfirmed()}
+            actionAlreadyDone={this.isUserIn('confirmators')}
             isFacebookAuthenticated={isFacebookAuthenticated}
             link={object}
             onConfirm={this.handleConfirm}
@@ -142,11 +132,13 @@ class Achievement extends Component {
           />
           <Support
             className={classes.actionsButtons}
+            actionAlreadyDone={this.isUserIn('supporters')}
             onSupport={this.handleSupport}
             walletBalance={walletBalance}
           />
           <Deposit
             className={classes.actionsButtons}
+            actionAlreadyDone={this.isUserIn('supporters')}
             onSupport={this.handleDeposit}
             walletBalance={walletBalance}
           />

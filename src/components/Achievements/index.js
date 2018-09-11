@@ -3,7 +3,6 @@ import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
 import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
@@ -13,7 +12,7 @@ import sortByTime from '../../helpers/sort-by-time'
 class Achievements extends Component {
   aggregateAchievements = R.compose(
     R.mapObjIndexed((itemsInHistory) => {
-      const verbCount = verb => R.compose(R.length, R.propEq('verb', verb))
+      const verbCount = verb => R.compose(R.length, R.filter(R.propEq('verb', verb)))
       const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
       const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
       return {
@@ -23,7 +22,7 @@ class Achievements extends Component {
         supportsCount: verbCount('support')(itemsInHistory)
       }
     }),
-    R.mapObjIndexed((items) => sortByTime.desc(items)),
+    R.mapObjIndexed(sortByTime.asc),
     R.groupBy(R.prop('wallet'))
   )
 
@@ -43,11 +42,6 @@ class Achievements extends Component {
           <Grid item xs={12}>
             <Create onCreate={createAchievement} />
             <Update onUpdate={updateAchievement} />
-          </Grid>
-        }
-        {!canCreateOrUpdate &&
-          <Grid item xs={12}>
-            <Button disabled variant="contained">Create/Update Achievement needs Facebook login and wallet ready</Button>
           </Grid>
         }
         {R.keys(aggregatedAchievements).length > 0

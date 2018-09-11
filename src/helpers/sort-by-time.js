@@ -1,15 +1,10 @@
 import moment from 'moment'
 import * as R from 'ramda'
 
-const isDateBefore = (A, B) => moment(A).isBefore(B)
-const isPropBeforeInTime = (prop) => (A, B) => isDateBefore(A[prop], B[prop])
-const isTimeBefore = isPropBeforeInTime('time')
-const sortByTimeDesc = R.sort(isTimeBefore)
+const momentDate = X => moment(new Date(X))
 
-const isDateAfter = (A, B) => moment(B).isBefore(A)
-const isPropAfterInTime = (prop) => (A, B) => isDateAfter(A[prop], B[prop])
-const isTimeAfter = isPropAfterInTime('time')
-const sortByTimeAsc = R.sort(isTimeAfter)
+const sortByTimeAsc = R.sort((A, B) => momentDate(A.time).valueOf() - momentDate(B.time).valueOf())
+const sortByTimeDesc = R.sort((A, B) => momentDate(B.time).valueOf() - momentDate(A.time).valueOf())
 
 export default {
   asc: sortByTimeDesc,

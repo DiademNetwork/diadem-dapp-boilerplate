@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import { getAllTransactionsData, isFacebookAuthenticated } from '../../selectors'
+import { getSortedTransactions, isFacebookAuthenticated } from '../../selectors'
 
 const mapStateToProps = (state) => ({
   isFacebookAuthenticated: isFacebookAuthenticated(state),
-  transactions: getAllTransactionsData(state)
+  transactions: getSortedTransactions(state)
 })
 
 export default WrappedComponent =>

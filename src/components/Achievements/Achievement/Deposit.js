@@ -36,7 +36,7 @@ class AchievementDeposit extends Component {
   }
 
   render () {
-    const { className, author, text, title, walletBalance } = this.props
+    const { className, author, title, walletBalance } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
     const { amount, modalOpen, witnessUserID } = this.state
     return [
@@ -48,7 +48,7 @@ class AchievementDeposit extends Component {
         variant="contained"
         color="primary"
       >
-        {isBalancePositive ? text : 'Deposit needs a positive balance'}
+        Deposit
       </Button>,
       <Dialog
         key='achievement-deposit-modal'
@@ -104,8 +104,7 @@ AchievementDeposit.propTypes = {
   className: T.string,
   onDeposit: T.func,
   title: T.string,
-  walletBalance: T.number,
-  text: T.string
+  walletBalance: T.number
 }
 
 export default AchievementDeposit

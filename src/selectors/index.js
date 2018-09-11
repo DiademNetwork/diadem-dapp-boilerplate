@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import { createSelector } from 'reselect'
+import sortByTime from '../helpers/sort-by-time'
 
 // Facebook
 export const getFacebookAnthenticationStatus = R.path(['facebook', 'authenticationStatus'])
@@ -24,6 +25,7 @@ export const getAllTransactionsData = R.path(['transactions', 'data'])
 export const getAllTransactionsMeta = R.path(['transactions', 'meta'])
 export const getTransactionsMeta = name => createSelector([getAllTransactionsMeta], R.prop(name))
 export const getTransactionsCount = createSelector([getAllTransactionsData], R.length)
+export const getSortedTransactions = createSelector([getAllTransactionsData], sortByTime.asc)
 
 // Achievements
 export const getAllAchievementsData = R.path(['achievements', 'data'])

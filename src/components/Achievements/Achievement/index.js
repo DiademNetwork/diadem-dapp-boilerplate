@@ -19,7 +19,7 @@ import { withStyles } from '@material-ui/core/styles'
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import copyToClipboard from '../../../services/copy-to-clipboard'
-import getOrdinalSuffixOf from '../../../helpers/get-ordinal-suffix-of'
+// import HelpTooltip from '../../HelpTooltip'
 
 const styles = (theme) => ({
   actions: {
@@ -122,20 +122,18 @@ class Achievement extends Component {
             className={classes.actionsButtons}
             onConfirm={this.handleConfirm}
             isFacebookAuthenticated={isFacebookAuthenticated}
-            text={`I want to be ${getOrdinalSuffixOf(confirmsCount + 1)} confirmer`}
           />
           <Support
             className={classes.actionsButtons}
             onSupport={this.handleSupport}
             walletBalance={walletBalance}
-            text={`I want to be ${getOrdinalSuffixOf(supportsCount + 1)} sponsor`}
           />
           <Deposit
             className={classes.actionsButtons}
             onSupport={this.handleDeposit}
             walletBalance={walletBalance}
-            text="Deposit"
           />
+          {/* <HelpTooltip text="test" /> */}
         </CardActions>
       </Card>,
       stackedHistoryItems.length > 0 && (

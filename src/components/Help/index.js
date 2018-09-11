@@ -66,13 +66,13 @@ class Help extends Component {
               This networks (for facebook only for now) aims to connect users achieving great things with people wanting to support them
             </Typography>
             <Typography color="textSecondary">
-              CREATE AN ACHIEVEMENT: Post a link to an achievement you already posted on facebook (1 max per user)
+              CREATE AN ACHIEVEMENT (1max per user): Post a link to an achievement you already posted on facebook
             </Typography>
             <Typography color="textSecondary">
-              UPDATE YOUR ACHIEVEMENT: Your achievement evolved? No problem!
+              UPDATE YOUR ACHIEVEMENT: Your achievement evolved? No problem! Available only if you have an achievement created
             </Typography>
             <Typography color="textSecondary">
-              CONFIRM ACHIEVEMENT(S): Confirm other user(s) achievement(s)! (free)
+              CONFIRM ACHIEVEMENT(S): Confirm other user(s) achievement(s). It's free!
             </Typography>
             <Typography color="textSecondary">
               SUPPORT ACHIEVEMENT(S): Send QTUM token to achievers to show them some love

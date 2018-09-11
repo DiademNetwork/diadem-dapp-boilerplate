@@ -71,16 +71,21 @@ class Achievement extends Component {
     supportAchievement({ amount, wallet, link: object })
   }
 
-  handleDeposit =({ amount, witnessUserID }) => {
+  handleDeposit = ({ amount, witnessUserID }) => {
     const { depositForAchievement } = this.props
     const { displayedHistoryItem: { wallet, object } } = this.state
     depositForAchievement({ amount, wallet, link: object, witnessUserID })
   }
 
+  hasUserAlreadyConfirmed = () => {
+    const { achievement: { confirmators }, userID } = this.props
+    return R.contains(userID, confirmators)
+  }
+
   render () {
     const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
-    const { confirmsCount, depositsCount, supportsCount } = achievement
+    const { confirmators, supporters, depositors } = achievement
     const { actor, name, title, wallet, object } = displayedHistoryItem
     return [
       <Card key="achievement-card" className={classes.card}>
@@ -102,9 +107,21 @@ class Achievement extends Component {
               <FileCopyIcon />
             </IconButton>
           </Typography>
-          <Typography variant="body1">
-            This achievement has been confirmed {confirmsCount} times, supported {supportsCount} times, and {depositsCount} deposit(s) wait for confirmation
-          </Typography>
+          {confirmators.length > 0 &&
+            <Typography variant="body1">
+              It has been confirmed by {confirmators[0]}{confirmators.length - 1 > 0 ? ` and ${confirmators.length - 1} others` : ''}
+            </Typography>
+          }
+          {supporters.length > 0 &&
+            <Typography variant="body1">
+              It has been supported by {supporters[0]}{supporters.length - 1 > 0 ? ` and ${supporters.length - 1} others` : ''}
+            </Typography>
+          }
+          {depositors.length > 0 &&
+            <Typography variant="body1">
+              {depositors[0]}{depositors.length - 1 > 0 ? ` and ${depositors.length - 1} others have` : ' has'} made a deposit
+            </Typography>
+          }
           <Link
             href={object}
             text="View achievement post on Facebook"
@@ -115,12 +132,13 @@ class Achievement extends Component {
           disableActionSpacing
         >
           <Confirm
-            className={classes.actionsButtons}
-            onConfirm={this.handleConfirm}
             actor={actor}
-            link={object}
-            title={title}
+            className={classes.actionsButtons}
+            hasAlreadyConfirmed={this.hasUserAlreadyConfirmed()}
             isFacebookAuthenticated={isFacebookAuthenticated}
+            link={object}
+            onConfirm={this.handleConfirm}
+            title={title}
           />
           <Support
             className={classes.actionsButtons}

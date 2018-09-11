@@ -17,14 +17,17 @@ class Achievements extends Component {
 
   aggregateAchievements = R.compose(
     R.mapObjIndexed((itemsInHistory) => {
-      const verbCount = verb => R.compose(R.length, R.filter(R.propEq('verb', verb)))
+      const getNamesForAction = verb => R.compose(
+        R.map(R.prop('actor')), // replace with name when ready
+        R.filter(R.propEq('verb', verb))
+      )
       const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
       const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
       return {
         history: [ creation, ...updates ],
-        confirmsCount: verbCount('confirm')(itemsInHistory),
-        depositsCount: verbCount('deposit')(itemsInHistory),
-        supportsCount: verbCount('support')(itemsInHistory)
+        confirmators: getNamesForAction('confirm')(itemsInHistory),
+        depositors: getNamesForAction('deposit')(itemsInHistory),
+        supporters: getNamesForAction('support')(itemsInHistory)
       }
     }),
     R.mapObjIndexed(sortByTime.asc),

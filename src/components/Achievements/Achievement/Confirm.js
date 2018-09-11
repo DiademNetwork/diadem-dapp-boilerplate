@@ -29,18 +29,25 @@ class AchievementConfirm extends Component {
   }
 
   render () {
-    const { actor, className, isFacebookAuthenticated, link, title } = this.props
+    const {
+      actor,
+      className,
+      hasAlreadyConfirmed,
+      isFacebookAuthenticated,
+      link,
+      title
+    } = this.props
     const { modalOpen } = this.state
     return [
       <Button
         color="primary"
         className={className}
         key='achievement-confirm-button'
-        disabled={!isFacebookAuthenticated}
+        disabled={!isFacebookAuthenticated || hasAlreadyConfirmed}
         onClick={this.handleClickOpen}
         variant="contained"
       >
-        Confirm
+        {hasAlreadyConfirmed ? 'You confirmed already' : 'Confirm'}
       </Button>,
       <Dialog
         key='achievement-confirm-modal'
@@ -87,6 +94,7 @@ class AchievementConfirm extends Component {
 AchievementConfirm.propTypes = {
   actor: T.string,
   className: T.string,
+  hasAlreadyConfirmed: T.bool,
   isFacebookAuthenticated: T.bool,
   link: T.string,
   onConfirm: T.func,

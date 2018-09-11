@@ -17,6 +17,7 @@ const styles = (theme) => ({
     marginRight: -theme.spacing.unit
   },
   facebookText: {
+    marginRight: theme.spacing.unit,
     [theme.breakpoints.down('sm')]: {
       display: 'none'
     }

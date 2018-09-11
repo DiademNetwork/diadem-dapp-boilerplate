@@ -13,6 +13,8 @@ const {
   TRANSACTIONS_UPDATE_DATA,
   ACHIEVEMENTS_UPDATE_META,
   TRANSACTIONS_UPDATE_META,
+  UI_SHOW_HELP,
+  UI_HIDE_HELP,
   WALLET_UPDATE_DATA,
   WALLET_UPDATE_META,
   WALLET_UPDATE_STATUS,
@@ -210,3 +212,7 @@ export const updateAchievementsMeta = (meta) => ({ type: ACHIEVEMENTS_UPDATE_MET
 export const displayNotification = (notification) => (dispatch) => {
   dispatch(notification)
 }
+
+// Ui
+export const showHelp = () => ({ type: UI_SHOW_HELP })
+export const hideHelp = () => ({ type: UI_HIDE_HELP })

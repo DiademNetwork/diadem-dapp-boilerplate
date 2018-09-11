@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -9,6 +10,10 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
 import FacebookLinkHelp from './FacebookLinkHelp'
+import isUrl from 'is-url'
+
+const LINK_INITIAL_VALUE = ''
+const TITLE_INITIAL_VALUE = ''
 
 const styles = (theme) => ({
   button: {
@@ -18,34 +23,53 @@ const styles = (theme) => ({
 
 class CreateAchievement extends Component {
   state = {
-    link: '',
+    isLinkValid: false,
+    isTitleValid: false,
+    link: LINK_INITIAL_VALUE,
     modalOpen: false,
-    title: ''
+    title: TITLE_INITIAL_VALUE
   }
 
-  handleClickOpen = () => {
-    this.setState({ modalOpen: true })
-  }
+  handleClickOpen = () => this.setState({ modalOpen: true })
 
-  handleClose = () => {
-    this.setState({ modalOpen: false })
-  }
+  handleClose = () => this.setState({ modalOpen: false })
 
   handleChange = name => e => {
-    this.setState({ [name]: e.target.value })
+    const value = e.target.value
+    if (name === 'link') {
+      const isLinkValid = this.isFacebookLinkValid(value)
+      this.setState({ link: value, isLinkValid })
+    } else if (name === 'title') {
+      const isTitleValid = value.length > 0
+      this.setState({ title: value, isTitleValid })
+    }
   }
+
+  isFacebookLinkValid = R.allPass([
+    R.is(String),
+    isUrl,
+    R.test(/.*facebook.*/)
+  ])
 
   handleSubmit = () => {
     const { onCreate } = this.props
     const { link, title } = this.state
     onCreate({ link, title })
-    this.setState({ link: '', title: '' })
+    this.resetForm()
     this.handleClose()
   }
 
+  resetForm = () => this.setState({
+    isLinkValid: false,
+    isTitleValid: false,
+    link: LINK_INITIAL_VALUE,
+    title: TITLE_INITIAL_VALUE
+  })
+
   render () {
-    const { link, modalOpen, title } = this.state
+    const { isLinkValid, isTitleValid, link, modalOpen, title } = this.state
     const { classes } = this.props
+    const isFormValid = isLinkValid && isTitleValid
     return [
       <Button
         className={classes.button}
@@ -70,6 +94,7 @@ class CreateAchievement extends Component {
           <FacebookLinkHelp />
           <TextField
             autoFocus
+            error={link !== LINK_INITIAL_VALUE && !isLinkValid}
             margin="normal"
             id='link'
             label="Facebook link of your achievement post"
@@ -80,6 +105,7 @@ class CreateAchievement extends Component {
             helperText='Please copy full link'
           />
           <TextField
+            error={title !== TITLE_INITIAL_VALUE && !isTitleValid}
             margin="normal"
             id='title'
             label="Title for your achievement"
@@ -98,7 +124,7 @@ class CreateAchievement extends Component {
           </Button>
           <Button
             color="primary"
-            disabled={title === '' || link === ''}
+            disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"
           >

@@ -4,11 +4,13 @@ import achievements from './achievements'
 import facebook from './facebook'
 import transactions from './transactions'
 import wallet from './wallet'
+import ui from './ui'
 
 export default combineReducers({
   achievements,
   facebook,
   notifications,
   transactions,
+  ui,
   wallet
 })

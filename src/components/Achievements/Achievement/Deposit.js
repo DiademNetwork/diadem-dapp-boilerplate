@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -8,37 +9,52 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
+const AMOUNT_INITIAL_VALUE = 0
+const WITNESS_USER_ID_INITIAL_VALUE = ''
+
 class AchievementDeposit extends Component {
   state = {
-    amount: 0,
-    witnessUserID: '',
+    amount: AMOUNT_INITIAL_VALUE,
+    witnessUserID: WITNESS_USER_ID_INITIAL_VALUE,
+    isWitnessUserIDValid: false,
+    isAmountValid: false,
     modalOpen: false
   }
 
-  handleClickOpen = () => {
-    this.setState({ modalOpen: true })
-  }
+  handleClickOpen = () => this.setState({ modalOpen: true })
 
-  handleClose = () => {
-    this.setState({ modalOpen: false })
-  }
+  handleClose = () => this.setState({ modalOpen: false })
 
   handleChange = name => e => {
-    this.setState({ [name]: e.target.value })
+    const value = e.target.value
+    if (name === 'witnessUserID') {
+      const isWitnessUserIDValid = R.test(/^[0-9]/)(value)
+      this.setState({ witnessUserID: value, isWitnessUserIDValid })
+    } else if (name === 'amount') {
+      const isAmountValid = value > 0
+      this.setState({ amount: value, isAmountValid })
+    }
   }
 
   handleSubmit = () => {
     const { onDeposit } = this.props
     const { amount, witnessUserID } = this.state
     onDeposit({ amount, witnessUserID })
-    this.setState({ amount: 0, witnessUserID: '' })
+    this.resetForm()
     this.handleClose()
   }
+
+  resetForm = () => this.setState({
+    amount: AMOUNT_INITIAL_VALUE,
+    witnessUserID: WITNESS_USER_ID_INITIAL_VALUE,
+    isWitnessUserIDValid: false,
+    isAmountValid: false
+  })
 
   render () {
     const { className, author, title, walletBalance } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
-    const { amount, modalOpen, witnessUserID } = this.state
+    const { amount, modalOpen, witnessUserID, isWitnessUserIDValid, isAmountValid } = this.state
     return [
       <Button
         className={className}
@@ -64,6 +80,7 @@ class AchievementDeposit extends Component {
           </DialogContentText>
           <TextField
             autoFocus
+            error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
             margin="normal"
             id='amount'
             label="Amount (in QTUM)"
@@ -73,6 +90,7 @@ class AchievementDeposit extends Component {
             fullWidth
           />
           <TextField
+            error={witnessUserID !== WITNESS_USER_ID_INITIAL_VALUE && !isWitnessUserIDValid}
             margin="normal"
             id='witnessUserID'
             label="userID of witness"
@@ -86,7 +104,7 @@ class AchievementDeposit extends Component {
             Cancel
           </Button>
           <Button
-            disabled={amount <= 0 || witnessUserID === ''}
+            disabled={!isWitnessUserIDValid || !isAmountValid}
             onClick={this.handleSubmit}
             variant="contained"
             color="primary"

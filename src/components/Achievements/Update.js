@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -8,37 +9,75 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import FacebookLinkHelp from './FacebookLinkHelp'
+import isUrl from 'is-url'
+
+const LINK_INITIAL_VALUE = ''
+const TITLE_INITIAL_VALUE = ''
+const PREVIOUS_LINK_INITIAL_VALUE = ''
 
 class UpdateAchievement extends Component {
   state = {
-    link: '',
+    isLinkValid: false,
+    isPreviousLinkValid: false,
+    isTitleValid: false,
+    link: LINK_INITIAL_VALUE,
     modalOpen: false,
-    previousLink: '',
-    title: ''
+    previousLink: PREVIOUS_LINK_INITIAL_VALUE,
+    title: TITLE_INITIAL_VALUE
   }
 
-  handleClickOpen = () => {
-    this.setState({ modalOpen: true })
-  }
+  handleClickOpen = () => this.setState({ modalOpen: true })
 
-  handleClose = () => {
-    this.setState({ modalOpen: false })
-  }
+  handleClose = () => this.setState({ modalOpen: false })
 
   handleChange = name => e => {
-    this.setState({ [name]: e.target.value })
+    const value = e.target.value
+    if (name === 'link') {
+      const isLinkValid = this.isFacebookLinkValid(value)
+      this.setState({ link: value, isLinkValid })
+    } else if (name === 'title') {
+      const isTitleValid = value.length > 0
+      this.setState({ title: value, isTitleValid })
+    } else if (name === 'previousLink') {
+      const isPreviousLinkValid = this.isFacebookLinkValid(value)
+      this.setState({ previousLink: value, isPreviousLinkValid })
+    }
   }
+
+  isFacebookLinkValid = R.allPass([
+    R.is(String),
+    isUrl,
+    R.test(/.*facebook.*/)
+  ])
 
   handleSubmit = () => {
     const { onUpdate } = this.props
     const { link, title, previousLink } = this.state
     onUpdate({ link, previousLink, title })
-    this.setState({ link: '', previousLink: '', title: '' })
+    this.resetForm()
     this.handleClose()
   }
 
+  resetForm = () => this.setState({
+    isLinkValid: false,
+    isPreviousLinkValid: false,
+    isTitleValid: false,
+    link: LINK_INITIAL_VALUE,
+    previousLink: PREVIOUS_LINK_INITIAL_VALUE,
+    title: TITLE_INITIAL_VALUE
+  })
+
   render () {
-    const { link, modalOpen, previousLink, title } = this.state
+    const {
+      isLinkValid,
+      isTitleValid,
+      isPreviousLinkValid,
+      link,
+      modalOpen,
+      previousLink,
+      title
+    } = this.state
+    const isFormValid = isLinkValid && isTitleValid && isPreviousLinkValid
     return [
       <Button
         color="secondary"
@@ -62,6 +101,7 @@ class UpdateAchievement extends Component {
           <FacebookLinkHelp />
           <TextField
             autoFocus
+            error={link !== PREVIOUS_LINK_INITIAL_VALUE && !isPreviousLinkValid}
             margin="normal"
             id='previousLink'
             label="Previous Facebook link of your achievement post"
@@ -72,8 +112,9 @@ class UpdateAchievement extends Component {
             helperText='Please copy full link'
           />
           <TextField
-            margin="normal"
             id='link'
+            margin="normal"
+            error={link !== LINK_INITIAL_VALUE && !isLinkValid}
             label="New Facebook link of your achievement post"
             value={link}
             onChange={this.handleChange('link')}
@@ -82,8 +123,9 @@ class UpdateAchievement extends Component {
             helperText='Please copy full link'
           />
           <TextField
-            margin="normal"
             id='title'
+            margin="normal"
+            error={link !== TITLE_INITIAL_VALUE && !isTitleValid}
             label="Title for your achievement"
             value={title}
             onChange={this.handleChange('title')}
@@ -100,7 +142,7 @@ class UpdateAchievement extends Component {
           </Button>
           <Button
             color="primary"
-            disabled={title === '' || link === ''}
+            disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"
           >

@@ -8,22 +8,23 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
+const AMOUNT_INITIAL_VALUE = 0
+
 class AchievementSupport extends Component {
   state = {
-    amount: 0,
+    amount: AMOUNT_INITIAL_VALUE,
+    isAmountValid: false,
     modalOpen: false
   }
 
-  handleClickOpen = () => {
-    this.setState({ modalOpen: true })
-  }
+  handleClickOpen = () => this.setState({ modalOpen: true })
 
-  handleClose = () => {
-    this.setState({ modalOpen: false })
-  }
+  handleClose = () => this.setState({ modalOpen: false })
 
   handleChange = e => {
-    this.setState({ amount: e.target.value })
+    const amount = e.target.value
+    const isAmountValid = amount > 0
+    this.setState({ amount, isAmountValid })
   }
 
   handleSubmit = () => {
@@ -37,7 +38,7 @@ class AchievementSupport extends Component {
   render () {
     const { className, author, title, walletBalance } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
-    const { modalOpen } = this.state
+    const { amount, isAmountValid, modalOpen } = this.state
     return [
       <Button
         className={className}
@@ -63,10 +64,11 @@ class AchievementSupport extends Component {
           </DialogContentText>
           <TextField
             autoFocus
+            error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
             margin="normal"
             id='amount'
             label="Amount (in QTUM)"
-            value={this.state.amount}
+            value={amount}
             onChange={this.handleChange}
             type='number'
             fullWidth
@@ -77,7 +79,7 @@ class AchievementSupport extends Component {
             Cancel
           </Button>
           <Button
-            disabled={this.state.amount <= 0}
+            disabled={!isAmountValid}
             onClick={this.handleSubmit}
             variant="contained"
             color="primary"

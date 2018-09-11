@@ -13,7 +13,8 @@ const styles = (theme) => ({
     marginRight: theme.spacing.unit * 2
   },
   icon: {
-    marginLeft: theme.spacing.unit
+    marginLeft: theme.spacing.unit,
+    marginRight: -theme.spacing.unit
   }
 })
 

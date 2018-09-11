@@ -59,7 +59,7 @@ class Recover extends Component {
 
   render () {
     const { open, mnemonic, privateKey, isMnemonicValid, isPrivateKeyValid } = this.state
-    const isFormValid = isMnemonicValid && isPrivateKeyValid
+    const isFormValid = isMnemonicValid || isPrivateKeyValid
     return [
       <Button
         color="primary"

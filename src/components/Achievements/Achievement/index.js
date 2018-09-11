@@ -81,12 +81,12 @@ class Achievement extends Component {
     const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { confirmsCount, depositsCount, supportsCount } = achievement
-    const { actor, title, wallet, object } = displayedHistoryItem
+    const { actor, name, title, wallet, object } = displayedHistoryItem
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={
           <Typography variant="headline">
-            {actor} has {title}
+            {name} has {title}
           </Typography>
         } />
         <Divider />

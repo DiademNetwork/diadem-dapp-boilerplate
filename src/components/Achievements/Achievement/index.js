@@ -10,6 +10,7 @@ import ExpansionPanel from '@material-ui/core/ExpansionPanel'
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import Divider from '@material-ui/core/Divider'
 import withContainer from './container'
 import Confirm from './Confirm'
 import Deposit from './Deposit'
@@ -18,21 +19,7 @@ import { withStyles } from '@material-ui/core/styles'
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import copyToClipboard from '../../../services/copy-to-clipboard'
-
-const getOrdinalSuffixOf = (i) => {
-  const j = i % 10
-  const k = i % 100
-  if (j === 1 && k !== 11) {
-    return i + 'st'
-  }
-  if (j === 2 && k !== 12) {
-    return i + 'nd'
-  }
-  if (j === 3 && k !== 13) {
-    return i + 'rd'
-  }
-  return i + 'th'
-}
+import getOrdinalSuffixOf from '../../../helpers/get-ordinal-suffix-of'
 
 const styles = (theme) => ({
   actions: {
@@ -99,6 +86,7 @@ class Achievement extends Component {
         <CardHeader title={
           <Typography variant="headline"><strong>{displayedHistoryItem.actor}</strong> has <strong>{displayedHistoryItem.title}</strong></Typography>
         } />
+        <Divider />
         <CardContent>
           <Typography paragraph variant="subheading" color="textSecondary">
             Creator QTUM address: {displayedHistoryItem.wallet}
@@ -163,7 +151,7 @@ class Achievement extends Component {
                 color="textSecondary"
               >
                 Title: {historyItem.title}<br />
-                Link: {historyItem.object}
+                <a style={{ fontSize: '12px' }} className={classes.link} target="_blank" href={historyItem.object}>View achievement post on Facebook</a>
               </Typography>
             ))}
           </ExpansionPanelDetails>

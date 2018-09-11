@@ -8,25 +8,39 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined'
+import CopyToClipBoardButton from './CopyToClipBoardButton'
+import HelpTooltip from '../HelpTooltip'
 
 const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
-  <Typography key="title" variant="headline">Please save your mnemonic and privateKey</Typography>,
+  <Typography key="title" variant="headline">
+    Please save your mnemonic and privateKey
+    <HelpTooltip text="They will never be shown again. Those are for the hot wallet which was just created for you for Diadem Network. You will need them to recover your funds." />
+  </Typography>,
   <List key="list">
     <ListItem>
       <ListItemIcon>
         <AssignmentOutlinedIcon />
       </ListItemIcon>
-      <ListItemText primary={mnemonic} />
+      <ListItemText primary={
+        <Typography>{mnemonic} <CopyToClipBoardButton text={mnemonic} /></Typography>
+      } />
     </ListItem>
     <ListItem>
       <ListItemIcon>
         <VpnKeyOutlinedIcon />
       </ListItemIcon>
-      <ListItemText primary={privateKey} />
+      <ListItemText primary={
+        <Typography>{privateKey} <CopyToClipBoardButton text={privateKey} /></Typography>
+      } />
     </ListItem>
   </List>,
-  <Button variant="contained" color="primary" onClick={onConfirm}>
-    I have copied these info
+  <Button
+    key="button"
+    variant="contained"
+    color="primary"
+    onClick={onConfirm}
+  >
+    I saved my new hot wallet Mnemomic and PrivateKey somewhere safe
   </Button>
 ]
 

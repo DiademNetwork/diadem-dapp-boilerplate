@@ -5,11 +5,15 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import withContainer from './container'
 
 const styles = (theme) => ({
   img: {
     marginRight: theme.spacing.unit * 2
+  },
+  icon: {
+    marginLeft: theme.spacing.unit
   }
 })
 
@@ -46,7 +50,7 @@ class LoginButton extends Component {
             onClick={renderProps.onClick}
             variant="contained"
           >
-            Facebook Login
+            Facebook Login <PowerSettingsNewIcon className={classes.icon} />
           </Button>
         )}
       />

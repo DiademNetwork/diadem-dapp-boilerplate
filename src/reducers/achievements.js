@@ -1,5 +1,6 @@
 import types from '../actions/types'
 import * as R from 'ramda'
+
 const {
   ASYNC_ACHIEVEMENT_CONFIRM,
   ASYNC_ACHIEVEMENT_CREATE,
@@ -27,7 +28,7 @@ export default (state, action) => {
   }
   const mergeState = R.merge(state)
   switch (action.type) {
-    case ACHIEVEMENTS_UPDATE_DATA: return mergeState({ data: action.data })
+    case ACHIEVEMENTS_UPDATE_DATA: return mergeState({ data: [ ...state.data, ...action.data ] })
     case ACHIEVEMENTS_UPDATE_META: return mergeState({ meta: { ...state.meta, ...action.meta } })
     case ASYNC_ACHIEVEMENT_CONFIRM.requested: return mergeState({ confirmStatus: 'requested' })
     case ASYNC_ACHIEVEMENT_CONFIRM.succeeded: return mergeState({ confirmStatus: 'succeeded' })

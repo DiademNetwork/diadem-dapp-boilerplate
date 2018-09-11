@@ -1,4 +1,3 @@
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { recoverWallet, updateWalletStatus } from '../../actions'
 import { isFacebookAuthenticated, getWallet, getWalletMeta, getWalletStatus } from '../../selectors'
@@ -12,13 +11,9 @@ const mapStateToProps = (state) => ({
   isFacebookAuthenticated: isFacebookAuthenticated(state)
 })
 
-const bindedActionCreators = dispatch => bindActionCreators({
-  updateWalletStatus
-}, dispatch)
-
 const mapDispatchToProps = {
-  ...bindedActionCreators,
-  recoverWallet
+  recoverWallet,
+  updateWalletStatus: (status) => dispatch => dispatch(updateWalletStatus(status))
 }
 
 export default WrappedComponent =>

@@ -21,7 +21,7 @@ export default (state, action) => {
   }
   const mergeState = R.merge(state)
   switch (action.type) {
-    case TRANSACTIONS_UPDATE_DATA: return mergeState({ data: action.data })
+    case TRANSACTIONS_UPDATE_DATA: return mergeState({ data: [ ...state.data, ...action.data ] })
     case TRANSACTIONS_UPDATE_META: return mergeState({ meta: { ...state.meta, ...action.meta } })
     default:
       return state

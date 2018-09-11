@@ -45,8 +45,8 @@ class StreamFetcher extends Component {
     } = this.props
     stream.fetchData('achievements', updateAchievementsSuccess, updateAchievementsFail)
     stream.fetchData('transactions', updateTransactionsSuccess, updateTransactionsFail)
-    stream.suscribeWithCallBacks('achievements', updateAchievementsSuccess)
-    stream.suscribeWithCallBacks('transactions', updateTransactionsSuccess)
+    stream.suscribeWithCallBacks('achievements', ({ new: newData }) => updateAchievementsSuccess(newData))
+    stream.suscribeWithCallBacks('transactions', ({ new: newData }) => updateTransactionsSuccess(newData))
   }
 
   render () {

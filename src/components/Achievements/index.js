@@ -32,7 +32,6 @@ class Achievements extends Component {
     const { achievementsData, createAchievement, isFacebookAuthenticated, isWalletReady, updateAchievement } = this.props
     const aggregatedAchievements = this.aggregateAchievements(achievementsData)
     const canCreateOrUpdate = isWalletReady && isFacebookAuthenticated
-    console.log({ aggregatedAchievements })
     return [
       <Grid
         key='list'

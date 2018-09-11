@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Typography from '@material-ui/core/Typography'
@@ -14,6 +15,9 @@ import Confirm from './Confirm'
 import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
+import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
+import IconButton from '@material-ui/core/IconButton'
+import copyToClipboard from '../../../services/copy-to-clipboard'
 
 const getOrdinalSuffixOf = (i) => {
   const j = i % 10
@@ -39,6 +43,9 @@ const styles = (theme) => ({
   },
   actionsButtons: {
     marginRight: theme.spacing.unit
+  },
+  iconButton: {
+    color: theme.palette.secondary.light
   },
   link: {
     color: theme.palette.primary.light,
@@ -89,9 +96,21 @@ class Achievement extends Component {
     const { confirmsCount, depositsCount, supportsCount } = achievement
     return [
       <Card key="achievement-card" className={classes.card}>
-        <CardContent>
+        <CardHeader title={
           <Typography variant="headline"><strong>{displayedHistoryItem.actor}</strong> has <strong>{displayedHistoryItem.title}</strong></Typography>
-          <Typography paragraph variant="subheading" color="textSecondary">Creator address: {displayedHistoryItem.wallet}</Typography>
+        } />
+        <CardContent>
+          <Typography paragraph variant="subheading" color="textSecondary">
+            Creator QTUM address: {displayedHistoryItem.wallet}
+            <IconButton
+              className={classes.iconButton}
+              onClick={() => copyToClipboard(displayedHistoryItem.wallet)}
+              aria-label="Copy"
+              color="primary"
+            >
+              <FileCopyIcon />
+            </IconButton>
+          </Typography>
           <Typography variant="body1">
             This achievement has been confirmed {confirmsCount} times, supported {supportsCount} times, and {depositsCount} deposit(s) wait for confirmation
           </Typography>
@@ -138,7 +157,11 @@ class Achievement extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             {stackedHistoryItems.map((historyItem, idx) => (
-              <Typography key={idx} variant="subheading" color="textSecondaryColor">
+              <Typography
+                key={idx}
+                variant="subheading"
+                color="textSecondary"
+              >
                 Title: {historyItem.title}<br />
                 Link: {historyItem.object}
               </Typography>

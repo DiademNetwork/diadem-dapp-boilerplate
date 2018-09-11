@@ -7,6 +7,7 @@ const {
   ASYNC_ACHIEVEMENT_CONFIRM,
   ASYNC_ACHIEVEMENT_CREATE,
   ASYNC_ACHIEVEMENT_SUPPORT,
+  ASYNC_ACHIEVEMENT_DEPOSIT,
   ASYNC_ACHIEVEMENT_UPDATE,
   ACHIEVEMENTS_UPDATE_DATA,
   TRANSACTIONS_UPDATE_DATA,
@@ -123,17 +124,37 @@ export const confirmAchievement = ({ address, link, token, user }) => async disp
   }
 }
 
-export const supportAchievement = (payload) => async (dispatch, getState) => {
+export const supportAchievement = ({ amount, wallet: targetAddress, link }) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
-    const { author, amount } = payload
+    const { encodedData } = await api.encodeSupport({ amount, link })
     const { wallet } = getState()
-    await wallet.walletMeta.wallet.send(author, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
+    const rawTx = await wallet.walletMeta.wallet.generateContractSendTx(targetAddress, encodedData, {
+      amount: amount * 1e8
+    })
+    await api.supportAchievement({ rawTx })
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
     dispatch(notifications.supportAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
+  }
+}
+
+export const depositForAchievement = ({ amount, wallet: targetAddress, link, witnessUserID }) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
+    const { encodedData } = await api.encodeSupport({ amount, link })
+    const { wallet } = getState()
+    const rawTx = await wallet.walletMeta.wallet.generateContractSendTx(targetAddress, encodedData, {
+      amount: amount * 1e8
+    })
+    await api.supportAchievement({ rawTx })
+    dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
+    dispatch(notifications.depositAchievementSuccess)
+  } catch (error) {
+    dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.failed, payload: { error } })
+    dispatch(notifications.depositAchievementError)
   }
 }
 

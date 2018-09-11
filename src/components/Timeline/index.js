@@ -35,40 +35,45 @@ class Timeline extends Component {
         <List>
           {transactions.map(({ actor, verb, object, target, time }, idx) => {
             let icon
-            let action
+            let text
+            let achievementLink
+            const txComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view transaction on explorer</a>
             const formattedTime = moment(time).format('DD/MM/YYYY, h:mm:ss')
             switch (verb) {
               case 'create':
                 icon = <PlusOneIcon />
-                action = `${actor} created achievement ${object}`
+                achievementLink = <a className={classes.link} href={object} target="_blank">{object}</a>
+                text = (<Typography>
+                  {formattedTime} - {actor} created {achievementLink} - {txComponent}
+                </Typography>)
                 break
               case 'confirm':
                 icon = <ThumbUpIcon />
-                action = `${actor} confirmed achievement ${object}`
+                achievementLink = <a className={classes.link} href={object} target="_blank">{object}</a>
+                text = (<Typography>
+                  {formattedTime} - {actor} confirmed {achievementLink} - {txComponent}
+                </Typography>)
                 break
               case 'register':
                 icon = <PermIdentityIcon />
-                action = `${actor} registered ${object}`
+                text = (<Typography>
+                  {formattedTime} - {actor} registered with address {object} - {txComponent}
+                </Typography>)
                 break
               case 'withdraw':
               default:
                 icon = <RemoveIcon />
-                action = `${actor} withdrew achievement ${object}`
-                break
+                achievementLink = <a className={classes.link} href={object} target="_blank">{object}</a>
+                text = (<Typography>
+                  {formattedTime} - {actor} withdrew {achievementLink} - {txComponent}
+                </Typography>)
             }
-            const linkComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view on explorer</a>
             return (
               <ListItem key={idx}>
                 <Avatar>
                   {icon}
                 </Avatar>
-                <ListItemText
-                  primary={(
-                    <Typography>
-                      {formattedTime} - {action} - {linkComponent}
-                    </Typography>
-                  )}
-                />
+                <ListItemText primary={text} />
               </ListItem>
             )
           })}

@@ -10,39 +10,29 @@ import Create from './Create'
 import Update from './Update'
 
 class Achievements extends Component {
-  extractCreatedAchievements = R.compose(
-    R.reduce((acc, curr) => ({ ...acc, [curr.object]: curr }), {}),
-    R.reduce(R.concat, []),
-    R.map(R.prop('activities')),
-    R.filter(R.propEq('group', 'create'))
-  )
-
-  aggregate = (singular, plural) => achievementsData => createdAchievements => {
-    return R.keys(createdAchievements).reduce((acc, curr) => {
-      const actions = R.compose(
-        R.reduce(R.concat, []),
-        R.map(R.prop('activities')),
-        R.filter(R.propEq('group', `${singular}_${curr}`))
-      )(achievementsData)
+  aggregateAchievements = R.compose(
+    R.mapObjIndexed((itemsInHistory) => {
+      const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
+      const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
+      const deposits = R.filter(R.propEq('verb', 'deposit'))(itemsInHistory)
+      const confirms = R.filter(R.propEq('verb', 'confirm'))(itemsInHistory)
+      const supports = R.filter(R.propEq('verb', 'support'))(itemsInHistory)
       return {
-        ...acc,
-        [curr]: {
-          ...createdAchievements[curr],
-          [plural]: actions
-        }
+        history: [ creation, ...updates ],
+        confirmsCount: confirms.length,
+        depositsCount: deposits.length,
+        supportsCount: supports.length
       }
-    }, {})
-  }
+    }),
+    R.mapObjIndexed((itemsInHistory) => itemsInHistory.sort((a, b) => new Date(a.time) - new Date(b.time))),
+    R.groupBy(R.prop('wallet'))
+  )
 
   render () {
     const { achievementsData, createAchievement, isFacebookAuthenticated, isWalletReady, updateAchievement } = this.props
-    const achievements = R.compose(
-      this.aggregate('confirm', 'confirms')(achievementsData),
-      this.aggregate('reward', 'rewards')(achievementsData),
-      this.extractCreatedAchievements
-    )(achievementsData)
-    const achievementsNames = R.keys(achievements)
+    const aggregatedAchievements = this.aggregateAchievements(achievementsData)
     const canCreateOrUpdate = isWalletReady && isFacebookAuthenticated
+    console.log({ aggregatedAchievements })
     return [
       <Grid
         key='list'
@@ -62,10 +52,10 @@ class Achievements extends Component {
             <Button disabled variant="contained">Create/Update Achievement needs Facebook login and wallet ready</Button>
           </Grid>
         }
-        {achievementsNames.length > 0
-          ? achievementsNames.map((name, idx) => (
+        {R.keys(aggregatedAchievements).length > 0
+          ? R.keys(aggregatedAchievements).map((key, idx) => (
             <Grid key={idx} item xs={12}>
-              <Achievement achievement={achievements[name]} />
+              <Achievement achievement={aggregatedAchievements[key]} />
             </Grid>
           ))
           : (

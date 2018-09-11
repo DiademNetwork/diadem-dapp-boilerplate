@@ -8,9 +8,10 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
-class AchievementSupport extends Component {
+class AchievementDeposit extends Component {
   state = {
     amount: 0,
+    witnessUserID: '',
     modalOpen: false
   }
 
@@ -22,40 +23,40 @@ class AchievementSupport extends Component {
     this.setState({ modalOpen: false })
   }
 
-  handleChange = e => {
-    this.setState({ amount: e.target.value })
+  handleChange = name => e => {
+    this.setState({ [name]: e.target.value })
   }
 
   handleSubmit = () => {
-    const { onSupport } = this.props
-    const { amount } = this.state
-    onSupport(amount)
-    this.setState({ amount: 0 })
+    const { onDeposit } = this.props
+    const { amount, witnessUserID } = this.state
+    onDeposit({ amount, witnessUserID })
+    this.setState({ amount: 0, witnessUserID: '' })
     this.handleClose()
   }
 
   render () {
     const { className, author, text, title, walletBalance } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
-    const { modalOpen } = this.state
+    const { amount, modalOpen, witnessUserID } = this.state
     return [
       <Button
         className={className}
-        key='achievement-support-button'
+        key='achievement-deposit-button'
         disabled={!isBalancePositive}
         onClick={this.handleClickOpen}
         variant="contained"
         color="primary"
       >
-        {isBalancePositive ? text : 'Support needs a positive balance'}
+        {isBalancePositive ? text : 'Deposit needs a positive balance'}
       </Button>,
       <Dialog
-        key='achievement-support-modal'
+        key='achievement-deposit-modal'
         open={modalOpen}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Support</DialogTitle>
+        <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Please enter an amount you would like to send to support author <strong>{author} </strong><br />
@@ -66,9 +67,17 @@ class AchievementSupport extends Component {
             margin="normal"
             id='amount'
             label="Amount (in QTUM)"
-            value={this.state.amount}
-            onChange={this.handleChange}
+            value={amount}
+            onChange={this.handleChange('amount')}
             type='number'
+            fullWidth
+          />
+          <TextField
+            margin="normal"
+            id='witnessUserID'
+            label="userID of witness"
+            value={witnessUserID}
+            onChange={this.handleChange('witnessUserID')}
             fullWidth
           />
         </DialogContent>
@@ -77,7 +86,7 @@ class AchievementSupport extends Component {
             Cancel
           </Button>
           <Button
-            disabled={this.state.amount <= 0}
+            disabled={amount <= 0 || witnessUserID === ''}
             onClick={this.handleSubmit}
             variant="contained"
             color="primary"
@@ -90,13 +99,13 @@ class AchievementSupport extends Component {
   }
 }
 
-AchievementSupport.propTypes = {
+AchievementDeposit.propTypes = {
   author: T.string,
   className: T.string,
-  onSupport: T.func,
+  onDeposit: T.func,
   title: T.string,
   walletBalance: T.number,
   text: T.string
 }
 
-export default AchievementSupport
+export default AchievementDeposit

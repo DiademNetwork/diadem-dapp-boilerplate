@@ -1,7 +1,5 @@
 import stream from 'getstream'
-// import * as R from 'ramda'
 
-// dependencies are injected for easier testing
 export const createStreamClient = (streamTool) => {
   const client = streamTool.connect(process.env.STREAM_KEY, null, process.env.STREAM_APPID)
   const feeds = {

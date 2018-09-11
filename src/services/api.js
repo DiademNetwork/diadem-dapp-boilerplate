@@ -26,11 +26,26 @@ export const createAPI = (fetcher, url) => {
     return fetcher.post(getUrl('confirm'), data)
   }
 
+  async function encodeSupport (data) {
+    return fetcher.post(getUrl('encore-support'), data)
+  }
+
+  async function supportAchievement (data) {
+    return fetcher.post(getUrl('support'), data)
+  }
+
+  async function depositForAchievement (data) {
+    return fetcher.post(getUrl('deposit'), data)
+  }
+
   return Object.freeze({
     checkUser,
     confirmAchievement,
     createAchievement,
+    depositForAchievement,
+    encodeSupport,
     registerUser,
+    supportAchievement,
     updateAchievement
   })
 }

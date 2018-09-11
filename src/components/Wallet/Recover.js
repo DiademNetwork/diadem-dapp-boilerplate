@@ -54,7 +54,7 @@ class Recover extends Component {
           </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
+            margin="normal"
             onChange={this.handleChange('mnemonic')}
             id="mnemonic"
             label="Mnemonic"

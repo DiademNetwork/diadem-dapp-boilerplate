@@ -4,12 +4,14 @@ const {
   ASYNC_ACHIEVEMENT_CONFIRM,
   ASYNC_ACHIEVEMENT_CREATE,
   ASYNC_ACHIEVEMENT_SUPPORT,
+  ASYNC_ACHIEVEMENT_DEPOSIT,
   ACHIEVEMENTS_UPDATE_DATA,
   ACHIEVEMENTS_UPDATE_META
 } = types
 
 const intialState = {
   createStatus: 'none',
+  depositStatus: 'none',
   supportStatus: 'none',
   confirmStatus: 'none',
   data: [],
@@ -36,6 +38,9 @@ export default (state, action) => {
     case ASYNC_ACHIEVEMENT_SUPPORT.request: return mergeState({ supportStatus: 'requested' })
     case ASYNC_ACHIEVEMENT_SUPPORT.succeeded: return mergeState({ supportStatus: 'succeeded' })
     case ASYNC_ACHIEVEMENT_SUPPORT.failed: return mergeState({ supportStatus: 'failed' })
+    case ASYNC_ACHIEVEMENT_DEPOSIT.request: return mergeState({ depositStatus: 'requested' })
+    case ASYNC_ACHIEVEMENT_DEPOSIT.succeeded: return mergeState({ depositStatus: 'succeeded' })
+    case ASYNC_ACHIEVEMENT_DEPOSIT.failed: return mergeState({ depositStatus: 'failed' })
     default: return state
   }
 }

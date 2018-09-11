@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { confirmAchievement, supportAchievement } from '../../../actions'
+import { confirmAchievement, depositForAchievement, supportAchievement } from '../../../actions'
 import { getFacebook, getWallet, isFacebookAuthenticated } from '../../../selectors'
 
 const mapStateToProps = (state) => ({
@@ -12,6 +12,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = {
   confirmAchievement,
+  depositForAchievement,
   supportAchievement
 }
 

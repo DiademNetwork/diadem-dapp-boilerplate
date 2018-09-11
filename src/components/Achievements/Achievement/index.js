@@ -1,11 +1,17 @@
 import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
+import * as R from 'ramda'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardActions from '@material-ui/core/CardActions'
 import Typography from '@material-ui/core/Typography'
+import ExpansionPanel from '@material-ui/core/ExpansionPanel'
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary'
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import withContainer from './container'
 import Confirm from './Confirm'
+import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
 
@@ -41,49 +47,59 @@ const styles = (theme) => ({
 })
 
 class Achievement extends Component {
+  state = {
+    displayedHistoryItem: {},
+    stackedHistoryItems: []
+  }
+
+  componentDidMount () {
+    const { achievement: { history } } = this.props
+    this.setState({
+      displayedHistoryItem: R.takeLast(1, history)[0],
+      stackedHistoryItems: R.dropLast(1, history)
+    })
+  }
+
   handleConfirm = () => {
-    const {
-      accessToken,
-      achievement,
-      confirmAchievement,
-      userID,
-      walletAddress
-    } = this.props
+    const { accessToken, confirmAchievement, userID, walletAddress } = this.props
+    const { displayedHistoryItem: { object } } = this.state
     confirmAchievement({
       address: walletAddress,
-      link: achievement.link,
+      link: object,
       token: accessToken,
       user: userID
     })
   }
 
   handleSupport = (amount) => {
-    const { achievement, supportAchievement } = this.props
-    supportAchievement({
-      amount,
-      author: achievement.author
-    })
+    const { supportAchievement } = this.props
+    const { displayedHistoryItem: { wallet, object } } = this.state
+    supportAchievement({ amount, wallet, link: object })
+  }
+
+  handleDeposit =({ amount, witnessUserID }) => {
+    const { depositForAchievement } = this.props
+    const { displayedHistoryItem: { wallet, object } } = this.state
+    depositForAchievement({ amount, wallet, link: object, witnessUserID })
   }
 
   render () {
     const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
-    const { title, actor, rewards, confirms, link } = achievement
-    const confirmationsCount = confirms.length
-    const rewardsCount = rewards.length
-    const confirmatorPosition = getOrdinalSuffixOf(confirmationsCount + 1)
-    const sponsorPosition = getOrdinalSuffixOf(rewardsCount + 1)
-    return (
-      <Card className={classes.card}>
+    const { displayedHistoryItem, stackedHistoryItems } = this.state
+    const { confirmsCount, depositsCount, supportsCount } = achievement
+    return [
+      <Card key="achievement-card" className={classes.card}>
         <CardContent>
-          <Typography paragraph variant="headline"><strong>{actor}</strong> has <strong>{title}</strong></Typography>
-          <Typography paragraph variant="subheading">
-            This achievement has been confirmed {confirmationsCount} times and supported {rewardsCount} times!
+          <Typography variant="headline"><strong>{displayedHistoryItem.actor}</strong> has <strong>{displayedHistoryItem.title}</strong></Typography>
+          <Typography paragraph variant="subheading" color="textSecondary">Creator address: {displayedHistoryItem.wallet}</Typography>
+          <Typography variant="body1">
+            This achievement has been confirmed {confirmsCount} times, supported {supportsCount} times, and {depositsCount} deposit(s) wait for confirmation
           </Typography>
           <Typography
             className={classes.link}
             color="primary"
             component="a"
-            href={link}
+            href={displayedHistoryItem.object}
             paragraph
             target="_blank"
             variant="body2"
@@ -99,17 +115,38 @@ class Achievement extends Component {
             className={classes.actionsButtons}
             onConfirm={this.handleConfirm}
             isFacebookAuthenticated={isFacebookAuthenticated}
-            text={`I want to be ${confirmatorPosition} confirmer`}
+            text={`I want to be ${getOrdinalSuffixOf(confirmsCount + 1)} confirmer`}
           />
           <Support
             className={classes.actionsButtons}
             onSupport={this.handleSupport}
             walletBalance={walletBalance}
-            text={`I want to be ${sponsorPosition} sponsor`}
+            text={`I want to be ${getOrdinalSuffixOf(supportsCount + 1)} sponsor`}
+          />
+          <Deposit
+            className={classes.actionsButtons}
+            onSupport={this.handleDeposit}
+            walletBalance={walletBalance}
+            text="Deposit"
           />
         </CardActions>
-      </Card>
-    )
+      </Card>,
+      stackedHistoryItems.length > 0 && (
+        <ExpansionPanel key={`achievement-previous-history-items`}>
+          <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+            <Typography>Click to see past info of this achievement</Typography>
+          </ExpansionPanelSummary>
+          <ExpansionPanelDetails>
+            {stackedHistoryItems.map((historyItem, idx) => (
+              <Typography key={idx} variant="subheading" color="textSecondaryColor">
+                Title: {historyItem.title}<br />
+                Link: {historyItem.object}
+              </Typography>
+            ))}
+          </ExpansionPanelDetails>
+        </ExpansionPanel>
+      )
+    ]
   }
 }
 
@@ -118,6 +155,7 @@ Achievement.propTypes = {
   achievement: T.object,
   confirmAchievement: T.func,
   classes: T.object,
+  depositForAchievement: T.func,
   isFacebookAuthenticated: T.bool,
   userID: T.string,
   walletAddress: T.string,

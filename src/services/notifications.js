@@ -32,5 +32,5 @@ export default {
   depositAchievementSuccess: createSuccessNotification('Deposit for achievement successful'),
   depositAchievementError: createErrorNotification('Impossible to deposit for achievement'),
   newAchievements: createSuccessNotification('New achievements'),
-  newTransactions: createSuccessNotification('New transactions')
+  newTransactions: createSuccessNotification('New activities')
 }

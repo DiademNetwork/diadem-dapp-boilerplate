@@ -10,6 +10,11 @@ import Update from './Update'
 import sortByTime from '../../helpers/sort-by-time'
 
 class Achievements extends Component {
+  componentDidMount () {
+    // remove new items badge from tabs when user navigates to achievements
+    this.props.updateAchievementsMeta({ notificationCount: 0 })
+  }
+
   aggregateAchievements = R.compose(
     R.mapObjIndexed((itemsInHistory) => {
       const verbCount = verb => R.compose(R.length, R.filter(R.propEq('verb', verb)))
@@ -66,7 +71,8 @@ Achievements.propTypes = {
   createAchievement: T.func,
   isFacebookAuthenticated: T.bool,
   isWalletReady: T.bool,
-  updateAchievement: T.func
+  updateAchievement: T.func,
+  updateAchievementsMeta: T.func
 }
 
 export default withContainer(Achievements)

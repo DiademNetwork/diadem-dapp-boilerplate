@@ -19,6 +19,7 @@ import { withStyles } from '@material-ui/core/styles'
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
 import IconButton from '@material-ui/core/IconButton'
 import copyToClipboard from '../../../services/copy-to-clipboard'
+import Link from '../../Link'
 // import HelpTooltip from '../../HelpTooltip'
 
 const styles = (theme) => ({
@@ -34,9 +35,8 @@ const styles = (theme) => ({
   iconButton: {
     color: theme.palette.secondary.light
   },
-  link: {
-    color: theme.palette.primary.light,
-    textDecoration: 'none'
+  panelDetails: {
+    flexDirection: 'column'
   }
 })
 
@@ -81,18 +81,21 @@ class Achievement extends Component {
     const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { confirmsCount, depositsCount, supportsCount } = achievement
+    const { actor, title, wallet, object } = displayedHistoryItem
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={
-          <Typography variant="headline"><strong>{displayedHistoryItem.actor}</strong> has <strong>{displayedHistoryItem.title}</strong></Typography>
+          <Typography variant="headline">
+            {actor} has {title}
+          </Typography>
         } />
         <Divider />
         <CardContent>
           <Typography paragraph variant="subheading" color="textSecondary">
-            Creator QTUM address: {displayedHistoryItem.wallet}
+            Creator QTUM address: {wallet}
             <IconButton
               className={classes.iconButton}
-              onClick={() => copyToClipboard(displayedHistoryItem.wallet)}
+              onClick={() => copyToClipboard(wallet)}
               aria-label="Copy"
               color="primary"
             >
@@ -102,17 +105,10 @@ class Achievement extends Component {
           <Typography variant="body1">
             This achievement has been confirmed {confirmsCount} times, supported {supportsCount} times, and {depositsCount} deposit(s) wait for confirmation
           </Typography>
-          <Typography
-            className={classes.link}
-            color="primary"
-            component="a"
-            href={displayedHistoryItem.object}
-            paragraph
-            target="_blank"
-            variant="body2"
-          >
-            View achievement post on Facebook
-          </Typography>
+          <Link
+            href={object}
+            text="View achievement post on Facebook"
+          />
         </CardContent>
         <CardActions
           className={classes.actions}
@@ -121,6 +117,9 @@ class Achievement extends Component {
           <Confirm
             className={classes.actionsButtons}
             onConfirm={this.handleConfirm}
+            actor={actor}
+            link={object}
+            title={title}
             isFacebookAuthenticated={isFacebookAuthenticated}
           />
           <Support
@@ -139,19 +138,26 @@ class Achievement extends Component {
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Click to see past info of this achievement</Typography>
+            <Typography>Click here to see past related achievements from {actor}</Typography>
           </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            {stackedHistoryItems.map((historyItem, idx) => (
+          <ExpansionPanelDetails className={classes.panelDetails}>
+            {stackedHistoryItems.map(({ actor, title, object }, idx) => [
               <Typography
-                key={idx}
-                variant="subheading"
                 color="textSecondary"
+                key={`${idx}-title`}
+                variant="subheading"
               >
-                Title: {historyItem.title}<br />
-                <a style={{ fontSize: '12px' }} className={classes.link} target="_blank" href={historyItem.object}>View achievement post on Facebook</a>
-              </Typography>
-            ))}
+                {actor} did {title}
+              </Typography>,
+              <Link
+                key={`${idx}-link`}
+                href={object}
+                text="View achievement post on Facebook"
+                typographyProps={{
+                  paragraph: true
+                }}
+              />
+            ])}
           </ExpansionPanelDetails>
         </ExpansionPanel>
       )

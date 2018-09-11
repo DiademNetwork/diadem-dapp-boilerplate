@@ -6,6 +6,8 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Typography from '@material-ui/core/Typography'
+import Link from '../../Link'
 
 class AchievementConfirm extends Component {
   state = {
@@ -27,7 +29,7 @@ class AchievementConfirm extends Component {
   }
 
   render () {
-    const { className, isFacebookAuthenticated } = this.props
+    const { actor, className, isFacebookAuthenticated, link, title } = this.props
     const { modalOpen } = this.state
     return [
       <Button
@@ -49,19 +51,32 @@ class AchievementConfirm extends Component {
         <DialogTitle id="form-dialog-title">Confirm</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to confirm this achievement?
+            <Typography paragraph variant="body1">
+              Has {actor} really {title}?
+            </Typography>
+            <Link
+              text="View achievement Facebook post again"
+              href={link}
+              typographyProps={{
+                paragraph: true
+              }}
+            />
+            <Typography variant="caption" color="textSecondary">
+              Confirmations make other Diadem Network users know they support real achievement(s)<br />
+              Please confirm only achievement(s) you are sure of
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">
-            No
+            I'm not sure
           </Button>
           <Button
             onClick={this.handleConfirm}
             variant="contained"
             color="primary"
           >
-            Yes
+            yes, {actor} has!
           </Button>
         </DialogActions>
       </Dialog>
@@ -70,9 +85,12 @@ class AchievementConfirm extends Component {
 }
 
 AchievementConfirm.propTypes = {
+  actor: T.string,
   className: T.string,
+  isFacebookAuthenticated: T.bool,
+  link: T.string,
   onConfirm: T.func,
-  isFacebookAuthenticated: T.bool
+  title: T.string
 }
 
 export default AchievementConfirm

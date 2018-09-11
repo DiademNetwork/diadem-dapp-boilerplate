@@ -8,6 +8,11 @@ import List from '@material-ui/core/List'
 import Item from './Item'
 
 class Timeline extends Component {
+  componentDidMount () {
+    // remove new items badge from tabs when user navigates to transactions
+    this.props.updateTransactionsMeta({ notificationCount: 0 })
+  }
+
   render () {
     const { isFacebookAuthenticated, transactions } = this.props
     let renderedComponent
@@ -36,7 +41,8 @@ class Timeline extends Component {
 
 Timeline.propTypes = {
   transactions: T.array,
-  isFacebookAuthenticated: T.bool.isRequired
+  isFacebookAuthenticated: T.bool.isRequired,
+  updateTransactionsMeta: T.func
 }
 
 export default withContainer(Timeline)

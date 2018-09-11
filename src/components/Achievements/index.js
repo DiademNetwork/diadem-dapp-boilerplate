@@ -8,23 +8,22 @@ import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
 import Update from './Update'
+import sortByTime from '../../helpers/sort-by-time'
 
 class Achievements extends Component {
   aggregateAchievements = R.compose(
     R.mapObjIndexed((itemsInHistory) => {
+      const verbCount = verb => R.compose(R.length, R.propEq('verb', verb))
       const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
       const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
-      const deposits = R.filter(R.propEq('verb', 'deposit'))(itemsInHistory)
-      const confirms = R.filter(R.propEq('verb', 'confirm'))(itemsInHistory)
-      const supports = R.filter(R.propEq('verb', 'support'))(itemsInHistory)
       return {
         history: [ creation, ...updates ],
-        confirmsCount: confirms.length,
-        depositsCount: deposits.length,
-        supportsCount: supports.length
+        confirmsCount: verbCount('confirm')(itemsInHistory),
+        depositsCount: verbCount('deposit')(itemsInHistory),
+        supportsCount: verbCount('support')(itemsInHistory)
       }
     }),
-    R.mapObjIndexed((itemsInHistory) => itemsInHistory.sort((a, b) => new Date(a.time) - new Date(b.time))),
+    R.mapObjIndexed((items) => sortByTime.desc(items)),
     R.groupBy(R.prop('wallet'))
   )
 

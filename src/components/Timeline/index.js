@@ -33,39 +33,39 @@ class Timeline extends Component {
     } else {
       renderedComponent = (
         <List>
-          {transactions.map(({ actor, verb, object, target, time }, idx) => {
+          {transactions.map(({ actor, verb, object, target, time, name }, idx) => {
             let icon
             let text
             let achievementLink
             const txComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view transaction on explorer</a>
-            const formattedTime = moment(time).format('DD/MM/YYYY, h:mm:ss')
+            const formattedTime = moment(time).format('DD/MM/YYYY hh:mm')
             switch (verb) {
               case 'create':
                 icon = <PlusOneIcon />
-                achievementLink = <a className={classes.link} href={object} target="_blank">{object}</a>
+                achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
                 text = (<Typography>
-                  {formattedTime} - {actor} created {achievementLink} - {txComponent}
+                  {formattedTime} - {name || actor} created {achievementLink} - {txComponent}
                 </Typography>)
                 break
               case 'confirm':
                 icon = <ThumbUpIcon />
-                achievementLink = <a className={classes.link} href={object} target="_blank">{object}</a>
+                achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
                 text = (<Typography>
-                  {formattedTime} - {actor} confirmed {achievementLink} - {txComponent}
+                  {formattedTime} - {name || actor} confirmed {achievementLink} - {txComponent}
                 </Typography>)
                 break
               case 'register':
                 icon = <PermIdentityIcon />
                 text = (<Typography>
-                  {formattedTime} - {actor} registered with address {object} - {txComponent}
+                  {formattedTime} - {name || actor} registered with address {object} - {txComponent}
                 </Typography>)
                 break
               case 'withdraw':
               default:
                 icon = <RemoveIcon />
-                achievementLink = <a className={classes.link} href={object} target="_blank">{object}</a>
+                achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
                 text = (<Typography>
-                  {formattedTime} - {actor} withdrew {achievementLink} - {txComponent}
+                  {formattedTime} - {name || actor} withdrew {achievementLink} - {txComponent}
                 </Typography>)
             }
             return (

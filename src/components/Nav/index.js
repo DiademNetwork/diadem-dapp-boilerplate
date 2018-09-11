@@ -14,6 +14,11 @@ const styles = (theme) => ({
   },
   flex: {
     flexGrow: 1
+  },
+  network: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
   }
 })
 
@@ -22,7 +27,7 @@ const Nav = ({ classes }) => (
     <Toolbar>
       <img className={classes.logo} alt="Diadem Network logo" src={LogoImage} />
       <Typography variant="title" color="inherit" className={classes.flex}>
-        Diadem Network
+        Diadem <span className={classes.network}>Network</span>
       </Typography>
       <LoginButton />
     </Toolbar>

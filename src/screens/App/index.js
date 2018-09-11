@@ -10,26 +10,22 @@ import Help from '../../components/Help'
 import Footer from '../../components/Footer'
 import { PropTypes as T } from 'prop-types'
 import Grid from '@material-ui/core/Grid'
-import { withStyles } from '@material-ui/core/styles'
 import withContainer from './container'
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1
-  },
-  grid: {
-    padding: `${theme.spacing.unit * 2} 0`,
-    width: '100%'
-  }
-})
 
 class App extends Component {
   render () {
-    const { achievementsNotificationCount, classes, transactionsNotificationCount } = this.props
+    const { achievementsNotificationCount, transactionsNotificationCount } = this.props
     return (
-      <div className={classes.root}>
-        <Nav />
-        <Grid className={classes.grid} container spacing={24} justify="center" alignContent="center">
+      <div>
+        <Grid
+          container
+          justify="center"
+          alignContent="center"
+          spacing={16}
+        >
+          <Grid item xs={12}>
+            <Nav />
+          </Grid>
           <Grid item xs={12} md={8}>
             <Wallet />
           </Grid>
@@ -59,8 +55,7 @@ class App extends Component {
 
 App.propTypes = {
   achievementsNotificationCount: T.number,
-  classes: T.object.isRequired,
   transactionsNotificationCount: T.number
 }
 
-export default withContainer(withStyles(styles)(App))
+export default withContainer(App)

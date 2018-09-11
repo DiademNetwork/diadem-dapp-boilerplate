@@ -15,6 +15,11 @@ const styles = (theme) => ({
   icon: {
     marginLeft: theme.spacing.unit,
     marginRight: -theme.spacing.unit
+  },
+  facebookText: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    }
   }
 })
 
@@ -51,7 +56,7 @@ class LoginButton extends Component {
             onClick={renderProps.onClick}
             variant="contained"
           >
-            Facebook Login <PowerSettingsNewIcon className={classes.icon} />
+            <span className={classes.facebookText}>Facebook</span> Login <PowerSettingsNewIcon className={classes.icon} />
           </Button>
         )}
       />

@@ -63,7 +63,8 @@ class Wallet extends Component {
       recoverWallet,
       unconfirmedBalance,
       walletStatus,
-      loadWallet
+      isRegistrationPending,
+      updateWalletStatus
     } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
@@ -79,16 +80,11 @@ class Wallet extends Component {
             <Typography color="textSecondary">Loading...</Typography>
           )
           break
-        case 'pending-registration':
-          renderedComponent = (
-            <Typography color="textSecondary">Please wait while your registration get confirmed (it can take some minutes)...</Typography>
-          )
-          break
         case 'generated':
           renderedComponent = <Generated
             mnemonic={mnemonic}
             privateKey={privateKey}
-            onConfirm={loadWallet}
+            onConfirm={() => updateWalletStatus('restoring-info-saved')}
           />
           break
         case 'needs-recovering':
@@ -98,7 +94,9 @@ class Wallet extends Component {
           break
         case 'restored':
         case 'restoring-info-saved':
-          renderedComponent = (
+          renderedComponent = isRegistrationPending ? (
+            <Typography color="textSecondary">Please wait while your registration get confirmed (it can take some minutes)...</Typography>
+          ) : (
             <Display
               address={address}
               balance={balance}
@@ -142,7 +140,7 @@ Wallet.propTypes = {
   refreshWallet: T.func,
   unconfirmedBalance: T.number,
   wallet: T.object,
-  loadWallet: T.func
+  updateWalletStatus: T.func
 }
 
 export default withContainer(Wallet)

@@ -16,6 +16,7 @@ export const getAllWalletData = R.path(['wallet', 'data'])
 export const getWalletStatus = R.path(['wallet', 'status'])
 export const getWallet = name => createSelector([ getAllWalletData ], R.prop(name))
 export const getWalletMeta = name => createSelector([ getAllWalletMeta ], R.prop(name))
+export const isUserRegistered = createSelector([getWalletMeta('isUserRegistered')], R.equals(true))
 export const getWalletAddress = getWallet('addrStr')
 export const isWalletReady = createSelector([ getWalletStatus ], R.either(R.equals('restored'), R.equals('restoring-info-saved')))
 
@@ -54,3 +55,4 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
 // Mix
 export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebookAuthenticated, isWalletReady ], R.and)
 export const hasUserCreatedAnAchievement = createSelector([getWalletAddress, getAllAchievementsWallets], R.contains)
+export const canCreateOrUpdateAchievement = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))

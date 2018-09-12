@@ -24,14 +24,12 @@ class Achievements extends Component {
   render () {
     const {
       achievements,
+      canCreateOrUpdateAchievement,
       classes,
       createAchievement,
       hasUserCreatedAnAchievement,
-      isFacebookAuthenticated,
-      isWalletReady,
       updateAchievement
     } = this.props
-    const canCreateOrUpdate = isWalletReady && isFacebookAuthenticated
     return [
       <Grid
         key='list'
@@ -40,7 +38,7 @@ class Achievements extends Component {
         justify="center"
         alignContent="center"
       >
-        {canCreateOrUpdate &&
+        {canCreateOrUpdateAchievement &&
           <Grid item xs={12}>
             {hasUserCreatedAnAchievement
               ? <Update onUpdate={updateAchievement} />
@@ -67,11 +65,10 @@ class Achievements extends Component {
 
 Achievements.propTypes = {
   achievements: T.object,
+  canCreateOrUpdateAchievement: T.bool,
   classes: T.object,
   createAchievement: T.func,
   hasUserCreatedAnAchievement: T.bool,
-  isFacebookAuthenticated: T.bool,
-  isWalletReady: T.bool,
   updateAchievement: T.func,
   updateAchievementsMeta: T.func
 }

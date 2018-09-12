@@ -67,10 +67,11 @@ export const checkUserRegistration = () => async (dispatch, getState) => {
   const { facebook: { data: { userID } } } = getState()
   const { data: { pending } } = await api.checkUser({ user: userID })
   if (!pending) {
-    dispatch(updateWalletMeta({ isRegistrationPending: false }))
+    dispatch(updateWalletMeta({
+      isRegistrationPending: false,
+      isUserRegistered: true
+    }))
     dispatch(notifications.userRegistrationSuccess)
-    dispatch(notifications.walletGenerated)
-    dispatch(updateWalletStatus('generated'))
   }
 }
 
@@ -99,20 +100,16 @@ const registerUser = async ({ userID, accessToken }, dispatch) => {
   window.localStorage.setItem('privateKey', privateKey)
   dispatch(updateWalletMeta({ mnemonic, privateKey }))
   const walletData = await wallet.getInfo()
+  dispatch(updateWalletMeta({ wallet }))
+  dispatch(updateWallet(walletData))
   await api.registerUser({
     address: walletData.addrStr,
     user: userID,
     token: accessToken
   })
-  dispatch(updateWalletMeta({ wallet }))
-  dispatch(updateWallet(walletData))
-  return setPendingRegistration(dispatch)
-}
-
-const setPendingRegistration = async (dispatch) => {
+  dispatch(updateWalletStatus('generated'))
+  dispatch(notifications.walletGenerated)
   dispatch(updateWalletMeta({ isRegistrationPending: true }))
-  dispatch(updateWalletStatus('pending-registration'))
-  return dispatch(notifications.pendingUserRegistration)
 }
 
 export const handleFacebookLogin = (facebookData) => async (dispatch, getState) => {
@@ -122,10 +119,11 @@ export const handleFacebookLogin = (facebookData) => async (dispatch, getState) 
   const { accessToken, userID } = facebookData
   const { data: { exists, pending } } = await api.checkUser({ user: userID })
   if (exists) {
+    dispatch(updateWalletMeta({ isUserRegistered: true }))
     return loadWallet()(dispatch)
   } else {
     if (pending) {
-      return setPendingRegistration(dispatch)
+      return dispatch(updateWalletMeta({ isRegistrationPending: true }))
     } else {
       return registerUser({ userID, accessToken }, dispatch)
     }

@@ -1,16 +1,18 @@
 import { connect } from 'react-redux'
-import { createAchievement, updateAchievement, updateAchievementsMeta } from '../../actions'
 import {
+  createAchievement,
+  updateAchievement,
+  updateAchievementsMeta
+} from '../../actions'
+import {
+  canCreateOrUpdateAchievement,
   getProcessedAchievements,
-  hasUserCreatedAnAchievement,
-  isWalletReady,
-  isFacebookAuthenticated
+  hasUserCreatedAnAchievement
 } from '../../selectors'
 
 const mapStateToProps = (state) => ({
   achievements: getProcessedAchievements(state),
-  isFacebookAuthenticated: isFacebookAuthenticated(state),
-  isWalletReady: isWalletReady(state),
+  canCreateOrUpdateAchievement: canCreateOrUpdateAchievement(state),
   hasUserCreatedAnAchievement: hasUserCreatedAnAchievement(state)
 })
 

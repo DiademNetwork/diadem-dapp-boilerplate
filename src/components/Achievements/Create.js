@@ -10,14 +10,15 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
 import FacebookLinkHelp from './FacebookLinkHelp'
+import StarIcon from '@material-ui/icons/Star'
 import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
 
 const styles = (theme) => ({
-  button: {
-    marginRight: theme.spacing.unit * 2
+  buttonIcon: {
+    marginRight: theme.spacing.unit
   }
 })
 
@@ -68,16 +69,18 @@ class CreateAchievement extends Component {
 
   render () {
     const { isLinkValid, isTitleValid, link, modalOpen, title } = this.state
-    const { classes } = this.props
+    const { className, classes } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return [
       <Button
-        className={classes.button}
+        aria-label="Create"
+        className={className}
         color="secondary"
         key="create-achievement-button"
-        variant="contained"
         onClick={this.handleClickOpen}
+        variant="extendedFab"
       >
+        <StarIcon className={classes.buttonIcon} />
         Create your Achievement
       </Button>,
       <Dialog
@@ -137,6 +140,7 @@ class CreateAchievement extends Component {
 }
 
 CreateAchievement.propTypes = {
+  className: T.string,
   classes: T.object,
   onCreate: T.func
 }

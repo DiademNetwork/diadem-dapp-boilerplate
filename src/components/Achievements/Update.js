@@ -8,12 +8,20 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import { withStyles } from '@material-ui/core/styles'
 import FacebookLinkHelp from './FacebookLinkHelp'
+import StarIcon from '@material-ui/icons/Star'
 import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
 const PREVIOUS_LINK_INITIAL_VALUE = ''
+
+const styles = (theme) => ({
+  buttonIcon: {
+    marginRight: theme.spacing.unit
+  }
+})
 
 class UpdateAchievement extends Component {
   state = {
@@ -77,15 +85,22 @@ class UpdateAchievement extends Component {
       previousLink,
       title
     } = this.state
+    const {
+      className,
+      classes
+    } = this.props
     const isFormValid = isLinkValid && isTitleValid && isPreviousLinkValid
     return [
       <Button
+        aria-label="Update"
+        className={className}
         color="secondary"
         key="update-achievement-button"
-        variant="contained"
         onClick={this.handleClickOpen}
+        variant="extendedFab"
       >
-        Update your achievement
+        <StarIcon className={classes.buttonIcon} />
+        Update your Achievement
       </Button>,
       <Dialog
         key='update-achievement-modal'
@@ -153,7 +168,9 @@ class UpdateAchievement extends Component {
 }
 
 UpdateAchievement.propTypes = {
+  className: T.string,
+  classes: T.object,
   onUpdate: T.func
 }
 
-export default UpdateAchievement
+export default withStyles(styles)(UpdateAchievement)

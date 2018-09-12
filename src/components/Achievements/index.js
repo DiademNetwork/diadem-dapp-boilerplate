@@ -9,6 +9,15 @@ import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
 import Update from './Update'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = (theme) => ({
+  achievementButton: {
+    position: 'fixed',
+    bottom: theme.spacing.unit * 2,
+    right: theme.spacing.unit * 2
+  }
+})
 
 class Achievements extends Component {
   componentDidMount () {
@@ -20,6 +29,7 @@ class Achievements extends Component {
     const {
       achievements,
       canCreateOrUpdateAchievement,
+      classes,
       createAchievement,
       hasUserCreatedAnAchievement,
       updateAchievement
@@ -35,8 +45,8 @@ class Achievements extends Component {
         {canCreateOrUpdateAchievement &&
           <Grid item xs={12}>
             {hasUserCreatedAnAchievement
-              ? <Update onUpdate={updateAchievement} />
-              : <Create onCreate={createAchievement} />
+              ? <Update className={classes.achievementButton} onUpdate={updateAchievement} />
+              : <Create className={classes.achievementButton} onCreate={createAchievement} />
             }
           </Grid>
         }
@@ -64,10 +74,11 @@ class Achievements extends Component {
 Achievements.propTypes = {
   achievements: T.object,
   canCreateOrUpdateAchievement: T.bool,
+  classes: T.object,
   createAchievement: T.func,
   hasUserCreatedAnAchievement: T.bool,
   updateAchievement: T.func,
   updateAchievementsMeta: T.func
 }
 
-export default withContainer(Achievements)
+export default withContainer(withStyles(styles)(Achievements))

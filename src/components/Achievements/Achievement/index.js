@@ -88,11 +88,10 @@ class Achievement extends Component {
     const { actor, name, title, object } = displayedHistoryItem
     return [
       <Card key="achievement-card" className={classes.card}>
-        <CardHeader title={
-          <Typography variant="headline">
-            {name} has {title}
-          </Typography>
-        } />
+        <CardHeader title={[
+          <Typography key="achievement-actor" variant="subheading" color="textSecondary">{name} has:</Typography>,
+          <Typography key="achievement-title" variant="headline">{title}</Typography>
+        ]} />
         <Divider />
         <CardContent>
           {confirmators.length > 0 &&

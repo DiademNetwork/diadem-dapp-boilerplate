@@ -65,7 +65,7 @@ class AchievementSupport extends Component {
         <DialogTitle id="form-dialog-title">Support</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter an amount (max ${walletBalance} QTUM) you would like to send to support author <strong>{author} </strong><br />
+            Please enter an amount (max {walletBalance} QTUM) you would like to send to support author <strong>{author} </strong><br />
             for his achievement: <strong>{title}</strong>
           </DialogContentText>
           <TextField

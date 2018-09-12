@@ -34,7 +34,7 @@ class WalletDisplay extends Component {
           <ListItemText primary={
             <Typography>
               {address}
-              <HelpTooltip text="This is the first address of your hot Diadem Network wallet" />
+              <HelpTooltip text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements" />
               <Tooltip
                 TransitionComponent={Zoom}
                 title='Copy address to clipboard'

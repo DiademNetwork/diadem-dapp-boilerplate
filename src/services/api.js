@@ -27,7 +27,7 @@ export const createAPI = (fetcher, url) => {
   }
 
   async function encodeSupport (data) {
-    return fetcher.post(getUrl('encore-support'), data)
+    return fetcher.post(getUrl('encode-support'), data)
   }
 
   async function supportAchievement (data) {

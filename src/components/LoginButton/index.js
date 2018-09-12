@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import withContainer from './container'
+import Hidden from '@material-ui/core/Hidden'
 
 const styles = (theme) => ({
   img: {
@@ -17,10 +18,7 @@ const styles = (theme) => ({
     marginRight: -theme.spacing.unit
   },
   facebookText: {
-    marginRight: theme.spacing.unit,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none'
-    }
+    marginRight: theme.spacing.unit
   }
 })
 
@@ -42,7 +40,9 @@ class LoginButton extends Component {
     if (isFacebookAuthenticated) {
       return [
         <Avatar className={classes.img} key="avatar" alt="Facebook profile picture" src={facebookPictureUrl} />,
-        <Typography key="username" variant="title" color="inherit">{facebookName}</Typography>
+        <Hidden smDown>
+          <Typography key="username" variant="title" color="inherit">{facebookName}</Typography>
+        </Hidden>
       ]
     }
     return (
@@ -57,7 +57,7 @@ class LoginButton extends Component {
             onClick={renderProps.onClick}
             variant="contained"
           >
-            <span className={classes.facebookText}>Facebook</span> Login <PowerSettingsNewIcon className={classes.icon} />
+            <Hidden smDown>Facebook</Hidden> Login <PowerSettingsNewIcon className={classes.icon} />
           </Button>
         )}
       />

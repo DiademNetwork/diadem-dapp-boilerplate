@@ -17,7 +17,8 @@ class Wallet extends Component {
 
   componentWillReceiveProps ({ unconfirmedBalance: newUnconfirmedBalance }) {
     const { displayNotification, unconfirmedBalance } = this.props
-    if (newUnconfirmedBalance !== unconfirmedBalance) {
+    // not the first load AND unconfirmedBalance changed
+    if (unconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
       const notificationToShow = newUnconfirmedBalance === 0
         ? notifications.newAvailableTokens
         : notifications.incomingTokens

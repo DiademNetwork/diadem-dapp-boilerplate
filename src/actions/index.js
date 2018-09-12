@@ -42,9 +42,10 @@ export const refreshWallet = (wallet) => async (dispatch) => {
   }
 }
 
-export const recoverWallet = ({ mnemonic, privateKey }) => async dispatch => {
+export const recoverWallet = ({ mnemonic, privateKey }) => async (dispatch, getState) => {
   try {
     let wallet
+    const { facebook: { data: { userID } } } = getState()
     if (privateKey) {
       wallet = network.fromWIF(privateKey)
     } else if (mnemonic) {
@@ -53,7 +54,7 @@ export const recoverWallet = ({ mnemonic, privateKey }) => async dispatch => {
     } else {
       throw new Error()
     }
-    window.localStorage.setItem('privateKey', privateKey)
+    window.localStorage.setItem(`privateKey-${userID}`, privateKey)
     const walletData = await wallet.getInfo()
     dispatch(updateWallet(walletData))
     dispatch(updateWalletMeta({ wallet }))
@@ -75,9 +76,9 @@ export const checkUserRegistration = () => async (dispatch, getState) => {
   }
 }
 
-export const loadWallet = () => async (dispatch) => {
+export const loadWallet = (userID) => async (dispatch) => {
   try {
-    const storedPrivateKey = window.localStorage.getItem('privateKey')
+    const storedPrivateKey = window.localStorage.getItem(`privateKey-${userID}`)
     if (!storedPrivateKey) {
       dispatch(updateWalletStatus('needs-recovering'))
     } else {
@@ -97,7 +98,7 @@ const registerUser = async ({ userID, accessToken }, dispatch) => {
   const mnemonic = generateMnemonic()
   const wallet = network.fromMnemonic(mnemonic)
   const privateKey = wallet.toWIF()
-  window.localStorage.setItem('privateKey', privateKey)
+  window.localStorage.setItem(`privateKey-${userID}`, privateKey)
   dispatch(updateWalletMeta({ mnemonic, privateKey }))
   const walletData = await wallet.getInfo()
   dispatch(updateWalletMeta({ wallet }))
@@ -120,7 +121,7 @@ export const handleFacebookLogin = (facebookData) => async (dispatch, getState) 
   const { data: { exists, pending } } = await api.checkUser({ user: userID })
   if (exists) {
     dispatch(updateWalletMeta({ isUserRegistered: true }))
-    return loadWallet()(dispatch)
+    return loadWallet(userID)(dispatch)
   } else {
     if (pending) {
       return dispatch(updateWalletMeta({ isRegistrationPending: true }))

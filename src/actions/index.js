@@ -246,6 +246,16 @@ export const displayNotification = (notification) => (dispatch) => {
   dispatch(notification)
 }
 
+export const withdrawFromHotWallet = ({address, amount}) => async (dispatch, getState) => {
+  try {
+    const { wallet: { meta: { wallet } } } = getState()
+    await wallet.send(address, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
+    dispatch(notifications.withdrawTokensSuccess)
+  } catch (error) {
+    dispatch(notifications.withdrawTokensError)
+  }
+}
+
 // Ui
 export const showHelp = () => ({ type: UI_SHOW_HELP })
 export const hideHelp = () => ({ type: UI_HIDE_HELP })

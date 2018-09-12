@@ -64,7 +64,8 @@ class Wallet extends Component {
       unconfirmedBalance,
       walletStatus,
       isRegistrationPending,
-      updateWalletStatus
+      updateWalletStatus,
+      withdrawFromHotWallet
     } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
@@ -102,6 +103,7 @@ class Wallet extends Component {
               balance={balance}
               unconfirmedBalance={unconfirmedBalance}
               onRefreshWallet={this.handleRefreshWallet}
+              withdrawFromHotWallet={withdrawFromHotWallet}
             />
           )
           break
@@ -140,7 +142,8 @@ Wallet.propTypes = {
   refreshWallet: T.func,
   unconfirmedBalance: T.number,
   wallet: T.object,
-  updateWalletStatus: T.func
+  updateWalletStatus: T.func,
+  withdrawFromHotWallet: T.func
 }
 
 export default withContainer(Wallet)

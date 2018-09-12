@@ -4,7 +4,8 @@ import {
   displayNotification,
   recoverWallet,
   refreshWallet,
-  updateWalletStatus
+  updateWalletStatus,
+  withdrawFromHotWallet
 } from '../../actions'
 import {
   isFacebookAuthenticated,
@@ -30,7 +31,8 @@ const mapDispatchToProps = {
   displayNotification,
   recoverWallet,
   refreshWallet,
-  updateWalletStatus
+  updateWalletStatus,
+  withdrawFromHotWallet
 }
 
 export default WrappedComponent =>

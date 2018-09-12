@@ -2,18 +2,13 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Grid from '@material-ui/core/Grid'
-import { withStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
+import Typography from '@material-ui/core/Typography'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
 import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
 import Update from './Update'
-
-const styles = (theme) => ({
-  paper: {
-    padding: theme.spacing.unit * 3
-  }
-})
 
 class Achievements extends Component {
   componentDidMount () {
@@ -25,7 +20,6 @@ class Achievements extends Component {
     const {
       achievements,
       canCreateOrUpdateAchievement,
-      classes,
       createAchievement,
       hasUserCreatedAnAchievement,
       updateAchievement
@@ -54,7 +48,11 @@ class Achievements extends Component {
           ))
           : (
             <Grid key='no-item' item xs={12}>
-              <Paper className={classes.paper} color="textPrimary">No achievement</Paper>
+              <Card>
+                <CardContent>
+                  <Typography color="textPrimary">No achievement</Typography>
+                </CardContent>
+              </Card>
             </Grid>
           )
         }
@@ -66,11 +64,10 @@ class Achievements extends Component {
 Achievements.propTypes = {
   achievements: T.object,
   canCreateOrUpdateAchievement: T.bool,
-  classes: T.object,
   createAchievement: T.func,
   hasUserCreatedAnAchievement: T.bool,
   updateAchievement: T.func,
   updateAchievementsMeta: T.func
 }
 
-export default withContainer(withStyles(styles)(Achievements))
+export default withContainer(Achievements)

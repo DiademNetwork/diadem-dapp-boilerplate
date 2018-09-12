@@ -32,9 +32,11 @@ export default {
   depositAchievementSuccess: createSuccessNotification('Deposit for achievement successful'),
   depositAchievementError: createErrorNotification('Impossible to deposit for achievement'),
   newAchievements: createSuccessNotification('New achievements'),
-  newTransactions: createSuccessNotification('New activities'),
+  newTransactions: createSuccessNotification('New activity on Diadem Network'),
   incomingTokens: createSuccessNotification('Incoming tokens'),
   newAvailableTokens: createSuccessNotification('New tokens are now available'),
   pendingUserRegistration: createSuccessNotification('Please wait, your registration is in process. You will be notified when confirmed'),
-  userRegistrationSuccess: createSuccessNotification('Registration successful')
+  userRegistrationSuccess: createSuccessNotification('Registration successful'),
+  withdrawTokensSuccess: createSuccessNotification('Tokens withdrawal successful'),
+  withdrawTokensError: createErrorNotification('Impossible to withdraw tokens')
 }

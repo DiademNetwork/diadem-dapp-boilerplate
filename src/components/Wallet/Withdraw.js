@@ -9,11 +9,14 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 
 const AMOUNT_INITIAL_VALUE = 0
+const ADDRESS_INITIAL_VALUE = ''
 
-class AchievementSupport extends Component {
+class Withdraw extends Component {
   state = {
+    address: ADDRESS_INITIAL_VALUE,
     amount: AMOUNT_INITIAL_VALUE,
     isAmountValid: false,
+    isAddressValid: false,
     modalOpen: false
   }
 
@@ -21,57 +24,57 @@ class AchievementSupport extends Component {
 
   handleClose = () => this.setState({ modalOpen: false })
 
-  handleChange = e => {
-    const amount = e.target.value
-    const isAmountValid = amount > 0
-    this.setState({ amount, isAmountValid })
+  handleChange = name => e => {
+    const value = e.target.value
+    const { balance } = this.props
+    if (name === 'address') {
+      const isAddressValid = value !== ''
+      this.setState({ address: value, isAddressValid })
+    } else if (name === 'amount') {
+      const isAmountValid = value > 0 && value <= balance
+      this.setState({ amount: value, isAmountValid })
+    }
   }
 
   handleSubmit = () => {
-    const { onSupport } = this.props
-    const { amount } = this.state
-    onSupport(amount)
+    const { onSubmit } = this.props
+    const { address, amount } = this.state
+    onSubmit({ address, amount })
     this.resetForm()
     this.handleClose()
   }
 
   resetForm = () => this.setState({
+    address: ADDRESS_INITIAL_VALUE,
     amount: AMOUNT_INITIAL_VALUE,
-    isAmountValid: false
+    isAmountValid: false,
+    isAddressValid: false
   })
 
   render () {
-    const {
-      actionAlreadyDone,
-      author,
-      className,
-      title,
-      walletBalance
-    } = this.props
-    const isBalancePositive = walletBalance && walletBalance > 0
-    const { amount, isAmountValid, modalOpen } = this.state
+    const { balance, className } = this.props
+    const { address, isAddressValid, amount, isAmountValid, modalOpen } = this.state
+    const isFormValid = isAmountValid && isAddressValid
     return [
       <Button
-        className={className}
-        key='achievement-support-button'
-        disabled={!isBalancePositive || actionAlreadyDone}
+        key='withdraw-button'
         onClick={this.handleClickOpen}
         variant="contained"
         color="secondary"
+        className={className}
       >
-        {actionAlreadyDone ? 'You already supported' : 'Support'}
+        Withdraw
       </Button>,
       <Dialog
-        key='achievement-support-modal'
+        key='withdraw-modal'
         open={modalOpen}
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Support</DialogTitle>
+        <DialogTitle id="form-dialog-title">Withdraw</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter an amount (max {walletBalance} QTUM) you would like to send to support author <strong>{author} </strong><br />
-            for his achievement: <strong>{title}</strong>
+            Please provide a withdrawal address and an amount (max {balance} QTUM) to withdraw tokens from your Diadem network hot wallet
           </DialogContentText>
           <TextField
             autoFocus
@@ -80,9 +83,22 @@ class AchievementSupport extends Component {
             id='amount'
             label="Amount (in QTUM)"
             value={amount}
-            onChange={this.handleChange}
+            onChange={this.handleChange('amount')}
             type='number'
+            placeholder={`max ${balance}`}
             fullWidth
+            helperText='In number'
+          />
+          <TextField
+            autoFocus
+            error={address !== ADDRESS_INITIAL_VALUE && !isAddressValid}
+            margin="normal"
+            id='address'
+            label="Target addres"
+            value={address}
+            onChange={this.handleChange('address')}
+            fullWidth
+            helperText='Please copy address in full. Diadem Network is not responsible if you enter wrong address'
           />
         </DialogContent>
         <DialogActions>
@@ -90,7 +106,7 @@ class AchievementSupport extends Component {
             Cancel
           </Button>
           <Button
-            disabled={!isAmountValid}
+            disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"
             color="secondary"
@@ -103,13 +119,10 @@ class AchievementSupport extends Component {
   }
 }
 
-AchievementSupport.propTypes = {
-  actionAlreadyDone: T.bool,
-  author: T.string,
+Withdraw.propTypes = {
+  balance: T.number,
   className: T.string,
-  onSupport: T.func,
-  title: T.string,
-  walletBalance: T.number
+  onSubmit: T.func
 }
 
-export default AchievementSupport
+export default Withdraw

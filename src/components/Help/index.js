@@ -77,8 +77,11 @@ class Help extends Component {
             <Typography color="textSecondary">
               SUPPORT ACHIEVEMENT(S): Send QTUM token to achievers to show them some love.
             </Typography>
-            <Typography paragraph color="textSecondary">
+            <Typography color="textSecondary">
               DEPOSIT FOR ACHIEVEMENT(S): Deposit QTUM tokens which will not be sent until the facebook user YOU chose confirms the achievement
+            </Typography>
+            <Typography paragraph color="textSecondary">
+              WITHDRAW YOUR TOKENS: QTUM Tokens you own in your hot wallet (where you can receive supports) can be withdrawn any time you want.
             </Typography>
             <Typography variant="body2">
               Facebook Login is required to perform most actions

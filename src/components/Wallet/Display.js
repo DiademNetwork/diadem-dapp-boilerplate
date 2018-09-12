@@ -8,11 +8,19 @@ import Tooltip from '@material-ui/core/Tooltip'
 import LocalPostOfficeOutlinedIcon from '@material-ui/icons/LocalPostOfficeOutlined'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import Zoom from '@material-ui/core/Zoom'
-import { Typography } from '@material-ui/core'
+import Typography from '@material-ui/core/Typography'
 import CopyToClipBoardButton from './CopyToClipBoardButton'
+import { withStyles } from '@material-ui/core/styles'
 import HelpTooltip from '../HelpTooltip'
+import Withdraw from './Withdraw'
 
 const AUTO_WALLET_REFRESH_INTERVAL = 5000 // in ms
+
+const styles = (theme) => ({
+  withdraw: {
+    marginLeft: theme.spacing.unit * 2
+  }
+})
 
 class WalletDisplay extends Component {
   componentDidMount () {
@@ -24,7 +32,13 @@ class WalletDisplay extends Component {
   }
 
   render () {
-    const { address, balance, unconfirmedBalance } = this.props
+    const {
+      address,
+      balance,
+      classes,
+      unconfirmedBalance,
+      withdrawFromHotWallet
+    } = this.props
     return (
       <List>
         <ListItem>
@@ -53,6 +67,13 @@ class WalletDisplay extends Component {
               <Typography>
                 {balance} QTUM{unconfirmedBalance > 0 ? ` (${unconfirmedBalance} QTUM pending)` : ''}
                 <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
+                {balance > 0 &&
+                  <Withdraw
+                    balance={balance}
+                    className={classes.withdraw}
+                    onSubmit={withdrawFromHotWallet}
+                  />
+                }
               </Typography>
             }
           />
@@ -65,8 +86,10 @@ class WalletDisplay extends Component {
 WalletDisplay.propTypes = {
   address: T.string,
   balance: T.number,
+  classes: T.object,
   onRefreshWallet: T.func,
-  unconfirmedBalance: T.number
+  unconfirmedBalance: T.number,
+  withdrawFromHotWallet: T.func
 }
 
-export default WalletDisplay
+export default withStyles(styles)(WalletDisplay)

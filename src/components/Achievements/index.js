@@ -31,6 +31,7 @@ class Achievements extends Component {
       canCreateOrUpdateAchievement,
       classes,
       createAchievement,
+      createAchievementStatus,
       hasUserCreatedAnAchievement,
       updateAchievement
     } = this.props
@@ -46,7 +47,7 @@ class Achievements extends Component {
           <Grid item xs={12}>
             {hasUserCreatedAnAchievement
               ? <Update className={classes.achievementButton} onUpdate={updateAchievement} />
-              : <Create className={classes.achievementButton} onCreate={createAchievement} />
+              : createAchievementStatus !== 'succeeded' && <Create className={classes.achievementButton} onCreate={createAchievement} />
             }
           </Grid>
         }
@@ -76,6 +77,7 @@ Achievements.propTypes = {
   canCreateOrUpdateAchievement: T.bool,
   classes: T.object,
   createAchievement: T.func,
+  createAchievementStatus: T.string,
   hasUserCreatedAnAchievement: T.bool,
   updateAchievement: T.func,
   updateAchievementsMeta: T.func

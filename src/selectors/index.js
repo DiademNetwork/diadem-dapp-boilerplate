@@ -28,6 +28,7 @@ export const getTransactionsCount = createSelector([getAllTransactionsData], R.l
 export const getSortedTransactions = createSelector([getAllTransactionsData], sortByTime.asc)
 
 // Achievements
+export const getAchievementCreateStatus = R.path(['achievements', 'createStatus'])
 export const getAllAchievementsData = R.path(['achievements', 'data'])
 export const getAllAchievementsMeta = R.path(['achievements', 'meta'])
 export const getAchievementsMeta = name => createSelector([getAllAchievementsMeta], R.prop(name))

@@ -7,10 +7,12 @@ import {
 import {
   canCreateOrUpdateAchievement,
   getProcessedAchievements,
-  hasUserCreatedAnAchievement
+  hasUserCreatedAnAchievement,
+  getAchievementCreateStatus
 } from '../../selectors'
 
 const mapStateToProps = (state) => ({
+  createAchievementStatus: getAchievementCreateStatus(state),
   achievements: getProcessedAchievements(state),
   canCreateOrUpdateAchievement: canCreateOrUpdateAchievement(state),
   hasUserCreatedAnAchievement: hasUserCreatedAnAchievement(state)

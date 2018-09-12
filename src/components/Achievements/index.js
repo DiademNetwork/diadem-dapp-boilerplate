@@ -35,8 +35,15 @@ class Achievements extends Component {
   )
 
   render () {
-    const { achievementsData, createAchievement, isFacebookAuthenticated, isWalletReady, updateAchievement } = this.props
-    const aggregatedAchievements = this.aggregateAchievements(achievementsData)
+    const {
+      achievements,
+      createAchievement,
+      hasUserCreatedAnAchievement,
+      isFacebookAuthenticated,
+      isWalletReady,
+      updateAchievement
+    } = this.props
+    const aggregatedAchievements = this.aggregateAchievements(achievements)
     const canCreateOrUpdate = isWalletReady && isFacebookAuthenticated
     return [
       <Grid
@@ -48,8 +55,10 @@ class Achievements extends Component {
       >
         {canCreateOrUpdate &&
           <Grid item xs={12}>
-            <Create onCreate={createAchievement} />
-            <Update onUpdate={updateAchievement} />
+            {hasUserCreatedAnAchievement
+              ? <Update onUpdate={updateAchievement} />
+              : <Create onCreate={createAchievement} />
+            }
           </Grid>
         }
         {R.keys(aggregatedAchievements).length > 0
@@ -70,8 +79,9 @@ class Achievements extends Component {
 }
 
 Achievements.propTypes = {
-  achievementsData: T.array,
+  achievements: T.array,
   createAchievement: T.func,
+  hasUserCreatedAnAchievement: T.bool,
   isFacebookAuthenticated: T.bool,
   isWalletReady: T.bool,
   updateAchievement: T.func,

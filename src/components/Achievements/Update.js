@@ -85,7 +85,7 @@ class UpdateAchievement extends Component {
         variant="contained"
         onClick={this.handleClickOpen}
       >
-        Update Achievement
+        Update your achievement
       </Button>,
       <Dialog
         key='update-achievement-modal'
@@ -93,7 +93,7 @@ class UpdateAchievement extends Component {
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Update achievement</DialogTitle>
+        <DialogTitle id="form-dialog-title">Update your achievement</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To update your achievement, please provide the previous link of your Facebook achievement post and provide a title for it

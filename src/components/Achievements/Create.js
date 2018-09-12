@@ -78,7 +78,7 @@ class CreateAchievement extends Component {
         variant="contained"
         onClick={this.handleClickOpen}
       >
-        Create Achievement
+        Create your Achievement
       </Button>,
       <Dialog
         key='create-achievement-modal'
@@ -86,7 +86,7 @@ class CreateAchievement extends Component {
         onClose={this.handleClose}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">Create achievement</DialogTitle>
+        <DialogTitle id="form-dialog-title">Create your achievement</DialogTitle>
         <DialogContent>
           <DialogContentText>
             To create an achievement, please provide the link to your Facebook achievement post and provide a title for it

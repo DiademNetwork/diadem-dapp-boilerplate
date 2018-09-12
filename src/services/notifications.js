@@ -21,7 +21,7 @@ export default {
   walletRefreshError: createErrorNotification('Impossible to refresh wallet'),
   walletGenerated: createSuccessNotification('Diadem Network QTUM wallet generated'),
   walletError: createErrorNotification('An error occured with Diadem Wallet'),
-  createAchievementSuccess: createSuccessNotification('Achievement created'),
+  createAchievementSuccess: createSuccessNotification('Achievement created. It will appear once confirmed on blockchain'),
   createAchievementError: createErrorNotification('Impossible to create achievement'),
   updateAchievementSuccess: createSuccessNotification('Achievement updated'),
   updateAchievementError: createErrorNotification('Impossible to update achievement'),

@@ -148,7 +148,7 @@ class Achievement extends Component {
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>View previous versions</Typography>
+            <Typography>View previous achievements of {name}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map(({ actor, title, object }, idx) => [

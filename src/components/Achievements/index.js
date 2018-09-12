@@ -2,12 +2,18 @@ import React, { Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import { withStyles } from '@material-ui/core/styles'
+import Paper from '@material-ui/core/Paper'
 import Achievement from './Achievement'
 import withContainer from './container'
 import Create from './Create'
 import Update from './Update'
-import sortByTime from '../../helpers/sort-by-time'
+
+const styles = (theme) => ({
+  paper: {
+    padding: theme.spacing.unit * 3
+  }
+})
 
 class Achievements extends Component {
   componentDidMount () {
@@ -15,35 +21,16 @@ class Achievements extends Component {
     this.props.updateAchievementsMeta({ notificationCount: 0 })
   }
 
-  aggregateAchievements = R.compose(
-    R.mapObjIndexed((itemsInHistory) => {
-      const getNamesForAction = verb => R.compose(
-        R.map(R.prop('actor')), // replace with name when ready
-        R.filter(R.propEq('verb', verb))
-      )
-      const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
-      const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
-      return {
-        history: [ creation, ...updates ],
-        confirmators: getNamesForAction('confirm')(itemsInHistory),
-        depositors: getNamesForAction('deposit')(itemsInHistory),
-        supporters: getNamesForAction('support')(itemsInHistory)
-      }
-    }),
-    R.mapObjIndexed(sortByTime.asc),
-    R.groupBy(R.prop('wallet'))
-  )
-
   render () {
     const {
       achievements,
+      classes,
       createAchievement,
       hasUserCreatedAnAchievement,
       isFacebookAuthenticated,
       isWalletReady,
       updateAchievement
     } = this.props
-    const aggregatedAchievements = this.aggregateAchievements(achievements)
     const canCreateOrUpdate = isWalletReady && isFacebookAuthenticated
     return [
       <Grid
@@ -61,15 +48,15 @@ class Achievements extends Component {
             }
           </Grid>
         }
-        {R.keys(aggregatedAchievements).length > 0
-          ? R.keys(aggregatedAchievements).map((key, idx) => (
+        {R.keys(achievements).length > 0
+          ? R.keys(achievements).map((key, idx) => (
             <Grid key={idx} item xs={12} lg={6}>
-              <Achievement achievement={aggregatedAchievements[key]} />
+              <Achievement achievement={achievements[key]} />
             </Grid>
           ))
           : (
             <Grid key='no-item' item xs={12}>
-              <Typography color="textPrimary">No achievement</Typography>
+              <Paper className={classes.paper} color="textPrimary">No achievement</Paper>
             </Grid>
           )
         }
@@ -79,7 +66,8 @@ class Achievements extends Component {
 }
 
 Achievements.propTypes = {
-  achievements: T.array,
+  achievements: T.object,
+  classes: T.object,
   createAchievement: T.func,
   hasUserCreatedAnAchievement: T.bool,
   isFacebookAuthenticated: T.bool,
@@ -88,4 +76,4 @@ Achievements.propTypes = {
   updateAchievementsMeta: T.func
 }
 
-export default withContainer(Achievements)
+export default withContainer(withStyles(styles)(Achievements))

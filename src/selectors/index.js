@@ -16,10 +16,8 @@ export const getAllWalletData = R.path(['wallet', 'data'])
 export const getWalletStatus = R.path(['wallet', 'status'])
 export const getWallet = name => createSelector([ getAllWalletData ], R.prop(name))
 export const getWalletMeta = name => createSelector([ getAllWalletMeta ], R.prop(name))
+export const getWalletAddress = getWallet('addrStr')
 export const isWalletReady = createSelector([ getWalletStatus ], R.either(R.equals('restored'), R.equals('restoring-info-saved')))
-
-// Mix
-export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebookAuthenticated, isWalletReady ], R.and)
 
 // Transactions
 export const getAllTransactionsData = R.path(['transactions', 'data'])
@@ -27,19 +25,32 @@ export const getAllTransactionsMeta = R.path(['transactions', 'meta'])
 export const getTransactionsMeta = name => createSelector([getAllTransactionsMeta], R.prop(name))
 export const getTransactionsCount = createSelector([getAllTransactionsData], R.length)
 export const getSortedTransactions = createSelector([getAllTransactionsData], sortByTime.asc)
-export const hasUserCreatedAnAchievement = createSelector([getFacebookUserID, getSortedTransactions], (userID, transactions) => {
-  return R.filter(
-    R.both(
-      R.propEq('actor', userID),
-      R.propEq('verb', 'create')
-    ),
-    transactions
-  ).length > 0
-})
 
 // Achievements
 export const getAllAchievementsData = R.path(['achievements', 'data'])
 export const getAllAchievementsMeta = R.path(['achievements', 'meta'])
 export const getAchievementsMeta = name => createSelector([getAllAchievementsMeta], R.prop(name))
 export const getAchievementsCount = createSelector([getAllAchievementsData], R.length)
-export const getSortedAchievements = createSelector([getAllAchievementsData], sortByTime.asc)
+export const getGroupedByWalletAchievements = createSelector([getAllAchievementsData], R.groupBy(R.prop('wallet')))
+export const getAllAchievementsWallets = createSelector([getGroupedByWalletAchievements], R.keys)
+export const getProcessedAchievements = createSelector([getGroupedByWalletAchievements], R.compose(
+  R.mapObjIndexed((itemsInHistory) => {
+    const getNamesForAction = verb => R.compose(
+      R.map(R.prop('actor')), // replace with name when ready
+      R.filter(R.propEq('verb', verb))
+    )
+    const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
+    const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
+    return {
+      history: [ creation, ...updates ],
+      confirmators: getNamesForAction('confirm')(itemsInHistory),
+      depositors: getNamesForAction('deposit')(itemsInHistory),
+      supporters: getNamesForAction('support')(itemsInHistory)
+    }
+  }),
+  R.mapObjIndexed(sortByTime.asc)
+))
+
+// Mix
+export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebookAuthenticated, isWalletReady ], R.and)
+export const hasUserCreatedAnAchievement = createSelector([getWalletAddress, getAllAchievementsWallets], R.contains)

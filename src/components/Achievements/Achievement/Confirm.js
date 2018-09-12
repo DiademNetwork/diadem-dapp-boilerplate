@@ -57,7 +57,7 @@ class AchievementConfirm extends Component {
       >
         <DialogTitle id="form-dialog-title">Confirm</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText component="div">
             <Typography paragraph variant="body1">
               Has {actor} really {title}?
             </Typography>

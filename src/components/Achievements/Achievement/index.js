@@ -17,7 +17,6 @@ import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
 import Link from '../../Link'
-// import HelpTooltip from '../../HelpTooltip'
 
 const styles = (theme) => ({
   actions: {
@@ -97,17 +96,17 @@ class Achievement extends Component {
         <Divider />
         <CardContent>
           {confirmators.length > 0 &&
-            <Typography variant="body1">
+            <Typography variant="body1" color="textSecondary">
               It has been confirmed by {confirmators[0]}{confirmators.length - 1 > 0 ? ` and ${confirmators.length - 1} others` : ''}
             </Typography>
           }
           {supporters.length > 0 &&
-            <Typography variant="body1">
+            <Typography variant="body1" color="textSecondary">
               It has been supported by {supporters[0]}{supporters.length - 1 > 0 ? ` and ${supporters.length - 1} others` : ''}
             </Typography>
           }
           {depositors.length > 0 &&
-            <Typography variant="body1">
+            <Typography variant="body1" color="textSecondary">
               {depositors[0]}{depositors.length - 1 > 0 ? ` and ${depositors.length - 1} others have` : ' has'} made a deposit
             </Typography>
           }
@@ -142,13 +141,12 @@ class Achievement extends Component {
             onSupport={this.handleDeposit}
             walletBalance={walletBalance}
           />
-          {/* <HelpTooltip text="test" /> */}
         </CardActions>
       </Card>,
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>Click here to see past related achievements from {actor}</Typography>
+            <Typography>View previous versions</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map(({ actor, title, object }, idx) => [

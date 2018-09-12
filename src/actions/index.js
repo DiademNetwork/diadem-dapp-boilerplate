@@ -119,9 +119,9 @@ export const confirmAchievement = ({ address, link, token, user }) => async disp
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.requested })
     await api.confirmAchievement({ address, link, token, user })
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
+    dispatch(notifications.confirmAchievementSuccess)
   } catch (error) {
     dispatch(notifications.confirmAchievementError)
-    dispatch(notifications.confirmAchievementSuccess)
     dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
   }
 }

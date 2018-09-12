@@ -66,22 +66,22 @@ class Help extends Component {
               This networks (for facebook only for now) aims to connect users achieving great things with people wanting to support them
             </Typography>
             <Typography color="textSecondary">
-              CREATE AN ACHIEVEMENT (1max per user): Post a link to an achievement you already posted on facebook
+              CREATE YOUR ACHIEVEMENT (1max per user): Post a link to an achievement you already posted on facebook
             </Typography>
             <Typography color="textSecondary">
               UPDATE YOUR ACHIEVEMENT: Your achievement evolved? No problem! Available only if you have an achievement created
             </Typography>
             <Typography color="textSecondary">
-              CONFIRM ACHIEVEMENT(S): Confirm other user(s) achievement(s). It's free!
+              CONFIRM achievement(s): Confirm other user(s) achievement(s)
             </Typography>
             <Typography color="textSecondary">
-              SUPPORT ACHIEVEMENT(S): Send QTUM token to achievers to show them some love.
+              SUPPORT achievement(s): Send QTUM token to achievers to show them some love
             </Typography>
             <Typography color="textSecondary">
-              DEPOSIT FOR ACHIEVEMENT(S): Deposit QTUM tokens which will not be sent until the facebook user YOU chose confirms the achievement
+              DEPOSIT for achievement(s): Deposit QTUM tokens which will not be sent until the facebook user YOU chose confirms the achievement
             </Typography>
             <Typography paragraph color="textSecondary">
-              WITHDRAW YOUR TOKENS: QTUM Tokens you own in your hot wallet (where you can receive supports) can be withdrawn any time you want.
+              WITHDRAW your tokens: QTUM Tokens you own in your hot wallet can be withdrawn any time you want
             </Typography>
             <Typography variant="body2">
               Facebook Login is required to perform most actions
@@ -90,7 +90,10 @@ class Help extends Component {
               A hot wallet is used to manage QTUM transactions
             </Typography>
             <Typography paragraph variant="body2">
-              Support and Deposit need a positive balance to be used
+              Create, Update and Confirm actions are free
+            </Typography>
+            <Typography paragraph variant="body2">
+              Support, Deposit and Withdraw need tokens you have sent to your Diadem Network hot wallet
             </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel

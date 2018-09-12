@@ -86,6 +86,9 @@ class Achievement extends Component {
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { confirmators, supporters, depositors } = achievement
     const { actor, name, title, object } = displayedHistoryItem
+    const confirmationsCount = confirmators.length
+    const supportsCount = supporters.length
+    const despositsCount = depositors.length
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
@@ -94,19 +97,19 @@ class Achievement extends Component {
         ]} />
         <Divider />
         <CardContent>
-          {confirmators.length > 0 &&
+          {confirmationsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been confirmed by {confirmators[0]}{confirmators.length - 1 > 0 ? ` and ${confirmators.length - 1} others` : ''}
+              It has been confirmed by {confirmators[0]}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
             </Typography>
           }
-          {supporters.length > 0 &&
+          {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been supported by {supporters[0]}{supporters.length - 1 > 0 ? ` and ${supporters.length - 1} others` : ''}
+              It has been supported by {supporters[0]}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
             </Typography>
           }
-          {depositors.length > 0 &&
+          {despositsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              {depositors[0]}{depositors.length - 1 > 0 ? ` and ${depositors.length - 1} others have` : ' has'} made a deposit
+              {depositors[0]}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit
             </Typography>
           }
           <Link

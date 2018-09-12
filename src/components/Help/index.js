@@ -90,10 +90,10 @@ class Help extends Component {
               A hot wallet is used to manage QTUM transactions
             </Typography>
             <Typography paragraph variant="body2">
-              Create, Update and Confirm actions are free
+              Create, Update and Confirm are free
             </Typography>
             <Typography paragraph variant="body2">
-              Support, Deposit and Withdraw need tokens you have sent to your Diadem Network hot wallet
+              Support, Deposit and Withdraw need QTUM tokens. For this, you must send some to your hot wallet
             </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel

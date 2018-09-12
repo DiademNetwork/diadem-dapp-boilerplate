@@ -35,6 +35,8 @@ class Achievements extends Component {
       hasUserCreatedAnAchievement,
       updateAchievement
     } = this.props
+    const displayUpdateButton = canCreateOrUpdateAchievement && hasUserCreatedAnAchievement
+    const displayCreateButton = canCreateOrUpdateAchievement && !hasUserCreatedAnAchievement && createAchievementStatus !== 'succeeded'
     return [
       <Grid
         key='list'
@@ -43,12 +45,14 @@ class Achievements extends Component {
         justify="center"
         alignContent="center"
       >
-        {canCreateOrUpdateAchievement &&
+        {displayUpdateButton &&
           <Grid item xs={12}>
-            {hasUserCreatedAnAchievement
-              ? <Update className={classes.achievementButton} onUpdate={updateAchievement} />
-              : createAchievementStatus !== 'succeeded' && <Create className={classes.achievementButton} onCreate={createAchievement} />
-            }
+            <Update className={classes.achievementButton} onUpdate={updateAchievement} />
+          </Grid>
+        }
+        {displayCreateButton &&
+          <Grid item xs={12}>
+            <Create className={classes.achievementButton} onCreate={createAchievement} />
           </Grid>
         }
         {R.keys(achievements).length > 0

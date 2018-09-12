@@ -42,10 +42,17 @@ export const refreshWallet = (wallet) => async (dispatch) => {
   }
 }
 
-export const recoverWallet = (mnemonic) => async dispatch => {
+export const recoverWallet = ({ mnemonic, privateKey }) => async dispatch => {
   try {
-    const wallet = network.fromMnemonic(mnemonic)
-    const privateKey = wallet.toWIF()
+    let wallet
+    if (privateKey) {
+      wallet = network.fromWIF(privateKey)
+    } else if (mnemonic) {
+      wallet = network.fromMnemonic(mnemonic)
+      privateKey = wallet.toWIF()
+    } else {
+      throw new Error()
+    }
     window.localStorage.setItem('privateKey', privateKey)
     const walletData = await wallet.getInfo()
     dispatch(updateWallet(walletData))
@@ -56,45 +63,72 @@ export const recoverWallet = (mnemonic) => async dispatch => {
   }
 }
 
-// Authentication and Wallet Generation/Restore
+export const checkUserRegistration = () => async (dispatch, getState) => {
+  const { facebook: { data: { userID } } } = getState()
+  const { data: { pending } } = await api.checkUser({ user: userID })
+  if (!pending) {
+    dispatch(updateWalletMeta({ isRegistrationPending: false }))
+    dispatch(notifications.userRegistrationSuccess)
+    dispatch(notifications.walletGenerated)
+    dispatch(updateWalletStatus('generated'))
+  }
+}
+
+export const loadWallet = () => async (dispatch) => {
+  try {
+    const storedPrivateKey = window.localStorage.getItem('privateKey')
+    if (!storedPrivateKey) {
+      dispatch(updateWalletStatus('needs-recovering'))
+    } else {
+      const wallet = network.fromWIF(storedPrivateKey)
+      dispatch(updateWalletMeta({ wallet }))
+      await refreshWallet(wallet)(dispatch)
+      dispatch(notifications.walletRestored)
+      dispatch(updateWalletStatus('restored'))
+    }
+  } catch (error) {
+    dispatch(notifications.walletError)
+    dispatch(updateWalletStatus('error'))
+  }
+}
+
+const registerUser = async ({ userID, accessToken }, dispatch) => {
+  const mnemonic = generateMnemonic()
+  const wallet = network.fromMnemonic(mnemonic)
+  const privateKey = wallet.toWIF()
+  window.localStorage.setItem('privateKey', privateKey)
+  dispatch(updateWalletMeta({ mnemonic, privateKey }))
+  const walletData = await wallet.getInfo()
+  await api.registerUser({
+    address: walletData.addrStr,
+    user: userID,
+    token: accessToken
+  })
+  dispatch(updateWalletMeta({ wallet }))
+  dispatch(updateWallet(walletData))
+  return setPendingRegistration(dispatch)
+}
+
+const setPendingRegistration = async (dispatch) => {
+  dispatch(updateWalletMeta({ isRegistrationPending: true }))
+  dispatch(updateWalletStatus('pending-registration'))
+  return dispatch(notifications.pendingUserRegistration)
+}
+
 export const handleFacebookLogin = (facebookData) => async (dispatch, getState) => {
   dispatch(updateFacebook(facebookData))
   dispatch(updateFacebookAuthenticationStatus('suceeded'))
   dispatch(notifications.facebookLoginSuccess)
   const { accessToken, userID } = facebookData
-  try {
-    const { data: { exists } } = await api.checkUser({ user: userID })
-    if (!exists) {
-      const mnemonic = generateMnemonic()
-      const wallet = network.fromMnemonic(mnemonic)
-      const privateKey = wallet.toWIF()
-      window.localStorage.setItem('privateKey', privateKey)
-      dispatch(updateWalletMeta({ mnemonic, privateKey }))
-      const walletData = await wallet.getInfo()
-      await api.registerUser({
-        address: walletData.addrStr,
-        user: userID,
-        token: accessToken
-      })
-      dispatch(updateWalletMeta({ wallet }))
-      dispatch(updateWallet(walletData))
-      dispatch(updateWalletStatus('generated'))
-      dispatch(notifications.walletGenerated)
+  const { data: { exists, pending } } = await api.checkUser({ user: userID })
+  if (exists) {
+    return loadWallet()(dispatch)
+  } else {
+    if (pending) {
+      return setPendingRegistration(dispatch)
     } else {
-      const storedPrivateKey = window.localStorage.getItem('privateKey')
-      if (!storedPrivateKey) {
-        dispatch(updateWalletStatus('needs-recovering'))
-      } else {
-        const wallet = network.fromWIF(storedPrivateKey)
-        dispatch(updateWalletMeta({ wallet }))
-        await refreshWallet(wallet)(dispatch)
-        dispatch(notifications.walletRestored)
-        dispatch(updateWalletStatus('restored'))
-      }
+      return registerUser({ userID, accessToken }, dispatch)
     }
-  } catch (error) {
-    dispatch(notifications.walletError)
-    dispatch(updateWalletStatus('error'))
   }
 }
 

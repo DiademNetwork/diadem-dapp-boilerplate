@@ -34,5 +34,7 @@ export default {
   newAchievements: createSuccessNotification('New achievements'),
   newTransactions: createSuccessNotification('New activities'),
   incomingTokens: createSuccessNotification('Incoming tokens'),
-  newAvailableTokens: createSuccessNotification('New tokens are now available')
+  newAvailableTokens: createSuccessNotification('New tokens are now available'),
+  pendingUserRegistration: createSuccessNotification('Please wait, your registration is in process. You will be notified when confirmed'),
+  userRegistrationSuccess: createSuccessNotification('Registration successful')
 }

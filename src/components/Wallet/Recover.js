@@ -39,7 +39,8 @@ class Recover extends Component {
   }
 
   handleSubmit = () => {
-    this.props.onRecover(this.state.mnemonic)
+    const { mnemonic, privateKey } = this.state
+    this.props.onRecover({ mnemonic, privateKey })
     this.handleClose()
   }
 

@@ -8,7 +8,9 @@ const {
 const intialState = {
   status: 'none',
   data: {},
-  meta: {}
+  meta: {
+    isRegistrationPending: false
+  }
 }
 
 export default (state, action) => {

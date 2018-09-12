@@ -40,7 +40,7 @@ class LoginButton extends Component {
     if (isFacebookAuthenticated) {
       return [
         <Avatar className={classes.img} key="avatar" alt="Facebook profile picture" src={facebookPictureUrl} />,
-        <Hidden smDown>
+        <Hidden key="username" smDown>
           <Typography key="username" variant="title" color="inherit">{facebookName}</Typography>
         </Hidden>
       ]

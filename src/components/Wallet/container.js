@@ -1,9 +1,10 @@
 import { connect } from 'react-redux'
 import {
+  checkUserRegistration,
   displayNotification,
   recoverWallet,
   refreshWallet,
-  updateWalletStatus
+  loadWallet
 } from '../../actions'
 import {
   isFacebookAuthenticated,
@@ -20,14 +21,16 @@ const mapStateToProps = (state) => ({
   privateKey: getWalletMeta('privateKey')(state),
   wallet: getWalletMeta('wallet')(state),
   walletStatus: getWalletStatus(state),
+  isRegistrationPending: getWalletMeta('isRegistrationPending')(state),
   isFacebookAuthenticated: isFacebookAuthenticated(state)
 })
 
 const mapDispatchToProps = {
+  checkUserRegistration,
   displayNotification,
   recoverWallet,
   refreshWallet,
-  updateWalletStatus: (status) => dispatch => dispatch(updateWalletStatus(status))
+  loadWallet
 }
 
 export default WrappedComponent =>

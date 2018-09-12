@@ -38,6 +38,8 @@ class Achievements extends Component {
     const displayUpdateButton = canCreateOrUpdateAchievement && hasUserCreatedAnAchievement
     const displayCreateButton = canCreateOrUpdateAchievement && !hasUserCreatedAnAchievement && createAchievementStatus !== 'succeeded'
     return [
+      displayUpdateButton && <Update key="update" className={classes.achievementButton} onUpdate={updateAchievement} />,
+      displayCreateButton && <Create key="create" className={classes.achievementButton} onCreate={createAchievement} />,
       <Grid
         key='list'
         container
@@ -45,16 +47,6 @@ class Achievements extends Component {
         justify="center"
         alignContent="center"
       >
-        {displayUpdateButton &&
-          <Grid item xs={12}>
-            <Update className={classes.achievementButton} onUpdate={updateAchievement} />
-          </Grid>
-        }
-        {displayCreateButton &&
-          <Grid item xs={12}>
-            <Create className={classes.achievementButton} onCreate={createAchievement} />
-          </Grid>
-        }
         {R.keys(achievements).length > 0
           ? R.keys(achievements).map((key, idx) => (
             <Grid key={idx} item xs={12} lg={6}>

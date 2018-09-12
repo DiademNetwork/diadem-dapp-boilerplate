@@ -89,7 +89,7 @@ class Help extends Component {
             <Typography variant="body2">
               A hot wallet is used to manage QTUM transactions
             </Typography>
-            <Typography paragraph variant="body2">
+            <Typography variant="body2">
               Create, Update and Confirm are free
             </Typography>
             <Typography paragraph variant="body2">

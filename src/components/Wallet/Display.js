@@ -41,7 +41,7 @@ class WalletDisplay extends Component {
     } = this.props
     return (
       <List>
-        <ListItem>
+        <ListItem divider>
           <ListItemIcon>
             <LocalPostOfficeOutlinedIcon />
           </ListItemIcon>

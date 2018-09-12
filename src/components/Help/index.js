@@ -61,8 +61,8 @@ class Help extends Component {
           {isHelpDisplayed ? 'Help' : 'Welcome to Diadem Network!'}
         </DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <Typography paragraph color="primary" variant="heading">
+          <DialogContentText component="div" id="alert-dialog-description">
+            <Typography paragraph color="textPrimary">
               This networks (for facebook only for now) aims to connect users achieving great things with people wanting to support them
             </Typography>
             <Typography color="textSecondary">

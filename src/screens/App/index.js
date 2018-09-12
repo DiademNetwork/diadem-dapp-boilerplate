@@ -7,7 +7,6 @@ import Achievements from '../../components/Achievements'
 import Timeline from '../../components/Timeline'
 import Notifications from '../../components/Notifications'
 import Help from '../../components/Help'
-import Footer from '../../components/Footer'
 import { PropTypes as T } from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import withContainer from './container'
@@ -44,7 +43,6 @@ class App extends Component {
             ]} />
           </Grid>
         </Grid>
-        <Footer />
         <Notifications />
         <Help />
         <StreamFetcher />

@@ -85,7 +85,7 @@ class Achievement extends Component {
     const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { confirmators, supporters, depositors } = achievement
-    const { actor, name, title, object } = displayedHistoryItem
+    const { name, title, object } = displayedHistoryItem
     const confirmationsCount = confirmators.length
     const supportsCount = supporters.length
     const despositsCount = depositors.length
@@ -97,11 +97,15 @@ class Achievement extends Component {
         ]} />
         <Divider />
         <CardContent>
-          {confirmationsCount > 0 &&
+          {confirmationsCount > 0 ? (
             <Typography variant="body1" color="textSecondary">
               It has been confirmed by {confirmators[0]}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
             </Typography>
-          }
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              No Diadem Network user confirmed it yet
+            </Typography>
+          )}
           {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
               It has been supported by {supporters[0]}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
@@ -123,25 +127,30 @@ class Achievement extends Component {
           disableActionSpacing
         >
           <Confirm
-            actor={actor}
-            className={classes.actionsButtons}
             actionAlreadyDone={this.isUserIn('confirmators')}
+            className={classes.actionsButtons}
             isFacebookAuthenticated={isFacebookAuthenticated}
             link={object}
+            name={name}
             onConfirm={this.handleConfirm}
             title={title}
           />
           <Support
-            className={classes.actionsButtons}
             actionAlreadyDone={this.isUserIn('supporters')}
+            className={classes.actionsButtons}
+            confirmationsCount={confirmationsCount}
+            name={name}
             onSupport={this.handleSupport}
             walletBalance={walletBalance}
+            title={title}
           />
           <Deposit
-            className={classes.actionsButtons}
             actionAlreadyDone={this.isUserIn('supporters')}
+            className={classes.actionsButtons}
+            name={name}
             onSupport={this.handleDeposit}
             walletBalance={walletBalance}
+            title={title}
           />
         </CardActions>
       </Card>,

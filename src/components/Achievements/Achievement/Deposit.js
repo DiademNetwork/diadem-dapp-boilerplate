@@ -8,6 +8,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Divider from '@material-ui/core/Divider'
 
 const AMOUNT_INITIAL_VALUE = 0
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -54,8 +55,9 @@ class AchievementDeposit extends Component {
   render () {
     const {
       actionAlreadyDone,
-      author,
       className,
+      confirmationsCount,
+      name,
       title,
       walletBalance
     } = this.props
@@ -81,8 +83,15 @@ class AchievementDeposit extends Component {
         <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter an amount (max ${walletBalance} QTUM) you would like to send to support author <strong>{author} </strong><br />
-            for his achievement: <strong>{title}</strong>
+            {confirmationsCount === 0 ? (
+              `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
+            ) : (
+              `This achievement has been confirmed ${confirmationsCount} times`
+            )}<br /><br />
+            <Divider />
+            <br />
+            Please enter an amount (max ${walletBalance} QTUM) you would like to send to support {name}<br />
+            for his achievement: {title}<br /><br />
           </DialogContentText>
           <TextField
             autoFocus
@@ -125,8 +134,9 @@ class AchievementDeposit extends Component {
 
 AchievementDeposit.propTypes = {
   actionAlreadyDone: T.bool,
-  author: T.string,
   className: T.string,
+  confirmationsCount: T.number,
+  name: T.string,
   onDeposit: T.func,
   title: T.string,
   walletBalance: T.number

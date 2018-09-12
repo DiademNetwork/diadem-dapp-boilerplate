@@ -31,10 +31,10 @@ class AchievementConfirm extends Component {
   render () {
     const {
       actionAlreadyDone,
-      actor,
       className,
       isFacebookAuthenticated,
       link,
+      name,
       title
     } = this.props
     const { modalOpen } = this.state
@@ -59,7 +59,7 @@ class AchievementConfirm extends Component {
         <DialogContent>
           <DialogContentText component="div">
             <Typography paragraph variant="body1">
-              Has {actor} really {title}?
+              Has {name} really {title}?
             </Typography>
             <Link
               text="View achievement Facebook post again"
@@ -83,7 +83,7 @@ class AchievementConfirm extends Component {
             variant="contained"
             color="secondary"
           >
-            yes, {actor} has!
+            yes, {name} has!
           </Button>
         </DialogActions>
       </Dialog>
@@ -93,10 +93,10 @@ class AchievementConfirm extends Component {
 
 AchievementConfirm.propTypes = {
   actionAlreadyDone: T.bool,
-  actor: T.string,
   className: T.string,
   isFacebookAuthenticated: T.bool,
   link: T.string,
+  name: T.string,
   onConfirm: T.func,
   title: T.string
 }

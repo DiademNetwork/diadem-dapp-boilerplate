@@ -124,7 +124,7 @@ class UpdateAchievement extends Component {
             onChange={this.handleChange('previousLink')}
             placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
-            helperText='Please copy full link'
+            helperText='Please paste here full Facebook link to your previous post'
           />
           <TextField
             id='link'
@@ -135,7 +135,7 @@ class UpdateAchievement extends Component {
             onChange={this.handleChange('link')}
             placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
-            helperText='Please copy full link'
+            helperText='Please paste here full Facebook link to your new post'
           />
           <TextField
             id='title'

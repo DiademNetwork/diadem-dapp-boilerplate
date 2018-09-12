@@ -105,7 +105,7 @@ class CreateAchievement extends Component {
             onChange={this.handleChange('link')}
             placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
-            helperText='Please copy Facebook link to your post'
+            helperText='Please paste here full Facebook link to your post'
           />
           <TextField
             error={title !== TITLE_INITIAL_VALUE && !isTitleValid}

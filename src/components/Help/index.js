@@ -63,7 +63,7 @@ class Help extends Component {
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
             <Typography paragraph color="textPrimary">
-              This networks (for facebook only for now) aims to connect users achieving great things with people wanting to support them
+              Diadem Network aims to connect users achieving great things with people wanting to support them<br />
             </Typography>
             <Typography color="textSecondary">
               CREATE YOUR ACHIEVEMENT (1max per user): Post a link to an achievement you already posted on facebook

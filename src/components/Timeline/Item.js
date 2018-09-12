@@ -4,8 +4,8 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
-import PlusOneIcon from '@material-ui/icons/PlusOneOutlined'
-import ThumbUpIcon from '@material-ui/icons/ThumbUpOutlined'
+import StarIcon from '@material-ui/icons/Star'
+import DoneIcon from '@material-ui/icons/Done'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import RemoveIcon from '@material-ui/icons/Remove'
 import { withStyles } from '@material-ui/core/styles'
@@ -28,12 +28,12 @@ const TimelineItem = ({ classes, transaction }) => {
   const actorDisplay = name || actor
   switch (verb) {
     case 'create':
-      icon = <PlusOneIcon />
+      icon = <StarIcon />
       achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
       verbDisplay = 'created'
       break
     case 'confirm':
-      icon = <ThumbUpIcon />
+      icon = <DoneIcon />
       achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
       verbDisplay = 'confirmed'
       break

@@ -38,5 +38,6 @@ export default {
   pendingUserRegistration: createSuccessNotification('Please wait, your registration is in process. You will be notified when confirmed on blockchain'),
   userRegistrationSuccess: createSuccessNotification('Registration successful'),
   withdrawTokensSuccess: createSuccessNotification('Tokens withdrawal successful'),
-  withdrawTokensError: createErrorNotification('Impossible to withdraw tokens')
+  withdrawTokensError: createErrorNotification('Impossible to withdraw tokens'),
+  checkUserError: createErrorNotification('Impossible to check your user existence')
 }

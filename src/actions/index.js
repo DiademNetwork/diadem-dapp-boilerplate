@@ -65,14 +65,18 @@ export const recoverWallet = ({ mnemonic, privateKey }) => async (dispatch, getS
 }
 
 export const checkUserRegistration = () => async (dispatch, getState) => {
-  const { facebook: { data: { userID } } } = getState()
-  const { data: { pending } } = await api.checkUser({ user: userID })
-  if (!pending) {
-    dispatch(updateWalletMeta({
-      isRegistrationPending: false,
-      isUserRegistered: true
-    }))
-    dispatch(notifications.userRegistrationSuccess)
+  try {
+    const { facebook: { data: { userID } } } = getState()
+    const { data: { pending } } = await api.checkUser({ user: userID })
+    if (!pending) {
+      dispatch(updateWalletMeta({
+        isRegistrationPending: false,
+        isUserRegistered: true
+      }))
+      dispatch(notifications.userRegistrationSuccess)
+    }
+  } catch (error) {
+    dispatch(notifications.checkUserError)
   }
 }
 
@@ -113,21 +117,25 @@ const registerUser = async ({ userID, accessToken }, dispatch) => {
   dispatch(updateWalletMeta({ isRegistrationPending: true }))
 }
 
-export const handleFacebookLogin = (facebookData) => async (dispatch, getState) => {
-  dispatch(updateFacebook(facebookData))
-  dispatch(updateFacebookAuthenticationStatus('suceeded'))
-  dispatch(notifications.facebookLoginSuccess)
-  const { accessToken, userID } = facebookData
-  const { data: { exists, pending } } = await api.checkUser({ user: userID })
-  if (exists) {
-    dispatch(updateWalletMeta({ isUserRegistered: true }))
-    return loadWallet(userID)(dispatch)
-  } else {
-    if (pending) {
-      return dispatch(updateWalletMeta({ isRegistrationPending: true }))
+export const handleFacebookLogin = (facebookData) => async (dispatch) => {
+  try {
+    dispatch(updateFacebook(facebookData))
+    dispatch(updateFacebookAuthenticationStatus('suceeded'))
+    dispatch(notifications.facebookLoginSuccess)
+    const { accessToken, userID } = facebookData
+    const { data: { exists, pending } } = await api.checkUser({ user: userID })
+    if (exists) {
+      dispatch(updateWalletMeta({ isUserRegistered: true }))
+      return loadWallet(userID)(dispatch)
     } else {
-      return registerUser({ userID, accessToken }, dispatch)
+      if (pending) {
+        return dispatch(updateWalletMeta({ isRegistrationPending: true }))
+      } else {
+        return registerUser({ userID, accessToken }, dispatch)
+      }
     }
+  } catch (error) {
+    dispatch(notifications.checkUserError)
   }
 }
 

@@ -126,22 +126,20 @@ class UpdateAchievement extends Component {
             id='title'
             margin="normal"
             error={link !== TITLE_INITIAL_VALUE && !isTitleValid}
-            label="Title for your achievement"
+            label="New title for your achievement"
             value={title}
             onChange={this.handleChange('title')}
-            placeholder='wrote the first chapter of my book'
+            placeholder='wrote the second chapter of my book'
             fullWidth
             helperText='I ..your title..'
           />
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={this.handleClose}
-          >
+          <Button onClick={this.handleClose}>
             Cancel
           </Button>
           <Button
-            color="primary"
+            color="secondary"
             disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"

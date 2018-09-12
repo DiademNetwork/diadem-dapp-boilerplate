@@ -89,7 +89,7 @@ class CreateAchievement extends Component {
         <DialogTitle id="form-dialog-title">Create achievement</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To create an achievement, please provide the link to your achievement Facebook post and provide a title for it
+            To create an achievement, please provide the link to your Facebook achievement post and provide a title for it
           </DialogContentText>
           <FacebookLinkHelp />
           <TextField
@@ -97,18 +97,18 @@ class CreateAchievement extends Component {
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
             margin="normal"
             id='link'
-            label="Facebook link of your achievement post"
+            label="Where can Diadem Network users see your achievement?"
             value={link}
             onChange={this.handleChange('link')}
             placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
-            helperText='Please copy full link'
+            helperText='Please copy Facebook link to your post'
           />
           <TextField
             error={title !== TITLE_INITIAL_VALUE && !isTitleValid}
             margin="normal"
             id='title'
-            label="Title for your achievement"
+            label="What great achievement did you do?"
             value={title}
             onChange={this.handleChange('title')}
             placeholder='wrote the first chapter of my book'
@@ -123,7 +123,7 @@ class CreateAchievement extends Component {
             Cancel
           </Button>
           <Button
-            color="primary"
+            color="secondary"
             disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"

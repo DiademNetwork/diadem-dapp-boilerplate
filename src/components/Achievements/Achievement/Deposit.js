@@ -68,7 +68,7 @@ class AchievementDeposit extends Component {
         disabled={!isBalancePositive || actionAlreadyDone}
         onClick={this.handleClickOpen}
         variant="contained"
-        color="primary"
+        color="secondary"
       >
         {actionAlreadyDone ? 'You have already deposit' : 'Deposit'}
       </Button>,
@@ -113,7 +113,7 @@ class AchievementDeposit extends Component {
             disabled={!isWitnessUserIDValid || !isAmountValid}
             onClick={this.handleSubmit}
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             Submit
           </Button>

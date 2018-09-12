@@ -52,7 +52,7 @@ class AchievementSupport extends Component {
         disabled={!isBalancePositive || actionAlreadyDone}
         onClick={this.handleClickOpen}
         variant="contained"
-        color="primary"
+        color="secondary"
       >
         {actionAlreadyDone ? 'You already supported' : 'Support'}
       </Button>,
@@ -88,7 +88,7 @@ class AchievementSupport extends Component {
             disabled={!isAmountValid}
             onClick={this.handleSubmit}
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             Submit
           </Button>

@@ -40,7 +40,7 @@ class AchievementConfirm extends Component {
     const { modalOpen } = this.state
     return [
       <Button
-        color="primary"
+        color="secondary"
         className={className}
         key='achievement-confirm-button'
         disabled={!isFacebookAuthenticated || actionAlreadyDone}
@@ -81,7 +81,7 @@ class AchievementConfirm extends Component {
           <Button
             onClick={this.handleConfirm}
             variant="contained"
-            color="primary"
+            color="secondary"
           >
             yes, {actor} has!
           </Button>

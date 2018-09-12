@@ -62,7 +62,7 @@ class Recover extends Component {
     const isFormValid = isMnemonicValid || isPrivateKeyValid
     return [
       <Button
-        color="primary"
+        color="secondary"
         key="button"
         onClick={this.handleClickOpen}
         variant="contained"
@@ -107,7 +107,7 @@ class Recover extends Component {
             Cancel
           </Button>
           <Button
-            color="primary"
+            color="secondary"
             disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"

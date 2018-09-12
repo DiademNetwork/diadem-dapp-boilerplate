@@ -37,7 +37,7 @@ const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
   <Button
     key="button"
     variant="contained"
-    color="primary"
+    color="secondary"
     onClick={onConfirm}
   >
     I saved my new hot wallet Mnemomic and PrivateKey somewhere safe

@@ -78,7 +78,7 @@ class Help extends Component {
               SUPPORT ACHIEVEMENT(S): Send QTUM token to achievers to show them some love.
             </Typography>
             <Typography paragraph color="textSecondary">
-              DEPOSIT FOR ACHIEVEMENT(S): Deposit QTUM tokens which will not be sent until facebook the user YOU chose confirms the achievement
+              DEPOSIT FOR ACHIEVEMENT(S): Deposit QTUM tokens which will not be sent until the facebook user YOU chose confirms the achievement
             </Typography>
             <Typography variant="body2">
               Facebook Login is required to perform most actions
@@ -93,7 +93,7 @@ class Help extends Component {
             <FormControlLabel
               control={
                 <Checkbox
-                  color="primary"
+                  color="secondary"
                   checked={wantsNotToShowSplashAgain}
                   onChange={this.handleCheckboxChange}
                 />
@@ -105,7 +105,7 @@ class Help extends Component {
         </DialogContent>
         <DialogActions>
           <Button
-            color="primary"
+            color="secondary"
             onClick={this.handleClose}
             variant="contained"
           >

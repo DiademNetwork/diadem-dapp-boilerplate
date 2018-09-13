@@ -98,7 +98,7 @@ export const loadWallet = (userID) => async (dispatch) => {
   }
 }
 
-const registerUser = async ({ userID, accessToken }, dispatch) => {
+const registerUser = async ({ accessToken, name, userID }, dispatch) => {
   const mnemonic = generateMnemonic()
   const wallet = network.fromMnemonic(mnemonic)
   const privateKey = wallet.toWIF()
@@ -109,6 +109,7 @@ const registerUser = async ({ userID, accessToken }, dispatch) => {
   dispatch(updateWallet(walletData))
   await api.registerUser({
     address: walletData.addrStr,
+    name,
     user: userID,
     token: accessToken
   })
@@ -122,7 +123,7 @@ export const handleFacebookLogin = (facebookData) => async (dispatch) => {
     dispatch(updateFacebook(facebookData))
     dispatch(updateFacebookAuthenticationStatus('suceeded'))
     dispatch(notifications.facebookLoginSuccess)
-    const { accessToken, userID } = facebookData
+    const { accessToken, name, userID } = facebookData
     const { data: { exists, pending } } = await api.checkUser({ user: userID })
     if (exists) {
       dispatch(updateWalletMeta({ isUserRegistered: true }))
@@ -131,7 +132,7 @@ export const handleFacebookLogin = (facebookData) => async (dispatch) => {
       if (pending) {
         return dispatch(updateWalletMeta({ isRegistrationPending: true }))
       } else {
-        return registerUser({ userID, accessToken }, dispatch)
+        return registerUser({ accessToken, name, userID }, dispatch)
       }
     }
   } catch (error) {

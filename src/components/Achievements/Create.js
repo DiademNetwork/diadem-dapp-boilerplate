@@ -102,7 +102,7 @@ class CreateAchievement extends Component {
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
             margin="normal"
             id='link'
-            label="Where can Diadem Network users see your achievement?"
+            label={fullScreen ? 'Facebook post link' : 'Where can Diadem Network users see your achievement?'}
             value={link}
             onChange={this.handleChange('link')}
             placeholder='https://www.facebook.com/username/posts/postid'

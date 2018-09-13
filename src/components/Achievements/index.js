@@ -15,7 +15,14 @@ const styles = (theme) => ({
   achievementButton: {
     position: 'fixed',
     bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2
+    right: theme.spacing.unit * 2,
+    [theme.breakpoints.down('sm')]: {
+      bottom: 0,
+      right: 0,
+      left: 0,
+      width: '100vw',
+      borderRadius: 'initial'
+    }
   }
 })
 

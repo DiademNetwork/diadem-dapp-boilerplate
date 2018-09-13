@@ -5,6 +5,7 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import Tooltip from '@material-ui/core/Tooltip'
+import Hidden from '@material-ui/core/Hidden'
 import LocalPostOfficeOutlinedIcon from '@material-ui/icons/LocalPostOfficeOutlined'
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import Zoom from '@material-ui/core/Zoom'
@@ -21,6 +22,19 @@ const styles = (theme) => ({
     marginLeft: theme.spacing.unit * 2
   }
 })
+
+const CopyToAddressToolip = ({ address }) => (
+  <Tooltip
+    TransitionComponent={Zoom}
+    title='Copy address to clipboard'
+  >
+    <CopyToClipBoardButton variant="icon" text={address} />
+  </Tooltip>
+)
+
+CopyToAddressToolip.propTypes = {
+  address: T.string
+}
 
 class WalletDisplay extends Component {
   componentDidMount () {
@@ -48,13 +62,10 @@ class WalletDisplay extends Component {
           <ListItemText primary={
             <Typography>
               {address}
-              <HelpTooltip text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements" />
-              <Tooltip
-                TransitionComponent={Zoom}
-                title='Copy address to clipboard'
-              >
-                <CopyToClipBoardButton text={address} />
-              </Tooltip>
+              <Hidden smDown>
+                <HelpTooltip text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements" />
+                <CopyToAddressToolip address={address} />
+              </Hidden>
             </Typography>
           } />
         </ListItem>
@@ -66,18 +77,32 @@ class WalletDisplay extends Component {
             primary={
               <Typography>
                 {balance} QTUM{unconfirmedBalance > 0 ? ` (${unconfirmedBalance} QTUM pending)` : ''}
-                <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
-                {balance > 0 &&
-                  <Withdraw
-                    balance={balance}
-                    className={classes.withdraw}
-                    onSubmit={withdrawFromHotWallet}
-                  />
-                }
+                <Hidden smDown>
+                  <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
+                  {balance > 0 &&
+                    <Withdraw
+                      balance={balance}
+                      className={classes.withdraw}
+                      onSubmit={withdrawFromHotWallet}
+                    />
+                  }
+                </Hidden>
               </Typography>
             }
           />
-        </ListItem>
+        </ListItem>,
+        <Hidden smUp>
+          <ListItem>
+            <CopyToClipBoardButton variant="button" text={address} />
+            {balance > 0 &&
+              <Withdraw
+                balance={balance}
+                className={classes.withdraw}
+                onSubmit={withdrawFromHotWallet}
+              />
+            }
+          </ListItem>
+        </Hidden>
       </List>
     )
   }

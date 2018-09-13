@@ -35,13 +35,13 @@ const Nav = ({ classes, showHelp }) => (
     <Toolbar>
       <img className={classes.logo} alt="Diadem Network logo" src={LogoImage} />
       <Typography variant="title" color="inherit" className={classes.flex}>
-        Diadem <Hidden smDown>Network</Hidden>
+        <Hidden smDown>Diadem Network</Hidden>
       </Typography>
       <LoginButton />
       <IconButton component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md" variant="fab" color="primary" className={classes.button}>
         <Avatar className={classes.avatar} alt="Github logo" src={GithubImg} />
       </IconButton>
-      <IconButton onClick={showHelp} variant="fab" color="primary" className={classes.button}>
+      <IconButton onClick={showHelp} variant="fab" color="primary">
         <Avatar className={classes.avatar} alt="Help logo" src={HelpImg} />
       </IconButton>
     </Toolbar>

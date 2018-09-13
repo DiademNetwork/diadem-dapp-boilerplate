@@ -128,7 +128,7 @@ class Help extends Component {
             onClick={this.handleClose}
             variant="contained"
           >
-            Get me to Diadem Network
+            {isHelpDisplayed ? 'Go back to Diadem Network' : ' Get me to Diadem Network'}
           </Button>
         </DialogActions>
       </Dialog>

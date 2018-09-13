@@ -38,7 +38,7 @@ export const getAllAchievementsWallets = createSelector([getGroupedByWalletAchie
 export const getProcessedAchievements = createSelector([getGroupedByWalletAchievements], R.compose(
   R.mapObjIndexed((itemsInHistory) => {
     const getNamesForAction = verb => R.compose(
-      R.map(R.prop('actor')), // replace with name when ready
+      R.map(R.prop('name')),
       R.filter(R.propEq('verb', verb))
     )
     const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)

@@ -38,7 +38,7 @@ const Nav = ({ classes, showHelp }) => (
         Diadem <Hidden smDown>Network</Hidden>
       </Typography>
       <LoginButton />
-      <IconButton component="a" target="_blank" href="https://github.com/DiademNetwork" variant="fab" color="primary" className={classes.button}>
+      <IconButton component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md" variant="fab" color="primary" className={classes.button}>
         <Avatar className={classes.avatar} alt="Github logo" src={GithubImg} />
       </IconButton>
       <IconButton onClick={showHelp} variant="fab" color="primary" className={classes.button}>

@@ -17,7 +17,7 @@ class Timeline extends Component {
     const { isFacebookAuthenticated, transactions } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
-      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see your timeline</Typography>
+      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see the timeline</Typography>
     } else if (transactions.length === 0) {
       renderedComponent = <Typography color="textPrimary">No item in timeline</Typography>
     } else {

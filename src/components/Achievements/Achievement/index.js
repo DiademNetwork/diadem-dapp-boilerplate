@@ -82,10 +82,10 @@ class Achievement extends Component {
   )
 
   render () {
-    const { achievement, classes, isFacebookAuthenticated, walletBalance } = this.props
+    const { achievement, classes, isFacebookAuthenticated, userID, walletBalance } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { confirmators, supporters, depositors } = achievement
-    const { name, title, object } = displayedHistoryItem
+    const { actor, name, title, object } = displayedHistoryItem
     const confirmationsCount = confirmators.length
     const supportsCount = supporters.length
     const despositsCount = depositors.length
@@ -122,37 +122,46 @@ class Achievement extends Component {
             text="View achievement post on Facebook"
           />
         </CardContent>
-        <CardActions
-          className={classes.actions}
-          disableActionSpacing
-        >
-          <Confirm
-            actionAlreadyDone={this.isUserIn('confirmators')}
-            className={classes.actionsButtons}
-            isFacebookAuthenticated={isFacebookAuthenticated}
-            link={object}
-            name={name}
-            onConfirm={this.handleConfirm}
-            title={title}
-          />
-          <Support
-            actionAlreadyDone={this.isUserIn('supporters')}
-            className={classes.actionsButtons}
-            confirmationsCount={confirmationsCount}
-            name={name}
-            onSupport={this.handleSupport}
-            walletBalance={walletBalance}
-            title={title}
-          />
-          <Deposit
-            actionAlreadyDone={this.isUserIn('supporters')}
-            className={classes.actionsButtons}
-            name={name}
-            onSupport={this.handleDeposit}
-            walletBalance={walletBalance}
-            title={title}
-          />
-        </CardActions>
+        {actor !== userID ? (
+          <CardActions
+            className={classes.actions}
+            disableActionSpacing
+          >
+            <Confirm
+              actionAlreadyDone={this.isUserIn('confirmators')}
+              className={classes.actionsButtons}
+              isFacebookAuthenticated={isFacebookAuthenticated}
+              link={object}
+              name={name}
+              onConfirm={this.handleConfirm}
+              title={title}
+            />
+            <Support
+              actionAlreadyDone={this.isUserIn('supporters')}
+              className={classes.actionsButtons}
+              confirmationsCount={confirmationsCount}
+              name={name}
+              onSupport={this.handleSupport}
+              walletBalance={walletBalance}
+              title={title}
+            />
+            <Deposit
+              actionAlreadyDone={this.isUserIn('supporters')}
+              className={classes.actionsButtons}
+              name={name}
+              onSupport={this.handleDeposit}
+              walletBalance={walletBalance}
+              title={title}
+            />
+          </CardActions>
+        ) : (
+          <CardActions
+            className={classes.actions}
+            disableActionSpacing
+          >
+            <Typography>This is your achievement</Typography>
+          </CardActions>
+        )}
       </Card>,
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>

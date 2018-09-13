@@ -59,7 +59,8 @@ class AchievementConfirm extends Component {
         <DialogContent>
           <DialogContentText component="div">
             <Typography paragraph variant="body1">
-              Has {name} really {title}?
+              Has {name} really done achievement?<br /><br />
+              {title}
             </Typography>
             <Link
               text="View achievement Facebook post again"

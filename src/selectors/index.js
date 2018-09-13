@@ -66,5 +66,24 @@ export const getUsers = R.path(['users', 'data'])
 
 // Mix
 export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebookAuthenticated, isWalletReady ], R.and)
-export const hasUserCreatedAnAchievement = createSelector([getWalletAddress, getAllAchievementsWallets], R.contains)
+export const previousLinkOfUserAchievementOrNull = createSelector([
+  getWalletAddress,
+  getAllAchievementsWallets,
+  getProcessedAchievements
+], (
+  userWalletAddress,
+  allAchievementsWallets,
+  processedAchievements
+) => {
+  if (!R.contains(userWalletAddress, allAchievementsWallets)) {
+    return null
+  } else {
+    return R.compose(
+      R.prop('previousLink'),
+      R.head,
+      R.takeLast(1),
+      R.prop(userWalletAddress)
+    )(processedAchievements)
+  }
+})
 export const canCreateOrUpdateAchievement = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))

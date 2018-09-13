@@ -39,14 +39,27 @@ class Achievements extends Component {
       classes,
       createAchievement,
       createAchievementStatus,
-      hasUserCreatedAnAchievement,
+      previousLinkOfUserAchievementOrNull,
       updateAchievement
     } = this.props
-    const displayUpdateButton = canCreateOrUpdateAchievement && hasUserCreatedAnAchievement
-    const displayCreateButton = canCreateOrUpdateAchievement && !hasUserCreatedAnAchievement && createAchievementStatus !== 'succeeded'
+    const displayUpdateButton = canCreateOrUpdateAchievement && previousLinkOfUserAchievementOrNull
+    const displayCreateButton = canCreateOrUpdateAchievement && !previousLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
     return [
-      displayUpdateButton && <Update key="update" className={classes.achievementButton} onUpdate={updateAchievement} />,
-      displayCreateButton && <Create key="create" className={classes.achievementButton} onCreate={createAchievement} />,
+      displayUpdateButton && (
+        <Update
+          className={classes.achievementButton}
+          key="update"
+          onUpdate={updateAchievement}
+          previousLink={previousLinkOfUserAchievementOrNull} // will always be string in this case
+        />
+      ),
+      displayCreateButton && (
+        <Create
+          key="create"
+          className={classes.achievementButton}
+          onCreate={createAchievement}
+        />
+      ),
       <Grid
         key='list'
         container
@@ -81,7 +94,7 @@ Achievements.propTypes = {
   classes: T.object,
   createAchievement: T.func,
   createAchievementStatus: T.string,
-  hasUserCreatedAnAchievement: T.bool,
+  previousLinkOfUserAchievementOrNull: T.string,
   updateAchievement: T.func,
   updateAchievementsMeta: T.func
 }

@@ -7,7 +7,7 @@ import {
 import {
   canCreateOrUpdateAchievement,
   getProcessedAchievements,
-  hasUserCreatedAnAchievement,
+  previousLinkOfUserAchievementOrNull,
   getAchievementCreateStatus
 } from '../../selectors'
 
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
   createAchievementStatus: getAchievementCreateStatus(state),
   achievements: getProcessedAchievements(state),
   canCreateOrUpdateAchievement: canCreateOrUpdateAchievement(state),
-  hasUserCreatedAnAchievement: hasUserCreatedAnAchievement(state)
+  previousLinkOfUserAchievementOrNull: previousLinkOfUserAchievementOrNull(state)
 })
 
 const mapDispatchToProps = {

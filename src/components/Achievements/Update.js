@@ -16,7 +16,6 @@ import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
-const PREVIOUS_LINK_INITIAL_VALUE = ''
 
 const styles = (theme) => ({
   buttonIcon: {
@@ -31,7 +30,6 @@ class UpdateAchievement extends Component {
     isTitleValid: false,
     link: LINK_INITIAL_VALUE,
     modalOpen: false,
-    previousLink: PREVIOUS_LINK_INITIAL_VALUE,
     title: TITLE_INITIAL_VALUE
   }
 
@@ -47,21 +45,19 @@ class UpdateAchievement extends Component {
     } else if (name === 'title') {
       const isTitleValid = value.length > 0
       this.setState({ title: value, isTitleValid })
-    } else if (name === 'previousLink') {
-      const isPreviousLinkValid = value === '' || this.isFacebookLinkValid(value)
-      this.setState({ previousLink: value, isPreviousLinkValid })
     }
   }
 
   isFacebookLinkValid = R.allPass([
+    R.complement(R.equals)(this.props.previousLink),
     R.is(String),
     isUrl,
     R.test(/.*facebook.*/)
   ])
 
   handleSubmit = () => {
-    const { onUpdate } = this.props
-    const { link, title, previousLink } = this.state
+    const { onUpdate, previousLink } = this.props
+    const { link, title } = this.state
     onUpdate({ link, previousLink, title })
     this.resetForm()
     this.handleClose()
@@ -69,10 +65,8 @@ class UpdateAchievement extends Component {
 
   resetForm = () => this.setState({
     isLinkValid: false,
-    isPreviousLinkValid: true,
     isTitleValid: false,
     link: LINK_INITIAL_VALUE,
-    previousLink: PREVIOUS_LINK_INITIAL_VALUE,
     title: TITLE_INITIAL_VALUE
   })
 
@@ -80,10 +74,8 @@ class UpdateAchievement extends Component {
     const {
       isLinkValid,
       isTitleValid,
-      isPreviousLinkValid,
       link,
       modalOpen,
-      previousLink,
       title
     } = this.state
     const {
@@ -91,7 +83,7 @@ class UpdateAchievement extends Component {
       classes,
       fullScreen
     } = this.props
-    const isFormValid = isLinkValid && isTitleValid && isPreviousLinkValid
+    const isFormValid = isLinkValid && isTitleValid
     return [
       <Button
         aria-label="Update"
@@ -119,26 +111,15 @@ class UpdateAchievement extends Component {
           <FacebookLinkHelp />
           <TextField
             autoFocus
-            error={link !== PREVIOUS_LINK_INITIAL_VALUE && !isPreviousLinkValid}
-            margin="normal"
-            id='previousLink'
-            label="Previous Facebook link of your achievement post"
-            value={previousLink}
-            onChange={this.handleChange('previousLink')}
-            placeholder='https://www.facebook.com/username/posts/postid'
-            fullWidth
-            helperText='Please paste here full Facebook link to your previous post'
-          />
-          <TextField
             id='link'
             margin="normal"
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
-            label="Facebook link of your achievement post"
+            label="New facebook link of your achievement post"
             value={link}
             onChange={this.handleChange('link')}
             placeholder='https://www.facebook.com/username/posts/postid'
             fullWidth
-            helperText='Please paste here full Facebook link to your new post'
+            helperText='Please note that you cannot post link you used before'
           />
           <TextField
             id='title'
@@ -174,7 +155,8 @@ UpdateAchievement.propTypes = {
   className: T.string,
   classes: T.object,
   fullScreen: T.bool,
-  onUpdate: T.func
+  onUpdate: T.func,
+  previousLink: T.string
 }
 
 export default withMobileDialog()(withStyles(styles)(UpdateAchievement))

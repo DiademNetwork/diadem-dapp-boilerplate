@@ -85,20 +85,23 @@ class Achievement extends Component {
     return !!foundUser
   }
 
+  getActionsCounts = verb => R.compose(
+    R.length,
+    R.propOr([], verb)
+  )
+
   render () {
     const {
-      achievement,
       classes,
       isFacebookAuthenticatedAndWalletReady,
       userID,
       walletBalance
     } = this.props
-    console.log(achievement)
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { actor, confirm, support, deposit, name, title, object } = displayedHistoryItem
-    const confirmationsCount = confirm ? confirm.length : 0
-    const supportsCount = support ? support.length : 0
-    const despositsCount = deposit ? deposit.length : 0
+    const confirmationsCount = this.getActionsCounts('confirm')(displayedHistoryItem)
+    const supportsCount = this.getActionsCounts('support')(displayedHistoryItem)
+    const despositsCount = this.getActionsCounts('deposit')(displayedHistoryItem)
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
@@ -179,23 +182,36 @@ class Achievement extends Component {
             <Typography>View previous achievements of {name}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
-            {stackedHistoryItems.map(({ title, object }, idx) => [
-              <Typography
-                color="textSecondary"
-                key={`${idx}-title`}
-                variant="subheading"
-              >
-                {title}
-              </Typography>,
-              <Link
-                key={`${idx}-link`}
-                href={object}
-                text="View achievement post on Facebook"
-                typographyProps={{
-                  paragraph: true
-                }}
-              />
-            ])}
+            {stackedHistoryItems.map((achievement, idx) => {
+              const { title, object } = achievement
+              const confirmationsCount = this.getActionsCounts('confirm')(achievement)
+              const supportsCount = this.getActionsCounts('support')(achievement)
+              const despositsCount = this.getActionsCounts('deposit')(achievement)
+              return [
+                <Typography
+                  color="textPrimary"
+                  key={`${idx}-title`}
+                  variant="subheading"
+                >
+                  {title}
+                </Typography>,
+                <Typography
+                  color="textSecondary"
+                  key={`${idx}-confirm-support-deposit`}
+                  variant="subheading"
+                >
+                  {`${confirmationsCount} confirmations, ${supportsCount} supports, ${despositsCount} deposits`}
+                </Typography>,
+                <Link
+                  key={`${idx}-link`}
+                  href={object}
+                  text="View achievement post on Facebook"
+                  typographyProps={{
+                    paragraph: true
+                  }}
+                />
+              ]
+            })}
           </ExpansionPanelDetails>
         </ExpansionPanel>
       )

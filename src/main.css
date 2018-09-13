@@ -1,9 +1,11 @@
 html, body {
   background: #f3f0f4db;
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 body {
+  overflow-y: scroll;
   min-height: 100vh;
   width: 100%;
 }

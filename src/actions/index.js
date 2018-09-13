@@ -206,11 +206,12 @@ export const createAchievement = (payload) => async (dispatch, getState) => {
     dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.requested })
     const { link, title } = payload
     const { facebook, wallet } = getState()
-    const { accessToken, userID } = facebook.data
+    const { accessToken, name, userID } = facebook.data
     const { addrStr } = wallet.data
     await api.createAchievement({
       address: addrStr,
       link,
+      name,
       previousLink: '',
       title,
       token: accessToken,
@@ -229,11 +230,12 @@ export const updateAchievement = (payload) => async (dispatch, getState) => {
     dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.requested })
     const { link, title, previousLink } = payload
     const { facebook, wallet } = getState()
-    const { accessToken, userID } = facebook.data
+    const { accessToken, name, userID } = facebook.data
     const { addrStr } = wallet.data
     await api.updateAchievement({
       address: addrStr,
       link,
+      name,
       previousLink,
       title,
       token: accessToken,

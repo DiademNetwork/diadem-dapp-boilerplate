@@ -49,7 +49,7 @@ class Achievement extends Component {
     const { achievement } = this.props
     this.setState({
       displayedHistoryItem: R.takeLast(1, achievement)[0],
-      stackedHistoryItems: R.dropLast(1, achievement)
+      stackedHistoryItems: R.reverse(R.dropLast(1, achievement))
     })
   }
 

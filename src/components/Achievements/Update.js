@@ -11,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
 import FacebookLinkHelp from './FacebookLinkHelp'
 import StarIcon from '@material-ui/icons/Star'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
@@ -87,7 +88,8 @@ class UpdateAchievement extends Component {
     } = this.state
     const {
       className,
-      classes
+      classes,
+      fullScreen
     } = this.props
     const isFormValid = isLinkValid && isTitleValid && isPreviousLinkValid
     return [
@@ -103,6 +105,7 @@ class UpdateAchievement extends Component {
         Update your Achievement
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key='update-achievement-modal'
         open={modalOpen}
         onClose={this.handleClose}
@@ -170,7 +173,8 @@ class UpdateAchievement extends Component {
 UpdateAchievement.propTypes = {
   className: T.string,
   classes: T.object,
+  fullScreen: T.bool,
   onUpdate: T.func
 }
 
-export default withStyles(styles)(UpdateAchievement)
+export default withMobileDialog()(withStyles(styles)(UpdateAchievement))

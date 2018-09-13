@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 const AMOUNT_INITIAL_VALUE = 0
 
@@ -46,6 +47,7 @@ class AchievementSupport extends Component {
       actionAlreadyDone,
       className,
       confirmationsCount,
+      fullScreen,
       name,
       title,
       walletBalance
@@ -64,6 +66,7 @@ class AchievementSupport extends Component {
         {actionAlreadyDone ? 'You already supported' : 'Support'}
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key='achievement-support-modal'
         open={modalOpen}
         onClose={this.handleClose}
@@ -116,10 +119,11 @@ AchievementSupport.propTypes = {
   actionAlreadyDone: T.bool,
   className: T.string,
   confirmationsCount: T.number,
+  fullScreen: T.bool,
   name: T.string,
   onSupport: T.func,
   title: T.string,
   walletBalance: T.number
 }
 
-export default AchievementSupport
+export default withMobileDialog()(AchievementSupport)

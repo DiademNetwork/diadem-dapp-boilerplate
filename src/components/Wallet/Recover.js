@@ -9,6 +9,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 class Recover extends Component {
   state = {
@@ -60,6 +61,7 @@ class Recover extends Component {
 
   render () {
     const { open, mnemonic, privateKey, isMnemonicValid, isPrivateKeyValid } = this.state
+    const { fullScreen } = this.props
     const isFormValid = isMnemonicValid || isPrivateKeyValid
     return [
       <Button
@@ -71,6 +73,7 @@ class Recover extends Component {
         Recover your wallet
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key="dialog"
         open={open}
         onClose={this.handleClose}
@@ -122,7 +125,8 @@ class Recover extends Component {
 }
 
 Recover.propTypes = {
+  fullScreen: T.bool,
   onRecover: T.func
 }
 
-export default Recover
+export default withMobileDialog()(Recover)

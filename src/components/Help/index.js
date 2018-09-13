@@ -11,6 +11,7 @@ import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { withStyles } from '@material-ui/core/styles'
 import withContainer from './container'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 const styles = (theme) => ({
   link: {
@@ -56,9 +57,10 @@ class Help extends Component {
 
   render () {
     const { open, wantsNotToShowSplashAgain } = this.state
-    const { classes, isHelpDisplayed } = this.props
+    const { classes, fullScreen, isHelpDisplayed } = this.props
     return (
       <Dialog
+        fullScreen={fullScreen}
         open={open}
         onClose={this.handleClose}
         maxWidth="md"
@@ -136,8 +138,9 @@ class Help extends Component {
 
 Help.propTypes = {
   classes: T.object,
+  fullScreen: T.bool,
   isHelpDisplayed: T.bool,
   hideHelp: T.func
 }
 
-export default withContainer(withStyles(styles)(Help))
+export default withMobileDialog()(withContainer(withStyles(styles)(Help)))

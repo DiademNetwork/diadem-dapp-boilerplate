@@ -8,6 +8,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Link from '../../Link'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 class AchievementConfirm extends Component {
   state = {
@@ -32,6 +33,7 @@ class AchievementConfirm extends Component {
     const {
       actionAlreadyDone,
       className,
+      fullScreen,
       isFacebookAuthenticated,
       link,
       name,
@@ -50,6 +52,7 @@ class AchievementConfirm extends Component {
         {actionAlreadyDone ? 'You confirmed already' : 'Confirm'}
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key='achievement-confirm-modal'
         open={modalOpen}
         onClose={this.handleClose}
@@ -95,6 +98,7 @@ class AchievementConfirm extends Component {
 AchievementConfirm.propTypes = {
   actionAlreadyDone: T.bool,
   className: T.string,
+  fullScreen: T.bool,
   isFacebookAuthenticated: T.bool,
   link: T.string,
   name: T.string,
@@ -102,4 +106,4 @@ AchievementConfirm.propTypes = {
   title: T.string
 }
 
-export default AchievementConfirm
+export default withMobileDialog()(AchievementConfirm)

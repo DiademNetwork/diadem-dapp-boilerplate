@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 const AMOUNT_INITIAL_VALUE = 0
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -57,6 +58,7 @@ class AchievementDeposit extends Component {
       actionAlreadyDone,
       className,
       confirmationsCount,
+      fullScreen,
       name,
       title,
       walletBalance
@@ -75,6 +77,7 @@ class AchievementDeposit extends Component {
         {actionAlreadyDone ? 'You have already deposit' : 'Deposit'}
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key='achievement-deposit-modal'
         open={modalOpen}
         onClose={this.handleClose}
@@ -136,10 +139,11 @@ AchievementDeposit.propTypes = {
   actionAlreadyDone: T.bool,
   className: T.string,
   confirmationsCount: T.number,
+  fullScreen: T.bool,
   name: T.string,
   onDeposit: T.func,
   title: T.string,
   walletBalance: T.number
 }
 
-export default AchievementDeposit
+export default withMobileDialog()(AchievementDeposit)

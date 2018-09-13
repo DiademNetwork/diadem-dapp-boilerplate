@@ -11,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
 import FacebookLinkHelp from './FacebookLinkHelp'
 import StarIcon from '@material-ui/icons/Star'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
@@ -69,7 +70,7 @@ class CreateAchievement extends Component {
 
   render () {
     const { isLinkValid, isTitleValid, link, modalOpen, title } = this.state
-    const { className, classes } = this.props
+    const { className, classes, fullScreen } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return [
       <Button
@@ -84,6 +85,7 @@ class CreateAchievement extends Component {
         Create your Achievement
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key='create-achievement-modal'
         open={modalOpen}
         onClose={this.handleClose}
@@ -142,7 +144,8 @@ class CreateAchievement extends Component {
 CreateAchievement.propTypes = {
   className: T.string,
   classes: T.object,
+  fullScreen: T.bool,
   onCreate: T.func
 }
 
-export default withStyles(styles)(CreateAchievement)
+export default withMobileDialog()(withStyles(styles)(CreateAchievement))

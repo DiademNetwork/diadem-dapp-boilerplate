@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
@@ -52,7 +53,7 @@ class Withdraw extends Component {
   })
 
   render () {
-    const { balance, className } = this.props
+    const { balance, className, fullScreen } = this.props
     const { address, isAddressValid, amount, isAmountValid, modalOpen } = this.state
     const isFormValid = isAmountValid && isAddressValid
     return [
@@ -66,6 +67,7 @@ class Withdraw extends Component {
         Withdraw
       </Button>,
       <Dialog
+        fullScreen={fullScreen}
         key='withdraw-modal'
         open={modalOpen}
         onClose={this.handleClose}
@@ -122,7 +124,8 @@ class Withdraw extends Component {
 Withdraw.propTypes = {
   balance: T.number,
   className: T.string,
+  fullScreen: T.bool,
   onSubmit: T.func
 }
 
-export default Withdraw
+export default withMobileDialog()(Withdraw)

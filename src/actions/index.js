@@ -9,6 +9,7 @@ const {
   ASYNC_ACHIEVEMENT_SUPPORT,
   ASYNC_ACHIEVEMENT_DEPOSIT,
   ASYNC_ACHIEVEMENT_UPDATE,
+  ASYNC_USERS_FETCH,
   ACHIEVEMENTS_UPDATE_DATA,
   TRANSACTIONS_UPDATE_DATA,
   ACHIEVEMENTS_UPDATE_META,
@@ -270,3 +271,14 @@ export const withdrawFromHotWallet = ({address, amount}) => async (dispatch, get
 // Ui
 export const showHelp = () => ({ type: UI_SHOW_HELP })
 export const hideHelp = () => ({ type: UI_HIDE_HELP })
+
+// Users
+export const fetchUsers = () => async (dispatch) => {
+  try {
+    const { data: { usersList } } = await api.fetchUsers()
+    dispatch({ type: ASYNC_USERS_FETCH.succeeded, data: usersList })
+  } catch (error) {
+    dispatch({ type: ASYNC_USERS_FETCH.failed, payload: { error } })
+    dispatch(notifications.fetchUsersError)
+  }
+}

@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import { createSelector } from 'reselect'
 import sortByTime from '../helpers/sort-by-time'
+import mapSort from '../helpers/map-sort'
 
 // Facebook
 export const getFacebookAnthenticationStatus = R.path(['facebook', 'authenticationStatus'])
@@ -35,23 +36,33 @@ export const getAchievementsMeta = name => createSelector([getAllAchievementsMet
 export const getAchievementsCount = createSelector([getAllAchievementsData], R.length)
 export const getGroupedByWalletAchievements = createSelector([getAllAchievementsData], R.groupBy(R.prop('wallet')))
 export const getAllAchievementsWallets = createSelector([getGroupedByWalletAchievements], R.keys)
-export const getProcessedAchievements = createSelector([getGroupedByWalletAchievements], R.compose(
-  R.mapObjIndexed((itemsInHistory) => {
-    const getNamesForAction = verb => R.compose(
-      R.map(R.prop('name')),
-      R.filter(R.propEq('verb', verb))
-    )
-    const creation = R.find(R.propEq('verb', 'create'))(itemsInHistory)
-    const updates = R.filter(R.propEq('verb', 'update'))(itemsInHistory)
-    return {
-      history: [ creation, ...updates ],
-      confirmators: getNamesForAction('confirm')(itemsInHistory),
-      depositors: getNamesForAction('deposit')(itemsInHistory),
-      supporters: getNamesForAction('support')(itemsInHistory)
-    }
-  }),
-  R.mapObjIndexed(sortByTime.asc)
-))
+export const getProcessedAchievements = createSelector([getGroupedByWalletAchievements], R.mapObjIndexed((groupedAchievement) => {
+  let result = R.compose(
+    R.forEach((item) => {
+      result = R.assocPath([item.object, 'achievement'], item, result)
+    }),
+    R.curry(mapSort)({ key: 'object', previousKey: 'previousLink' }),
+    R.filter(R.compose(
+      R.anyPass([R.equals('create'), R.equals('update')]),
+      R.prop('verb')
+    ))
+  )(groupedAchievement)
+
+  R.compose(
+    R.forEach((item) => {
+      const matchingItemIndex = R.findIndex(R.propEq('object', item.object))(result)
+      const existingVerbItems = R.pathOr([], [item.verb], result)
+      result[matchingItemIndex] = R.assoc(item.verb, R.append(item, existingVerbItems), result[matchingItemIndex])
+    }),
+    R.filter(R.compose(
+      R.anyPass([R.equals('confirm'), R.equals('support'), R.equals('deposit')]),
+      R.prop('verb')
+    ))
+  )(groupedAchievement)
+  return result
+}))
+
+export const getUsers = R.path(['users', 'data'])
 
 // Mix
 export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebookAuthenticated, isWalletReady ], R.and)

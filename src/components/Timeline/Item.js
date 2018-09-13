@@ -32,6 +32,11 @@ const TimelineItem = ({ classes, transaction }) => {
       achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
       verbDisplay = 'created'
       break
+    case 'update':
+      icon = <StarIcon />
+      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
+      verbDisplay = 'updated'
+      break
     case 'confirm':
       icon = <DoneIcon />
       achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>

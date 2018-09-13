@@ -46,10 +46,10 @@ class Achievement extends Component {
   }
 
   componentDidMount () {
-    const { achievement: { history } } = this.props
+    const { achievement } = this.props
     this.setState({
-      displayedHistoryItem: R.takeLast(1, history)[0],
-      stackedHistoryItems: R.dropLast(1, history)
+      displayedHistoryItem: R.takeLast(1, achievement)[0],
+      stackedHistoryItems: R.dropLast(1, achievement)
     })
   }
 
@@ -76,19 +76,29 @@ class Achievement extends Component {
     depositForAchievement({ amount, wallet, link: object, witnessUserID })
   }
 
-  isUserIn = listName => R.contains(
-    this.props.userID,
-    this.props.achievement[listName]
-  )
+  isUserIn = verb => {
+    const verbActors = R.prop(verb, this.state.displayedHistoryItem)
+    if (!verbActors) {
+      return false
+    }
+    const foundUser = R.find(R.propEq('actor', this.props.userID), verbActors)
+    return !!foundUser
+  }
 
   render () {
-    const { achievement, classes, isFacebookAuthenticated, userID, walletBalance } = this.props
+    const {
+      achievement,
+      classes,
+      isFacebookAuthenticatedAndWalletReady,
+      userID,
+      walletBalance
+    } = this.props
+    console.log(achievement)
     const { displayedHistoryItem, stackedHistoryItems } = this.state
-    const { confirmators, supporters, depositors } = achievement
-    const { actor, name, title, object } = displayedHistoryItem
-    const confirmationsCount = confirmators.length
-    const supportsCount = supporters.length
-    const despositsCount = depositors.length
+    const { actor, confirm, support, deposit, name, title, object } = displayedHistoryItem
+    const confirmationsCount = confirm ? confirm.length : 0
+    const supportsCount = support ? support.length : 0
+    const despositsCount = deposit ? deposit.length : 0
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
@@ -99,7 +109,7 @@ class Achievement extends Component {
         <CardContent>
           {confirmationsCount > 0 ? (
             <Typography variant="body1" color="textSecondary">
-              It has been confirmed by {confirmators[0]}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
+              It has been confirmed by {confirm[0].name}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
             </Typography>
           ) : (
             <Typography variant="body1" color="textSecondary">
@@ -108,12 +118,12 @@ class Achievement extends Component {
           )}
           {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been supported by {supporters[0]}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
+              It has been supported by {support[0].name}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
             </Typography>
           }
           {despositsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              {depositors[0]}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit
+              {deposit[0].name}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit
             </Typography>
           }
           <Link
@@ -128,16 +138,16 @@ class Achievement extends Component {
             disableActionSpacing
           >
             <Confirm
-              actionAlreadyDone={this.isUserIn('confirmators')}
+              actionAlreadyDone={this.isUserIn('confirm')}
               className={classes.actionsButtons}
-              isFacebookAuthenticated={isFacebookAuthenticated}
+              isFacebookAuthenticatedAndWalletReady={isFacebookAuthenticatedAndWalletReady}
               link={object}
               name={name}
               onConfirm={this.handleConfirm}
               title={title}
             />
             <Support
-              actionAlreadyDone={this.isUserIn('supporters')}
+              actionAlreadyDone={this.isUserIn('support')}
               className={classes.actionsButtons}
               confirmationsCount={confirmationsCount}
               name={name}
@@ -146,7 +156,7 @@ class Achievement extends Component {
               title={title}
             />
             <Deposit
-              actionAlreadyDone={this.isUserIn('supporters')}
+              actionAlreadyDone={this.isUserIn('deposit')}
               className={classes.actionsButtons}
               name={name}
               onSupport={this.handleDeposit}
@@ -169,13 +179,13 @@ class Achievement extends Component {
             <Typography>View previous achievements of {name}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
-            {stackedHistoryItems.map(({ actor, title, object }, idx) => [
+            {stackedHistoryItems.map(({ title, object }, idx) => [
               <Typography
                 color="textSecondary"
                 key={`${idx}-title`}
                 variant="subheading"
               >
-                {actor} did {title}
+                {title}
               </Typography>,
               <Link
                 key={`${idx}-link`}
@@ -195,11 +205,11 @@ class Achievement extends Component {
 
 Achievement.propTypes = {
   accessToken: T.string,
-  achievement: T.object,
+  achievement: T.array,
   confirmAchievement: T.func,
   classes: T.object,
   depositForAchievement: T.func,
-  isFacebookAuthenticated: T.bool,
+  isFacebookAuthenticatedAndWalletReady: T.bool,
   userID: T.string,
   walletAddress: T.string,
   walletBalance: T.number,

@@ -27,7 +27,7 @@ const styles = (theme) => ({
 class UpdateAchievement extends Component {
   state = {
     isLinkValid: false,
-    isPreviousLinkValid: false,
+    isPreviousLinkValid: true,
     isTitleValid: false,
     link: LINK_INITIAL_VALUE,
     modalOpen: false,
@@ -48,7 +48,7 @@ class UpdateAchievement extends Component {
       const isTitleValid = value.length > 0
       this.setState({ title: value, isTitleValid })
     } else if (name === 'previousLink') {
-      const isPreviousLinkValid = this.isFacebookLinkValid(value)
+      const isPreviousLinkValid = value === '' || this.isFacebookLinkValid(value)
       this.setState({ previousLink: value, isPreviousLinkValid })
     }
   }
@@ -69,7 +69,7 @@ class UpdateAchievement extends Component {
 
   resetForm = () => this.setState({
     isLinkValid: false,
-    isPreviousLinkValid: false,
+    isPreviousLinkValid: true,
     isTitleValid: false,
     link: LINK_INITIAL_VALUE,
     previousLink: PREVIOUS_LINK_INITIAL_VALUE,
@@ -133,7 +133,7 @@ class UpdateAchievement extends Component {
             id='link'
             margin="normal"
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
-            label="New Facebook link of your achievement post"
+            label="Facebook link of your achievement post"
             value={link}
             onChange={this.handleChange('link')}
             placeholder='https://www.facebook.com/username/posts/postid'

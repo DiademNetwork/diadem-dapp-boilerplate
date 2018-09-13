@@ -38,12 +38,17 @@ export const createAPI = (fetcher, url) => {
     return fetcher.post(getUrl('deposit'), data)
   }
 
+  async function fetchUsers () {
+    return fetcher.get(getUrl('users'))
+  }
+
   return Object.freeze({
     checkUser,
     confirmAchievement,
     createAchievement,
     depositForAchievement,
     encodeSupport,
+    fetchUsers,
     registerUser,
     supportAchievement,
     updateAchievement

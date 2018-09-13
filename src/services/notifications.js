@@ -39,5 +39,6 @@ export default {
   userRegistrationSuccess: createSuccessNotification('Registration successful'),
   withdrawTokensSuccess: createSuccessNotification('Tokens withdrawal successful'),
   withdrawTokensError: createErrorNotification('Impossible to withdraw tokens'),
-  checkUserError: createErrorNotification('Impossible to check your user existence')
+  checkUserError: createErrorNotification('Impossible to check your user existence'),
+  fetchUsersError: createErrorNotification('Impossible to fetch users list')
 }

@@ -10,6 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import withContainer from './container'
 
 const AMOUNT_INITIAL_VALUE = 0
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -21,6 +22,10 @@ class AchievementDeposit extends Component {
     isWitnessUserIDValid: false,
     isAmountValid: false,
     modalOpen: false
+  }
+
+  componentDidMount () {
+    this.props.fetchUsers()
   }
 
   handleClickOpen = () => this.setState({ modalOpen: true })
@@ -61,8 +66,10 @@ class AchievementDeposit extends Component {
       fullScreen,
       name,
       title,
+      users,
       walletBalance
     } = this.props
+    console.log(users)
     const isBalancePositive = walletBalance && walletBalance > 0
     const { amount, modalOpen, witnessUserID, isWitnessUserIDValid, isAmountValid } = this.state
     return [
@@ -139,11 +146,13 @@ AchievementDeposit.propTypes = {
   actionAlreadyDone: T.bool,
   className: T.string,
   confirmationsCount: T.number,
+  fetchUsers: T.func,
   fullScreen: T.bool,
   name: T.string,
   onDeposit: T.func,
   title: T.string,
+  users: T.array,
   walletBalance: T.number
 }
 
-export default withMobileDialog()(AchievementDeposit)
+export default withMobileDialog()(withContainer(AchievementDeposit))

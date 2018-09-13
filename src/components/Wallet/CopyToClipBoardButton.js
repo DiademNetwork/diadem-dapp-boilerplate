@@ -7,11 +7,11 @@ import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
 
 class WalletCopyToClipBoardButton extends Component {
   handleCopy = () => {
-    copyToClipboard(this.props.text)
+    copyToClipboard(this.props.textToCopy)
   }
 
   render () {
-    const { variant } = this.props
+    const { name, variant } = this.props
     if (variant === 'icon') {
       return (
         <IconButton
@@ -25,7 +25,7 @@ class WalletCopyToClipBoardButton extends Component {
     } else {
       return (
         <Button onClick={this.handleCopy} variant="contained" color="secondary">
-          Copy Address
+          Copy {name}
         </Button>
       )
     }
@@ -33,7 +33,8 @@ class WalletCopyToClipBoardButton extends Component {
 }
 
 WalletCopyToClipBoardButton.propTypes = {
-  text: T.string,
+  name: T.string,
+  textToCopy: T.string,
   variant: T.string
 }
 

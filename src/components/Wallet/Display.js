@@ -28,7 +28,7 @@ const CopyToAddressToolip = ({ address }) => (
     TransitionComponent={Zoom}
     title='Copy address to clipboard'
   >
-    <CopyToClipBoardButton variant="icon" text={address} />
+    <CopyToClipBoardButton variant="icon" textToCopy={address} name="address" />
   </Tooltip>
 )
 
@@ -93,7 +93,7 @@ class WalletDisplay extends Component {
         </ListItem>,
         <Hidden smUp>
           <ListItem>
-            <CopyToClipBoardButton variant="button" text={address} />
+            <CopyToClipBoardButton variant="button" textToCopy={address} name="address" />
             {balance > 0 &&
               <Withdraw
                 balance={balance}

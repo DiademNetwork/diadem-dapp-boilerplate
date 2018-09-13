@@ -9,7 +9,15 @@ import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Checkbox from '@material-ui/core/Checkbox'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
+import { withStyles } from '@material-ui/core/styles'
 import withContainer from './container'
+
+const styles = (theme) => ({
+  link: {
+    color: theme.palette.primary.light,
+    textDecoration: 'none'
+  }
+})
 
 class Help extends Component {
   state = {
@@ -48,7 +56,7 @@ class Help extends Component {
 
   render () {
     const { open, wantsNotToShowSplashAgain } = this.state
-    const { isHelpDisplayed } = this.props
+    const { classes, isHelpDisplayed } = this.props
     return (
       <Dialog
         open={open}
@@ -63,7 +71,7 @@ class Help extends Component {
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
             <Typography paragraph color="textPrimary">
-              Diadem Network aims to connect users achieving great things with people wanting to support them<br />
+              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect users achieving great things with people wanting to support them<br />
             </Typography>
             <Typography color="textSecondary">
               CREATE YOUR ACHIEVEMENT (1max per user): Post a link to an achievement you already posted on facebook
@@ -88,6 +96,9 @@ class Help extends Component {
             </Typography>
             <Typography variant="body2">
               A hot wallet is used to manage QTUM transactions
+            </Typography>
+            <Typography variant="body2">
+              You need to send token to Diadem Hot wallet to be able to Support and Deposit. <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a>
             </Typography>
             <Typography variant="body2">
               Create, Update and Confirm are free
@@ -124,8 +135,9 @@ class Help extends Component {
 }
 
 Help.propTypes = {
+  classes: T.object,
   isHelpDisplayed: T.bool,
   hideHelp: T.func
 }
 
-export default withContainer(Help)
+export default withContainer(withStyles(styles)(Help))

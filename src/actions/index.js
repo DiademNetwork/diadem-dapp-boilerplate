@@ -181,6 +181,7 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
+    console.log(error)
     dispatch(notifications.supportAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
@@ -198,6 +199,7 @@ export const depositForAchievement = ({ amount, wallet: targetAddress, link, wit
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
     dispatch(notifications.depositAchievementSuccess)
   } catch (error) {
+    console.log(error)
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.failed, payload: { error } })
     dispatch(notifications.depositAchievementError)
   }

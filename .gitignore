@@ -3,3 +3,5 @@ dist/
 coverage/
 .qtum
 .env
+.env.testnet
+.env.mainnet

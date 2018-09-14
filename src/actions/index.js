@@ -23,7 +23,7 @@ const {
   FACEBOOK_UPDATE_AUTHENTICATION_STATUS
 } = types
 
-const network = networks.testnet
+const network = networks[process.env.QTUM_NETWORK]
 
 // Facebook
 export const updateFacebook = (data) => ({ type: FACEBOOK_UPDATE_DATA, data })
@@ -198,7 +198,6 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
-    console.log(error)
     dispatch(notifications.supportAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
@@ -225,7 +224,6 @@ export const depositForAchievement = ({ amount, link, witnessUserID }) => async 
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
     dispatch(notifications.depositAchievementSuccess)
   } catch (error) {
-    console.log(error)
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.failed, payload: { error } })
     dispatch(notifications.depositAchievementError)
   }

@@ -179,7 +179,7 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
     })
     const { accessToken, userID } = facebook.data
     await api.supportAchievement({
-      address,
+      address: wallet.data.addrStr,
       link,
       rawTx,
       token: accessToken,
@@ -204,7 +204,7 @@ export const depositForAchievement = ({ amount, link, witnessUserID }) => async 
     })
     const { accessToken, userID } = facebook.data
     await api.depositForAchievement({
-      address,
+      address: wallet.data.addrStr,
       link,
       rawTx,
       token: accessToken,

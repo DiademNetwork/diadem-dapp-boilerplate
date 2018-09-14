@@ -91,10 +91,10 @@ class WalletDisplay extends Component {
               </Typography>
             }
           />
-        </ListItem>,
+        </ListItem>
         {isRegistrationPending &&
           <Typography color="textSecondary">Your registration is still pending, it can take some minutes...You have to wait for it to be able to user Diadem Network</Typography>
-        },
+        }
         <Hidden key="mobile-button" smUp>
           <ListItem>
             <CopyToClipBoardButton variant="button" textToCopy={address} name="address" />

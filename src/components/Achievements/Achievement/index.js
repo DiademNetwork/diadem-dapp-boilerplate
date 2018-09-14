@@ -45,12 +45,22 @@ class Achievement extends Component {
     stackedHistoryItems: []
   }
 
-  componentDidMount () {
-    const { achievement } = this.props
+  setDisplayedAndStackedItems = (achievement) => {
     this.setState({
       displayedHistoryItem: R.takeLast(1, achievement)[0],
       stackedHistoryItems: R.reverse(R.dropLast(1, achievement))
     })
+  }
+
+  componentDidMount () {
+    this.setDisplayedAndStackedItems(this.props.achievement)
+  }
+
+  componentWillReceiveProps ({ achievement: newAchievement }) {
+    const { achievement } = this.props
+    if (R.complement(R.equals)(newAchievement, achievement)) {
+      this.setDisplayedAndStackedItems(newAchievement)
+    }
   }
 
   handleConfirm = () => {

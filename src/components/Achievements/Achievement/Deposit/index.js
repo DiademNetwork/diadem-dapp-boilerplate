@@ -11,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import withContainer from './container'
+import MenuItem from '@material-ui/core/MenuItem'
 
 const AMOUNT_INITIAL_VALUE = 0
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -69,7 +70,6 @@ class AchievementDeposit extends Component {
       users,
       walletBalance
     } = this.props
-    console.log(users)
     const isBalancePositive = walletBalance && walletBalance > 0
     const { amount, modalOpen, witnessUserID, isWitnessUserIDValid, isAmountValid } = this.state
     return [
@@ -116,13 +116,19 @@ class AchievementDeposit extends Component {
           />
           <TextField
             error={witnessUserID !== WITNESS_USER_ID_INITIAL_VALUE && !isWitnessUserIDValid}
+            select
+            label="Select a witness user"
             margin="normal"
-            id='witnessUserID'
-            label="userID of witness"
-            value={witnessUserID}
             onChange={this.handleChange('witnessUserID')}
             fullWidth
-          />
+            value={witnessUserID}
+          >
+            {users.map(({ userAccount, userName }) => (
+              <MenuItem key={userAccount} value={userAccount}>
+                {userName}
+              </MenuItem>
+            ))}
+          </TextField>
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">

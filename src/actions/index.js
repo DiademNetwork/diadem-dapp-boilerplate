@@ -198,8 +198,8 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
 export const depositForAchievement = ({ amount, link, witnessUserID }) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
-    const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: witnessUserID })
     const { facebook, wallet } = getState()
+    const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: wallet.data.addrStr })
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8,
       feeRate: Math.ceil(0.004 * 1e8 / 100)

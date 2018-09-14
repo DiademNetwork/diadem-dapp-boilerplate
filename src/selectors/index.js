@@ -42,6 +42,7 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
       result = R.assocPath([item.object, 'achievement'], item, result)
     }),
     R.curry(mapSort)({ key: 'object', previousKey: 'previousLink' }),
+    (x) => { console.log(x); return x },
     R.filter(R.compose(
       R.anyPass([R.equals('create'), R.equals('update')]),
       R.prop('verb')
@@ -78,12 +79,16 @@ export const previousLinkOfUserAchievementOrNull = createSelector([
   if (!R.contains(userWalletAddress, allAchievementsWallets)) {
     return null
   } else {
+    const userAchievementsChain = R.prop(userWalletAddress, processedAchievements)
+    const updates = R.filter(R.propEq('verb', 'update'), userAchievementsChain)
+    if (R.length(updates) === 0) {
+      return null
+    }
     return R.compose(
       R.prop('previousLink'),
       R.head,
-      R.takeLast(1),
-      R.prop(userWalletAddress)
-    )(processedAchievements)
+      R.takeLast(1)
+    )(updates)
   }
 })
 export const canCreateOrUpdateAchievement = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))

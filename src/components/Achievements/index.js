@@ -22,7 +22,7 @@ const styles = (theme) => ({
       left: 0,
       width: '100vw',
       borderRadius: 'initial',
-      zIndex: 100000
+      zIndex: 1000
     }
   }
 })

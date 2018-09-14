@@ -153,12 +153,12 @@ class Achievement extends Component {
           )}
           {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been supported by {R.head(uniqSupportersNames)}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''} for a total amount of {supportsTotalAmount}
+              It has been supported by {R.head(uniqSupportersNames)}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''} for a total amount of {supportsTotalAmount} QTUM
             </Typography>
           }
           {despositsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              {R.head(uniqDepositorsNames)}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit for a total amount of {depositsTotalAmount}
+              {R.head(uniqDepositorsNames)}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit for a total amount of {depositsTotalAmount} QTUM
             </Typography>
           }
         </CardContent>

@@ -16,6 +16,7 @@ import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
+const MAX_CHARACTERS = 60
 
 const styles = (theme) => ({
   buttonIcon: {
@@ -42,7 +43,7 @@ class CreateAchievement extends Component {
       const isLinkValid = this.isFacebookLinkValid(value)
       this.setState({ link: value, isLinkValid })
     } else if (name === 'title') {
-      const isTitleValid = value.length > 0
+      const isTitleValid = value.length > 0 && value.length <= MAX_CHARACTERS
       this.setState({ title: value, isTitleValid })
     }
   }
@@ -118,7 +119,7 @@ class CreateAchievement extends Component {
             onChange={this.handleChange('title')}
             placeholder='wrote the first chapter of my book'
             fullWidth
-            helperText='I ..your title..'
+            helperText='I ..your title.. (max 60 characters)'
           />
         </DialogContent>
         <DialogActions>

@@ -89,9 +89,23 @@ class Achievement extends Component {
     )(transactions)
   }
 
-  getTotalAmount = R.reduce(
-    (acc, curr) => R.add(acc, R.prop('amount', curr)),
-    0
+  getUniqueUsersNamesFor = verb => R.compose(
+    (list) => {
+      const nameKey = verb === 'confirm' ? 'witnessName' : 'name'
+      return R.compose(
+        R.uniq,
+        R.map(R.prop(nameKey))
+      )(list)
+    },
+    R.propOr([], verb)
+  )
+
+  getTotalAmountFor = verb => R.compose(
+    R.reduce(
+      (acc, curr) => R.add(acc, R.prop('amount', curr)),
+      0
+    ),
+    R.propOr([], verb)
   )
 
   render () {
@@ -102,15 +116,19 @@ class Achievement extends Component {
       walletBalance
     } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
-    const { actor, confirm, support, deposit, name, title, object } = displayedHistoryItem
-    const confirms = R.propOr([], 'confirm')(displayedHistoryItem)
-    const supports = R.propOr([], 'support')(displayedHistoryItem)
-    const deposits = R.propOr([], 'deposit')(displayedHistoryItem)
-    const confirmationsCount = R.length(confirms)
-    const supportsCount = R.length(supports)
-    const despositsCount = R.length(deposits)
-    const depositsTotalAmount = this.getTotalAmount(deposits) / 1e8
-    const supportTotalAmount = this.getTotalAmount(supports) / 1e8
+    const { actor, name, title, object } = displayedHistoryItem
+
+    const uniqConfirmatorsNames = this.getUniqueUsersNamesFor('confirm')(displayedHistoryItem)
+    const uniqSupportersNames = this.getUniqueUsersNamesFor('support')(displayedHistoryItem)
+    const uniqDepositorsNames = this.getUniqueUsersNamesFor('deposit')(displayedHistoryItem)
+
+    const confirmationsCount = R.length(uniqConfirmatorsNames)
+    const supportsCount = R.length(uniqSupportersNames)
+    const despositsCount = R.length(uniqDepositorsNames)
+
+    const depositsTotalAmount = this.getTotalAmountFor('deposit')(displayedHistoryItem) / 1e8
+    const supportsTotalAmount = this.getTotalAmountFor('support')(displayedHistoryItem) / 1e8
+
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
@@ -121,7 +139,7 @@ class Achievement extends Component {
         <CardContent>
           {confirmationsCount > 0 ? (
             <Typography variant="body1" color="textSecondary">
-              It has been confirmed by {confirm[0].witnessName}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
+              It has been confirmed by {R.head(uniqConfirmatorsNames)}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
             </Typography>
           ) : (
             <Typography variant="body1" color="textSecondary">
@@ -130,12 +148,12 @@ class Achievement extends Component {
           )}
           {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been supported by {support[0].name}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''} for a total amount of {supportTotalAmount}
+              It has been supported by {R.head(uniqSupportersNames)}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''} for a total amount of {supportsTotalAmount}
             </Typography>
           }
           {despositsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              {deposit[0].name}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit for a total amount of {depositsTotalAmount}
+              {R.head(uniqDepositorsNames)}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit for a total amount of {depositsTotalAmount}
             </Typography>
           }
           <Link
@@ -193,9 +211,9 @@ class Achievement extends Component {
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map((achievement, idx) => {
               const { title, object } = achievement
-              const confirmationsCount = R.length(R.propOr([], 'confirm')(achievement))
-              const supportsCount = R.length(R.propOr([], 'support')(achievement))
-              const despositsCount = R.length(R.propOr([], 'deposit')(achievement))
+              const confirmationsCount = R.length(this.getUniqueUsersNamesFor('confirm')(achievement))
+              const supportsCount = R.length(this.getUniqueUsersNamesFor('support')(achievement))
+              const despositsCount = R.length(this.getUniqueUsersNamesFor('deposit')(achievement))
               return [
                 <Typography
                   color="textPrimary"

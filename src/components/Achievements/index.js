@@ -40,19 +40,19 @@ class Achievements extends Component {
       classes,
       createAchievement,
       createAchievementStatus,
-      previousLinkOfUserAchievementOrNull,
+      lastLinkOfUserAchievementOrNull,
       updateAchievement
     } = this.props
     console.log({ achievements })
-    const displayUpdateButton = canUserConfirmCreateUpdateSupportDeposit && previousLinkOfUserAchievementOrNull
-    const displayCreateButton = canUserConfirmCreateUpdateSupportDeposit && !previousLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
+    const displayUpdateButton = canUserConfirmCreateUpdateSupportDeposit && lastLinkOfUserAchievementOrNull
+    const displayCreateButton = canUserConfirmCreateUpdateSupportDeposit && !lastLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
     return [
       displayUpdateButton && (
         <Update
           className={classes.achievementButton}
           key="update"
           onUpdate={updateAchievement}
-          previousLink={previousLinkOfUserAchievementOrNull} // will always be string in this case
+          previousLink={lastLinkOfUserAchievementOrNull} // will always be string in this case
         />
       ),
       displayCreateButton && (
@@ -96,7 +96,7 @@ Achievements.propTypes = {
   classes: T.object,
   createAchievement: T.func,
   createAchievementStatus: T.string,
-  previousLinkOfUserAchievementOrNull: T.string,
+  lastLinkOfUserAchievementOrNull: T.string,
   updateAchievement: T.func,
   updateAchievementsMeta: T.func
 }

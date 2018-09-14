@@ -7,7 +7,7 @@ import {
 import {
   canUserConfirmCreateUpdateSupportDeposit,
   getProcessedAchievements,
-  previousLinkOfUserAchievementOrNull,
+  lastLinkOfUserAchievementOrNull,
   getAchievementCreateStatus
 } from '../../selectors'
 
@@ -15,7 +15,7 @@ const mapStateToProps = (state) => ({
   createAchievementStatus: getAchievementCreateStatus(state),
   achievements: getProcessedAchievements(state),
   canUserConfirmCreateUpdateSupportDeposit: canUserConfirmCreateUpdateSupportDeposit(state),
-  previousLinkOfUserAchievementOrNull: previousLinkOfUserAchievementOrNull(state)
+  lastLinkOfUserAchievementOrNull: lastLinkOfUserAchievementOrNull(state)
 })
 
 const mapDispatchToProps = {

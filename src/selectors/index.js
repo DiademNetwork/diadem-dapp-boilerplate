@@ -38,9 +38,6 @@ export const getGroupedByWalletAchievements = createSelector([getAllAchievements
 export const getAllAchievementsWallets = createSelector([getGroupedByWalletAchievements], R.keys)
 export const getProcessedAchievements = createSelector([getGroupedByWalletAchievements], R.mapObjIndexed((groupedAchievement) => {
   let result = R.compose(
-    R.forEach((item) => {
-      result = R.assocPath([item.object, 'achievement'], item, result)
-    }),
     R.curry(mapSort)({ key: 'object', previousKey: 'previousLink' }),
     R.filter(R.compose(
       R.anyPass([R.equals('create'), R.equals('update')]),
@@ -51,10 +48,9 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
   R.compose(
     R.forEach((item) => {
       const matchingItemIndex = R.findIndex(R.propEq('object', item.object))(result)
-      if (matchingItemIndex >= 0) {
-        const existingVerbItems = R.pathOr([], [item.verb], result)
-        result[matchingItemIndex] = R.assoc(item.verb, R.append(item, existingVerbItems), result[matchingItemIndex])
-      }
+      const path = [matchingItemIndex, item.verb]
+      const existingVerbItems = R.pathOr([], path, result)
+      result = R.assocPath(path, [...existingVerbItems, item], result)
     }),
     R.filter(R.compose(
       R.anyPass([R.equals('confirm'), R.equals('support'), R.equals('deposit')]),
@@ -67,7 +63,7 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
 export const getUsers = R.path(['users', 'data'])
 
 // Mix
-export const previousLinkOfUserAchievementOrNull = createSelector([
+export const lastLinkOfUserAchievementOrNull = createSelector([
   getWalletAddress,
   getAllAchievementsWallets,
   getProcessedAchievements
@@ -84,14 +80,12 @@ export const previousLinkOfUserAchievementOrNull = createSelector([
   } else {
     const userAchievementsChain = R.prop(userWalletAddress, processedAchievements)
     const updates = R.filter(R.propEq('verb', 'update'), userAchievementsChain)
-    if (R.length(updates) === 0) {
-      return null
-    }
+    const create = R.find(R.propEq('verb', 'create'), userAchievementsChain)
     return R.compose(
-      R.prop('previousLink'),
+      R.prop('object'),
       R.head,
       R.takeLast(1)
-    )(updates)
+    )([ create, ...updates ])
   }
 })
 export const canUserConfirmCreateUpdateSupportDeposit = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))

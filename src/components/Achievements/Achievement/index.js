@@ -107,6 +107,11 @@ class Achievement extends Component {
     const supports = R.propOr([], 'support')(displayedHistoryItem)
     const deposits = R.propOr([], 'deposit')(displayedHistoryItem)
     const confirmationsCount = R.length(confirms)
+    console.log({
+      title,
+      confirms,
+      confirmationsCount
+    })
     const supportsCount = R.length(supports)
     const despositsCount = R.length(deposits)
     const depositsTotalAmount = this.getTotalAmount(deposits) / 1e8
@@ -193,9 +198,9 @@ class Achievement extends Component {
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map((achievement, idx) => {
               const { title, object } = achievement
-              const confirmationsCount = this.getActionsCounts('confirm')(achievement)
-              const supportsCount = this.getActionsCounts('support')(achievement)
-              const despositsCount = this.getActionsCounts('deposit')(achievement)
+              const confirmationsCount = R.length(R.propOr([], 'confirm')(achievement))
+              const supportsCount = R.length(R.propOr([], 'support')(achievement))
+              const despositsCount = R.length(R.propOr([], 'deposit')(achievement))
               return [
                 <Typography
                   color="textPrimary"

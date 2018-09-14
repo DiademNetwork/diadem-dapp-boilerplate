@@ -35,7 +35,7 @@ class Achievements extends Component {
   render () {
     const {
       achievements,
-      canCreateOrUpdateAchievement,
+      canUserConfirmCreateUpdateSupportDeposit,
       className,
       classes,
       createAchievement,
@@ -43,8 +43,8 @@ class Achievements extends Component {
       previousLinkOfUserAchievementOrNull,
       updateAchievement
     } = this.props
-    const displayUpdateButton = canCreateOrUpdateAchievement && previousLinkOfUserAchievementOrNull
-    const displayCreateButton = canCreateOrUpdateAchievement && !previousLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
+    const displayUpdateButton = canUserConfirmCreateUpdateSupportDeposit && previousLinkOfUserAchievementOrNull
+    const displayCreateButton = canUserConfirmCreateUpdateSupportDeposit && !previousLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
     return [
       displayUpdateButton && (
         <Update
@@ -90,7 +90,7 @@ class Achievements extends Component {
 
 Achievements.propTypes = {
   achievements: T.object,
-  canCreateOrUpdateAchievement: T.bool,
+  canUserConfirmCreateUpdateSupportDeposit: T.bool,
   className: T.string,
   classes: T.object,
   createAchievement: T.func,

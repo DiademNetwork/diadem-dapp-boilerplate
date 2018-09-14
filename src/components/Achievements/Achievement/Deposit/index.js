@@ -13,9 +13,16 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import withContainer from './container'
 import MenuItem from '@material-ui/core/MenuItem'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
+import { withStyles } from '@material-ui/core/styles'
 
 const AMOUNT_INITIAL_VALUE = 0
 const WITNESS_USER_ID_INITIAL_VALUE = ''
+
+const styles = (theme) => ({
+  icon: {
+    marginRight: theme.spacing.unit
+  }
+})
 
 class AchievementDeposit extends Component {
   state = {
@@ -64,6 +71,7 @@ class AchievementDeposit extends Component {
     const {
       actionAlreadyDone,
       className,
+      classes,
       confirmationsCount,
       fullScreen,
       name,
@@ -83,7 +91,7 @@ class AchievementDeposit extends Component {
         color="secondary"
         variant="extendedFab"
       >
-        <VpnKeyOutlinedIcon />
+        <VpnKeyOutlinedIcon className={classes.icon} />
         {actionAlreadyDone ? 'You have already deposit' : 'Deposit'}
       </Button>,
       <Dialog
@@ -154,6 +162,7 @@ class AchievementDeposit extends Component {
 AchievementDeposit.propTypes = {
   actionAlreadyDone: T.bool,
   className: T.string,
+  classes: T.object,
   confirmationsCount: T.number,
   fetchUsers: T.func,
   fullScreen: T.bool,
@@ -164,4 +173,4 @@ AchievementDeposit.propTypes = {
   walletBalance: T.number
 }
 
-export default withMobileDialog()(withContainer(AchievementDeposit))
+export default withMobileDialog()(withContainer(withStyles(styles)(AchievementDeposit)))

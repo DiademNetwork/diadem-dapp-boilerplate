@@ -65,7 +65,6 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
 export const getUsers = R.path(['users', 'data'])
 
 // Mix
-export const isFacebookAuthenticatedAndWalletReady = createSelector([ isFacebookAuthenticated, isWalletReady ], R.and)
 export const previousLinkOfUserAchievementOrNull = createSelector([
   getWalletAddress,
   getAllAchievementsWallets,
@@ -93,4 +92,4 @@ export const previousLinkOfUserAchievementOrNull = createSelector([
     )(updates)
   }
 })
-export const canCreateOrUpdateAchievement = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))
+export const canUserConfirmCreateUpdateSupportDeposit = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))

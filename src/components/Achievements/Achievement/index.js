@@ -93,7 +93,7 @@ class Achievement extends Component {
   render () {
     const {
       classes,
-      isFacebookAuthenticatedAndWalletReady,
+      canUserConfirmCreateUpdateSupportDeposit,
       userID,
       walletBalance
     } = this.props
@@ -143,7 +143,7 @@ class Achievement extends Component {
             <Confirm
               actionAlreadyDone={this.isUserIn('confirm')}
               className={classes.actionsButtons}
-              isFacebookAuthenticatedAndWalletReady={isFacebookAuthenticatedAndWalletReady}
+              canUserConfirmCreateUpdateSupportDeposit={canUserConfirmCreateUpdateSupportDeposit}
               link={object}
               name={name}
               onConfirm={this.handleConfirm}
@@ -225,7 +225,7 @@ Achievement.propTypes = {
   confirmAchievement: T.func,
   classes: T.object,
   depositForAchievement: T.func,
-  isFacebookAuthenticatedAndWalletReady: T.bool,
+  canUserConfirmCreateUpdateSupportDeposit: T.bool,
   userID: T.string,
   walletAddress: T.string,
   walletBalance: T.number,

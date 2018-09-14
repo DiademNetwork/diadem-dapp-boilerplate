@@ -76,7 +76,6 @@ class Wallet extends Component {
       recoverWallet,
       unconfirmedBalance,
       walletStatus,
-      isRegistrationPending,
       updateWalletStatus,
       withdrawFromHotWallet
     } = this.props
@@ -95,11 +94,13 @@ class Wallet extends Component {
           )
           break
         case 'generated':
-          renderedComponent = <Generated
-            mnemonic={mnemonic}
-            privateKey={privateKey}
-            onConfirm={() => updateWalletStatus('restoring-info-saved')}
-          />
+          renderedComponent = (
+            <Generated
+              mnemonic={mnemonic}
+              privateKey={privateKey}
+              onConfirm={() => updateWalletStatus('restoring-info-saved')}
+            />
+          )
           break
         case 'needs-recovering':
           renderedComponent = (
@@ -108,9 +109,7 @@ class Wallet extends Component {
           break
         case 'restored':
         case 'restoring-info-saved':
-          renderedComponent = isRegistrationPending ? (
-            <Typography color="textSecondary">Please wait while your registration get confirmed (it can take some minutes)...</Typography>
-          ) : (
+          renderedComponent = (
             <Display
               address={address}
               balance={balance}

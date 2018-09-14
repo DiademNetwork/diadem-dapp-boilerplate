@@ -76,8 +76,8 @@ class Help extends Component {
         </DialogTitle>
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
-            <Typography paragraph color="textPrimary">
-              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect users achieving great things with people willing to support them<br />
+            <Typography paragraph color="textPrimary" variant="headline">
+              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect people improving the world by their actions to those willing to support them for it<br />
             </Typography>
             <Typography color="textSecondary">
               CREATE YOUR ACHIEVEMENT: Post a link to an achievement you already posted on facebook.

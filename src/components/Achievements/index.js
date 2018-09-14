@@ -21,7 +21,8 @@ const styles = (theme) => ({
       right: 0,
       left: 0,
       width: '100vw',
-      borderRadius: 'initial'
+      borderRadius: 'initial',
+      zIndex: 100000
     }
   }
 })

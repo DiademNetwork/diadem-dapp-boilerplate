@@ -16,8 +16,11 @@ const styles = (theme) => ({
   sm9: {
     width: '100%',
     margin: `${theme.spacing.unit} auto`,
-    [theme.breakpoints.up('sm')]: {
-      width: '70%'
+    [theme.breakpoints.up('md')]: {
+      width: '80%'
+    },
+    [theme.breakpoints.up('lg')]: {
+      width: '60%'
     }
   }
 })

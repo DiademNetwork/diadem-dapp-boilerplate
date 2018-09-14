@@ -30,6 +30,10 @@ export const createAPI = (fetcher, url) => {
     return fetcher.post(getUrl('encode-support'), data)
   }
 
+  async function encodeDeposit (data) {
+    return fetcher.post(getUrl('encode-deposit'), data)
+  }
+
   async function supportAchievement (data) {
     return fetcher.post(getUrl('support'), data)
   }
@@ -48,6 +52,7 @@ export const createAPI = (fetcher, url) => {
     createAchievement,
     depositForAchievement,
     encodeSupport,
+    encodeDeposit,
     fetchUsers,
     registerUser,
     supportAchievement,

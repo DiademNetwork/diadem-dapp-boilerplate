@@ -66,7 +66,7 @@ class Achievements extends Component {
         key='list'
         container
         className={className}
-        spacing={8}
+        spacing={16}
       >
         {R.keys(achievements).length > 0
           ? R.keys(achievements).map((key, idx) => (

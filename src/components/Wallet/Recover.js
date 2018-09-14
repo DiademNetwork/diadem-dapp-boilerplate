@@ -118,7 +118,7 @@ class Recover extends Component {
             Please enter your mnemonic or privateKey (one is enough) that were generated when you first visited Diadem Network
           </DialogContentText>
           <TextField
-            autoFocus
+            autoFocus={!fullScreen}
             error={mnemonic !== MNEMONIC_INITIAL_VALUE && !isMnemonicValid}
             margin="normal"
             onChange={this.handleChange('mnemonic')}

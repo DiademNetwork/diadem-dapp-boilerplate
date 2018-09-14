@@ -99,7 +99,7 @@ class AchievementSupport extends Component {
             {title}<br /><br />
           </DialogContentText>
           <TextField
-            autoFocus
+            autoFocus={!fullScreen}
             error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
             margin="normal"
             id='amount'

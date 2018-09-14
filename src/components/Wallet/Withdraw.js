@@ -93,7 +93,7 @@ class Withdraw extends Component {
             Please provide a withdrawal address and an amount (max {balance} QTUM minus fees of around 0.01 QTUM) to withdraw tokens from your Diadem network hot wallet
           </DialogContentText>
           <TextField
-            autoFocus
+            autoFocus={!fullScreen}
             error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
             margin="normal"
             id='amount'
@@ -106,7 +106,6 @@ class Withdraw extends Component {
             helperText='Fees are around 0.1 QTUM'
           />
           <TextField
-            autoFocus
             error={address !== ADDRESS_INITIAL_VALUE && !isAddressValid}
             margin="normal"
             id='address'

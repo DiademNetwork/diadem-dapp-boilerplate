@@ -114,7 +114,7 @@ class UpdateAchievement extends Component {
           </DialogContentText>
           <FacebookLinkHelp />
           <TextField
-            autoFocus
+            autoFocus={!fullScreen}
             id='link'
             margin="normal"
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}

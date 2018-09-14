@@ -99,7 +99,7 @@ class CreateAchievement extends Component {
           </DialogContentText>
           <FacebookLinkHelp />
           <TextField
-            autoFocus
+            autoFocus={!fullScreen}
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
             margin="normal"
             id='link'

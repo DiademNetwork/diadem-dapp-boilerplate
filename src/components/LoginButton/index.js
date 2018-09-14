@@ -57,7 +57,7 @@ class LoginButton extends Component {
             onClick={renderProps.onClick}
             variant="contained"
           >
-            <Hidden smDown>Facebook</Hidden> Login <PowerSettingsNewIcon className={classes.icon} />
+            <Hidden smDown>Facebook Login</Hidden><PowerSettingsNewIcon className={classes.icon} />
           </Button>
         )}
       />

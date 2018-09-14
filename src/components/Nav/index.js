@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography'
 import Hidden from '@material-ui/core/Hidden'
 import { withStyles } from '@material-ui/core/styles'
 import LoginButton from '../LoginButton'
+import Hashtag from '../Hashtag'
 import LogoImage from './logo.png'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
@@ -44,6 +45,7 @@ const Nav = ({ classes, showHelp }) => (
       <IconButton onClick={showHelp} variant="fab" color="primary">
         <Avatar className={classes.avatar} alt="Help logo" src={HelpImg} />
       </IconButton>
+      <Hashtag />
     </Toolbar>
   </AppBar>
 )

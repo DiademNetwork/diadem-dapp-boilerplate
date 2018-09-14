@@ -35,7 +35,7 @@ class AchievementConfirm extends Component {
       actionAlreadyDone,
       className,
       fullScreen,
-      isFacebookAuthenticatedAndWalletReady,
+      canUserConfirmCreateUpdateSupportDeposit,
       link,
       name,
       title
@@ -47,7 +47,7 @@ class AchievementConfirm extends Component {
         color="secondary"
         className={className}
         key='achievement-confirm-button'
-        disabled={!isFacebookAuthenticatedAndWalletReady || actionAlreadyDone}
+        disabled={!canUserConfirmCreateUpdateSupportDeposit || actionAlreadyDone}
         onClick={this.handleClickOpen}
         variant="extendedFab"
       >
@@ -102,7 +102,7 @@ AchievementConfirm.propTypes = {
   actionAlreadyDone: T.bool,
   className: T.string,
   fullScreen: T.bool,
-  isFacebookAuthenticatedAndWalletReady: T.bool,
+  canUserConfirmCreateUpdateSupportDeposit: T.bool,
   link: T.string,
   name: T.string,
   onConfirm: T.func,

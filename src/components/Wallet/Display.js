@@ -50,6 +50,7 @@ class WalletDisplay extends Component {
       address,
       balance,
       classes,
+      isRegistrationPending,
       unconfirmedBalance,
       withdrawFromHotWallet
     } = this.props
@@ -91,7 +92,10 @@ class WalletDisplay extends Component {
             }
           />
         </ListItem>,
-        <Hidden smUp>
+        {isRegistrationPending &&
+          <Typography color="textSecondary">Your registration is still pending, it can take some minutes...You have to wait for it to be able to user Diadem Network</Typography>
+        },
+        <Hidden key="mobile-button" smUp>
           <ListItem>
             <CopyToClipBoardButton variant="button" textToCopy={address} name="address" />
             {balance > 0 &&
@@ -112,6 +116,7 @@ WalletDisplay.propTypes = {
   address: T.string,
   balance: T.number,
   classes: T.object,
+  isRegistrationPending: T.bool,
   onRefreshWallet: T.func,
   unconfirmedBalance: T.number,
   withdrawFromHotWallet: T.func

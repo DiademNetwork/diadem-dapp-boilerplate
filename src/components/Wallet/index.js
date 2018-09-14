@@ -71,6 +71,7 @@ class Wallet extends Component {
       balance,
       className,
       isFacebookAuthenticated,
+      isRegistrationPending,
       mnemonic,
       privateKey,
       recoverWallet,
@@ -89,7 +90,10 @@ class Wallet extends Component {
     } else {
       switch (walletStatus) {
         case 'none':
-          renderedComponent = (
+
+          renderedComponent = isRegistrationPending ? (
+            <Typography color="textSecondary">Please wait, your registration is still waiting to be confirmed on blockchain, it can take some minutes...</Typography>
+          ) : (
             <Typography color="textSecondary">Loading...</Typography>
           )
           break
@@ -113,9 +117,10 @@ class Wallet extends Component {
             <Display
               address={address}
               balance={balance}
-              unconfirmedBalance={unconfirmedBalance}
+              isRegistrationPending={isRegistrationPending}
               onRefreshWallet={this.handleRefreshWallet}
               withdrawFromHotWallet={withdrawFromHotWallet}
+              unconfirmedBalance={unconfirmedBalance}
             />
           )
           break

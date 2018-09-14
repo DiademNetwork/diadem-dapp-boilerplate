@@ -18,6 +18,10 @@ export const createAPI = (fetcher, url) => {
     return fetcher.post(getUrl('check'), data)
   }
 
+  async function checkUserAddress (data) {
+    return fetcher.post(getUrl('check-qtum-address'), data)
+  }
+
   async function registerUser (data) {
     return fetcher.post(getUrl('register'), data)
   }
@@ -48,6 +52,7 @@ export const createAPI = (fetcher, url) => {
 
   return Object.freeze({
     checkUser,
+    checkUserAddress,
     confirmAchievement,
     createAchievement,
     depositForAchievement,

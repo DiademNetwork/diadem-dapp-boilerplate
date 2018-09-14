@@ -107,8 +107,12 @@ class Wallet extends Component {
           )
           break
         case 'needs-recovering':
+        case 'recover-failed':
           renderedComponent = (
-            <Recover onRecover={recoverWallet} />
+            <Recover
+              onRecover={recoverWallet}
+              failed={walletStatus === 'recover-failed'}
+            />
           )
           break
         case 'restored':

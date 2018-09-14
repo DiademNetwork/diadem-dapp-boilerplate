@@ -43,6 +43,18 @@ export const refreshWallet = (wallet) => async (dispatch) => {
   }
 }
 
+export const checkUserAddressAndLoadWallet = ({ walletData, wallet, userID }) => async (dispatch) => {
+  const { data: { ok } } = await api.checkUserAddress({ user: userID, walletAddress: walletData.addrStr })
+  if (ok) {
+    dispatch(updateWallet(walletData))
+    dispatch(updateWalletMeta({ wallet }))
+    dispatch(notifications.walletRestored)
+    dispatch(updateWalletStatus('restored'))
+  } else {
+    dispatch(updateWalletStatus('recover-failed'))
+  }
+}
+
 export const recoverWallet = ({ mnemonic, privateKey }) => async (dispatch, getState) => {
   try {
     let wallet
@@ -57,9 +69,7 @@ export const recoverWallet = ({ mnemonic, privateKey }) => async (dispatch, getS
     }
     window.localStorage.setItem(`privateKey-${userID}`, privateKey)
     const walletData = await wallet.getInfo()
-    dispatch(updateWallet(walletData))
-    dispatch(updateWalletMeta({ wallet }))
-    dispatch(updateWalletStatus('restored'))
+    await checkUserAddressAndLoadWallet({ walletData, wallet, userID })(dispatch)
   } catch (error) {
     dispatch(notifications.walletRecoverError)
   }
@@ -88,10 +98,8 @@ export const loadWallet = (userID) => async (dispatch) => {
       dispatch(updateWalletStatus('needs-recovering'))
     } else {
       const wallet = network.fromWIF(storedPrivateKey)
-      dispatch(updateWalletMeta({ wallet }))
-      await refreshWallet(wallet)(dispatch)
-      dispatch(notifications.walletRestored)
-      dispatch(updateWalletStatus('restored'))
+      const walletData = await wallet.getInfo()
+      await checkUserAddressAndLoadWallet({ walletData, wallet, userID })(dispatch)
     }
   } catch (error) {
     dispatch(notifications.walletError)

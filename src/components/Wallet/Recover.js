@@ -11,16 +11,33 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 
+const MNEMONIC_INITIAL_VALUE = ''
+const PRIVATE_KEY_INITIAL_VALUE = ''
+
 class Recover extends Component {
   state = {
     open: true,
-    mnemonic: '',
-    privateKey: '',
+    mnemonic: MNEMONIC_INITIAL_VALUE,
+    privateKey: PRIVATE_KEY_INITIAL_VALUE,
     isMnemonicValid: false,
     isPrivateKeyValid: false
   }
 
-  handleClickOpen = () => {
+  startFailedOpenModalInterval = () => {
+    this.interval = setInterval(() => {
+      this.props.failed && this.handleOpen()
+    }, 1000)
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.interval)
+  }
+
+  componentDidMount () {
+    this.startFailedOpenModalInterval()
+  }
+
+  handleOpen = () => {
     this.setState({ open: true })
   }
 
@@ -42,8 +59,16 @@ class Recover extends Component {
   handleSubmit = () => {
     const { mnemonic, privateKey } = this.state
     this.props.onRecover({ mnemonic, privateKey })
+    this.resetForm()
     this.handleClose()
   }
+
+  resetForm = () => this.setState({
+    mnemonic: MNEMONIC_INITIAL_VALUE,
+    privateKey: PRIVATE_KEY_INITIAL_VALUE,
+    isMnemonicValid: false,
+    isPrivateKeyValid: false
+  })
 
   is12WordsLong = R.compose(
     R.equals(12),
@@ -61,13 +86,13 @@ class Recover extends Component {
 
   render () {
     const { open, mnemonic, privateKey, isMnemonicValid, isPrivateKeyValid } = this.state
-    const { fullScreen } = this.props
+    const { failed, fullScreen } = this.props
     const isFormValid = isMnemonicValid || isPrivateKeyValid
     return [
       <Button
         color="secondary"
         key="button"
-        onClick={this.handleClickOpen}
+        onClick={this.handleOpen}
         variant="contained"
       >
         Recover your wallet
@@ -81,12 +106,20 @@ class Recover extends Component {
       >
         <DialogTitle id="form-dialog-title">Recover your Diadem Network wallet</DialogTitle>
         <DialogContent>
+          {failed && [
+            <DialogContentText key="failure-message-title">
+              Wallet found is not the one you registered with initially! Please provide the privateKey you were told to store on very first visit.
+            </DialogContentText>,
+            <DialogContentText color="textSecondary" key="failure-message-subtitle">
+              You lost your initial privateKey/mnemonic? Sorry to tell you you will have to wait for Diadem Network team to add possibility to force new registration with another wallet.
+            </DialogContentText>
+          ]}
           <DialogContentText>
             Please enter your mnemonic or privateKey (one is enough) that were generated when you first visited Diadem Network
           </DialogContentText>
           <TextField
             autoFocus
-            error={mnemonic !== '' && !isMnemonicValid}
+            error={mnemonic !== MNEMONIC_INITIAL_VALUE && !isMnemonicValid}
             margin="normal"
             onChange={this.handleChange('mnemonic')}
             id="mnemonic"
@@ -96,7 +129,7 @@ class Recover extends Component {
             placeholder='this is a twelve words long key used to recover your wallet'
           />
           <TextField
-            error={privateKey !== '' && !isPrivateKeyValid}
+            error={privateKey !== PRIVATE_KEY_INITIAL_VALUE && !isPrivateKeyValid}
             margin="normal"
             onChange={this.handleChange('privateKey')}
             id="privateKey"
@@ -125,6 +158,7 @@ class Recover extends Component {
 }
 
 Recover.propTypes = {
+  failed: T.bool,
   fullScreen: T.bool,
   onRecover: T.func
 }

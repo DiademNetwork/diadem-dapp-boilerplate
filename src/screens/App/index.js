@@ -14,13 +14,10 @@ import { withStyles } from '@material-ui/core/styles'
 const styles = (theme) => ({
   sm9: {
     width: '100%',
+    margin: `${theme.spacing.unit} auto`,
     [theme.breakpoints.up('sm')]: {
-      width: '80%',
-      margin: 'auto'
+      width: '70%'
     }
-  },
-  wallet: {
-    marginBottom: theme.spacing.unit
   }
 })
 
@@ -34,7 +31,7 @@ class App extends Component {
     return (
       <div>
         <Nav />
-        <Wallet className={classes.wallet} />
+        <Wallet className={classes.sm9} />
         <Tabs tabs={[
           {
             badgeContent: achievementsNotificationCount,

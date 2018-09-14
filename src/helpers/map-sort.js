@@ -1,3 +1,5 @@
+// snippet from https://blog.theodorejb.me/linked-list-sorting/
+
 const mapSort = ({ key, previousKey }, linkedList) => {
   const sortedList = []
   const map = new Map()

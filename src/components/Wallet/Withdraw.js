@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -10,6 +11,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import WithdrawIcon from '@material-ui/icons/AccountBalanceWalletOutlined'
 import { withStyles } from '@material-ui/core/styles'
+import Hidden from '@material-ui/core/Hidden'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
@@ -71,9 +73,12 @@ class Withdraw extends Component {
         color="secondary"
         key='withdraw-button'
         onClick={this.handleClickOpen}
-        variant="extendedFab"
+        variant={fullScreen ? 'contained' : 'extendedFab'}
       >
-        <WithdrawIcon className={classes.icon} /> Withdraw
+        <Hidden smDown>
+          <WithdrawIcon className={classes.icon} />
+        </Hidden>
+         Withdraw
       </Button>,
       <Dialog
         fullScreen={fullScreen}
@@ -138,4 +143,7 @@ Withdraw.propTypes = {
   onSubmit: T.func
 }
 
-export default withMobileDialog()(withStyles(styles)(Withdraw))
+export default R.compose(
+  withMobileDialog(),
+  withStyles(styles)
+)(Withdraw)

@@ -149,4 +149,7 @@ CreateAchievement.propTypes = {
   onCreate: T.func
 }
 
-export default withMobileDialog()(withStyles(styles)(CreateAchievement))
+export default R.compose(
+  withMobileDialog(),
+  withStyles(styles)
+)(CreateAchievement)

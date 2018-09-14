@@ -91,7 +91,7 @@ class AchievementDeposit extends Component {
         disabled={!isBalancePositive}
         onClick={this.handleClickOpen}
         color="secondary"
-        variant="extendedFab"
+        variant={fullScreen ? 'contained' : 'extendedFab'}
       >
         <Hidden smDown>
           <VpnKeyOutlinedIcon className={classes.icon} />
@@ -182,4 +182,8 @@ AchievementDeposit.propTypes = {
   walletBalance: T.number
 }
 
-export default withMobileDialog()(withContainer(withStyles(styles)(AchievementDeposit)))
+export default R.compose(
+  withMobileDialog(),
+  withContainer,
+  withStyles(styles)
+)(AchievementDeposit)

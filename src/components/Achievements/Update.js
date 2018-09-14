@@ -163,4 +163,7 @@ UpdateAchievement.propTypes = {
   previousLink: T.string
 }
 
-export default withMobileDialog()(withStyles(styles)(UpdateAchievement))
+export default R.compose(
+  withMobileDialog(),
+  withStyles(styles)
+)(UpdateAchievement)

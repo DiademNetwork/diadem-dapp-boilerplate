@@ -12,6 +12,11 @@ import Update from './Update'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
+  grid: {
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: `${theme.spacing.unit * 7} !important`
+    }
+  },
   achievementButton: {
     position: 'fixed',
     bottom: theme.spacing.unit * 2,
@@ -44,7 +49,6 @@ class Achievements extends Component {
       lastLinkOfUserAchievementOrNull,
       updateAchievement
     } = this.props
-    console.log({ achievements })
     const displayUpdateButton = canUserConfirmCreateUpdateSupportDeposit && lastLinkOfUserAchievementOrNull
     const displayCreateButton = canUserConfirmCreateUpdateSupportDeposit && !lastLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
     return [
@@ -66,7 +70,7 @@ class Achievements extends Component {
       <Grid
         key='list'
         container
-        className={className}
+        className={`${className} ${classes.grid}`}
         spacing={16}
       >
         {R.keys(achievements).length > 0

@@ -8,6 +8,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Checkbox from '@material-ui/core/Checkbox'
+import Hidden from '@material-ui/core/Hidden'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { withStyles } from '@material-ui/core/styles'
 import withContainer from './container'
@@ -137,9 +138,12 @@ class Help extends Component {
             aria-label="Go to application"
             color="secondary"
             onClick={this.handleClose}
-            variant="extendedFab"
+            variant={fullScreen ? 'contained' : 'extendedFab'}
           >
-            <SendIcon className={classes.icon} /> {isHelpDisplayed ? 'Go back to Diadem Network' : ' Get me to Diadem Network'}
+            <Hidden smDown>
+              <SendIcon className={classes.icon} />
+            </Hidden>
+            {isHelpDisplayed ? 'Go back to Diadem Network' : ' Get me to Diadem Network'}
           </Button>
         </DialogActions>
       </Dialog>

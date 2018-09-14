@@ -65,7 +65,7 @@ class AchievementSupport extends Component {
         disabled={!isBalancePositive}
         key='achievement-support-button'
         onClick={this.handleClickOpen}
-        variant="extendedFab"
+        variant={fullScreen ? 'contained' : 'extendedFab'}
       >
         <Hidden smDown>
           <MoneyIcon />

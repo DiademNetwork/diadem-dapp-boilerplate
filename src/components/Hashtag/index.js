@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import IconButton from '@material-ui/core/IconButton'
@@ -14,6 +15,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import { withStyles } from '@material-ui/core/styles'
 import HashtagImg from './hashtag.png'
 import SendIcon from '@material-ui/icons/SendOutlined'
+import Hidden from '@material-ui/core/Hidden'
 
 const styles = (theme) => ({
   icon: {
@@ -84,9 +86,12 @@ class Hashtag extends Component {
             aria-label="Go to application"
             color="secondary"
             onClick={this.handleClose}
-            variant="extendedFab"
+            variant={fullScreen ? 'contained' : 'extendedFab'}
           >
-            <SendIcon className={classes.icon} />Go back to Diadem Network
+            <Hidden smDown>
+              <SendIcon className={classes.icon} />
+            </Hidden>
+            Go back to Diadem Network
           </Button>
         </DialogActions>
       </Dialog>
@@ -99,4 +104,7 @@ Hashtag.propTypes = {
   fullScreen: T.bool
 }
 
-export default withMobileDialog()(withStyles(styles)(Hashtag))
+export default R.compose(
+  withMobileDialog(),
+  withStyles(styles)
+)(Hashtag)

@@ -50,7 +50,7 @@ class AchievementConfirm extends Component {
         key='achievement-confirm-button'
         disabled={!canUserConfirmCreateUpdateSupportDeposit || actionAlreadyDone}
         onClick={this.handleClickOpen}
-        variant="extendedFab"
+        variant={fullScreen ? 'contained' : 'extendedFab'}
       >
         <Hidden smDown>
           <DoneIcon />

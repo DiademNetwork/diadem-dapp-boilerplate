@@ -14,7 +14,11 @@ class Timeline extends Component {
   }
 
   render () {
-    const { isFacebookAuthenticated, transactions } = this.props
+    const {
+      className,
+      isFacebookAuthenticated,
+      transactions
+    } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
       renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see the timeline</Typography>
@@ -30,7 +34,7 @@ class Timeline extends Component {
       )
     }
     return (
-      <Card>
+      <Card className={className}>
         <CardContent>
           {renderedComponent}
         </CardContent>
@@ -40,6 +44,7 @@ class Timeline extends Component {
 }
 
 Timeline.propTypes = {
+  className: T.string,
   transactions: T.array,
   isFacebookAuthenticated: T.bool.isRequired,
   updateTransactionsMeta: T.func

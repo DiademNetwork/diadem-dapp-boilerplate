@@ -57,6 +57,7 @@ class Wallet extends Component {
     const {
       address,
       balance,
+      className,
       isFacebookAuthenticated,
       mnemonic,
       privateKey,
@@ -118,7 +119,7 @@ class Wallet extends Component {
       }
     }
     return (
-      <Card>
+      <Card className={className}>
         <CardContent>
           <Typography paragraph color="textSecondary">Your Diadem Network wallet</Typography>
           {renderedComponent}
@@ -132,6 +133,7 @@ Wallet.propTypes = {
   address: T.string,
   balance: T.number,
   checkUserRegistration: T.func,
+  className: T.string,
   displayNotification: T.func,
   isFacebookAuthenticated: T.bool,
   isRegistrationPending: T.bool,

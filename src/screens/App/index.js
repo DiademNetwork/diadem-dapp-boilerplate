@@ -8,41 +8,45 @@ import Timeline from '../../components/Timeline'
 import Notifications from '../../components/Notifications'
 import Help from '../../components/Help'
 import { PropTypes as T } from 'prop-types'
-import Grid from '@material-ui/core/Grid'
 import withContainer from './container'
+import { withStyles } from '@material-ui/core/styles'
+
+const styles = (theme) => ({
+  sm9: {
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: '80%',
+      margin: 'auto'
+    }
+  },
+  wallet: {
+    marginBottom: theme.spacing.unit
+  }
+})
 
 class App extends Component {
   render () {
-    const { achievementsNotificationCount, transactionsNotificationCount } = this.props
+    const {
+      achievementsNotificationCount,
+      classes,
+      transactionsNotificationCount
+    } = this.props
     return (
       <div>
-        <Grid
-          container
-          justify="center"
-          alignContent="center"
-          spacing={16}
-        >
-          <Grid item xs={12}>
-            <Nav />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Wallet />
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Tabs tabs={[
-              {
-                badgeContent: achievementsNotificationCount,
-                label: 'Achievements',
-                component: <Achievements />
-              },
-              {
-                badgeContent: transactionsNotificationCount,
-                label: 'Timeline',
-                component: <Timeline />
-              }
-            ]} />
-          </Grid>
-        </Grid>
+        <Nav />
+        <Wallet className={classes.wallet} />
+        <Tabs tabs={[
+          {
+            badgeContent: achievementsNotificationCount,
+            label: 'Achievements',
+            component: <Achievements className={classes.sm9} />
+          },
+          {
+            badgeContent: transactionsNotificationCount,
+            label: 'Timeline',
+            component: <Timeline className={classes.sm9} />
+          }
+        ]} />
         <Notifications />
         <Help />
         <StreamFetcher />
@@ -53,7 +57,8 @@ class App extends Component {
 
 App.propTypes = {
   achievementsNotificationCount: T.number,
+  classes: T.object,
   transactionsNotificationCount: T.number
 }
 
-export default withContainer(App)
+export default withContainer(withStyles(styles)(App))

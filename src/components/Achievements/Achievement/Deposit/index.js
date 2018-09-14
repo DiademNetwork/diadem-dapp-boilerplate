@@ -100,7 +100,7 @@ class AchievementDeposit extends Component {
             )}<br /><br />
             <Divider />
             <br />
-            Please enter an amount (max ${walletBalance} QTUM) you would like to send to support {name}<br />
+            Please enter an amount (max ${walletBalance} QTUM minus fees of around 0.01 QTUM) you would like to send to support {name}<br />
             for his achievement: {title}<br /><br />
           </DialogContentText>
           <TextField

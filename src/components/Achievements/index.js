@@ -36,6 +36,7 @@ class Achievements extends Component {
     const {
       achievements,
       canCreateOrUpdateAchievement,
+      className,
       classes,
       createAchievement,
       createAchievementStatus,
@@ -63,9 +64,8 @@ class Achievements extends Component {
       <Grid
         key='list'
         container
-        spacing={24}
-        justify="center"
-        alignContent="center"
+        className={className}
+        spacing={8}
       >
         {R.keys(achievements).length > 0
           ? R.keys(achievements).map((key, idx) => (
@@ -91,6 +91,7 @@ class Achievements extends Component {
 Achievements.propTypes = {
   achievements: T.object,
   canCreateOrUpdateAchievement: T.bool,
+  className: T.string,
   classes: T.object,
   createAchievement: T.func,
   createAchievementStatus: T.string,

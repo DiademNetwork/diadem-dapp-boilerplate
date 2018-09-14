@@ -22,7 +22,7 @@ const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
         <AssignmentOutlinedIcon />
       </ListItemIcon>
       <ListItemText primary={
-        <Typography>{mnemonic} <CopyToClipBoardButton textToCopy={mnemonic} name="mnemonic" /></Typography>
+        <Typography>{mnemonic} <CopyToClipBoardButton textToCopy={mnemonic} name="mnemonic" variant="icon" /></Typography>
       } />
     </ListItem>
     <ListItem>
@@ -30,7 +30,7 @@ const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
         <VpnKeyOutlinedIcon />
       </ListItemIcon>
       <ListItemText primary={
-        <Typography>{privateKey} <CopyToClipBoardButton textToCopy={privateKey} name="privateKey" /></Typography>
+        <Typography>{privateKey} <CopyToClipBoardButton textToCopy={privateKey} name="privateKey" variant="icon" /></Typography>
       } />
     </ListItem>
   </List>,

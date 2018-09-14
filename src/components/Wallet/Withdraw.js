@@ -8,6 +8,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import WithdrawIcon from '@material-ui/icons/AccountBalanceWalletOutlined'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
@@ -58,13 +59,14 @@ class Withdraw extends Component {
     const isFormValid = isAmountValid && isAddressValid
     return [
       <Button
+        aria-label="Create"
+        className={className}
+        color="secondary"
         key='withdraw-button'
         onClick={this.handleClickOpen}
-        variant="contained"
-        color="secondary"
-        className={className}
+        variant="extendedFab"
       >
-        Withdraw
+        <WithdrawIcon /> Withdraw
       </Button>,
       <Dialog
         fullScreen={fullScreen}

@@ -89,9 +89,9 @@ class Achievement extends Component {
     )(transactions)
   }
 
-  getTotalAmount = R.compose(
-
-    R.reduce((acc, curr) => R.add(acc, R.prop('amount')(curr)), 0)
+  getTotalAmount = R.reduce(
+    (acc, curr) => R.add(acc, R.prop('amount', curr)),
+    0
   )
 
   render () {
@@ -107,11 +107,6 @@ class Achievement extends Component {
     const supports = R.propOr([], 'support')(displayedHistoryItem)
     const deposits = R.propOr([], 'deposit')(displayedHistoryItem)
     const confirmationsCount = R.length(confirms)
-    console.log({
-      title,
-      confirms,
-      confirmationsCount
-    })
     const supportsCount = R.length(supports)
     const despositsCount = R.length(deposits)
     const depositsTotalAmount = this.getTotalAmount(deposits) / 1e8

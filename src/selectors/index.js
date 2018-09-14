@@ -41,8 +41,9 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
     R.forEach((item) => {
       result = R.assocPath([item.object, 'achievement'], item, result)
     }),
+    (x) => { console.log('HERE', x); return x },
     R.curry(mapSort)({ key: 'object', previousKey: 'previousLink' }),
-    (x) => { console.log(x); return x },
+    (x) => { console.log('HERE', x); return x },
     R.filter(R.compose(
       R.anyPass([R.equals('create'), R.equals('update')]),
       R.prop('verb')
@@ -76,6 +77,9 @@ export const previousLinkOfUserAchievementOrNull = createSelector([
   allAchievementsWallets,
   processedAchievements
 ) => {
+  if (!userWalletAddress || !R.is(Array)(allAchievementsWallets) || processedAchievements === {}) {
+    return null
+  }
   if (!R.contains(userWalletAddress, allAchievementsWallets)) {
     return null
   } else {

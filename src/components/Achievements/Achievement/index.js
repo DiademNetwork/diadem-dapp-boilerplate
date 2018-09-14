@@ -112,7 +112,7 @@ class Achievement extends Component {
         <CardContent>
           {confirmationsCount > 0 ? (
             <Typography variant="body1" color="textSecondary">
-              It has been confirmed by {confirm[0].name}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
+              It has been confirmed by {confirm[0].witnessName}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
             </Typography>
           ) : (
             <Typography variant="body1" color="textSecondary">
@@ -121,12 +121,12 @@ class Achievement extends Component {
           )}
           {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been supported by {support[0].name}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
+              It has been supported by {support[0].witnessName}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
             </Typography>
           }
           {despositsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              {deposit[0].name}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit
+              {deposit[0].witnessName}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit
             </Typography>
           }
           <Link

@@ -46,7 +46,6 @@ class AchievementSupport extends Component {
 
   render () {
     const {
-      actionAlreadyDone,
       className,
       confirmationsCount,
       fullScreen,
@@ -62,13 +61,13 @@ class AchievementSupport extends Component {
         aria-label="Support"
         className={className}
         color="secondary"
-        disabled={!isBalancePositive || actionAlreadyDone}
+        disabled={!isBalancePositive}
         key='achievement-support-button'
         onClick={this.handleClickOpen}
         variant="extendedFab"
       >
         <MoneyIcon />
-        {actionAlreadyDone ? 'You already supported' : 'Support'}
+        Support
       </Button>,
       <Dialog
         fullScreen={fullScreen}
@@ -127,7 +126,6 @@ class AchievementSupport extends Component {
 }
 
 AchievementSupport.propTypes = {
-  actionAlreadyDone: T.bool,
   className: T.string,
   confirmationsCount: T.number,
   fullScreen: T.bool,

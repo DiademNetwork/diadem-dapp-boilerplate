@@ -51,8 +51,10 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
   R.compose(
     R.forEach((item) => {
       const matchingItemIndex = R.findIndex(R.propEq('object', item.object))(result)
-      const existingVerbItems = R.pathOr([], [item.verb], result)
-      result[matchingItemIndex] = R.assoc(item.verb, R.append(item, existingVerbItems), result[matchingItemIndex])
+      if (matchingItemIndex >= 0) {
+        const existingVerbItems = R.pathOr([], [item.verb], result)
+        result[matchingItemIndex] = R.assoc(item.verb, R.append(item, existingVerbItems), result[matchingItemIndex])
+      }
     }),
     R.filter(R.compose(
       R.anyPass([R.equals('confirm'), R.equals('support'), R.equals('deposit')]),

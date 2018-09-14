@@ -70,7 +70,6 @@ class AchievementDeposit extends Component {
 
   render () {
     const {
-      actionAlreadyDone,
       className,
       classes,
       confirmationsCount,
@@ -88,13 +87,13 @@ class AchievementDeposit extends Component {
         aria-label="Deposit"
         className={className}
         key='achievement-deposit-button'
-        disabled={!isBalancePositive || actionAlreadyDone}
+        disabled={!isBalancePositive}
         onClick={this.handleClickOpen}
         color="secondary"
         variant="extendedFab"
       >
         <VpnKeyOutlinedIcon className={classes.icon} />
-        {actionAlreadyDone ? 'You have already deposit' : 'Deposit'}
+        Deposit
       </Button>,
       <Dialog
         fullScreen={fullScreen}
@@ -167,7 +166,6 @@ class AchievementDeposit extends Component {
 }
 
 AchievementDeposit.propTypes = {
-  actionAlreadyDone: T.bool,
   className: T.string,
   classes: T.object,
   confirmationsCount: T.number,

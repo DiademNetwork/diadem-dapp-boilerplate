@@ -43,6 +43,7 @@ class Achievements extends Component {
       previousLinkOfUserAchievementOrNull,
       updateAchievement
     } = this.props
+    console.log({ achievements })
     const displayUpdateButton = canUserConfirmCreateUpdateSupportDeposit && previousLinkOfUserAchievementOrNull
     const displayCreateButton = canUserConfirmCreateUpdateSupportDeposit && !previousLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
     return [

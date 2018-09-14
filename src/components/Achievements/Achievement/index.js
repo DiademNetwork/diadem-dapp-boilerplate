@@ -76,13 +76,17 @@ class Achievement extends Component {
     depositForAchievement({ amount, link: object, witnessUserID })
   }
 
-  isUserIn = verb => {
-    const verbActors = R.prop(verb, this.state.displayedHistoryItem)
-    if (!verbActors) {
-      return false
-    }
-    const foundUser = R.find(R.propEq('witness', this.props.userID), verbActors)
-    return !!foundUser
+  hasUserAlreadyConfirmed = () => {
+    const { displayedHistoryItem: { object } } = this.state
+    const { userID, transactions } = this.props
+    return R.compose(
+      R.complement(R.isNil),
+      R.find(R.both(
+        R.propEq('actor', userID),
+        R.propEq('object', object)
+      )),
+      R.filter(R.propEq('verb', 'confirm'))
+    )(transactions)
   }
 
   getActionsCounts = verb => R.compose(
@@ -141,7 +145,7 @@ class Achievement extends Component {
             disableActionSpacing
           >
             <Confirm
-              actionAlreadyDone={this.isUserIn('confirm')}
+              actionAlreadyDone={this.hasUserAlreadyConfirmed()}
               className={classes.actionsButtons}
               canUserConfirmCreateUpdateSupportDeposit={canUserConfirmCreateUpdateSupportDeposit}
               link={object}
@@ -150,7 +154,6 @@ class Achievement extends Component {
               title={title}
             />
             <Support
-              actionAlreadyDone={this.isUserIn('support')}
               className={classes.actionsButtons}
               confirmationsCount={confirmationsCount}
               link={object}
@@ -160,7 +163,6 @@ class Achievement extends Component {
               title={title}
             />
             <Deposit
-              actionAlreadyDone={this.isUserIn('deposit')}
               className={classes.actionsButtons}
               link={object}
               name={name}
@@ -231,7 +233,8 @@ Achievement.propTypes = {
   userID: T.string,
   walletAddress: T.string,
   walletBalance: T.number,
-  supportAchievement: T.func
+  supportAchievement: T.func,
+  transactions: T.array
 }
 
 export default withContainer(withStyles(styles)(Achievement))

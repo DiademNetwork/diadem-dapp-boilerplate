@@ -41,9 +41,7 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
     R.forEach((item) => {
       result = R.assocPath([item.object, 'achievement'], item, result)
     }),
-    (x) => { console.log('HERE', x); return x },
     R.curry(mapSort)({ key: 'object', previousKey: 'previousLink' }),
-    (x) => { console.log('HERE', x); return x },
     R.filter(R.compose(
       R.anyPass([R.equals('create'), R.equals('update')]),
       R.prop('verb')

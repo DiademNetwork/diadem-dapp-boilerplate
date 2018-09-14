@@ -81,7 +81,7 @@ class Achievement extends Component {
     if (!verbActors) {
       return false
     }
-    const foundUser = R.find(R.propEq('actor', this.props.userID), verbActors)
+    const foundUser = R.find(R.propEq('witness', this.props.userID), verbActors)
     return !!foundUser
   }
 

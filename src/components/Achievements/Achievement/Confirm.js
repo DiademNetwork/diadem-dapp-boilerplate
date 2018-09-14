@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Link from '../../Link'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import DoneIcon from '@material-ui/icons/Done'
 
 class AchievementConfirm extends Component {
   state = {
@@ -42,13 +43,15 @@ class AchievementConfirm extends Component {
     const { modalOpen } = this.state
     return [
       <Button
+        aria-label="Confirm"
         color="secondary"
         className={className}
         key='achievement-confirm-button'
         disabled={!isFacebookAuthenticatedAndWalletReady || actionAlreadyDone}
         onClick={this.handleClickOpen}
-        variant="contained"
+        variant="extendedFab"
       >
+        <DoneIcon />
         {actionAlreadyDone ? 'You confirmed already' : 'Confirm'}
       </Button>,
       <Dialog

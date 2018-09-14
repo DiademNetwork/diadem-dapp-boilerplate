@@ -8,6 +8,8 @@ import StarIcon from '@material-ui/icons/Star'
 import DoneIcon from '@material-ui/icons/Done'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 import RemoveIcon from '@material-ui/icons/Remove'
+import MoneyIcon from '@material-ui/icons/AttachMoney'
+import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import { withStyles } from '@material-ui/core/styles'
 import moment from 'moment'
 
@@ -36,6 +38,16 @@ const TimelineItem = ({ classes, transaction }) => {
       icon = <StarIcon />
       achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
       verbDisplay = 'updated'
+      break
+    case 'support':
+      icon = <MoneyIcon />
+      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
+      verbDisplay = 'supported'
+      break
+    case 'deposit':
+      icon = <VpnKeyOutlinedIcon />
+      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
+      verbDisplay = 'deposited for'
       break
     case 'confirm':
       icon = <DoneIcon />

@@ -69,7 +69,7 @@ class Achievements extends Component {
       >
         {R.keys(achievements).length > 0
           ? R.keys(achievements).map((key, idx) => (
-            <Grid key={idx} item xs={12} lg={6}>
+            <Grid key={idx} item xs={12}>
               <Achievement achievement={achievements[key]} />
             </Grid>
           ))

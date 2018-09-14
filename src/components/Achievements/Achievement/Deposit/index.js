@@ -12,6 +12,7 @@ import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import withContainer from './container'
 import MenuItem from '@material-ui/core/MenuItem'
+import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 
 const AMOUNT_INITIAL_VALUE = 0
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -74,13 +75,15 @@ class AchievementDeposit extends Component {
     const { amount, modalOpen, witnessUserID, isWitnessUserIDValid, isAmountValid } = this.state
     return [
       <Button
+        aria-label="Deposit"
         className={className}
         key='achievement-deposit-button'
         disabled={!isBalancePositive || actionAlreadyDone}
         onClick={this.handleClickOpen}
-        variant="contained"
         color="secondary"
+        variant="extendedFab"
       >
+        <VpnKeyOutlinedIcon />
         {actionAlreadyDone ? 'You have already deposit' : 'Deposit'}
       </Button>,
       <Dialog

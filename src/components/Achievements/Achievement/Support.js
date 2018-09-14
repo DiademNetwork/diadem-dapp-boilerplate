@@ -9,6 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import MoneyIcon from '@material-ui/icons/AttachMoney'
 
 const AMOUNT_INITIAL_VALUE = 0
 
@@ -56,13 +57,15 @@ class AchievementSupport extends Component {
     const { amount, isAmountValid, modalOpen } = this.state
     return [
       <Button
+        aria-label="Support"
         className={className}
-        key='achievement-support-button'
-        disabled={!isBalancePositive || actionAlreadyDone}
-        onClick={this.handleClickOpen}
-        variant="contained"
         color="secondary"
+        disabled={!isBalancePositive || actionAlreadyDone}
+        key='achievement-support-button'
+        onClick={this.handleClickOpen}
+        variant="extendedFab"
       >
+        <MoneyIcon />
         {actionAlreadyDone ? 'You already supported' : 'Support'}
       </Button>,
       <Dialog

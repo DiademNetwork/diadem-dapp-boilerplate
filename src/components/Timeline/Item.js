@@ -72,7 +72,7 @@ const TimelineItem = ({ classes, transaction }) => {
         <Typography key='text'>
           {actorDisplay} {verbDisplay} {achievementLink || object}
         </Typography>,
-        <Typography key='tx'>{txComponent}</Typography>
+        txComponent && <Typography key='tx'>{txComponent}</Typography>
       ]} />
     </ListItem>
   )

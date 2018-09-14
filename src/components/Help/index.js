@@ -80,7 +80,7 @@ class Help extends Component {
               Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect users achieving great things with people willing to support them<br />
             </Typography>
             <Typography color="textSecondary">
-              CREATE YOUR ACHIEVEMENT (1 max per user for now): Post a link to an achievement you already posted on facebook
+              CREATE YOUR ACHIEVEMENT: Post a link to an achievement you already posted on facebook.
             </Typography>
             <Typography color="textSecondary">
               UPDATE YOUR ACHIEVEMENT: Your achievement evolved? No problem! Available only if you have an achievement created
@@ -109,8 +109,14 @@ class Help extends Component {
             <Typography variant="body2">
               Create, Update and Confirm are free
             </Typography>
-            <Typography paragraph variant="body2">
+            <Typography variant="body2">
               Support, Deposit and Withdraw need QTUM token(s). For this, you must send some to your hot wallet
+            </Typography>
+            <Typography paragraph variant="body2">
+              For non-free action, you will have to pay a little extra fee you cannot configure (for now)
+            </Typography>
+            <Typography paragraph variant="title">
+              #diademnetwork
             </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel

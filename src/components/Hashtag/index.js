@@ -65,7 +65,7 @@ class Hashtag extends Component {
               Help us spreading the love!
             </Typography>
             <Typography paragraph variant="body1">
-              Use this hashtag in your achievements posts:
+              Use this hashtag in your achievements posts
             </Typography>
             <Typography paragraph variant="title">
               #diademnetwork

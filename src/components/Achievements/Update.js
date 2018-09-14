@@ -105,8 +105,11 @@ class UpdateAchievement extends Component {
       >
         <DialogTitle id="form-dialog-title">Update your achievement</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText paragraph>
             To update your achievement, please provide the previous link of your Facebook achievement post and provide a title for it
+          </DialogContentText>
+          <DialogContentText>
+             Please be aware that after updating your achievement, people will not anymore be able to confirm/support/deposit the previous one.
           </DialogContentText>
           <FacebookLinkHelp />
           <TextField

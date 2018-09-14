@@ -32,7 +32,7 @@ const styles = (theme) => ({
     color: theme.palette.secondary.light
   },
   link: {
-    marginTop: theme.spacing.unit
+    marginBottom: theme.spacing.unit
   },
   panelDetails: {
     flexDirection: 'column'
@@ -137,6 +137,11 @@ class Achievement extends Component {
         ]} />
         <Divider />
         <CardContent>
+          <Link
+            className={classes.link}
+            href={object}
+            text="View achievement post on Facebook"
+          />
           {confirmationsCount > 0 ? (
             <Typography variant="body1" color="textSecondary">
               It has been confirmed by {R.head(uniqConfirmatorsNames)}{confirmationsCount - 1 > 0 ? ` and ${confirmationsCount - 1} others` : ''}
@@ -156,11 +161,6 @@ class Achievement extends Component {
               {R.head(uniqDepositorsNames)}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit for a total amount of {depositsTotalAmount}
             </Typography>
           }
-          <Link
-            className={classes.link}
-            href={object}
-            text="View achievement post on Facebook"
-          />
         </CardContent>
         {actor !== userID ? (
           <CardActions
@@ -206,7 +206,7 @@ class Achievement extends Component {
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>View previous achievements of {name}</Typography>
+            <Typography color="textSecondary">View previous achievements of {name}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map((achievement, idx) => {
@@ -222,21 +222,19 @@ class Achievement extends Component {
                 >
                   {title}
                 </Typography>,
-                <Typography
-                  color="textSecondary"
-                  key={`${idx}-confirm-support-deposit`}
-                  variant="subheading"
-                >
-                  {`${confirmationsCount} confirmations, ${supportsCount} supports, ${despositsCount} deposits`}
-                </Typography>,
                 <Link
                   key={`${idx}-link`}
                   href={object}
                   text="View achievement post on Facebook"
-                  typographyProps={{
-                    paragraph: true
-                  }}
-                />
+                />,
+                <Typography
+                  color="textSecondary"
+                  key={`${idx}-confirm-support-deposit`}
+                  variant="subheading"
+                  paragraph
+                >
+                  {`${confirmationsCount} confirmations, ${supportsCount} supports, ${despositsCount} deposits`}
+                </Typography>
               ]
             })}
           </ExpansionPanelDetails>

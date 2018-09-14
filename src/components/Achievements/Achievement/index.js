@@ -66,14 +66,14 @@ class Achievement extends Component {
 
   handleSupport = (amount) => {
     const { supportAchievement } = this.props
-    const { displayedHistoryItem: { wallet, object } } = this.state
-    supportAchievement({ amount, wallet, link: object })
+    const { displayedHistoryItem: { object } } = this.state
+    supportAchievement({ amount, link: object })
   }
 
   handleDeposit = ({ amount, witnessUserID }) => {
     const { depositForAchievement } = this.props
-    const { displayedHistoryItem: { wallet, object } } = this.state
-    depositForAchievement({ amount, wallet, link: object, witnessUserID })
+    const { displayedHistoryItem: { object } } = this.state
+    depositForAchievement({ amount, link: object, witnessUserID })
   }
 
   isUserIn = verb => {

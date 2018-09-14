@@ -9,9 +9,16 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import WithdrawIcon from '@material-ui/icons/AccountBalanceWalletOutlined'
+import { withStyles } from '@material-ui/core/styles'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
+
+const styles = (theme) => ({
+  icon: {
+    marginRight: theme.spacing.unit
+  }
+})
 
 class Withdraw extends Component {
   state = {
@@ -54,7 +61,7 @@ class Withdraw extends Component {
   })
 
   render () {
-    const { balance, className, fullScreen } = this.props
+    const { balance, className, classes, fullScreen } = this.props
     const { address, isAddressValid, amount, isAmountValid, modalOpen } = this.state
     const isFormValid = isAmountValid && isAddressValid
     return [
@@ -66,7 +73,7 @@ class Withdraw extends Component {
         onClick={this.handleClickOpen}
         variant="extendedFab"
       >
-        <WithdrawIcon /> Withdraw
+        <WithdrawIcon className={classes.icon} /> Withdraw
       </Button>,
       <Dialog
         fullScreen={fullScreen}
@@ -125,9 +132,10 @@ class Withdraw extends Component {
 
 Withdraw.propTypes = {
   balance: T.number,
+  classes: T.object,
   className: T.string,
   fullScreen: T.bool,
   onSubmit: T.func
 }
 
-export default withMobileDialog()(Withdraw)
+export default withMobileDialog()(withStyles(styles)(Withdraw))

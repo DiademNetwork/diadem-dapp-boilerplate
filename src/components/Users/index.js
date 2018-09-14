@@ -7,28 +7,27 @@ import CardContent from '@material-ui/core/CardContent'
 import List from '@material-ui/core/List'
 import Item from './Item'
 
-class Timeline extends Component {
+class Users extends Component {
   componentDidMount () {
-    // remove new items badge from tabs when user navigates to transactions
-    this.props.updateTransactionsMeta({ notificationCount: 0 })
+    this.props.fetchUsers()
   }
 
   render () {
     const {
       className,
       isFacebookAuthenticated,
-      transactions
+      users
     } = this.props
     let renderedComponent
     if (!isFacebookAuthenticated) {
-      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see the timeline</Typography>
-    } else if (transactions.length === 0) {
-      renderedComponent = <Typography color="textPrimary">No item in timeline</Typography>
+      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see the users</Typography>
+    } else if (users.length === 0) {
+      renderedComponent = <Typography color="textPrimary">No user registered</Typography>
     } else {
       renderedComponent = (
         <List>
-          {transactions.map((transaction, idx) => (
-            <Item key={idx} transaction={transaction} />
+          {users.map((user, idx) => (
+            <Item key={idx} user={user} />
           ))}
         </List>
       )
@@ -36,7 +35,7 @@ class Timeline extends Component {
     return (
       <Card className={className}>
         <CardContent>
-          <Typography paragraph color="textSecondary">Do not miss anything! Diadem network last activities:</Typography>
+          <Typography paragraph color="textSecondary">All registered Diadem Network users</Typography>
           {renderedComponent}
         </CardContent>
       </Card>
@@ -44,11 +43,11 @@ class Timeline extends Component {
   }
 }
 
-Timeline.propTypes = {
+Users.propTypes = {
   className: T.string,
-  transactions: T.array,
+  users: T.array,
   isFacebookAuthenticated: T.bool.isRequired,
-  updateTransactionsMeta: T.func
+  fetchUsers: T.func
 }
 
-export default withContainer(Timeline)
+export default withContainer(Users)

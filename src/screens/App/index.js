@@ -5,6 +5,7 @@ import StreamFetcher from '../../components/StreamFetcher'
 import Tabs from '../../components/Tabs'
 import Achievements from '../../components/Achievements'
 import Timeline from '../../components/Timeline'
+import Users from '../../components/Users'
 import Notifications from '../../components/Notifications'
 import Help from '../../components/Help'
 import { PropTypes as T } from 'prop-types'
@@ -42,6 +43,10 @@ class App extends Component {
             badgeContent: transactionsNotificationCount,
             label: 'Timeline',
             component: <Timeline className={classes.sm9} />
+          },
+          {
+            label: 'Users',
+            component: <Users className={classes.sm9} />
           }
         ]} />
         <Notifications />

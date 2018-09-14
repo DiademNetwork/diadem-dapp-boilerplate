@@ -45,7 +45,7 @@ class AppTabs extends Component {
       >
         {R.map(({ badgeContent, label }) => (
           <Tab key={label} label={
-            badgeContent > 0 ? (
+            !!badgeContent && badgeContent > 0 ? (
               <Badge className={classes.tabBadge} color="secondary" badgeContent={badgeContent}>
                 {label}
               </Badge>

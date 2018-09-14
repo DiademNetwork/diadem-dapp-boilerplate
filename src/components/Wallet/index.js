@@ -90,7 +90,6 @@ class Wallet extends Component {
     } else {
       switch (walletStatus) {
         case 'none':
-
           renderedComponent = isRegistrationPending ? (
             <Typography color="textSecondary">Please wait, your registration is still waiting to be confirmed on blockchain, it can take some minutes...</Typography>
           ) : (

@@ -85,6 +85,7 @@ export const checkUserRegistration = () => async (dispatch, getState) => {
         isUserRegistered: true
       }))
       dispatch(notifications.userRegistrationSuccess)
+      await loadWallet(userID)(dispatch)
     }
   } catch (error) {
     dispatch(notifications.checkUserError)

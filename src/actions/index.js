@@ -173,11 +173,18 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
     const { data: { address, encodedData } } = await api.encodeSupport({ link })
-    const { wallet } = getState()
+    const { facebook, wallet } = getState()
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8
     })
-    await api.supportAchievement({ rawTx })
+    const { accessToken, userID } = facebook
+    await api.supportAchievement({
+      address,
+      link,
+      rawTx,
+      token: accessToken,
+      user: userID
+    })
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
@@ -187,15 +194,23 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
   }
 }
 
-export const depositForAchievement = ({ amount, wallet: targetAddress, link, witnessUserID }) => async (dispatch, getState) => {
+export const depositForAchievement = ({ amount, link, witnessUserID }) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
     const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: witnessUserID })
-    const { wallet } = getState()
+    const { facebook, wallet } = getState()
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8
     })
-    await api.supportAchievement({ rawTx })
+    const { accessToken, userID } = facebook
+    await api.depositForAchievement({
+      address,
+      link,
+      rawTx,
+      token: accessToken,
+      user: userID,
+      witness: witnessUserID
+    })
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
     dispatch(notifications.depositAchievementSuccess)
   } catch (error) {

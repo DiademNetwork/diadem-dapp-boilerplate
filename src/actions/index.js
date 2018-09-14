@@ -174,7 +174,7 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
     const { data: { address, encodedData } } = await api.encodeSupport({ link })
     const { wallet } = getState()
-    const rawTx = await wallet.walletMeta.wallet.generateContractSendTx(address, encodedData, {
+    const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8
     })
     await api.supportAchievement({ rawTx })
@@ -192,7 +192,7 @@ export const depositForAchievement = ({ amount, wallet: targetAddress, link, wit
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
     const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: witnessUserID })
     const { wallet } = getState()
-    const rawTx = await wallet.walletMeta.wallet.generateContractSendTx(address, encodedData, {
+    const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8
     })
     await api.supportAchievement({ rawTx })

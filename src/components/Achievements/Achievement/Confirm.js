@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import Link from '../../Link'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import Hidden from '@material-ui/core/Hidden'
 import DoneIcon from '@material-ui/icons/Done'
 
 class AchievementConfirm extends Component {
@@ -51,7 +52,9 @@ class AchievementConfirm extends Component {
         onClick={this.handleClickOpen}
         variant="extendedFab"
       >
-        <DoneIcon />
+        <Hidden smDown>
+          <DoneIcon />
+        </Hidden>
         {actionAlreadyDone ? 'You confirmed already' : 'Confirm'}
       </Button>,
       <Dialog

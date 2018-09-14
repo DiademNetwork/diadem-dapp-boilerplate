@@ -12,6 +12,7 @@ import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import withContainer from './container'
 import MenuItem from '@material-ui/core/MenuItem'
+import Hidden from '@material-ui/core/Hidden'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import { withStyles } from '@material-ui/core/styles'
 import Link from '../../../Link'
@@ -92,7 +93,9 @@ class AchievementDeposit extends Component {
         color="secondary"
         variant="extendedFab"
       >
-        <VpnKeyOutlinedIcon className={classes.icon} />
+        <Hidden smDown>
+          <VpnKeyOutlinedIcon className={classes.icon} />
+        </Hidden>
         Deposit
       </Button>,
       <Dialog

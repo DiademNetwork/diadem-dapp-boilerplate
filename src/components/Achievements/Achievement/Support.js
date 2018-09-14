@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import MoneyIcon from '@material-ui/icons/AttachMoney'
+import Hidden from '@material-ui/core/Hidden'
 import Link from '../../Link'
 
 const AMOUNT_INITIAL_VALUE = ''
@@ -66,7 +67,9 @@ class AchievementSupport extends Component {
         onClick={this.handleClickOpen}
         variant="extendedFab"
       >
-        <MoneyIcon />
+        <Hidden smDown>
+          <MoneyIcon />
+        </Hidden>
         Support
       </Button>,
       <Dialog

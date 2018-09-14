@@ -39,10 +39,22 @@ class Wallet extends Component {
     } = this.props
     // not the first load AND unconfirmedBalance changed
     if (unconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
-      const notificationToShow = newUnconfirmedBalance === 0
-        ? notifications.newAvailableTokens
-        : notifications.incomingTokens
-      displayNotification(notificationToShow)
+      switch (true) {
+        case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+          displayNotification(notifications.sentTokens)
+          break
+        case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+          displayNotification(notifications.newAvailableTokens)
+          break
+        case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+          displayNotification(notifications.incomingTokens)
+          break
+        case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+          displayNotification(notifications.sendingTokens)
+          break
+        default:
+          break
+      }
     }
     if (newIsRegistrationPending !== isRegistrationPending) {
       if (newIsRegistrationPending) { // changed to pending

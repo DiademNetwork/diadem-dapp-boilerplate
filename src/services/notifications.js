@@ -40,5 +40,7 @@ export default {
   withdrawTokensSuccess: createSuccessNotification('Tokens withdrawal successful'),
   withdrawTokensError: createErrorNotification('Impossible to withdraw tokens'),
   checkUserError: createErrorNotification('Impossible to check your user existence'),
-  fetchUsersError: createErrorNotification('Impossible to fetch users list')
+  fetchUsersError: createErrorNotification('Impossible to fetch users list'),
+  sendingTokens: createSuccessNotification('Sending tokens. Please wait'),
+  sentTokens: createSuccessNotification('Tokens sent')
 }

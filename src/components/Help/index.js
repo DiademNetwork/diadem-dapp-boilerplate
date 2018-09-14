@@ -12,8 +12,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { withStyles } from '@material-ui/core/styles'
 import withContainer from './container'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import SendIcon from '@material-ui/icons/SendOutlined'
 
 const styles = (theme) => ({
+  icon: {
+    marginRight: theme.spacing.unit
+  },
   link: {
     color: theme.palette.primary.light,
     textDecoration: 'none'
@@ -124,11 +128,12 @@ class Help extends Component {
         </DialogContent>
         <DialogActions>
           <Button
+            aria-label="Go to application"
             color="secondary"
             onClick={this.handleClose}
-            variant="contained"
+            variant="extendedFab"
           >
-            {isHelpDisplayed ? 'Go back to Diadem Network' : ' Get me to Diadem Network'}
+            <SendIcon className={classes.icon} /> {isHelpDisplayed ? 'Go back to Diadem Network' : ' Get me to Diadem Network'}
           </Button>
         </DialogActions>
       </Dialog>

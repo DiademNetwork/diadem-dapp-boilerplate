@@ -26,7 +26,7 @@ const TimelineItem = ({ classes, transaction }) => {
   let achievementLink
   let verbDisplay
   const txComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view qtum transaction on blockchain explorer</a>
-  const formattedTime = moment(time).fromNow()
+  const formattedTime = moment.utc(time).fromNow()
   const actorDisplay = name || actor
   switch (verb) {
     case 'create':

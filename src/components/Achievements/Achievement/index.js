@@ -105,7 +105,7 @@ class Achievement extends Component {
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
-          <Typography key="achievement-actor" variant="subheading" color="textSecondary">{name}:</Typography>,
+          <Typography key="achievement-actor" variant="subheading" color="textSecondary">{name} achieved:</Typography>,
           <Typography key="achievement-title" variant="headline">{title}</Typography>
         ]} />
         <Divider />

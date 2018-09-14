@@ -73,10 +73,10 @@ class Help extends Component {
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
             <Typography paragraph color="textPrimary">
-              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect users achieving great things with people wanting to support them<br />
+              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect users achieving great things with people willing to support them<br />
             </Typography>
             <Typography color="textSecondary">
-              CREATE YOUR ACHIEVEMENT (1max per user): Post a link to an achievement you already posted on facebook
+              CREATE YOUR ACHIEVEMENT (1 max per user for now): Post a link to an achievement you already posted on facebook
             </Typography>
             <Typography color="textSecondary">
               UPDATE YOUR ACHIEVEMENT: Your achievement evolved? No problem! Available only if you have an achievement created
@@ -85,10 +85,10 @@ class Help extends Component {
               CONFIRM achievement(s): Confirm other user(s) achievement(s)
             </Typography>
             <Typography color="textSecondary">
-              SUPPORT achievement(s): Send QTUM token to achievers to show them some love
+              SUPPORT achievement(s): Send QTUM token(s) to achievers to show them some love
             </Typography>
             <Typography color="textSecondary">
-              DEPOSIT for achievement(s): Deposit QTUM tokens which will not be sent until the facebook user YOU chose confirms the achievement
+              DEPOSIT for achievement(s): Deposit QTUM token(s) which will not be sent until the facebook user YOU chose confirms the achievement
             </Typography>
             <Typography paragraph color="textSecondary">
               WITHDRAW your tokens: QTUM Tokens you own in your hot wallet can be withdrawn any time you want
@@ -100,13 +100,13 @@ class Help extends Component {
               A hot wallet is used to manage QTUM transactions
             </Typography>
             <Typography variant="body2">
-              You need to send token to Diadem Hot wallet to be able to Support and Deposit. <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a>
+              You need to send QTUM tokens to Diadem Hot wallet to be able to Support and Deposit. <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a>
             </Typography>
             <Typography variant="body2">
               Create, Update and Confirm are free
             </Typography>
             <Typography paragraph variant="body2">
-              Support, Deposit and Withdraw need QTUM tokens. For this, you must send some to your hot wallet
+              Support, Deposit and Withdraw need QTUM token(s). For this, you must send some to your hot wallet
             </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel

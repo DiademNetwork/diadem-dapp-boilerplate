@@ -28,6 +28,10 @@ class Wallet extends Component {
     this.clearCheckRegistrationInterval()
   }
 
+  componentDidMount () {
+    this.props.displayNotification(notifications.sentTokens)
+  }
+
   componentWillReceiveProps ({
     unconfirmedBalance: newUnconfirmedBalance,
     isRegistrationPending: newIsRegistrationPending

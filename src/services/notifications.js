@@ -5,7 +5,8 @@ const getNotification = type => ({ title, message }) => Notifications[type]({
   position: 'bl',
   title,
   message: message || '',
-  uid: uuidv1()
+  uid: uuidv1(),
+  autoDismiss: 4355355
 })
 
 const createSuccessNotification = title => getNotification('success')({ title })

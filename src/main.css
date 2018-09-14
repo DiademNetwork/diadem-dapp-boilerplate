@@ -9,3 +9,11 @@ body {
   min-height: 100vh;
 }
 
+/* TODO: try to find better way for mobile notifications styles */
+@media only screen and (max-width: 600px) {
+  .notifications-wrapper,
+  .notifications-wrapper .notifications-bl,
+  .notifications-wrapper .notification {
+    width: 100% !important;
+  }
+}

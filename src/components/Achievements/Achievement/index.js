@@ -164,7 +164,7 @@ class Achievement extends Component {
               className={classes.actionsButtons}
               link={object}
               name={name}
-              onSupport={this.handleDeposit}
+              onDeposit={this.handleDeposit}
               walletBalance={walletBalance}
               title={title}
             />

@@ -15,7 +15,7 @@ import MenuItem from '@material-ui/core/MenuItem'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import { withStyles } from '@material-ui/core/styles'
 
-const AMOUNT_INITIAL_VALUE = 0
+const AMOUNT_INITIAL_VALUE = ''
 const WITNESS_USER_ID_INITIAL_VALUE = ''
 
 const styles = (theme) => ({

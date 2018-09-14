@@ -11,7 +11,7 @@ import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import MoneyIcon from '@material-ui/icons/AttachMoney'
 
-const AMOUNT_INITIAL_VALUE = 0
+const AMOUNT_INITIAL_VALUE = ''
 
 class AchievementSupport extends Component {
   state = {

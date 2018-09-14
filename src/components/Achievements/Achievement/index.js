@@ -89,9 +89,9 @@ class Achievement extends Component {
     )(transactions)
   }
 
-  getActionsCounts = verb => R.compose(
-    R.length,
-    R.propOr([], verb)
+  getTotalAmount = R.compose(
+
+    R.reduce((acc, curr) => R.add(acc, R.prop('amount')(curr)), 0)
   )
 
   render () {
@@ -103,9 +103,14 @@ class Achievement extends Component {
     } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
     const { actor, confirm, support, deposit, name, title, object } = displayedHistoryItem
-    const confirmationsCount = this.getActionsCounts('confirm')(displayedHistoryItem)
-    const supportsCount = this.getActionsCounts('support')(displayedHistoryItem)
-    const despositsCount = this.getActionsCounts('deposit')(displayedHistoryItem)
+    const confirms = R.propOr([], 'confirm')(displayedHistoryItem)
+    const supports = R.propOr([], 'support')(displayedHistoryItem)
+    const deposits = R.propOr([], 'deposit')(displayedHistoryItem)
+    const confirmationsCount = R.length(confirms)
+    const supportsCount = R.length(supports)
+    const despositsCount = R.length(deposits)
+    const depositsTotalAmount = this.getTotalAmount(deposits) / 1e8
+    const supportTotalAmount = this.getTotalAmount(supports) / 1e8
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
@@ -125,12 +130,12 @@ class Achievement extends Component {
           )}
           {supportsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              It has been supported by {support[0].name}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''}
+              It has been supported by {support[0].name}{supportsCount - 1 > 0 ? ` and ${supportsCount - 1} others` : ''} for a total amount of {supportTotalAmount}
             </Typography>
           }
           {despositsCount > 0 &&
             <Typography variant="body1" color="textSecondary">
-              {deposit[0].name}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit
+              {deposit[0].name}{despositsCount - 1 > 0 ? ` and ${despositsCount - 1} others have` : ' has'} made a deposit for a total amount of {depositsTotalAmount}
             </Typography>
           }
           <Link

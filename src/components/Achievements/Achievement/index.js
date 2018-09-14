@@ -153,6 +153,7 @@ class Achievement extends Component {
               actionAlreadyDone={this.isUserIn('support')}
               className={classes.actionsButtons}
               confirmationsCount={confirmationsCount}
+              link={object}
               name={name}
               onSupport={this.handleSupport}
               walletBalance={walletBalance}
@@ -161,6 +162,7 @@ class Achievement extends Component {
             <Deposit
               actionAlreadyDone={this.isUserIn('deposit')}
               className={classes.actionsButtons}
+              link={object}
               name={name}
               onSupport={this.handleDeposit}
               walletBalance={walletBalance}

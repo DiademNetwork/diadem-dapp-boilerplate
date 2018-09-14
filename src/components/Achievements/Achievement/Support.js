@@ -10,6 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Divider from '@material-ui/core/Divider'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import MoneyIcon from '@material-ui/icons/AttachMoney'
+import Link from '../../Link'
 
 const AMOUNT_INITIAL_VALUE = ''
 
@@ -49,6 +50,7 @@ class AchievementSupport extends Component {
       className,
       confirmationsCount,
       fullScreen,
+      link,
       name,
       title,
       walletBalance
@@ -85,8 +87,14 @@ class AchievementSupport extends Component {
             )}<br /><br />
             <Divider />
             <br />
+            <Link
+              text="View achievement Facebook post again"
+              href={link}
+              typographyProps={{ paragraph: true }}
+            />
             Please enter an amount (max {walletBalance} QTUM minus fees of around 0.01 QTUM) you would like to send to support {name}<br />
-            for his achievement: {title}<br /><br />
+            for his achievement:<br /><br />
+            {title}<br /><br />
           </DialogContentText>
           <TextField
             autoFocus
@@ -123,6 +131,7 @@ AchievementSupport.propTypes = {
   className: T.string,
   confirmationsCount: T.number,
   fullScreen: T.bool,
+  link: T.string,
   name: T.string,
   onSupport: T.func,
   title: T.string,

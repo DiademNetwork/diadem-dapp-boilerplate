@@ -14,6 +14,7 @@ import withContainer from './container'
 import MenuItem from '@material-ui/core/MenuItem'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import { withStyles } from '@material-ui/core/styles'
+import Link from '../../../Link'
 
 const AMOUNT_INITIAL_VALUE = ''
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -74,6 +75,7 @@ class AchievementDeposit extends Component {
       classes,
       confirmationsCount,
       fullScreen,
+      link,
       name,
       title,
       users,
@@ -104,15 +106,20 @@ class AchievementDeposit extends Component {
         <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {confirmationsCount === 0 ? (
+            {!confirmationsCount || confirmationsCount === 0 ? (
               `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
             ) : (
               `This achievement has been confirmed ${confirmationsCount} times`
             )}<br /><br />
-            <Divider />
-            <br />
-            Please enter an amount (max ${walletBalance} QTUM minus fees of around 0.01 QTUM) you would like to send to support {name}<br />
-            for his achievement: {title}<br /><br />
+            <Divider /><br />
+            <Link
+              text="View achievement Facebook post again"
+              href={link}
+              typographyProps={{ paragraph: true }}
+            />
+            Please enter an amount (max {walletBalance} QTUM minus fees of around 0.01 QTUM) you would like to send to support {name}<br />
+            for his achievement:<br /><br />
+            {title}<br /><br />
           </DialogContentText>
           <TextField
             autoFocus
@@ -166,6 +173,7 @@ AchievementDeposit.propTypes = {
   confirmationsCount: T.number,
   fetchUsers: T.func,
   fullScreen: T.bool,
+  link: T.string,
   name: T.string,
   onDeposit: T.func,
   title: T.string,

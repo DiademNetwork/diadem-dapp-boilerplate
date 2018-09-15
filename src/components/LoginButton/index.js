@@ -57,7 +57,7 @@ class LoginButton extends Component {
           <MenuItem
             onClick={renderProps.onClick}
           >
-            Log with facebook
+            Login with facebook
           </MenuItem>
         ) : (
           <Button
@@ -65,7 +65,7 @@ class LoginButton extends Component {
             onClick={renderProps.onClick}
             variant="contained"
           >
-            Log with facebook<PowerSettingsNewIcon className={classes.icon} />
+            Login with facebook<PowerSettingsNewIcon className={classes.icon} />
           </Button>
         )}
       />

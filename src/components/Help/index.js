@@ -119,6 +119,9 @@ class Help extends Component {
             <Typography paragraph variant="title">
               #diademnetwork
             </Typography>
+            <Typography>
+              If you need more help, have questions, improvements ideas, or just want to say hello to the team behind Diadem Network, don't hesitate contacting us at: <a className={classes.link} target="_blank" href="mailto:team@diadem.network">team@diadem.network</a>
+            </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel
               control={

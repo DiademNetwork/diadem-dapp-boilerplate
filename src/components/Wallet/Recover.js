@@ -110,8 +110,15 @@ class Recover extends Component {
             <DialogContentText
               key="failure-message-title"
               paragraph
+              variant="title"
             >
-              Wallet found is not the one you registered with initially! Please provide info you received on very first visit.
+              Wallet found is not the one you registered with initially!
+            </DialogContentText>,
+            <DialogContentText
+              key="failure-message-2"
+              paragraph
+            >
+              Please provide info you received on very first visit.
             </DialogContentText>,
             <DialogContentText
               color="textSecondary"
@@ -119,7 +126,7 @@ class Recover extends Component {
               paragraph
               variant="caption"
             >
-              You lost your initial privateKey/mnemonic? Sorry to tell you that if you had funds in it their are lost. Furthermore, you will have to wait for Diadem Network team to developp the possibility to force new registration with another wallet.
+              You lost your initial privateKey/mnemonic? Sorry to tell you that if you had funds in it their are lost forever. Furthermore, you will have to wait for Diadem Network team to developp the possibility to force new registration with another wallet.
             </DialogContentText>
           ]}
           <DialogContentText>

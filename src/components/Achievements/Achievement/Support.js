@@ -22,7 +22,7 @@ class AchievementSupport extends Component {
     areFeesValid: true,
     fees: FeesSelector.INITIAL_FEES,
     isAmountValid: false,
-    modalOpen: true
+    modalOpen: false
   }
 
   handleClickOpen = () => this.setState({ modalOpen: true })

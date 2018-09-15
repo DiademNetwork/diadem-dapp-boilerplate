@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -14,6 +15,8 @@ import CopyToClipBoardButton from './CopyToClipBoardButton'
 import { withStyles } from '@material-ui/core/styles'
 import HelpTooltip from '../HelpTooltip'
 import Withdraw from './Withdraw'
+import truncateText from '../../helpers/truncate-text'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
 const AUTO_WALLET_REFRESH_INTERVAL = 5000 // in ms
 
@@ -50,6 +53,7 @@ class WalletDisplay extends Component {
       address,
       balance,
       classes,
+      fullScreen,
       isRegistrationPending,
       unconfirmedBalance,
       withdrawFromHotWallet
@@ -62,7 +66,7 @@ class WalletDisplay extends Component {
           </ListItemIcon>
           <ListItemText primary={
             <Typography>
-              {address}
+              {fullScreen ? `${truncateText(address, 25, '...')}` : `${address}`}
               <Hidden smDown>
                 <HelpTooltip text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements" />
                 <CopyToAddressToolip address={address} />
@@ -116,10 +120,14 @@ WalletDisplay.propTypes = {
   address: T.string,
   balance: T.number,
   classes: T.object,
+  fullScreen: T.bool,
   isRegistrationPending: T.bool,
   onRefreshWallet: T.func,
   unconfirmedBalance: T.number,
   withdrawFromHotWallet: T.func
 }
 
-export default withStyles(styles)(WalletDisplay)
+export default R.compose(
+  withMobileDialog(),
+  withStyles(styles)
+)(WalletDisplay)

@@ -107,11 +107,19 @@ class Recover extends Component {
         <DialogTitle id="form-dialog-title">Recover your Diadem Network wallet</DialogTitle>
         <DialogContent>
           {failed && [
-            <DialogContentText key="failure-message-title">
-              Wallet found is not the one you registered with initially! Please provide the privateKey you were told to store on very first visit.
+            <DialogContentText
+              key="failure-message-title"
+              paragraph
+            >
+              Wallet found is not the one you registered with initially! Please provide info you received on very first visit.
             </DialogContentText>,
-            <DialogContentText color="textSecondary" key="failure-message-subtitle">
-              You lost your initial privateKey/mnemonic? Sorry to tell you you will have to wait for Diadem Network team to add possibility to force new registration with another wallet.
+            <DialogContentText
+              color="textSecondary"
+              key="failure-message-subtitle"
+              paragraph
+              variant="caption"
+            >
+              You lost your initial privateKey/mnemonic? Sorry to tell you that if you had funds in it their are lost. Furthermore, you will have to wait for Diadem Network team to developp the possibility to force new registration with another wallet.
             </DialogContentText>
           ]}
           <DialogContentText>

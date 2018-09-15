@@ -88,7 +88,7 @@ class Hashtag extends Component {
               #diademnetwork
             </Typography>
             <Typography paragraph>
-              <a className={classes.link} target="_blank" href="mailto:team@diadem.network">team@diadem.network</a>
+              <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
             </Typography>
             <Typography paragraph>
               Together, we can build a better world!

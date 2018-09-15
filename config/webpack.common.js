@@ -19,10 +19,17 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-        use: {
-          loader: 'url-loader'
-        }
+        test: /\.(png|woff|woff2|eot|ttf|svg|gif)$/,
+        use: [
+          'file-loader',
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+              disable: true
+            }
+          }
+        ]
       }
     ]
   },

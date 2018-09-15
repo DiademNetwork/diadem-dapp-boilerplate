@@ -37,5 +37,9 @@ A client for diadem-network project for Qtum Hackathon.
 
 - Handling technical debt which resulted from fast coding for Hackathon :
   - Separate components into smaller components
-  - User redux-sagas instead of redux-thunk
+  - User redux-sagas instead of redux-thunk (and divide ugly actions/index.js in better/smaller chunks)
   - Cover app with unit/integration/acceptance tests
+  - Separate repetitive UI component into their own component + make use of storybook
+  - Add Typescript ? => TBD
+  - CI Integration
+  

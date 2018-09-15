@@ -32,9 +32,10 @@ export const getSortedTransactions = createSelector([getAllTransactionsData], so
 export const getAchievementCreateStatus = R.path(['achievements', 'createStatus'])
 export const getAllAchievementsData = R.path(['achievements', 'data'])
 export const getAllAchievementsMeta = R.path(['achievements', 'meta'])
+export const getAllUnbannedAchievementsData = createSelector([getAllAchievementsData], R.filter(R.complement(R.propEq)('ban', true)))
 export const getAchievementsMeta = name => createSelector([getAllAchievementsMeta], R.prop(name))
-export const getAchievementsCount = createSelector([getAllAchievementsData], R.length)
-export const getGroupedByWalletAchievements = createSelector([getAllAchievementsData], R.groupBy(R.prop('wallet')))
+export const getAchievementsCount = createSelector([getAllUnbannedAchievementsData], R.length)
+export const getGroupedByWalletAchievements = createSelector([getAllUnbannedAchievementsData], R.groupBy(R.prop('wallet')))
 export const getAllAchievementsWallets = createSelector([getGroupedByWalletAchievements], R.keys)
 export const getProcessedAchievements = createSelector([getGroupedByWalletAchievements], R.mapObjIndexed((groupedAchievement) => {
   let result = R.compose(
@@ -65,7 +66,7 @@ export const getAllOtherUsers = createSelector([
   getUsers,
   getFacebookUserID
 ], (userID, users) => R.filter(
-  R.complement(R.propEq('userAccount', userID)),
+  R.complement(R.propEq)('userAccount', userID),
   users
 ))
 

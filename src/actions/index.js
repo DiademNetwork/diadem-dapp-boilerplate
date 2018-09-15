@@ -24,6 +24,7 @@ const {
 } = types
 
 const network = networks[process.env.QTUM_NETWORK]
+const DEFAULT_FEE = Math.ceil(0.004 * 1e8 / 1024)
 
 // Facebook
 export const updateFacebook = (data) => ({ type: FACEBOOK_UPDATE_DATA, data })
@@ -185,7 +186,7 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
     const { facebook, wallet } = getState()
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8,
-      feeRate: Math.ceil(0.004 * 1e8 / 100)
+      feeRate: DEFAULT_FEE
     })
     const { accessToken, userID } = facebook.data
     await api.supportAchievement({
@@ -210,7 +211,7 @@ export const depositForAchievement = ({ amount, link, witnessUserID }) => async 
     const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: wallet.data.addrStr })
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8,
-      feeRate: Math.ceil(0.004 * 1e8 / 100)
+      feeRate: DEFAULT_FEE
     })
     const { accessToken, userID } = facebook.data
     await api.depositForAchievement({
@@ -287,7 +288,9 @@ export const displayNotification = (notification) => (dispatch) => {
 export const withdrawFromHotWallet = ({address, amount}) => async (dispatch, getState) => {
   try {
     const { wallet: { meta: { wallet } } } = getState()
-    await wallet.send(address, amount * 1e8, { feeRate: Math.ceil(0.004 * 1e8 / 100) })
+    await wallet.send(address, amount * 1e8, {
+      feeRate: DEFAULT_FEE
+    })
     dispatch(notifications.withdrawTokensSuccess)
   } catch (error) {
     dispatch(notifications.withdrawTokensError)

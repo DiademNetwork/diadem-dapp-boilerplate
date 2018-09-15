@@ -12,14 +12,17 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import MoneyIcon from '@material-ui/icons/AttachMoney'
 import Hidden from '@material-ui/core/Hidden'
 import Link from '../../Link'
+import FeesSelector from '../../FeesSelector'
 
 const AMOUNT_INITIAL_VALUE = ''
 
 class AchievementSupport extends Component {
   state = {
     amount: AMOUNT_INITIAL_VALUE,
+    areFeesValid: true,
+    fees: FeesSelector.INITIAL_FEES,
     isAmountValid: false,
-    modalOpen: false
+    modalOpen: true
   }
 
   handleClickOpen = () => this.setState({ modalOpen: true })
@@ -32,16 +35,26 @@ class AchievementSupport extends Component {
     this.setState({ amount, isAmountValid })
   }
 
+  handleFeesChange = (fees) => {
+    const areFeesValid = FeesSelector.areFeesValid(fees)
+    this.setState({
+      fees,
+      areFeesValid
+    })
+  }
+
   handleSubmit = () => {
     const { onSupport } = this.props
-    const { amount } = this.state
-    onSupport(amount)
+    const { amount, fees } = this.state
+    onSupport({ amount, fees: FeesSelector.convertFees(fees) })
     this.resetForm()
     this.handleClose()
   }
 
   resetForm = () => this.setState({
     amount: AMOUNT_INITIAL_VALUE,
+    areFeesValid: true,
+    fees: FeesSelector.INITIAL_FEES,
     isAmountValid: false
   })
 
@@ -56,7 +69,13 @@ class AchievementSupport extends Component {
       walletBalance
     } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
-    const { amount, isAmountValid, modalOpen } = this.state
+    const {
+      amount,
+      areFeesValid,
+      fees,
+      isAmountValid,
+      modalOpen
+    } = this.state
     return [
       <Button
         aria-label="Support"
@@ -81,33 +100,41 @@ class AchievementSupport extends Component {
       >
         <DialogTitle id="form-dialog-title">Support</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText paragraph>
             {confirmationsCount === 0 ? (
               `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
             ) : (
               `This achievement has been confirmed ${confirmationsCount} times`
-            )}<br /><br />
-            <Divider />
-            <br />
+            )}
+          </DialogContentText>
+          <Divider style={{ marginBottom: '16px' }} />
+          <DialogContentText paragraph>
             <Link
               text="View achievement Facebook post again"
               href={link}
               typographyProps={{ paragraph: true }}
             />
-            Please enter an amount (max {walletBalance} QTUM minus fees of around 0.1 QTUM) you would like to send to support {name}<br />
-            for his achievement:<br /><br />
-            {title}<br /><br />
+            Please enter an amount you would like to send to support {name} for his achievement:
           </DialogContentText>
+          <DialogContentText paragraph color="textPrimary">
+            {title}
+          </DialogContentText>
+          <Divider style={{ marginBottom: '16px' }} />
           <TextField
             autoFocus={!fullScreen}
             error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
             margin="normal"
             id='amount'
-            label="Amount (in QTUM)"
+            label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
             value={amount}
             onChange={this.handleChange}
             type='number'
             fullWidth
+          />
+          <FeesSelector
+            error={!areFeesValid}
+            onChange={this.handleFeesChange}
+            value={fees}
           />
         </DialogContent>
         <DialogActions>

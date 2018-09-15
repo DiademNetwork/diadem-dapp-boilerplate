@@ -74,16 +74,16 @@ class Achievement extends Component {
     })
   }
 
-  handleSupport = (amount) => {
+  handleSupport = (data) => {
     const { supportAchievement } = this.props
     const { displayedHistoryItem: { object } } = this.state
-    supportAchievement({ amount, link: object })
+    supportAchievement({ ...data, link: object })
   }
 
-  handleDeposit = ({ amount, witnessUserID }) => {
+  handleDeposit = (data) => {
     const { depositForAchievement } = this.props
     const { displayedHistoryItem: { object } } = this.state
-    depositForAchievement({ amount, link: object, witnessUserID })
+    depositForAchievement({ ...data, link: object })
   }
 
   hasUserAlreadyConfirmed = () => {

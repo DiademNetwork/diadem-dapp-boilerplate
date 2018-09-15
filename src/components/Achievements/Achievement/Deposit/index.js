@@ -16,6 +16,7 @@ import Hidden from '@material-ui/core/Hidden'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import { withStyles } from '@material-ui/core/styles'
 import Link from '../../../Link'
+import FeesSelector from '../../../FeesSelector'
 
 const AMOUNT_INITIAL_VALUE = ''
 const WITNESS_USER_ID_INITIAL_VALUE = ''
@@ -29,6 +30,8 @@ const styles = (theme) => ({
 class AchievementDeposit extends Component {
   state = {
     amount: AMOUNT_INITIAL_VALUE,
+    areFeesValid: true,
+    fees: FeesSelector.INITIAL_FEES,
     witnessUserID: WITNESS_USER_ID_INITIAL_VALUE,
     isWitnessUserIDValid: false,
     isAmountValid: false,
@@ -54,19 +57,35 @@ class AchievementDeposit extends Component {
     }
   }
 
+  handleFeesChange = (fees) => {
+    const areFeesValid = FeesSelector.areFeesValid(fees)
+    this.setState({
+      fees,
+      areFeesValid
+    })
+  }
+
   handleSubmit = () => {
-    const { onDeposit } = this.props
-    const { amount, witnessUserID } = this.state
-    onDeposit({ amount, witnessUserID })
+    const { onDeposit, users } = this.props
+    const { amount, fees, witnessUserID } = this.state
+    const witnessAddress = this.findWitnessAddress(witnessUserID)(users)
+    onDeposit({ amount, fees: FeesSelector.convertFees(fees), witnessUserID, witnessAddress })
     this.resetForm()
     this.handleClose()
   }
 
+  findWitnessAddress = (userID) => R.compose(
+    R.prop('userAddress'),
+    R.find(R.propEq('userAccount', userID))
+  )
+
   resetForm = () => this.setState({
     amount: AMOUNT_INITIAL_VALUE,
-    witnessUserID: WITNESS_USER_ID_INITIAL_VALUE,
+    areFeesValid: true,
+    fees: FeesSelector.INITIAL_FEES,
+    isAmountValid: false,
     isWitnessUserIDValid: false,
-    isAmountValid: false
+    witnessUserID: WITNESS_USER_ID_INITIAL_VALUE
   })
 
   render () {
@@ -82,7 +101,15 @@ class AchievementDeposit extends Component {
       walletBalance
     } = this.props
     const isBalancePositive = walletBalance && walletBalance > 0
-    const { amount, modalOpen, witnessUserID, isWitnessUserIDValid, isAmountValid } = this.state
+    const {
+      amount,
+      areFeesValid,
+      modalOpen,
+      fees,
+      isWitnessUserIDValid,
+      isAmountValid,
+      witnessUserID
+    } = this.state
     return [
       <Button
         aria-label="Deposit"
@@ -107,28 +134,34 @@ class AchievementDeposit extends Component {
       >
         <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText paragraph>
             {!confirmationsCount || confirmationsCount === 0 ? (
               `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
             ) : (
               `This achievement has been confirmed ${confirmationsCount} times`
-            )}<br /><br />
-            <Divider /><br />
+            )}
+          </DialogContentText>
+          <Divider style={{ marginBottom: '16px' }} />
+          <DialogContentText paragraph>
             <Link
               text="View achievement Facebook post again"
               href={link}
               typographyProps={{ paragraph: true }}
             />
-            Please enter an amount (max {walletBalance} QTUM minus fees of around 0.1 QTUM) you would like to send to support {name}<br />
-            for his achievement:<br /><br />
-            {title}<br /><br />
           </DialogContentText>
+          <DialogContentText paragraph>
+            Please enter an amount you would like to send to support {name} for his achievement:
+          </DialogContentText>
+          <DialogContentText paragraph color="textPrimary">
+            {title}
+          </DialogContentText>
+          <Divider style={{ marginBottom: '16px' }} />
           <TextField
             autoFocus={!fullScreen}
             error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
             margin="normal"
             id='amount'
-            label="Amount (in QTUM)"
+            label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
             value={amount}
             onChange={this.handleChange('amount')}
             type='number'
@@ -149,6 +182,11 @@ class AchievementDeposit extends Component {
               </MenuItem>
             ))}
           </TextField>
+          <FeesSelector
+            error={!areFeesValid}
+            onChange={this.handleFeesChange}
+            value={fees}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={this.handleClose} color="primary">

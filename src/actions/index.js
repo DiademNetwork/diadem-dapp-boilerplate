@@ -24,7 +24,6 @@ const {
 } = types
 
 const network = networks[process.env.QTUM_NETWORK]
-const DEFAULT_FEE = Math.ceil(0.004 * 1e8 / 1024)
 
 // Facebook
 export const updateFacebook = (data) => ({ type: FACEBOOK_UPDATE_DATA, data })
@@ -179,14 +178,14 @@ export const confirmAchievement = ({ address, link, token, user }) => async disp
   }
 }
 
-export const supportAchievement = ({ amount, link }) => async (dispatch, getState) => {
+export const supportAchievement = ({ amount, fees, link }) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
     const { data: { address, encodedData } } = await api.encodeSupport({ link })
     const { facebook, wallet } = getState()
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8,
-      feeRate: DEFAULT_FEE
+      feeRate: fees
     })
     const { accessToken, userID } = facebook.data
     await api.supportAchievement({
@@ -204,14 +203,14 @@ export const supportAchievement = ({ amount, link }) => async (dispatch, getStat
   }
 }
 
-export const depositForAchievement = ({ amount, link, witnessUserID }) => async (dispatch, getState) => {
+export const depositForAchievement = ({ amount, fees, link, witnessUserID, witnessAddress }) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
     const { facebook, wallet } = getState()
-    const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: wallet.data.addrStr })
+    const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: witnessAddress })
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
       amount: amount * 1e8,
-      feeRate: DEFAULT_FEE
+      feeRate: fees
     })
     const { accessToken, userID } = facebook.data
     await api.depositForAchievement({
@@ -285,11 +284,11 @@ export const displayNotification = (notification) => (dispatch) => {
   dispatch(notification)
 }
 
-export const withdrawFromHotWallet = ({address, amount}) => async (dispatch, getState) => {
+export const withdrawFromHotWallet = ({address, amount, fees}) => async (dispatch, getState) => {
   try {
     const { wallet: { meta: { wallet } } } = getState()
     await wallet.send(address, amount * 1e8, {
-      feeRate: DEFAULT_FEE
+      feeRate: fees
     })
     dispatch(notifications.withdrawTokensSuccess)
   } catch (error) {

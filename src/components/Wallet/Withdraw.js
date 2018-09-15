@@ -12,6 +12,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import WithdrawIcon from '@material-ui/icons/AccountBalanceWalletOutlined'
 import { withStyles } from '@material-ui/core/styles'
 import Hidden from '@material-ui/core/Hidden'
+import FeesSelector from '../FeesSelector'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
@@ -24,8 +25,10 @@ const styles = (theme) => ({
 
 class Withdraw extends Component {
   state = {
+    areFeesValid: true,
     address: ADDRESS_INITIAL_VALUE,
     amount: AMOUNT_INITIAL_VALUE,
+    fees: FeesSelector.INITIAL_FEES,
     isAmountValid: false,
     isAddressValid: false,
     modalOpen: false
@@ -47,25 +50,43 @@ class Withdraw extends Component {
     }
   }
 
+  handleFeesChange = (fees) => {
+    const areFeesValid = FeesSelector.areFeesValid(fees)
+    this.setState({
+      fees,
+      areFeesValid
+    })
+  }
+
   handleSubmit = () => {
     const { onSubmit } = this.props
-    const { address, amount } = this.state
-    onSubmit({ address, amount })
+    const { address, amount, fees } = this.state
+    onSubmit({ address, amount, fees: FeesSelector.convertFees(fees) })
     this.resetForm()
     this.handleClose()
   }
 
   resetForm = () => this.setState({
+    areFeesValid: true,
     address: ADDRESS_INITIAL_VALUE,
     amount: AMOUNT_INITIAL_VALUE,
+    fees: FeesSelector.INITIAL_FEES,
     isAmountValid: false,
     isAddressValid: false
   })
 
   render () {
     const { balance, className, classes, fullScreen } = this.props
-    const { address, isAddressValid, amount, isAmountValid, modalOpen } = this.state
-    const isFormValid = isAmountValid && isAddressValid
+    const {
+      address,
+      amount,
+      areFeesValid,
+      fees,
+      isAddressValid,
+      isAmountValid,
+      modalOpen
+    } = this.state
+    const isFormValid = isAmountValid && isAddressValid && areFeesValid
     return [
       <Button
         aria-label="Create"
@@ -114,6 +135,11 @@ class Withdraw extends Component {
             onChange={this.handleChange('address')}
             fullWidth
             helperText='Please copy address in full. Diadem Network is not responsible if you enter wrong address'
+          />
+          <FeesSelector
+            error={!areFeesValid}
+            onChange={this.handleFeesChange}
+            value={fees}
           />
         </DialogContent>
         <DialogActions>

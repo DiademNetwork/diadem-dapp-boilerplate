@@ -16,8 +16,13 @@ import { withStyles } from '@material-ui/core/styles'
 import HashtagImg from './hashtag.png'
 import SendIcon from '@material-ui/icons/SendOutlined'
 import Hidden from '@material-ui/core/Hidden'
+import MenuItem from '@material-ui/core/MenuItem'
 
 const styles = (theme) => ({
+  hastag: {
+    width: '36px',
+    height: '36px'
+  },
   icon: {
     marginRight: theme.spacing.unit
   },
@@ -41,9 +46,16 @@ class Hashtag extends Component {
   }
 
   render () {
-    const { classes, fullScreen } = this.props
+    const { classes, fullScreen, mobile } = this.props
     const { modalOpen } = this.state
-    return [
+    const openButton = mobile ? (
+      <MenuItem
+        key='hashtag-button'
+        onClick={this.handleClickOpen}
+      >
+        #DiademNetwork
+      </MenuItem>
+    ) : (
       <IconButton
         aria-label="Hashtag"
         key='hashtag-button'
@@ -51,8 +63,11 @@ class Hashtag extends Component {
         variant="fab"
         color="primary"
       >
-        <Avatar alt="Hashtag logo" src={HashtagImg} />
-      </IconButton>,
+        <Avatar className={classes.hastag} alt="Hashtag logo" src={HashtagImg} />
+      </IconButton>
+    )
+    return [
+      openButton,
       <Dialog
         fullScreen={fullScreen}
         key='hashtag-modal'
@@ -101,7 +116,8 @@ class Hashtag extends Component {
 
 Hashtag.propTypes = {
   classes: T.object,
-  fullScreen: T.bool
+  fullScreen: T.bool,
+  mobile: T.bool
 }
 
 export default R.compose(

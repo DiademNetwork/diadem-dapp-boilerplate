@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import { fetchUsers } from '../../../../actions'
-import { getUsers } from '../../../../selectors'
+import { getAllOtherUsers } from '../../../../selectors'
 
 const mapStateToProps = (state) => ({
-  users: getUsers(state)
+  users: getAllOtherUsers(state)
 })
 
 const mapDispatchToProps = {

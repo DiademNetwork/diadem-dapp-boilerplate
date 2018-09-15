@@ -61,6 +61,13 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
 }))
 
 export const getUsers = R.path(['users', 'data'])
+export const getAllOtherUsers = createSelector([
+  getUsers,
+  getFacebookUserID
+], (userID, users) => R.filter(
+  R.complement(R.propEq('userAccount', userID)),
+  users
+))
 
 // Mix
 export const lastLinkOfUserAchievementOrNull = createSelector([

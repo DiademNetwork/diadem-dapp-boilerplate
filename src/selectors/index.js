@@ -30,7 +30,7 @@ export const getSortedTransactions = createSelector([getAllTransactionsData], so
 
 // Achievements
 export const getAchievementCreateStatus = R.path(['achievements', 'createStatus'])
-export const getAllAchievementsData = R.path(['achievements', 'data'])
+export const getAllAchievementsData = R.pathOr([], ['achievements', 'data'])
 export const getAllAchievementsMeta = R.path(['achievements', 'meta'])
 export const getAllUnbannedAchievementsData = createSelector([getAllAchievementsData], R.filter(R.complement(R.propEq)('ban', true)))
 export const getAchievementsMeta = name => createSelector([getAllAchievementsMeta], R.prop(name))
@@ -61,11 +61,11 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
   return result
 }))
 
-export const getUsers = R.path(['users', 'data'])
+export const getUsers = R.pathOr([], ['users', 'data'])
 export const getAllOtherUsers = createSelector([
   getUsers,
   getFacebookUserID
-], (userID, users) => R.filter(
+], (users, userID) => R.filter(
   R.complement(R.propEq)('userAccount', userID),
   users
 ))
@@ -86,7 +86,7 @@ export const lastLinkOfUserAchievementOrNull = createSelector([
   if (!R.contains(userWalletAddress, allAchievementsWallets)) {
     return null
   } else {
-    const userAchievementsChain = R.prop(userWalletAddress, processedAchievements)
+    const userAchievementsChain = R.propOr([], userWalletAddress, processedAchievements)
     const updates = R.filter(R.propEq('verb', 'update'), userAchievementsChain)
     const create = R.find(R.propEq('verb', 'create'), userAchievementsChain)
     return R.compose(

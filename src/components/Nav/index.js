@@ -61,6 +61,7 @@ class Nav extends Component {
           <Typography variant="title" color="inherit" className={classes.flex}>
             Diadem Network
           </Typography>
+          <LoginButton />
           <Hidden mdUp>
             <IconButton
               aria-label="Menu"
@@ -77,14 +78,13 @@ class Nav extends Component {
               open={Boolean(anchorEl)}
               onClose={this.handleClose}
             >
-              <LoginButton mobile />
+
               <MenuItem onClick={showHelp}>Show help</MenuItem>
               <MenuItem component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md">See on Github</MenuItem>
               <Hashtag mobile />
             </Menu>
           </Hidden>
           <Hidden smDown>
-            <LoginButton />
             <IconButton component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md" variant="fab" color="primary" className={classes.button}>
               <Avatar className={classes.github} alt="Github logo" src={GithubImg} />
             </IconButton>

@@ -21,4 +21,5 @@ export default function copyToClipboard (text) {
   existsTextarea.value = text
   existsTextarea.select()
   document.execCommand('copy')
+  existsTextarea.blur()
 }

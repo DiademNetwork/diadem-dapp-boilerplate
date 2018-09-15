@@ -8,7 +8,6 @@ import Avatar from '@material-ui/core/Avatar'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
 import withContainer from './container'
 import Hidden from '@material-ui/core/Hidden'
-import MenuItem from '@material-ui/core/MenuItem'
 
 const styles = (theme) => ({
   img: {
@@ -36,8 +35,7 @@ class LoginButton extends Component {
       classes,
       facebookName,
       facebookPictureUrl,
-      isFacebookAuthenticated,
-      mobile
+      isFacebookAuthenticated
     } = this.props
     if (isFacebookAuthenticated) {
       return [
@@ -53,19 +51,13 @@ class LoginButton extends Component {
         fields="name,email,picture"
         callback={this.onFacebookLogin}
         version="3.1"
-        render={renderProps => mobile ? (
-          <MenuItem
-            onClick={renderProps.onClick}
-          >
-            Login with facebook
-          </MenuItem>
-        ) : (
+        render={renderProps => (
           <Button
             color="secondary"
             onClick={renderProps.onClick}
             variant="contained"
           >
-            Login with facebook<PowerSettingsNewIcon className={classes.icon} />
+            Login<Hidden smDown> with facebook<PowerSettingsNewIcon className={classes.icon} /></Hidden>
           </Button>
         )}
       />
@@ -78,8 +70,7 @@ LoginButton.propTypes = {
   facebookName: T.string,
   facebookPictureUrl: T.string,
   handleFacebookLogin: T.func,
-  isFacebookAuthenticated: T.bool,
-  mobile: T.bool
+  isFacebookAuthenticated: T.bool
 }
 
 export default withContainer(withStyles(styles)(LoginButton))

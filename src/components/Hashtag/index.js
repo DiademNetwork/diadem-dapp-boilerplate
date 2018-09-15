@@ -87,16 +87,16 @@ class Hashtag extends Component {
             <Typography paragraph variant="title">
               #diademnetwork
             </Typography>
-            <Typography paragraph>
-              <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
-            </Typography>
-            <Typography paragraph>
-              Together, we can build a better world!
-            </Typography>
             <Link
               text="Wow, I want to see #diademnetwork community!"
               href="https://www.facebook.com/search/top/?q=%23diademnetwork"
+              typographyProps={{
+                paragraph: true
+              }}
             />
+            <Typography paragraph>
+              Together, we can build a better world! If you have improvements ideas share them with us at <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
+            </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>

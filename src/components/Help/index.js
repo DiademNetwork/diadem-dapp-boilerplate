@@ -77,49 +77,49 @@ class Help extends Component {
         </DialogTitle>
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
-            <Typography paragraph color="textPrimary" variant="headline">
+            <Typography paragraph color="textPrimary" variant="title">
               Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect people improving the world by their actions to those willing to support them for it<br />
             </Typography>
-            <Typography color="textSecondary">
-              CREATE YOUR ACHIEVEMENT: Post a link to an achievement you already posted on facebook.
+            <Typography variant="subheading">
+              CREATE YOUR ACHIEVEMENT by posting a link to a facebook post for something you achieved
+            </Typography>
+            <Typography variant="subheading">
+              UPDATE YOUR ACHIEVEMENT if it evolved. Available only if you created one
+            </Typography>
+            <Typography variant="subheading">
+              CONFIRM other users achievements
+            </Typography>
+            <Typography variant="subheading">
+              SUPPORT other users achievements with QTUM tokens to show them some love
+            </Typography>
+            <Typography variant="subheading">
+              DEPOSIT QTUM tokens for other users achievements. Your deposit will not be sent until the facebook user YOU chose confirmed the achievement
+            </Typography>
+            <Typography variant="subheading" paragraph>
+              WITHDRAW your QTUM tokens you received from others or sent yourselves, any time you want.
             </Typography>
             <Typography color="textSecondary">
-              UPDATE YOUR ACHIEVEMENT: Your achievement evolved? No problem! Available only if you have an achievement created
-            </Typography>
-            <Typography color="textSecondary">
-              CONFIRM achievement(s): Confirm other user(s) achievement(s)
-            </Typography>
-            <Typography color="textSecondary">
-              SUPPORT achievement(s): Send QTUM token(s) to achievers to show them some love
-            </Typography>
-            <Typography color="textSecondary">
-              DEPOSIT for achievement(s): Deposit QTUM token(s) which will not be sent until the facebook user YOU chose confirms the achievement
-            </Typography>
-            <Typography paragraph color="textSecondary">
-              WITHDRAW your tokens: QTUM Tokens you own in your hot wallet can be withdrawn any time you want
-            </Typography>
-            <Typography variant="body2">
               Facebook Login is required to perform most actions
-            </Typography>
-            <Typography variant="body2">
+            </Typography >
+            <Typography color="textSecondary">
               A hot wallet is used to manage QTUM transactions
             </Typography>
-            <Typography variant="body2">
-              You need to send QTUM tokens to Diadem Hot wallet to be able to Support and Deposit. <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a>
+            <Typography color="textSecondary">
+              You need to send QTUM tokens to your Diadem Hot wallet to be able to Support and Deposit. <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a>
             </Typography>
-            <Typography variant="body2">
+            <Typography color="textSecondary">
               Create, Update and Confirm are free
             </Typography>
-            <Typography variant="body2">
-              Support, Deposit and Withdraw need QTUM token(s). For this, you must send some to your hot wallet
+            <Typography color="textSecondary">
+              Support, Deposit and Withdraw need QTUM tokens. For this, you must send some before to your hot wallet
             </Typography>
-            <Typography paragraph variant="body2">
-              For non-free action, you will have to pay a little extra fee you cannot configure (for now)
+            <Typography color="textSecondary" paragraph>
+              For non-free action, you will have to pay fees for blockchain miners, which you can configure
             </Typography>
             <Typography paragraph variant="title">
               #diademnetwork
             </Typography>
-            <Typography>
+            <Typography variant="caption">
               If you need more help, have questions, improvements ideas, or just want to say hello to the team behind Diadem Network, don't hesitate contacting us at: <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
             </Typography>
             {!isHelpDisplayed &&

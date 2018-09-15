@@ -6,7 +6,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import InputAdornment from '@material-ui/core/InputAdornment'
 
-const INITIAL_FEES = parseFloat(process.env.DEFAULT_QTUM_FEE_PER_KILOBYTE)
+const INITIAL_FEES = parseFloat(process.env.DEFAULT_QTUM_FEES_PER_KILOBYTE)
+const MAX_FEES = process.env.MAX_QTUM_FEES_PER_KILOBYTE
+const MIN_FEES = INITIAL_FEES / 2
 
 class FeesSelector extends Component {
   state = {
@@ -21,8 +23,8 @@ class FeesSelector extends Component {
 
   static areFeesValid = R.allPass([
     R.is(Number),
-    R.lte(R.__, 0.1),
-    R.gte(R.__, INITIAL_FEES / 2)
+    R.lte(R.__, MAX_FEES),
+    R.gte(R.__, MIN_FEES)
   ])
 
   useCustomFees = () => this.setState({
@@ -74,7 +76,7 @@ class FeesSelector extends Component {
           InputProps={{
             endAdornment: <InputAdornment position="end">QTUM/kB</InputAdornment>
           }}
-          label="Fees you want to pay for miners to confirm this transaction"
+          label={`max ${MAX_FEES} - min ${MIN_FEES}`}
           margin="normal"
           onChange={this.handleChange}
           type='number'

@@ -95,7 +95,7 @@ class AchievementDeposit extends Component {
       confirmationsCount,
       fullScreen,
       link,
-      name,
+      creatorName,
       title,
       users,
       walletBalance
@@ -150,7 +150,7 @@ class AchievementDeposit extends Component {
             />
           </DialogContentText>
           <DialogContentText paragraph>
-            Please enter an amount you would like to send to support {name} for his achievement:
+            Please enter an amount you would like to send to support {creatorName} for his achievement:
           </DialogContentText>
           <DialogContentText paragraph color="textPrimary">
             {title}
@@ -213,7 +213,7 @@ AchievementDeposit.propTypes = {
   fetchUsers: T.func,
   fullScreen: T.bool,
   link: T.string,
-  name: T.string,
+  creatorName: T.string,
   onDeposit: T.func,
   title: T.string,
   users: T.array,

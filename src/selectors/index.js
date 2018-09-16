@@ -61,12 +61,13 @@ export const getProcessedAchievements = createSelector([getGroupedByWalletAchiev
   return result
 }))
 
+export const getCreatorID = (state, props) => R.prop('creatorID', props)
 export const getUsers = R.pathOr([], ['users', 'data'])
 export const getAllOtherUsers = createSelector([
   getUsers,
-  getFacebookUserID
-], (users, userID) => R.filter(
-  R.complement(R.propEq)('userAccount', userID),
+  getCreatorID
+], (users, creatorID) => R.filter(
+  R.complement(R.propEq)('userAccount', creatorID),
   users
 ))
 

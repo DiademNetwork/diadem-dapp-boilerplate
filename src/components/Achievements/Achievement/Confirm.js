@@ -38,7 +38,7 @@ class AchievementConfirm extends Component {
       fullScreen,
       canUserConfirmCreateUpdateSupportDeposit,
       link,
-      name,
+      creatorName,
       title
     } = this.props
     const { modalOpen } = this.state
@@ -68,7 +68,7 @@ class AchievementConfirm extends Component {
         <DialogContent>
           <DialogContentText component="div">
             <Typography paragraph variant="body1">
-              Has {name} really done achievement?<br /><br />
+              Has {creatorName} really done achievement?<br /><br />
               {title}
             </Typography>
             <Link
@@ -93,7 +93,7 @@ class AchievementConfirm extends Component {
             variant="contained"
             color="secondary"
           >
-            yes, {name} has!
+            yes, {creatorName} has!
           </Button>
         </DialogActions>
       </Dialog>
@@ -107,7 +107,7 @@ AchievementConfirm.propTypes = {
   fullScreen: T.bool,
   canUserConfirmCreateUpdateSupportDeposit: T.bool,
   link: T.string,
-  name: T.string,
+  creatorName: T.string,
   onConfirm: T.func,
   title: T.string
 }

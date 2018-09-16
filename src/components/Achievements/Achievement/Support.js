@@ -64,7 +64,7 @@ class AchievementSupport extends Component {
       confirmationsCount,
       fullScreen,
       link,
-      name,
+      creatorName,
       title,
       walletBalance
     } = this.props
@@ -114,7 +114,7 @@ class AchievementSupport extends Component {
               href={link}
               typographyProps={{ paragraph: true }}
             />
-            Please enter an amount you would like to send to support {name} for his achievement:
+            Please enter an amount you would like to send to support {creatorName} for his achievement:
           </DialogContentText>
           <DialogContentText paragraph color="textPrimary">
             {title}
@@ -160,7 +160,7 @@ AchievementSupport.propTypes = {
   confirmationsCount: T.number,
   fullScreen: T.bool,
   link: T.string,
-  name: T.string,
+  creatorName: T.string,
   onSupport: T.func,
   title: T.string,
   walletBalance: T.number

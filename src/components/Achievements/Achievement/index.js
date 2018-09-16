@@ -126,7 +126,7 @@ class Achievement extends Component {
       walletBalance
     } = this.props
     const { displayedHistoryItem, stackedHistoryItems } = this.state
-    const { actor, name, title, object } = displayedHistoryItem
+    const { actor: creatorID, name: creatorName, title, object } = displayedHistoryItem
 
     const uniqConfirmatorsNames = this.getUniqueUsersNamesFor('confirm')(displayedHistoryItem)
     const uniqSupportersNames = this.getUniqueUsersNamesFor('support')(displayedHistoryItem)
@@ -142,7 +142,7 @@ class Achievement extends Component {
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
-          <Typography key="achievement-actor" variant="subheading" color="textSecondary">{name} achieved:</Typography>,
+          <Typography key="achievement-actor" variant="subheading" color="textSecondary">{creatorName} achieved:</Typography>,
           <Typography key="achievement-title" variant="headline">{title}</Typography>
         ]} />
         <Divider />
@@ -172,7 +172,7 @@ class Achievement extends Component {
             </Typography>
           }
         </CardContent>
-        {actor !== userID ? (
+        {creatorID !== userID ? (
           <CardActions
             className={classes.actions}
             disableActionSpacing
@@ -182,7 +182,8 @@ class Achievement extends Component {
               className={classes.actionsButtons}
               canUserConfirmCreateUpdateSupportDeposit={canUserConfirmCreateUpdateSupportDeposit}
               link={object}
-              name={name}
+              creatorID={creatorID}
+              creatorName={creatorName}
               onConfirm={this.handleConfirm}
               title={title}
             />
@@ -190,7 +191,7 @@ class Achievement extends Component {
               className={classes.actionsButtons}
               confirmationsCount={confirmationsCount}
               link={object}
-              name={name}
+              creatorName={creatorName}
               onSupport={this.handleSupport}
               walletBalance={walletBalance}
               title={title}
@@ -198,7 +199,7 @@ class Achievement extends Component {
             <Deposit
               className={classes.actionsButtons}
               link={object}
-              name={name}
+              creatorName={creatorName}
               onDeposit={this.handleDeposit}
               walletBalance={walletBalance}
               title={title}
@@ -216,7 +217,7 @@ class Achievement extends Component {
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography color="textSecondary">View previous achievements of {name}</Typography>
+            <Typography color="textSecondary">View previous achievements of {creatorName}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map((achievement, idx) => {

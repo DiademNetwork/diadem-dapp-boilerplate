@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -167,4 +168,8 @@ Help.propTypes = {
   hideHelp: T.func
 }
 
-export default withMobileDialog()(withContainer(withStyles(styles)(Help)))
+export default R.compose(
+  withMobileDialog(),
+  withContainer,
+  withStyles(styles)
+)(Help)

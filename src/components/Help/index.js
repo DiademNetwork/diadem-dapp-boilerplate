@@ -81,7 +81,11 @@ class Help extends Component {
             <Typography paragraph color="textPrimary">
               Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a>.
             </Typography>
+            <Typography paragraph color="textPrimary">
+              On Diadem network you can be an achiever and/or a sponsor.
+            </Typography>
             <Typography paragraph color="textPrimary" variant="title">
+              Achiever:<br />
               Fighting for the planet? Helping people out? But you need a boost?<br />Get financial support using Diadem Network:
             </Typography>
             <Typography variant="subheading">
@@ -97,6 +101,7 @@ class Help extends Component {
               Note you can UPDATE YOUR ACHIEVEMENT if it evolves. Available only if you created one.
             </Typography>
             <Typography paragraph color="textPrimary" variant="title">
+              Sponsor:<br />
               You want to financially support people helping the world?
             </Typography>
             <Typography variant="subheading">

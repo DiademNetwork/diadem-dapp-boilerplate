@@ -18,6 +18,7 @@ const mapStateToProps = (state) => ({
   address: getWallet('addrStr')(state),
   balance: getWallet('balance')(state),
   unconfirmedBalance: getWallet('unconfirmedBalance')(state),
+  unconfirmedTxApperances: getWallet('unconfirmedTxApperances')(state),
   mnemonic: getWalletMeta('mnemonic')(state),
   privateKey: getWalletMeta('privateKey')(state),
   wallet: getWalletMeta('wallet')(state),

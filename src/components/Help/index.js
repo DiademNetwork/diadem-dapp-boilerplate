@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -17,6 +18,9 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import SendIcon from '@material-ui/icons/SendOutlined'
 
 const styles = (theme) => ({
+  divider: {
+    marginBottom: theme.spacing.unit * 2
+  },
   icon: {
     marginRight: theme.spacing.unit
   },
@@ -79,14 +83,14 @@ class Help extends Component {
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
             <Typography paragraph color="textPrimary">
-              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a>.
+              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a>. You can be an achiever and/or a sponsor.
             </Typography>
-            <Typography paragraph color="textPrimary">
-              On Diadem network you can be an achiever and/or a sponsor.
+            <Divider className={classes.divider} />
+            <Typography color="textPrimary" variant="title">
+              Achiever
             </Typography>
-            <Typography paragraph color="textPrimary" variant="title">
-              Achiever:<br />
-              Fighting for the planet? Helping people out? But you need a boost?<br />Get financial support using Diadem Network:
+            <Typography paragraph variant="body2">
+              Fighting for the planet? Helping people out? But you need a boost? Get financial support using Diadem Network!
             </Typography>
             <Typography variant="subheading">
               1. Publish a Facebook post explaining your achievement (with text, picture(s), video(s)).
@@ -100,8 +104,11 @@ class Help extends Component {
             <Typography paragraph variant="subheading">
               Note you can UPDATE YOUR ACHIEVEMENT if it evolves. Available only if you created one.
             </Typography>
-            <Typography paragraph color="textPrimary" variant="title">
-              Sponsor:<br />
+            <Divider className={classes.divider} />
+            <Typography variant="title">
+              Sponsor
+            </Typography>
+            <Typography paragraph variant="body2">
               You want to financially support people helping the world?
             </Typography>
             <Typography variant="subheading">
@@ -113,6 +120,7 @@ class Help extends Component {
             <Typography paragraph variant="subheading">
               - You prefer waiting for someone you choose to confirm the achievement ? Then DEPOSIT QTUM tokens. They will not be transferred until he does.
             </Typography>
+            <Divider className={classes.divider} />
             <Typography color="textSecondary">
               - Facebook Login is required to perform most actions.
             </Typography >
@@ -125,8 +133,11 @@ class Help extends Component {
             <Typography color="textSecondary">
               - Supporting, Depositing and Withdrawing require QTUM tokens.
             </Typography>
+            <Typography color="textSecondary">
+              - <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a> to know how to send QTUM tokens to your hot wallet.
+            </Typography>
             <Typography color="textSecondary" paragraph>
-              - <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a> to know how to send QTUM tokens to yourself.
+              - {isHelpDisplayed ? 'NEVER EVER lose privateKey/mnemonic you were given at first visit' : 'SAVE the mnemonic/privateKey you are going to receive when your wallet will ge generated'}
             </Typography>
             <Typography paragraph variant="title">
               #diademnetwork

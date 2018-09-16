@@ -82,7 +82,7 @@ class WalletDisplay extends Component {
             primary={
               <Typography>
                 {balance} QTUM{unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} QTUM pending)` : ''}
-                <Hidden mdDown>
+                <Hidden smDown>
                   <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
                   {balance > 0 &&
                     <Withdraw

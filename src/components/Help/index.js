@@ -27,7 +27,7 @@ const styles = (theme) => ({
 
 class Help extends Component {
   state = {
-    open: false,
+    open: true,
     wantsNotToShowSplashAgain: false
   }
 
@@ -77,50 +77,56 @@ class Help extends Component {
         </DialogTitle>
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
+            <Typography paragraph color="textPrimary">
+              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a>.
+            </Typography>
             <Typography paragraph color="textPrimary" variant="title">
-              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a> to connect people improving the world by their actions to those willing to support them for it<br />
+              Fighting for the planet? Helping people out? But you need a boost?<br />Get financial support using Diadem Network:
             </Typography>
             <Typography variant="subheading">
-              CREATE YOUR ACHIEVEMENT by posting a link to a facebook post for something you achieved
+              1. Publish a Facebook post explaining your achievement (with text, picture(s), video(s)).
             </Typography>
             <Typography variant="subheading">
-              UPDATE YOUR ACHIEVEMENT if it evolved. Available only if you created one
-            </Typography>
-            <Typography variant="subheading">
-              CONFIRM other users achievements
-            </Typography>
-            <Typography variant="subheading">
-              SUPPORT other users achievements with QTUM tokens to show them some love
-            </Typography>
-            <Typography variant="subheading">
-              DEPOSIT QTUM tokens for other users achievements. Your deposit will not be sent until the facebook user YOU chose confirmed the achievement
+              2. CREATE YOUR ACHIEVEMENT on Diadem Network with the link to your Facebook post.
             </Typography>
             <Typography variant="subheading" paragraph>
-              WITHDRAW your QTUM tokens you received from others or sent yourselves, any time you want.
+              3. WITHDRAW QTUM tokens you receive from others supporting your great actions!
+            </Typography>
+            <Typography paragraph variant="subheading">
+              Note you can UPDATE YOUR ACHIEVEMENT if it evolves. Available only if you created one.
+            </Typography>
+            <Typography paragraph color="textPrimary" variant="title">
+              You want to financially support people helping the world?
+            </Typography>
+            <Typography variant="subheading">
+              - CONFIRM achievements you know are real.
+            </Typography>
+            <Typography variant="subheading">
+              - You want to give immediate SUPPORT ? You can send QTUM tokens right away.
+            </Typography>
+            <Typography paragraph variant="subheading">
+              - You prefer waiting for someone you choose to confirm the achievement ? Then DEPOSIT QTUM tokens. They will not be transferred until he does.
             </Typography>
             <Typography color="textSecondary">
-              Facebook Login is required to perform most actions
+              - Facebook Login is required to perform most actions.
             </Typography >
             <Typography color="textSecondary">
-              A hot wallet is used to manage QTUM transactions
+              - A hot wallet is used to manage QTUM transactions.
             </Typography>
             <Typography color="textSecondary">
-              You need to send QTUM tokens to your Diadem Hot wallet to be able to Support and Deposit. <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a>
+              - Creating, Updating and Confirming achievements are free.
             </Typography>
             <Typography color="textSecondary">
-              Create, Update and Confirm are free
-            </Typography>
-            <Typography color="textSecondary">
-              Support, Deposit and Withdraw need QTUM tokens. For this, you must send some before to your hot wallet
+              - Supporting, Depositing and Withdrawing require QTUM tokens.
             </Typography>
             <Typography color="textSecondary" paragraph>
-              For non-free action, you will have to pay fees for blockchain miners, which you can configure
+              - <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a> to know how to send QTUM tokens to yourself.
             </Typography>
             <Typography paragraph variant="title">
               #diademnetwork
             </Typography>
             <Typography variant="caption">
-              If you need more help, have questions, improvements ideas, or just want to say hello to the team behind Diadem Network, don't hesitate contacting us at: <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
+              If you need more help, have questions, improvements ideas, or just want to say hello, don't hesitate contacting us at: <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
             </Typography>
             {!isHelpDisplayed &&
             <FormControlLabel

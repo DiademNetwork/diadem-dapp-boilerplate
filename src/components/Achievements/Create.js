@@ -50,6 +50,7 @@ class CreateAchievement extends Component {
 
   isFacebookLinkValid = R.allPass([
     R.is(String),
+    R.compose(R.lte(R.__, 80), R.length),
     isUrl,
     R.test(/.*facebook.*/)
   ])
@@ -103,23 +104,23 @@ class CreateAchievement extends Component {
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
             margin="normal"
             id='link'
-            label={fullScreen ? 'Facebook post link' : 'Where can Diadem Network users see your achievement?'}
+            label="Your achievement Facebook post link"
             value={link}
             onChange={this.handleChange('link')}
-            placeholder='https://www.facebook.com/username/posts/postid'
+            placeholder="https://www.facebook.com/username/posts/postid"
             fullWidth
-            helperText='Please paste here full Facebook link to your post'
+            helperText="max 80 caracters"
           />
           <TextField
             error={title !== TITLE_INITIAL_VALUE && !isTitleValid}
             margin="normal"
             id='title'
-            label="What great achievement did you do?"
+            label="Title for you achievement"
             value={title}
             onChange={this.handleChange('title')}
-            placeholder='wrote the first chapter of my book'
+            placeholder='Help the world by my action...'
             fullWidth
-            helperText='I ..your title.. (max 60 characters)'
+            helperText="max 60 caracters"
           />
         </DialogContent>
         <DialogActions>

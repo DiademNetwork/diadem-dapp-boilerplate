@@ -51,6 +51,7 @@ class UpdateAchievement extends Component {
 
   isFacebookLinkValid = R.allPass([
     R.complement(R.equals)(this.props.previousLink),
+    R.compose(R.lte(R.__, 80), R.length),
     R.is(String),
     isUrl,
     R.test(/.*facebook.*/)
@@ -118,23 +119,23 @@ class UpdateAchievement extends Component {
             id='link'
             margin="normal"
             error={link !== LINK_INITIAL_VALUE && !isLinkValid}
-            label="New facebook link of your achievement post"
+            label="Your new achievement Facebook post link"
             value={link}
             onChange={this.handleChange('link')}
-            placeholder='https://www.facebook.com/username/posts/postid'
+            placeholder="https://www.facebook.com/username/posts/postid"
             fullWidth
-            helperText='Please note that you cannot post link you used before'
+            helperText="max 80 caracters"
           />
           <TextField
             id='title'
             margin="normal"
             error={link !== TITLE_INITIAL_VALUE && !isTitleValid}
-            label="New title for your achievement"
+            label="Title for you achievement"
             value={title}
             onChange={this.handleChange('title')}
-            placeholder='wrote the second chapter of my book'
+            placeholder="Help the world by my action..."
             fullWidth
-            helperText='I ..your title..(max 60 characters)'
+            helperText="max 60 characters"
           />
         </DialogContent>
         <DialogActions>

@@ -95,7 +95,7 @@ class Hashtag extends Component {
               }}
             />
             <Typography paragraph>
-              Together, we can build a better world! If you have improvements ideas share them with us at <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
+              Together, we can build a better world! If you have improvements ideas, share them with us at <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
             </Typography>
           </DialogContentText>
         </DialogContent>

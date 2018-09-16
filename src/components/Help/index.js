@@ -137,7 +137,7 @@ class Help extends Component {
               - <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a> to know how to send QTUM tokens to your hot wallet.
             </Typography>
             <Typography color="textSecondary" paragraph>
-              - {isHelpDisplayed ? 'NEVER EVER lose privateKey/mnemonic you were given at first visit' : 'SAVE the mnemonic/privateKey you are going to receive when your wallet will ge generated'}
+              - NEVER EVER lose privateKey/mnemonic you are given at first login. If you lose it, you lose funds inside.
             </Typography>
             <Typography paragraph variant="title">
               #diademnetwork

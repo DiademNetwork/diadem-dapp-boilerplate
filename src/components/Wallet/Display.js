@@ -20,7 +20,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 const AUTO_WALLET_REFRESH_INTERVAL = 5000 // in ms
-const AUTO_CHECK_TRANSACTIONS_INTERVAL = 5000
+const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000
 
 const styles = (theme) => ({
   withdraw: {

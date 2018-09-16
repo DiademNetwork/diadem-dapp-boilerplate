@@ -23,46 +23,40 @@ const styles = (theme) => ({
 const TimelineItem = ({ classes, transaction }) => {
   const { actor, verb, object, target, time, name } = transaction
   let icon
-  let achievementLink
-  let verbDisplay
+  let mainText
   const txComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view qtum transaction on blockchain explorer</a>
   const formattedTime = moment.utc(time).from(moment.utc(new Date()))
-  const actorDisplay = name || actor
+  const nameDisplay = name || actor
+  const achievementLink = object && <a className={classes.link} href={object} target="_blank">achievement</a>
   switch (verb) {
     case 'create':
       icon = <StarIcon />
-      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
-      verbDisplay = 'created'
+      mainText = `${nameDisplay} created ${achievementLink}`
       break
     case 'update':
       icon = <StarIcon />
-      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
-      verbDisplay = 'updated'
+      mainText = `${nameDisplay} updated ${achievementLink}`
       break
     case 'support':
       icon = <MoneyIcon />
-      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
-      verbDisplay = 'supported'
+      mainText = `${nameDisplay} supported ${achievementLink}`
       break
     case 'deposit':
       icon = <VpnKeyOutlinedIcon />
-      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
-      verbDisplay = 'deposited for'
+      mainText = `${nameDisplay} deposited for ${achievementLink}`
       break
     case 'confirm':
       icon = <DoneIcon />
-      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
-      verbDisplay = 'confirmed'
+      mainText = `${nameDisplay} confirmed ${achievementLink}`
       break
     case 'register':
       icon = <PermIdentityIcon />
-      verbDisplay = 'registered with address'
+      mainText = `${nameDisplay} registered with address ${object}`
       break
     case 'withdraw':
     default:
       icon = <RemoveIcon />
-      achievementLink = <a className={classes.link} href={object} target="_blank">achievement</a>
-      verbDisplay = 'withdrew'
+      mainText = `${nameDisplay} withdraw`
   }
   return (
     <ListItem>
@@ -70,7 +64,7 @@ const TimelineItem = ({ classes, transaction }) => {
       <ListItemText primary={[
         <Typography color="textSecondary" key='time'>{formattedTime}</Typography>,
         <Typography key='text'>
-          {actorDisplay} {verbDisplay} {achievementLink || object}
+          {mainText}
         </Typography>,
         txComponent && <Typography key='tx'>{txComponent}</Typography>
       ]} />

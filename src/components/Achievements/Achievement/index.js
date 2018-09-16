@@ -142,7 +142,7 @@ class Achievement extends Component {
     return [
       <Card key="achievement-card" className={classes.card}>
         <CardHeader title={[
-          <Typography key="achievement-actor" variant="subheading" color="textSecondary">{creatorName} achieved:</Typography>,
+          <Typography key="achievement-actor" variant="subheading" color="textSecondary">Last achievement of {creatorName}:</Typography>,
           <Typography key="achievement-title" variant="headline">{title}</Typography>
         ]} />
         <Divider />
@@ -217,7 +217,7 @@ class Achievement extends Component {
       stackedHistoryItems.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography color="textSecondary">View previous achievements of {creatorName}</Typography>
+            <Typography color="textSecondary">View past achievements of {creatorName}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
             {stackedHistoryItems.map((achievement, idx) => {

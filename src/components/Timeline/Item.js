@@ -21,7 +21,7 @@ const styles = (theme) => ({
 })
 
 const TimelineItem = ({ classes, transaction }) => {
-  const { actor, verb, object, target, time, name } = transaction
+  const { actor, verb, object, target, time, name, witnessName } = transaction
   let icon
   let mainText
   const txComponent = <a className={classes.link} href={`${process.env.QTUM_INSIGHT_URL}/tx/${target}`} target="_blank">view qtum transaction on blockchain explorer</a>
@@ -43,7 +43,7 @@ const TimelineItem = ({ classes, transaction }) => {
       break
     case 'deposit':
       icon = <VpnKeyOutlinedIcon />
-      mainText = `${nameDisplay} deposited for ${achievementLink}`
+      mainText = `${nameDisplay} deposited for ${achievementLink} with witness ${witnessName}`
       break
     case 'confirm':
       icon = <DoneIcon />

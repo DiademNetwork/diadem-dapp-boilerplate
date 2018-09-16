@@ -68,14 +68,21 @@ class AchievementDeposit extends Component {
   handleSubmit = () => {
     const { onDeposit, users } = this.props
     const { amount, fees, witnessUserID } = this.state
-    const witnessAddress = this.findWitnessAddress(witnessUserID)(users)
-    onDeposit({ amount, fees: FeesSelector.convertFees(fees), witnessUserID, witnessAddress })
+    const witnessAddress = this.findWitness('userAddress')(witnessUserID)(users)
+    const witnessName = this.findWitness('userName')(witnessUserID)(users)
+    onDeposit({
+      amount,
+      fees: FeesSelector.convertFees(fees),
+      witnessAddress,
+      witnessName,
+      witnessUserID
+    })
     this.resetForm()
     this.handleClose()
   }
 
-  findWitnessAddress = (userID) => R.compose(
-    R.prop('userAddress'),
+  findWitness = (propName) => (userID) => R.compose(
+    R.prop(propName),
     R.find(R.propEq('userAccount', userID))
   )
 

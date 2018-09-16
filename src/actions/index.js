@@ -203,7 +203,14 @@ export const supportAchievement = ({ amount, fees, link }) => async (dispatch, g
   }
 }
 
-export const depositForAchievement = ({ amount, fees, link, witnessUserID, witnessAddress }) => async (dispatch, getState) => {
+export const depositForAchievement = ({
+  amount,
+  fees,
+  link,
+  witnessAddress,
+  witnessName,
+  witnessUserID
+}) => async (dispatch, getState) => {
   try {
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
     const { facebook, wallet } = getState()
@@ -219,7 +226,8 @@ export const depositForAchievement = ({ amount, fees, link, witnessUserID, witne
       rawTx,
       token: accessToken,
       user: userID,
-      witness: witnessUserID
+      witness: witnessUserID,
+      witnessName
     })
     dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
     dispatch(notifications.depositAchievementSuccess)

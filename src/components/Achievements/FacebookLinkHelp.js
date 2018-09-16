@@ -16,19 +16,19 @@ const styles = (theme) => ({
 
 const FacebookLinkHelp = ({ classes, fullScreen }) => fullScreen ? (
   <Typography variant="caption" color="secondary">
-    `To get your facebook post link, click on time just below your name on your facebook post to access to your post URL. Copy all link before "?"`
+    To get your Facebook post link, click on time just below your name on your Facebook post to access to your post URL. Copy all link before "?"
   </Typography>
 ) : (
   <Tooltip
     TransitionComponent={Zoom}
-    title={`Click on time just below your name on your facebook post to access to your post URL. Copy all link before "?"`}
+    title={`Click on time just below your name on your Facebook post to access to your post URL. Copy all link before "?"`}
   >
     <Typography
       className={classes.help}
       color="secondary"
       variant="body2"
     >
-      How to get your facebook link?
+      How to get the link of your Facebook post?
     </Typography>
   </Tooltip>
 )

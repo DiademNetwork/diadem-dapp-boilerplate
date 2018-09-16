@@ -100,12 +100,12 @@ class WalletDisplay extends Component {
         </ListItem>
         <ListItem>
           <LinearProgress color="secondary" />
-          {unconfirmedTxApperances && [
+          {unconfirmedTxApperances > 0 && [
             <LinearProgress color="secondary" key="progress-bar" />,
             <Typography color="textSecondary">
               {isRegistrationPending
                 ? 'Your registration is still pending, it can take some minutes...You have to wait for it to be able to user Diadem Network'
-                : 'You have blockchain transactions pending to be mined. Please wit, it can takes some minutes. '
+                : 'You have blockchain transactions pending to be mined. Please wait, it can takes some minutes.'
               }
             </Typography>
           ]}

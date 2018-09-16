@@ -1,4 +1,5 @@
 import api from '../services/api'
+import * as R from 'ramda'
 import insight from '../services/insight'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import notifications from '../services/notifications'
@@ -35,10 +36,13 @@ export const updateWallet = (data) => ({ type: WALLET_UPDATE_DATA, data })
 export const updateWalletMeta = (meta) => ({ type: WALLET_UPDATE_META, meta })
 export const updateWalletStatus = (status) => ({ type: WALLET_UPDATE_STATUS, status })
 
-export const refreshWallet = (wallet) => async (dispatch) => {
+export const refreshWallet = (wallet) => async (dispatch, getState) => {
   try {
     const walletData = await wallet.getInfo()
-    dispatch(updateWallet(walletData))
+    const { wallet: { data } } = getState()
+    if (R.complement(R.equal)(data, walletData)) {
+      dispatch(updateWallet(walletData))
+    }
   } catch (error) {
     dispatch(notifications.walletRefreshError)
   }

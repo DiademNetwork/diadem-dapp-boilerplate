@@ -25,6 +25,12 @@ const AUTO_CHECK_TRANSACTIONS_INTERVAL = 5000
 const styles = (theme) => ({
   withdraw: {
     marginLeft: theme.spacing.unit * 2
+  },
+  waitbox: {
+    marginTop: theme.spacing.unit * 2
+  },
+  progress: {
+    flexGrow: 1
   }
 })
 
@@ -134,18 +140,19 @@ class WalletDisplay extends Component {
             }
           />
         </ListItem>
-        <ListItem>
-          <LinearProgress color="secondary" />
-          {hasPendingTransactions && [
-            <LinearProgress color="secondary" key="progress-bar" />,
+        {(hasPendingTransactions || isRegistrationPending) && (
+          <ListItem className={classes.waitbox}>
+            <div className={classes.progress}>
+              <LinearProgress color="secondary" />
+            </div>
             <Typography color="textSecondary">
               {isRegistrationPending
                 ? 'Your registration is still pending, it can take some minutes...You have to wait for it to be able to user Diadem Network'
                 : 'You have blockchain transactions pending to be mined. Please wait, it can takes some minutes.'
               }
             </Typography>
-          ]}
-        </ListItem>
+          </ListItem>
+        )}
         <Hidden key="mobile-button" smUp>
           <ListItem>
             <CopyToClipBoardButton variant="button" textToCopy={address} name="address" />

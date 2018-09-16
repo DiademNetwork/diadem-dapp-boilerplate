@@ -40,7 +40,7 @@ export const refreshWallet = (wallet) => async (dispatch, getState) => {
   try {
     const walletData = await wallet.getInfo()
     const { wallet: { data } } = getState()
-    if (R.complement(R.equal)(data, walletData)) {
+    if (R.complement(R.equals)(data, walletData)) {
       dispatch(updateWallet(walletData))
     }
   } catch (error) {

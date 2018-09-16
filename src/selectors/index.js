@@ -98,3 +98,15 @@ export const lastLinkOfUserAchievementOrNull = createSelector([
   }
 })
 export const canUserConfirmCreateUpdateSupportDeposit = createSelector([isFacebookAuthenticated, isWalletReady, isUserRegistered], R.unapply(R.all(R.equals(true))))
+
+export const getLastUserTransactions = (state, { userID }) => {
+  if (!userID) {
+    return []
+  }
+  return R.compose(
+    R.takeLast(2),
+    R.map(R.prop('target')),
+    R.filter(R.propEq('actor', userID)),
+    R.path(['transactions', 'data'])
+  )(state)
+}

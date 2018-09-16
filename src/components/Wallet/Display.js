@@ -20,6 +20,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 const AUTO_WALLET_REFRESH_INTERVAL = 5000 // in ms
+const AUTO_CHECK_TRANSACTIONS_INTERVAL = 5000
 
 const styles = (theme) => ({
   withdraw: {
@@ -42,11 +43,46 @@ CopyToAddressToolip.propTypes = {
 
 class WalletDisplay extends Component {
   componentDidMount () {
-    this.refreshInterval = setInterval(this.props.onRefreshWallet, AUTO_WALLET_REFRESH_INTERVAL)
+    const { onRefreshWallet } = this.props
+    this.refreshInterval = setInterval(onRefreshWallet, AUTO_WALLET_REFRESH_INTERVAL)
+    this.checkLastTransactions()
+  }
+
+  checkLastTransactions = () => {
+    const { checkLastUserTransactions, lastUserTransactions } = this.props
+    if (lastUserTransactions.length > 0) {
+      checkLastUserTransactions(lastUserTransactions)
+    }
+  }
+
+  componentWillReceiveProps ({
+    lastUserTransactions: newLastUserTransactions,
+    hasPendingTransactions: newHasPendingTransactions
+  }) {
+    const {
+      checkLastUserTransactions,
+      hasPendingTransactions,
+      lastUserTransactions
+    } = this.props
+    if (newLastUserTransactions.length > 0 && R.complement(R.equals)(lastUserTransactions, newLastUserTransactions)) {
+      checkLastUserTransactions(newLastUserTransactions)
+    }
+    if (newHasPendingTransactions !== hasPendingTransactions) {
+      newHasPendingTransactions ? this.startCheckTransactionsInterval() : this.stopCheckTransactionsInterval()
+    }
+  }
+
+  startCheckTransactionsInterval = () => {
+    this.checkTransactionsInterval = setInterval(this.checkLastTransactions, AUTO_CHECK_TRANSACTIONS_INTERVAL)
+  }
+
+  stopCheckTransactionsInterval = () => {
+    clearInterval(this.checkTransactionsInterval)
   }
 
   componentWillUnmount () {
     clearInterval(this.refreshInterval)
+    this.stopCheckTransactionsInterval()
   }
 
   render () {
@@ -55,9 +91,9 @@ class WalletDisplay extends Component {
       balance,
       classes,
       fullScreen,
+      hasPendingTransactions,
       isRegistrationPending,
       unconfirmedBalance,
-      unconfirmedTxApperances,
       withdrawFromHotWallet
     } = this.props
     return (
@@ -76,7 +112,7 @@ class WalletDisplay extends Component {
             </Typography>
           } />
         </ListItem>
-        <ListItem divider={unconfirmedTxApperances > 0}>
+        <ListItem divider={hasPendingTransactions}>
           <ListItemIcon>
             <MonetizationOnOutlinedIcon />
           </ListItemIcon>
@@ -100,7 +136,7 @@ class WalletDisplay extends Component {
         </ListItem>
         <ListItem>
           <LinearProgress color="secondary" />
-          {unconfirmedTxApperances > 0 && [
+          {hasPendingTransactions && [
             <LinearProgress color="secondary" key="progress-bar" />,
             <Typography color="textSecondary">
               {isRegistrationPending
@@ -130,12 +166,14 @@ class WalletDisplay extends Component {
 WalletDisplay.propTypes = {
   address: T.string,
   balance: T.number,
+  checkLastUserTransactions: T.func,
   classes: T.object,
   fullScreen: T.bool,
+  hasPendingTransactions: T.bool,
   isRegistrationPending: T.bool,
+  lastUserTransactions: T.array,
   onRefreshWallet: T.func,
   unconfirmedBalance: T.number,
-  unconfirmedTxApperances: T.number,
   withdrawFromHotWallet: T.func
 }
 

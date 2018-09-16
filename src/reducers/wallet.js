@@ -9,6 +9,7 @@ const intialState = {
   status: 'none',
   data: {},
   meta: {
+    hasPendingTransactions: false,
     isRegistrationPending: false,
     isUserRegistered: false
   }

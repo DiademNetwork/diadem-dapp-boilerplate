@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import {
+  checkLastUserTransactions,
   checkUserRegistration,
   displayNotification,
   recoverWallet,
@@ -9,16 +10,18 @@ import {
 } from '../../actions'
 import {
   isFacebookAuthenticated,
+  getLastUserTransactions,
   getWallet,
   getWalletMeta,
   getWalletStatus
 } from '../../selectors'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, props) => ({
   address: getWallet('addrStr')(state),
   balance: getWallet('balance')(state),
+  hasPendingTransactions: getWalletMeta('hasPendingTransactions')(state),
   unconfirmedBalance: getWallet('unconfirmedBalance')(state),
-  unconfirmedTxApperances: getWallet('unconfirmedTxApperances')(state),
+  lastUserTransactions: getLastUserTransactions(state, props),
   mnemonic: getWalletMeta('mnemonic')(state),
   privateKey: getWalletMeta('privateKey')(state),
   wallet: getWalletMeta('wallet')(state),
@@ -28,6 +31,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = {
+  checkLastUserTransactions,
   checkUserRegistration,
   displayNotification,
   recoverWallet,

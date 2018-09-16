@@ -30,12 +30,13 @@ class App extends Component {
     const {
       achievementsNotificationCount,
       classes,
-      transactionsNotificationCount
+      transactionsNotificationCount,
+      userID
     } = this.props
     return (
       <div>
         <Nav />
-        <Wallet className={classes.sm9} />
+        <Wallet className={classes.sm9} userID={userID} />
         <Tabs tabs={[
           {
             badgeContent: achievementsNotificationCount,
@@ -63,7 +64,8 @@ class App extends Component {
 App.propTypes = {
   achievementsNotificationCount: T.number,
   classes: T.object,
-  transactionsNotificationCount: T.number
+  transactionsNotificationCount: T.number,
+  userID: T.string
 }
 
 export default withContainer(withStyles(styles)(App))

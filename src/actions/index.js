@@ -1,4 +1,5 @@
 import api from '../services/api'
+import insight from '../services/insight'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import notifications from '../services/notifications'
 import types from './types'
@@ -317,4 +318,13 @@ export const fetchUsers = () => async (dispatch) => {
     dispatch({ type: ASYNC_USERS_FETCH.failed, payload: { error } })
     dispatch(notifications.fetchUsersError)
   }
+}
+
+export const checkLastUserTransactions = (transactions) => async (dispatch) => {
+  let hasPendingTransactions = false
+  for (let transaction of transactions) {
+    const { data: { confirmations } } = await insight.checkTransactions(`insight-api/tx/${transaction}`)
+    hasPendingTransactions = hasPendingTransactions || confirmations === 0
+  }
+  dispatch(updateWalletMeta({ hasPendingTransactions }))
 }

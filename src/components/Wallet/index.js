@@ -70,8 +70,11 @@ class Wallet extends Component {
       address,
       balance,
       className,
+      checkLastUserTransactions,
+      hasPendingTransactions,
       isFacebookAuthenticated,
       isRegistrationPending,
+      lastUserTransactions,
       mnemonic,
       privateKey,
       recoverWallet,
@@ -120,7 +123,10 @@ class Wallet extends Component {
             <Display
               address={address}
               balance={balance}
+              checkLastUserTransactions={checkLastUserTransactions}
               isRegistrationPending={isRegistrationPending}
+              hasPendingTransactions={hasPendingTransactions}
+              lastUserTransactions={lastUserTransactions}
               onRefreshWallet={this.handleRefreshWallet}
               withdrawFromHotWallet={withdrawFromHotWallet}
               unconfirmedBalance={unconfirmedBalance}
@@ -152,10 +158,13 @@ Wallet.propTypes = {
   address: T.string,
   balance: T.number,
   checkUserRegistration: T.func,
+  checkLastUserTransactions: T.func,
   className: T.string,
   displayNotification: T.func,
+  hasPendingTransactions: T.bool,
   isFacebookAuthenticated: T.bool,
   isRegistrationPending: T.bool,
+  lastUserTransactions: T.array,
   mnemonic: T.string,
   privateKey: T.string,
   walletStatus: T.string,

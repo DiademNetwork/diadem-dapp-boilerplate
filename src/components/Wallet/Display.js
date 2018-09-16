@@ -76,7 +76,7 @@ class WalletDisplay extends Component {
             </Typography>
           } />
         </ListItem>
-        <ListItem divider>
+        <ListItem divider={unconfirmedTxApperances > 0}>
           <ListItemIcon>
             <MonetizationOnOutlinedIcon />
           </ListItemIcon>

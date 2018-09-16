@@ -32,7 +32,7 @@ const styles = (theme) => ({
 
 class Help extends Component {
   state = {
-    open: true,
+    open: false,
     wantsNotToShowSplashAgain: false
   }
 

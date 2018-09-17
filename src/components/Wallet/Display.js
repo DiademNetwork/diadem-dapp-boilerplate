@@ -27,10 +27,14 @@ const styles = (theme) => ({
     marginLeft: theme.spacing.unit * 2
   },
   waitbox: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing.unit * 2,
+    flexDirection: 'column'
   },
   progress: {
-    flexGrow: 1
+    flexGrow: 1,
+    marginBottom: theme.spacing.unit * 2,
+    width: '100%',
+    display: 'block'
   }
 })
 

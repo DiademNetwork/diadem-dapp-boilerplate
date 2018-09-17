@@ -125,6 +125,9 @@ class Help extends Component {
               - Facebook Login is required to perform most actions.
             </Typography >
             <Typography color="textSecondary">
+              - Adblocker seems to block Facebook login. Please desactivate it to use DiademNetwork.
+            </Typography >
+            <Typography color="textSecondary">
               - A hot wallet is used to manage QTUM transactions.
             </Typography>
             <Typography color="textSecondary">

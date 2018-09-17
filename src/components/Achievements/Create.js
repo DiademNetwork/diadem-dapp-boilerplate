@@ -16,7 +16,8 @@ import isUrl from 'is-url'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
-const MAX_CHARACTERS = 60
+const MAX_TITLE_CARACTERS = 60
+const MAX_LINK_CARACTERS = 91
 
 const styles = (theme) => ({
   buttonIcon: {
@@ -43,14 +44,14 @@ class CreateAchievement extends Component {
       const isLinkValid = this.isFacebookLinkValid(value)
       this.setState({ link: value, isLinkValid })
     } else if (name === 'title') {
-      const isTitleValid = value.length > 0 && value.length <= MAX_CHARACTERS
+      const isTitleValid = value.length > 0 && value.length <= MAX_TITLE_CARACTERS
       this.setState({ title: value, isTitleValid })
     }
   }
 
   isFacebookLinkValid = R.allPass([
     R.is(String),
-    R.compose(R.lte(R.__, 80), R.length),
+    R.compose(R.lte(R.__, MAX_LINK_CARACTERS), R.length),
     isUrl,
     R.test(/.*facebook.*/)
   ])
@@ -109,7 +110,7 @@ class CreateAchievement extends Component {
             onChange={this.handleChange('link')}
             placeholder="https://www.facebook.com/username/posts/postid"
             fullWidth
-            helperText="max 80 caracters"
+            helperText={`max ${MAX_LINK_CARACTERS} caracters`}
           />
           <TextField
             error={title !== TITLE_INITIAL_VALUE && !isTitleValid}
@@ -120,7 +121,7 @@ class CreateAchievement extends Component {
             onChange={this.handleChange('title')}
             placeholder='Help the world by my action...'
             fullWidth
-            helperText="max 60 caracters"
+            helperText={`max ${MAX_TITLE_CARACTERS} caracters`}
           />
         </DialogContent>
         <DialogActions>

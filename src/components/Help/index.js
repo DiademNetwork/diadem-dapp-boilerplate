@@ -125,10 +125,13 @@ class Help extends Component {
               - Facebook Login is required to perform most actions.
             </Typography >
             <Typography color="textSecondary">
-              - Adblocker seems to block Facebook login. Please desactivate it to use DiademNetwork.
+              - Adblockers seems to cause a Facebook login bug. Please desactivate them to use DiademNetwork.
             </Typography >
             <Typography color="textSecondary">
               - A hot wallet is used to manage QTUM transactions.
+            </Typography>
+            <Typography color="textSecondary">
+              - Please do not use hot wallet to store large amount of QTUM tokens.
             </Typography>
             <Typography color="textSecondary">
               - Creating, Updating and Confirming achievements are free.

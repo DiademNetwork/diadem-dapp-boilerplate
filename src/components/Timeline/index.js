@@ -16,28 +16,21 @@ class Timeline extends Component {
   render () {
     const {
       className,
-      isFacebookAuthenticated,
       transactions
     } = this.props
-    let renderedComponent
-    if (!isFacebookAuthenticated) {
-      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see the timeline</Typography>
-    } else if (transactions.length === 0) {
-      renderedComponent = <Typography color="textPrimary">No item in timeline</Typography>
-    } else {
-      renderedComponent = (
-        <List>
-          {transactions.map((transaction, idx) => (
-            <Item key={idx} transaction={transaction} />
-          ))}
-        </List>
-      )
-    }
     return (
       <Card className={className}>
         <CardContent>
           <Typography paragraph color="textSecondary">Do not miss anything! Diadem network last activities:</Typography>
-          {renderedComponent}
+          {(transactions.length === 0) ? (
+            <Typography color="textPrimary">No item in timeline</Typography>
+          ) : (
+            <List>
+              {transactions.map((transaction, idx) => (
+                <Item key={idx} transaction={transaction} />
+              ))}
+            </List>
+          )}
         </CardContent>
       </Card>
     )
@@ -47,7 +40,6 @@ class Timeline extends Component {
 Timeline.propTypes = {
   className: T.string,
   transactions: T.array,
-  isFacebookAuthenticated: T.bool.isRequired,
   updateTransactionsMeta: T.func
 }
 

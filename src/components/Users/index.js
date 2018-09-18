@@ -15,28 +15,21 @@ class Users extends Component {
   render () {
     const {
       className,
-      isFacebookAuthenticated,
       users
     } = this.props
-    let renderedComponent
-    if (!isFacebookAuthenticated) {
-      renderedComponent = <Typography color="textPrimary">You must be logged with Facebook to see the users</Typography>
-    } else if (users.length === 0) {
-      renderedComponent = <Typography color="textPrimary">No user registered</Typography>
-    } else {
-      renderedComponent = (
-        <List>
-          {users.map((user, idx) => (
-            <Item key={idx} user={user} />
-          ))}
-        </List>
-      )
-    }
     return (
       <Card className={className}>
         <CardContent>
           <Typography paragraph color="textSecondary">All registered Diadem Network users</Typography>
-          {renderedComponent}
+          {(users.length === 0) ? (
+            <Typography color="textPrimary">No user registered</Typography>
+          ) : (
+            <List>
+              {users.map((user, idx) => (
+                <Item key={idx} user={user} />
+              ))}
+            </List>
+          )}
         </CardContent>
       </Card>
     )
@@ -45,9 +38,8 @@ class Users extends Component {
 
 Users.propTypes = {
   className: T.string,
-  users: T.array,
-  isFacebookAuthenticated: T.bool.isRequired,
-  fetchUsers: T.func
+  fetchUsers: T.func,
+  users: T.array
 }
 
 export default withContainer(Users)

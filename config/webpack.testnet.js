@@ -1,7 +1,7 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const merge = require('webpack-merge')
-const webpack = require('webpack')
 const Dotenv = require('dotenv-webpack')
+const path = require('path')
 const commonWebpackConfig = require('./webpack.common')
 
 module.exports = merge(commonWebpackConfig, {
@@ -16,9 +16,6 @@ module.exports = merge(commonWebpackConfig, {
         }
       }
     }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production')
-    }),
-    new Dotenv()
+    new Dotenv({ path: path.join(__dirname, '../.env.testnet') })
   ]
 })

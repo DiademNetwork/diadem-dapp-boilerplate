@@ -2,7 +2,7 @@
 
 Client for Diadem Network application for Qtum Hackathon.
 
-If you do not know what Diadem Netowkr is about, please [Check cocumentation](https://github.com/DiademNetwork/qtum-dapp-documentation)
+If you do not know what Diadem Network is about, please [Check documentation](https://github.com/DiademNetwork/qtum-dapp-documentation)
 
 ## Techs used
 
@@ -28,7 +28,7 @@ If you do not know what Diadem Netowkr is about, please [Check cocumentation](ht
 6 - If it's the first time you develop on application add `127.0.0.1 local.diadem.network` in your `/etc/hosts` file  
 7 - Go to `https://local.diadem.network:9000`
 
-Note: The trick with `/etc/hosts` and `local.diadem.network` instead of `localhost` will make it possible to login with facebook.
+Note: The trick with `/etc/hosts` and `local.diadem.network` instead of `localhost` will make it possible to login with facebook on development version.
 
 ## Develop (sandboxed version)
 
@@ -42,9 +42,10 @@ To start sandboxed app, after repository is cloned and dependencies installed:
 
 ## Available scripts
 
-* `start` : start a development version of your app on `localhost:9000`, in watch mode
-* `build`: build a development version of you app in `dist` folder
-* `build-production`: build an optimized version of your app in `dist` folder
+* `start` : start a development version on `localhost:9000`, in watch mode
+* `start:sandbox` : start a **sandboxed** development version on `localhost:9000`, in watch mode
+* `build`: build a development version in `dist` folder
+* `build-production`: build an optimized version in `dist` folder
 * `lint` : run eslint for you project
 * `test`: run `jest` tests and create a `coverage` directory (you can then open file `/coverage/lcov-report/index.html` to see nice coverage report
 

@@ -1,10 +1,5 @@
 node_modules/
 dist/
-coverage/
-.qtum
-.env
-.env.testnet
-.env.mainnet
 envs/.testnet.env
 envs/.mainnet.env
 envs/.development.env

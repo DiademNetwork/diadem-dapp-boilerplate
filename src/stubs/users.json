@@ -1,0 +1,69 @@
+{
+  "usersList": [
+    {
+      "userAddress": "QY7FFhDmFXHGVVRgsyfcA2GJZo9EEtVhEv",
+      "userAccount": "1133316623498653",
+      "userName": "John Doe"
+    },
+    {
+      "userAddress": "QXgSuvpUyMdaGScAbuLAKr3jNNuqNEM2So",
+      "userAccount": "124566928499419",
+      "userName": "Crypto Igor"
+    },
+    {
+      "userAddress": "QgWZkUbugaq4HEpUTqoa7AYFkwSa6YCQg1",
+      "userAccount": "914462252075741",
+      "userName": "Alexandr  Smirnov"
+    },
+    {
+      "userAddress": "QetMQCLKHswMsU3NZg9MtWR3R9r9479CAT",
+      "userAccount": "10156583216029650",
+      "userName": "Clement Maori Lang-Tribalat Bresson"
+    },
+    {
+      "userAddress": "QMbgNf7RQnELCqbXrzMX9UjDmC2uwb9tWo",
+      "userAccount": "10156617362747128",
+      "userName": "Etienne Sinet"
+    },
+    {
+      "userAddress": "QYHgtux7Gsj7KGrLGVa9FtTxmAik5gU6fV",
+      "userAccount": "10212442338481316",
+      "userName": "Kuba Gaj"
+    },
+    {
+      "userAddress": "QecFCTDpRmtEUXcvP5VWHTZHbAoxPqFPZd",
+      "userAccount": "771637119861120",
+      "userName": "Dmitriy Guzev"
+    },
+    {
+      "userAddress": "QbctksYhVNy2SRMv4pXnsdSKvkNQJiukb2",
+      "userAccount": "1148189385350548",
+      "userName": "Lucas Brzsson"
+    },
+    {
+      "userAddress": "QfHXPDzdevxnapEsVvGwCnH6Cjq2mJGkUa",
+      "userAccount": "10155786994988176",
+      "userName": "Joséphine Monthioux"
+    },
+    {
+      "userAddress": "QSbUx6G3crrHnmY5rbnG2tExJNfQM9cMJ6",
+      "userAccount": "10156482933303828",
+      "userName": "Yacine Achiakh"
+    },
+    {
+      "userAddress": "QaoRHduf377o6M6GtoYksiSwE8jbTAWCBZ",
+      "userAccount": "10155840393822666",
+      "userName": "Benjamin Athuil"
+    },
+    {
+      "userAddress": "QR3KKtr44Wj7i8GL4X5YGCCSHzN7ogP4se",
+      "userAccount": "10214655839042950",
+      "userName": "Adrien de Tailly"
+    },
+    {
+      "userAddress": "QXRiE2zYtC1xV9RQmjJtzUnvL8u1HEEjfs",
+      "userAccount": "10217798976708634",
+      "userName": "Pierre Donati"
+    }
+  ]
+}

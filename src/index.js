@@ -12,10 +12,6 @@ import App from './screens/App'
 
 dotenv.config()
 
-if (process.env.NODE_ENV !== 'production') {
-  console.log('Looks like we are in development mode!')
-}
-
 const theme = createMuiTheme({
   palette: {
     primary: {

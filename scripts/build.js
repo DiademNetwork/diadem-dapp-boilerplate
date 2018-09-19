@@ -15,12 +15,12 @@ const env = args[0] || 'development'
 const DEFAULT_ENV = 'development'
 
 const getWebpackConfig = () => {
-  let target = path.join(__dirname, `../config/webpack.${env}.js`)
+  let target = path.join(__dirname, `../webpackConfigs/webpack.${env}.js`)
   if (!fs.existsSync(target)) {
     console.log(
       chalk.yellow(`WARNING: No webpack.${env}, using webpack.${DEFAULT_ENV}`)
     )
-    target = path.join(__dirname, `../config/webpack.${DEFAULT_ENV}`)
+    target = path.join(__dirname, `../webpackConfigs/webpack.${DEFAULT_ENV}`)
   }
   return require(target)
 }

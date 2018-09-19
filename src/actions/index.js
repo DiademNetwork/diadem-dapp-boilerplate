@@ -203,6 +203,7 @@ export const supportAchievement = ({ amount, fees, link }) => async (dispatch, g
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
+    console.log(error)
     dispatch(notifications.supportAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }

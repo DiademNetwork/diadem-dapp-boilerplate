@@ -1,5 +1,7 @@
 import stream from 'getstream'
+import streamMock from '../mocks/stream'
 
+// dependencies are injected for easier testing /mocking
 export const createStreamClient = (streamTool) => {
   const client = streamTool.connect(process.env.STREAM_KEY, null, process.env.STREAM_APPID)
   const feeds = {
@@ -7,12 +9,13 @@ export const createStreamClient = (streamTool) => {
     transactions: client.feed(process.env.STREAM_TRANSACTIONS_FEED, 'common', process.env.STREAM_TRANSACTIONS_FEED_TOKEN)
   }
 
-  function suscribeWithCallBacks (feedName, successCallback) {
-    return feeds[feedName].subscribe(successCallback).then(() => {
+  async function suscribeWithCallBacks (feedName, successCallback) {
+    try {
+      await feeds[feedName].subscribe(successCallback)
       console.log(`Suscribed to getstream feed: ${feedName}`)
-    }, (error) => {
+    } catch (error) {
       console.log(error)
-    })
+    }
   }
 
   async function fetchData (feedName, successCallback, failCallback) {
@@ -31,4 +34,7 @@ export const createStreamClient = (streamTool) => {
   })
 }
 
-export default createStreamClient(stream)
+export default createStreamClient(process.env.ENV === 'sandbox'
+  ? streamMock
+  : stream
+)

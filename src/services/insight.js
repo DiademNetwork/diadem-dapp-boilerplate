@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-// dependencies are injected for easier testing
+// dependencies are injected for easier testing /mocking
 export const createInsight = (fetcher, url) => {
   function getUrl (path) {
     return [url, path].join('/')

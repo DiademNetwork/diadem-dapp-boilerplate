@@ -1,7 +1,7 @@
 import axios from 'axios'
 import axiosMock from '../mocks/axios'
 
-// dependencies are injected for easier testing
+// dependencies are injected for easier testing /mocking
 export const createAPI = (fetcher, url) => {
   function getUrl (path) {
     return [url, path].join('/')

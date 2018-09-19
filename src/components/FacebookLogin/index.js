@@ -9,16 +9,14 @@ import facebookStub from '../../stubs/facebook'
 
 class FacebookLogin extends Component {
   onFacebookLogin = (facebookData) => {
-    if (!facebookData.userID) { // facebookLogin failed
-      return
-    }
+    if (!facebookData.userID) { return }
     this.props.handleFacebookLogin(facebookData)
   }
 
   render () {
     return this.props.isFacebookAuthenticated ? (
       <User />
-    ) : process.env.ENV !== 'mocked' ? (
+    ) : process.env.ENV !== 'sandbox' ? (
       <ReactFacebookLogin
         appId={process.env.FACEBOOK_APP_ID}
         fields="name,email,picture"

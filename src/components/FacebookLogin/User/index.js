@@ -14,8 +14,8 @@ const styles = (theme) => ({
 })
 
 const FacebookLoginUser = ({ facebookName, facebookPictureUrl, classes }) => [
-  <Avatar key="avatar" className={classes.img} alt="Facebook profile picture" src={facebookPictureUrl} />,
-  <Hidden key="username" smDown>
+  <Avatar key="facebook-login-user-avatar" className={classes.img} alt="Facebook profile picture" src={facebookPictureUrl} />,
+  <Hidden key="facebook-login-user-username" smDown>
     <Typography key="username" variant="title" color="inherit">{facebookName}</Typography>
   </Hidden>
 ]

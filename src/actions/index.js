@@ -151,7 +151,6 @@ export const handleFacebookLogin = (facebookData) => async (dispatch) => {
       }
     }
   } catch (error) {
-    console.log(error)
     dispatch(notifications.checkUserError)
   }
 }
@@ -204,6 +203,7 @@ export const supportAchievement = ({ amount, fees, link }) => async (dispatch, g
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
+    console.log(error)
     dispatch(notifications.supportAchievementError)
     dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
@@ -320,7 +320,6 @@ export const fetchUsers = () => async (dispatch) => {
     const { data: { usersList } } = await api.fetchUsers()
     dispatch({ type: ASYNC_USERS_FETCH.succeeded, data: usersList })
   } catch (error) {
-    console.log(error)
     dispatch({ type: ASYNC_USERS_FETCH.failed, payload: { error } })
     dispatch(notifications.fetchUsersError)
   }

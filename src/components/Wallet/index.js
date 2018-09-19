@@ -9,6 +9,8 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import notifications from '../../services/notifications'
 
+const CHECK_USER_REGISTRATION_INTERVAL = 5000 // in ms
+
 class Wallet extends Component {
   handleRefreshWallet = () => {
     const { refreshWallet, wallet } = this.props
@@ -17,7 +19,7 @@ class Wallet extends Component {
 
   startCheckRegistrationInterval = () => {
     const { checkUserRegistration } = this.props
-    this.checkRegistrationInterval = setInterval(checkUserRegistration, 5000)
+    this.checkRegistrationInterval = setInterval(checkUserRegistration, CHECK_USER_REGISTRATION_INTERVAL)
   }
 
   clearCheckRegistrationInterval = () => {

@@ -20,7 +20,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
 const AUTO_WALLET_REFRESH_INTERVAL = 5000 // in ms
-const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000
+const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 
 const styles = (theme) => ({
   withdraw: {
@@ -115,7 +115,7 @@ class WalletDisplay extends Component {
           <ListItemText primary={
             <Typography>
               {fullScreen ? `${truncateText(address, 25, '...')}` : `${address}`}
-              <Hidden smDown>
+              <Hidden xsDown>
                 <HelpTooltip text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements" />
                 <CopyToAddressToolip address={address} />
               </Hidden>
@@ -130,7 +130,7 @@ class WalletDisplay extends Component {
             primary={
               <Typography>
                 {balance} QTUM{unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} QTUM pending)` : ''}
-                <Hidden smDown>
+                <Hidden xsDown>
                   <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
                   {balance > 0 &&
                     <Withdraw

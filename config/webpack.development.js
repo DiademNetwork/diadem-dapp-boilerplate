@@ -15,6 +15,6 @@ module.exports = merge(commonWebpackConfig, {
     port: 9000
   },
   plugins: [
-    new Dotenv({ path: path.join(__dirname, '../.env.development') })
+    new Dotenv({ path: path.join(__dirname, '../.development.env') })
   ]
 })

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import axiosMock from '../mocks/axios'
 
 // dependencies are injected for easier testing
 export const createAPI = (fetcher, url) => {
@@ -47,6 +48,7 @@ export const createAPI = (fetcher, url) => {
   }
 
   async function fetchUsers () {
+    console.log(getUrl('users'))
     return fetcher.get(getUrl('users'))
   }
 
@@ -65,4 +67,12 @@ export const createAPI = (fetcher, url) => {
   })
 }
 
-export default createAPI(axios, process.env.BACKEND_URL)
+export default createAPI(
+  process.env.ENV === 'development'
+    ? axiosMock
+    : axios
+  ,
+  process.env.ENV === 'development'
+    ? ''
+    : process.env.BACKEND_URL
+)

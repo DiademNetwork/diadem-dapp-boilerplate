@@ -319,6 +319,7 @@ export const fetchUsers = () => async (dispatch) => {
     const { data: { usersList } } = await api.fetchUsers()
     dispatch({ type: ASYNC_USERS_FETCH.succeeded, data: usersList })
   } catch (error) {
+    console.log(error)
     dispatch({ type: ASYNC_USERS_FETCH.failed, payload: { error } })
     dispatch(notifications.fetchUsersError)
   }

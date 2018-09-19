@@ -16,6 +16,6 @@ module.exports = merge(commonWebpackConfig, {
         }
       }
     }),
-    new Dotenv({ path: path.join(__dirname, '../.env.testnet') })
+    new Dotenv({ path: path.join(__dirname, '../.testnet.env') })
   ]
 })

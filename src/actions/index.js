@@ -151,6 +151,7 @@ export const handleFacebookLogin = (facebookData) => async (dispatch) => {
       }
     }
   } catch (error) {
+    console.log(error)
     dispatch(notifications.checkUserError)
   }
 }

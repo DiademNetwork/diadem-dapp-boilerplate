@@ -34,9 +34,7 @@ export const createStreamClient = (streamTool) => {
   })
 }
 
-console.log(process.env.ENV)
-
-export default createStreamClient(process.env.ENV === 'development'
+export default createStreamClient(process.env.ENV === 'sandbox'
   ? streamMock
   : stream
 )

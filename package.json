@@ -13,7 +13,8 @@
     "build-storybook": "build-storybook",
     "predeploy": "yarn build:mainnet",
     "deploy": "gh-pages -d dist",
-    "start": "yarn run prebuild && webpack-dev-server --config ./config/webpack.development.js --https",
+    "start": "yarn run prebuild && webpack-dev-server --config ./webpackConfigs/webpack.development.js --https",
+    "start:sandbox": "yarn run prebuild && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js --https",
     "storybook": "start-storybook -p 6006",
     "test": "jest --coverage"
   },

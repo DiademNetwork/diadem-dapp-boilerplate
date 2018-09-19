@@ -1,11 +1,9 @@
 import { connect } from 'react-redux'
 import { handleFacebookLogin } from '../../actions'
 
-import { getFacebook, getFacebookPictureUrl, isFacebookAuthenticated } from '../../selectors'
+import { isFacebookAuthenticated } from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  facebookName: getFacebook('name')(state),
-  facebookPictureUrl: getFacebookPictureUrl(state),
   isFacebookAuthenticated: isFacebookAuthenticated(state)
 })
 

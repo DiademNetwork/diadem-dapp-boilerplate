@@ -1,9 +1,9 @@
-const merge = require('webpack-merge')
+const webpackConfigMerger = require('./webpackConfigMerger')
 const commonWebpackConfig = require('./webpack.common')
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
 
-module.exports = merge(commonWebpackConfig, {
+module.exports = webpackConfigMerger(commonWebpackConfig, {
   devtool: 'inline-source-map',
   devServer: {
     contentBase: path.join(__dirname, '../dist'),

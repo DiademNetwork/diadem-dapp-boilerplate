@@ -5,7 +5,7 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import Hidden from '@material-ui/core/Hidden'
 import { withStyles } from '@material-ui/core/styles'
-import LoginButton from '../LoginButton'
+import FacebookLogin from '../FacebookLogin'
 import Hashtag from '../Hashtag'
 import LogoImage from './logo.png'
 import Avatar from '@material-ui/core/Avatar'
@@ -61,7 +61,7 @@ class Nav extends Component {
           <Typography variant="title" color="inherit" className={classes.flex}>
             Diadem Network
           </Typography>
-          <LoginButton />
+          <FacebookLogin />
           <Hidden mdUp>
             <IconButton
               aria-label="Menu"

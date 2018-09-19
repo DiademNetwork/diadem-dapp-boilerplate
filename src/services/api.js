@@ -1,78 +1,36 @@
 import axios from 'axios'
-import axiosMock from '../mocks/axios'
+import * as R from 'ramda'
 
-// dependencies are injected for easier testing /mocking
+import mockAxios from '../mocks/axios'
+
 export const createAPI = (fetcher, url) => {
-  function getUrl (path) {
-    return [url, path].join('/')
-  }
-
-  async function createAchievement (data) {
-    return fetcher.post(getUrl('create'), data)
-  }
-
-  async function updateAchievement (data) {
-    return fetcher.post(getUrl('create'), data)
-  }
-
-  async function checkUser (data) {
-    return fetcher.post(getUrl('check'), data)
-  }
-
-  async function checkUserAddress (data) {
-    return fetcher.post(getUrl('check-qtum-address'), data)
-  }
-
-  async function registerUser (data) {
-    return fetcher.post(getUrl('register'), data)
-  }
-
-  async function confirmAchievement (data) {
-    return fetcher.post(getUrl('confirm'), data)
-  }
-
-  async function encodeSupport (data) {
-    return fetcher.post(getUrl('encode-support'), data)
-  }
-
-  async function encodeDeposit (data) {
-    return fetcher.post(getUrl('encode-deposit'), data)
-  }
-
-  async function supportAchievement (data) {
-    return fetcher.post(getUrl('support'), data)
-  }
-
-  async function depositForAchievement (data) {
-    return fetcher.post(getUrl('deposit'), data)
-  }
-
-  async function fetchUsers () {
-    console.log(getUrl('users'))
-    return fetcher.get(getUrl('users'))
-  }
+  const getFullUrl = (path) => `${url}${path}`
+  const post = async (path, data) => fetcher.post(getFullUrl(path), data)
+  const postPath = path => R.partial(post, [path])
+  const get = async (path) => fetcher.get(getFullUrl(path))
+  const getPath = path => R.partial(get, [path])
 
   return Object.freeze({
-    checkUser,
-    checkUserAddress,
-    confirmAchievement,
-    createAchievement,
-    depositForAchievement,
-    encodeSupport,
-    encodeDeposit,
-    fetchUsers,
-    registerUser,
-    supportAchievement,
-    updateAchievement
+    checkUser: postPath('/check'),
+    checkUserAddress: postPath('/check-qtum-address'),
+    confirmAchievement: postPath('/confirm'),
+    createAchievement: postPath('/create'),
+    depositForAchievement: postPath('/deposit'),
+    encodeSupport: postPath('/encode-support'),
+    encodeDeposit: postPath('/encode-deposit'),
+    fetchUsers: getPath('/users'),
+    registerUser: postPath('/register'),
+    supportAchievement: postPath('/support'),
+    updateAchievement: postPath('/create')
   })
 }
 
-export default createAPI(
-  process.env.ENV === 'development'
-    ? axiosMock
-    : axios
-  ,
-  process.env.ENV === 'development'
+if (process.env.ENV === 'sandbox') {
+  mockAxios()
+}
+
+export default createAPI(axios,
+  process.env.ENV === 'sandbox'
     ? ''
     : process.env.BACKEND_URL
 )

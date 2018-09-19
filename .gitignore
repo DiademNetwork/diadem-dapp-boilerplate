@@ -3,3 +3,4 @@ dist/
 envs/.testnet.env
 envs/.mainnet.env
 envs/.development.env
+envs/.sandbox.env

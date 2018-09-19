@@ -3,15 +3,15 @@ import achievementsStub from '../stubs/achievements'
 import transactionsStub from '../stubs/transactions'
 
 export default (function stream () {
-  function suscribe (name) {
-    console.log(`Fake suscribe to ${name}`)
+  function subscribe (name) {
+    console.log(`Fake subscribe to ${name}`)
   }
 
   function get (name) {
     switch (name) {
-      case 'achievement_chain_feeds':
+      case 'achievements_chain':
         return achievementsStub
-      case 'transactions_feed':
+      case 'transactions':
         return transactionsStub
       default:
         return {}
@@ -21,12 +21,11 @@ export default (function stream () {
   function feed (name) {
     return Object.freeze({
       get: R.partial(get, [name]),
-      suscribe: R.partial(get, [suscribe])
+      subscribe: R.partial(subscribe, [name])
     })
   }
 
   function connect () {
-    console.log('CONNECT ?')
     return Object.freeze({
       feed
     })

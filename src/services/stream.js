@@ -17,7 +17,7 @@ export const createStreamClient = (streamTool) => {
 
   async function fetchData (feedName, successCallback, failCallback) {
     try {
-      const response = await feeds[feedName].get()
+      const response = await feeds[feedName].get({ limit: 100 })
       return successCallback(response.results)
     } catch (error) {
       failCallback(error)

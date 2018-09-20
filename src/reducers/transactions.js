@@ -8,8 +8,8 @@ const {
 } = types
 
 const intialState = {
-  data: [],
   fetchStatus: 'none',
+  data: {},
   meta: {
     hasMore: true,
     hasUnread: false

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 
-import { getFacebook, getFacebookPictureUrl } from '../../../selectors'
+import { getFacebookDataProp, getFacebookPictureUrl } from '../../../selectors'
 
 const mapStateToProps = (state) => ({
-  facebookName: getFacebook('name')(state),
+  facebookName: getFacebookDataProp('name')(state),
   facebookPictureUrl: getFacebookPictureUrl(state)
 })
 export default WrappedComponent => connect(mapStateToProps)(WrappedComponent)

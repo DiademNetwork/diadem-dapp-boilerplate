@@ -6,7 +6,7 @@ const {
 } = types
 
 const intialState = {
-  data: [],
+  data: {},
   fetchStatus: 'none'
 }
 

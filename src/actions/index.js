@@ -158,7 +158,7 @@ export const handleFacebookLogin = (facebookData) => async (dispatch) => {
   }
 }
 
-export const updateAchievementsSuccess = (data) => async dispatch => {
+export const updateAchievementsData = (data) => async dispatch => {
   dispatch({ type: ACHIEVEMENTS_UPDATE_DATA, data })
 }
 

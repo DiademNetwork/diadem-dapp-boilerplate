@@ -17,7 +17,7 @@ const intialState = {
   fetchStatus: 'none',
   supportStatus: 'none',
   confirmStatus: 'none',
-  data: [],
+  data: {},
   meta: {
     hasUnread: false
   }

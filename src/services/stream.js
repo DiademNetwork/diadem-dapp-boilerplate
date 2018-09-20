@@ -1,12 +1,24 @@
+
 import stream from 'getstream'
 import streamMock from '../mocks/stream'
+
+const LIMIT = 100
 
 // dependencies are injected for easier testing /mocking
 export const createStreamClient = (streamTool) => {
   const client = streamTool.connect(process.env.STREAM_KEY, null, process.env.STREAM_APPID)
+
   const feeds = {
-    achievements: client.feed(process.env.STREAM_ACHIEVEMENTS_FEED, 'common', process.env.STREAM_ACHIEVEMENTS_FEED_TOKEN),
-    transactions: client.feed(process.env.STREAM_TRANSACTIONS_FEED, 'common', process.env.STREAM_TRANSACTIONS_FEED_TOKEN)
+    achievements: client.feed(
+      process.env.STREAM_ACHIEVEMENTS_FEED,
+      'common',
+      process.env.STREAM_ACHIEVEMENTS_FEED_TOKEN
+    ),
+    transactions: client.feed(
+      process.env.STREAM_TRANSACTIONS_FEED,
+      'common',
+      process.env.STREAM_TRANSACTIONS_FEED_TOKEN
+    )
   }
 
   async function suscribeWithCallBacks (feedName, successCallback) {
@@ -18,10 +30,29 @@ export const createStreamClient = (streamTool) => {
     }
   }
 
+  // For now, all data is fetched. Later, when filters will be implemented
+  // idea will be to fetch only the LIMIT first results of search, and have a system of pagination/scroll load
+  // while loop is temporary while data amount is low, and filters/search on their way to be implemented
+  // Imperative code below is thus temporary
   async function fetchData (feedName, successCallback, failCallback) {
     try {
-      const response = await feeds[feedName].get({ limit: 100 })
-      return successCallback(response.results)
+      let items
+      const { next, results } = await feeds[feedName].get({ limit: LIMIT })
+      items = results
+      let allFetched = next === ''
+      if (!allFetched) {
+        let previousRequestsCount = 1
+        while (!allFetched) {
+          const { results: newResults, next: newNext } = await feeds[feedName].get({
+            limit: LIMIT,
+            offset: LIMIT * previousRequestsCount
+          })
+          previousRequestsCount += 1
+          allFetched = newNext === ''
+          items = [ ...items, ...newResults ]
+        }
+      }
+      return successCallback(items)
     } catch (error) {
       failCallback(error)
       return []
@@ -34,7 +65,8 @@ export const createStreamClient = (streamTool) => {
   })
 }
 
-export default createStreamClient(process.env.ENV === 'sandbox'
-  ? streamMock
-  : stream
+export default createStreamClient(
+  process.env.ENV === 'sandbox'
+    ? streamMock
+    : stream
 )

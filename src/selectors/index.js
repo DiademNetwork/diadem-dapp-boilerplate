@@ -27,9 +27,11 @@ export const getAllTransactionsMeta = R.path(['transactions', 'meta'])
 export const getTransactionsMeta = name => createSelector([getAllTransactionsMeta], R.prop(name))
 export const getTransactionsCount = createSelector([getAllTransactionsData], R.length)
 export const getSortedTransactions = createSelector([getAllTransactionsData], sortByTime.asc)
+export const getTransactionsFetchStatus = R.path(['transactions', 'fetchStatus'])
 
 // Achievements
 export const getAchievementCreateStatus = R.path(['achievements', 'createStatus'])
+export const getAchievementsFetchStatus = R.path(['achievements', 'fetchStatus'])
 export const getAllAchievementsData = R.pathOr([], ['achievements', 'data'])
 export const getAllAchievementsMeta = R.path(['achievements', 'meta'])
 export const getAllUnbannedAchievementsData = createSelector([getAllAchievementsData], R.filter(R.complement(R.propEq)('ban', true)))
@@ -110,3 +112,5 @@ export const getLastUserTransactions = (state, { userID }) => {
     R.path(['transactions', 'data'])
   )(state)
 }
+
+export const getUsersFetchStatus = R.path(['users', 'fetchStatus'])

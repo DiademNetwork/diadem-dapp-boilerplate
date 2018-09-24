@@ -13,8 +13,8 @@
     "build-storybook": "build-storybook",
     "predeploy": "yarn build:mainnet",
     "deploy": "gh-pages -d dist",
-    "start": "yarn run prebuild && webpack-dev-server --config ./webpackConfigs/webpack.development.js --https",
-    "start:sandbox": "yarn run prebuild && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js",
+    "start": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.development.js --https",
+    "start:sandbox": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js",
     "storybook": "start-storybook -p 6006",
     "test": "jest --coverage"
   },
@@ -91,6 +91,7 @@
     "qtumjs-wallet": "^0.1.5",
     "ramda": "^0.25.0",
     "react-facebook-login": "^4.0.1",
+    "react-infinite-scroller": "^1.2.1",
     "react-notification-system": "^0.2.17",
     "react-notification-system-redux": "^1.2.0",
     "redux-saga": "^0.16.0",

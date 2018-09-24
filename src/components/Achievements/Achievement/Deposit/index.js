@@ -38,11 +38,10 @@ class AchievementDeposit extends Component {
     modalOpen: false
   }
 
-  componentDidMount () {
+  handleClickOpen = () => {
     this.props.fetchUsers()
+    this.setState({ modalOpen: true })
   }
-
-  handleClickOpen = () => this.setState({ modalOpen: true })
 
   handleClose = () => this.setState({ modalOpen: false })
 

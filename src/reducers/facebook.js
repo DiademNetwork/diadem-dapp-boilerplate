@@ -1,24 +1,16 @@
-import types from '../actions/types'
-const {
-  FACEBOOK_UPDATE_DATA,
-  FACEBOOK_UPDATE_AUTHENTICATION_STATUS
-} = types
+import merge from './merge-state'
+import T from '../actions/types'
 
-const intialState = {
-  authenticationStatus: 'none',
-  data: {}
-}
-
-export default (state, action) => {
+export default (state, { type, data }) => {
   if (typeof state === 'undefined') {
-    return intialState
+    return {
+      authenticationStatus: 'none',
+      data: {}
+    }
   }
-  switch (action.type) {
-    case FACEBOOK_UPDATE_DATA:
-      return { ...state, data: action.data }
-    case FACEBOOK_UPDATE_AUTHENTICATION_STATUS:
-      return { ...state, authenticationStatus: 'succeeded' }
-    default:
-      return state
+  switch (type) {
+    case T.FACEBOOK_UPDATE_DATA: return merge(state)(data)
+    case T.FACEBOOK_UPDATE_AUTHENTICATION_STATUS: return merge(state)({ authenticationStatus: 'succeeded' })
+    default: return state
   }
 }

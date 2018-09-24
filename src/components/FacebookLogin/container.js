@@ -1,13 +1,14 @@
 import { connect } from 'react-redux'
-import { handleFacebookLogin } from '../../actions'
-
-import { isFacebookAuthenticated } from '../../selectors'
+import * as A from '../../actions'
+import S from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  isFacebookAuthenticated: isFacebookAuthenticated(state)
+  isFacebookAuthenticated: S.isFacebookAuthenticated(state)
 })
 
-const mapDispatchToProps = { handleFacebookLogin }
+const mapDispatchToProps = {
+  handleFacebookLogin: A.handleFacebookLogin
+}
 
 export default WrappedComponent =>
   connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)

@@ -1,23 +1,15 @@
-import types from '../actions/types'
-const {
-  UI_SHOW_HELP,
-  UI_HIDE_HELP
-} = types
+import T from '../actions/types'
+import merge from './merge-state'
 
-const intialState = {
-  isHelpDisplayed: false
-}
-
-export default (state, action) => {
+export default (state, { type }) => {
   if (typeof state === 'undefined') {
-    return intialState
+    return {
+      isHelpDisplayed: false
+    }
   }
-  switch (action.type) {
-    case UI_SHOW_HELP:
-      return { ...state, isHelpDisplayed: true }
-    case UI_HIDE_HELP:
-      return { ...state, isHelpDisplayed: false }
-    default:
-      return state
+  switch (type) {
+    case T.UI_SHOW_HELP: return merge(state)({ isHelpDisplayed: true })
+    case T.UI_HIDE_HELP: return merge(state)({ isHelpDisplayed: false })
+    default: return state
   }
 }

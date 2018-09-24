@@ -4,15 +4,15 @@ import mapSort from '../helpers/map-sort'
 
 // Helpers
 export const getAchievements = (path) => R.path(['achievements', ...path])
-export const getAchievementsData = (path) => createSelector([getAchievements], R.path(['data', ...path]))
-export const getAchievementsMeta = (path) => createSelector([getAchievements], R.path(['meta', ...path]))
+export const getAchievementsData = (path) => createSelector([getAchievements(['data'])], R.path(path))
+export const getAchievementsMeta = (path) => createSelector([getAchievements(['meta'])], R.path(path))
 
 // Simple targets
 export const getAchievementCreateStatus = getAchievements(['createStatus'])
 export const getAchievementsFetchStatus = getAchievements(['fetchStatus'])
 
 // Logic
-export const getAchievementsItems = createSelector([getAchievementsData('items')], R.filter(R.complement(R.propEq)('ban', true)))
+export const getAchievementsItems = createSelector([getAchievementsData(['items'])], R.filter(R.complement(R.propEq)('ban', true)))
 export const getAchievementsItemsCount = createSelector([getAchievementsItems], R.length)
 export const getAchievementsItemsGroupedByWallet = createSelector([getAchievementsItems], R.groupBy(R.prop('wallet')))
 export const getAllAchievementsWallets = createSelector([getAchievementsItemsGroupedByWallet], R.keys)

@@ -1,37 +1,26 @@
-import types from '../actions/types'
-import * as R from 'ramda'
+import T from '../actions/types'
+import merge from './merge-state'
 
-const {
-  ASYNC_TRANSACTIONS_FETCH,
-  TRANSACTIONS_UPDATE_META,
-  TRANSACTIONS_UPDATE_DATA
-} = types
-
-const intialState = {
-  fetchStatus: 'none',
-  data: {},
-  meta: {
-    hasMore: true,
-    hasUnread: false
-  }
-}
-
-export default (state, action) => {
+export default (state, { type, data, meta }) => {
   if (typeof state === 'undefined') {
-    return intialState
+    return {
+      fetchStatus: 'none',
+      data: {
+        items: []
+      },
+      meta: {
+        hasMore: true,
+        hasUnread: false
+      }
+    }
   }
-  const mergeState = R.merge(state)
-  switch (action.type) {
-    case TRANSACTIONS_UPDATE_DATA: return mergeState({ data: [ ...state.data, ...action.data ] })
-    case TRANSACTIONS_UPDATE_META: return mergeState({ meta: { ...state.meta, ...action.meta } })
+  switch (type) {
+    case T.TRANSACTIONS_UPDATE_DATA: return merge(state)(data)
+    case T.TRANSACTIONS_UPDATE_META: return merge(state)(meta)
 
-    case ASYNC_TRANSACTIONS_FETCH.requested: return mergeState({ fetchStatus: 'requested' })
-    case ASYNC_TRANSACTIONS_FETCH.succeeded: return mergeState({
-      fetchStatus: 'succeeded',
-      data: [ ...state.data, ...action.results ],
-      meta: { ...state.meta, hasMore: action.hasMore }
-    })
-    case ASYNC_TRANSACTIONS_FETCH.failed: return mergeState({ fetchStatus: 'failed' })
+    case T.ASYNC_TRANSACTIONS_FETCH.requested: return merge(state)({ fetchStatus: 'requested' })
+    case T.ASYNC_TRANSACTIONS_FETCH.succeeded: return merge(state)({ fetchStatus: 'succeeded', data, meta })
+    case T.ASYNC_TRANSACTIONS_FETCH.failed: return merge(state)({ fetchStatus: 'failed' })
     default:
       return state
   }

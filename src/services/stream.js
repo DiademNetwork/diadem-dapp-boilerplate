@@ -3,7 +3,7 @@ import stream from 'getstream'
 import streamMock from '../mocks/stream'
 
 const LIMIT = 100
-const TRANSACTIONS_LIMIT = 10
+const TRANSACTIONS_LIMIT = 30
 
 // dependencies are injected for easier testing /mocking
 export const createStreamClient = (streamTool) => {

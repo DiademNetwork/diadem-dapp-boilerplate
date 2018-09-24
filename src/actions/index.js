@@ -4,40 +4,18 @@ import insight from '../services/insight'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import notifications from '../services/notifications'
 import stream from '../services/stream'
-import types from './types'
-
-const {
-  ASYNC_ACHIEVEMENT_CONFIRM,
-  ASYNC_ACHIEVEMENT_CREATE,
-  ASYNC_ACHIEVEMENT_SUPPORT,
-  ASYNC_ACHIEVEMENT_DEPOSIT,
-  ASYNC_ACHIEVEMENT_UPDATE,
-  ASYNC_ACHIEVEMENTS_FETCH,
-  ASYNC_TRANSACTIONS_FETCH,
-  ASYNC_USERS_FETCH,
-  ACHIEVEMENTS_UPDATE_DATA,
-  ACHIEVEMENTS_UPDATE_META,
-  TRANSACTIONS_UPDATE_META,
-  TRANSACTIONS_UPDATE_DATA,
-  UI_SHOW_HELP,
-  UI_HIDE_HELP,
-  WALLET_UPDATE_DATA,
-  WALLET_UPDATE_META,
-  WALLET_UPDATE_STATUS,
-  FACEBOOK_UPDATE_DATA,
-  FACEBOOK_UPDATE_AUTHENTICATION_STATUS
-} = types
+import T from './types'
 
 const network = networks[process.env.QTUM_NETWORK]
 
 // Facebook
-export const updateFacebook = (data) => ({ type: FACEBOOK_UPDATE_DATA, data })
-export const updateFacebookAuthenticationStatus = (status) => ({ type: FACEBOOK_UPDATE_AUTHENTICATION_STATUS, status })
+export const updateFacebook = (data) => ({ type: T.FACEBOOK_UPDATE_DATA, data })
+export const updateFacebookAuthenticationStatus = (status) => ({ type: T.FACEBOOK_UPDATE_AUTHENTICATION_STATUS, status })
 
 // Wallet
-export const updateWallet = (data) => ({ type: WALLET_UPDATE_DATA, data })
-export const updateWalletMeta = (meta) => ({ type: WALLET_UPDATE_META, meta })
-export const updateWalletStatus = (status) => ({ type: WALLET_UPDATE_STATUS, status })
+export const updateWallet = (data) => ({ type: T.WALLET_UPDATE_DATA, data })
+export const updateWalletMeta = (meta) => ({ type: T.WALLET_UPDATE_META, meta })
+export const updateWalletStatus = (status) => ({ type: T.WALLET_UPDATE_STATUS, status })
 
 export const refreshWallet = (wallet) => async (dispatch, getState) => {
   try {
@@ -159,7 +137,7 @@ export const handleFacebookLogin = (facebookData) => async (dispatch) => {
 }
 
 export const updateAchievementsData = (data) => async dispatch => {
-  dispatch({ type: ACHIEVEMENTS_UPDATE_DATA, data })
+  dispatch({ type: T.ACHIEVEMENTS_UPDATE_DATA, data })
 }
 
 export const updateAchievementsFail = () => async dispatch => {
@@ -167,24 +145,24 @@ export const updateAchievementsFail = () => async dispatch => {
 }
 
 export const updateTransactionsData = (data) => async dispatch => {
-  dispatch({ type: TRANSACTIONS_UPDATE_DATA, data })
+  dispatch({ type: T.TRANSACTIONS_UPDATE_DATA, data })
 }
 
 export const confirmAchievement = ({ address, link, token, user }) => async dispatch => {
   try {
-    dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.requested })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_CONFIRM.requested })
     await api.confirmAchievement({ address, link, token, user })
-    dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_CONFIRM.succeeded })
     dispatch(notifications.confirmAchievementSuccess)
   } catch (error) {
     dispatch(notifications.confirmAchievementError)
-    dispatch({ type: ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_CONFIRM.failed, payload: { error } })
   }
 }
 
 export const supportAchievement = ({ amount, fees, link }) => async (dispatch, getState) => {
   try {
-    dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.requested })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_SUPPORT.requested })
     const { data: { address, encodedData } } = await api.encodeSupport({ link })
     const { facebook, wallet } = getState()
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
@@ -199,12 +177,11 @@ export const supportAchievement = ({ amount, fees, link }) => async (dispatch, g
       token: accessToken,
       user: userID
     })
-    dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_SUPPORT.succeeded })
     dispatch(notifications.supportAchievementSuccess)
   } catch (error) {
-    console.log(error)
     dispatch(notifications.supportAchievementError)
-    dispatch({ type: ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_SUPPORT.failed, payload: { error } })
   }
 }
 
@@ -217,7 +194,7 @@ export const depositForAchievement = ({
   witnessUserID
 }) => async (dispatch, getState) => {
   try {
-    dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.requested })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_DEPOSIT.requested })
     const { facebook, wallet } = getState()
     const { data: { address, encodedData } } = await api.encodeDeposit({ link, witness: witnessAddress })
     const rawTx = await wallet.meta.wallet.generateContractSendTx(address, encodedData, {
@@ -234,17 +211,17 @@ export const depositForAchievement = ({
       witness: witnessUserID,
       witnessName
     })
-    dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_DEPOSIT.succeeded })
     dispatch(notifications.depositAchievementSuccess)
   } catch (error) {
-    dispatch({ type: ASYNC_ACHIEVEMENT_DEPOSIT.failed, payload: { error } })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_DEPOSIT.failed, payload: { error } })
     dispatch(notifications.depositAchievementError)
   }
 }
 
 export const createAchievement = (payload) => async (dispatch, getState) => {
   try {
-    dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.requested })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_CREATE.requested })
     const { link, title } = payload
     const { facebook, wallet } = getState()
     const { accessToken, name, userID } = facebook.data
@@ -258,17 +235,17 @@ export const createAchievement = (payload) => async (dispatch, getState) => {
       token: accessToken,
       user: userID
     })
-    dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.succeeded })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_CREATE.succeeded })
     dispatch(notifications.createAchievementSuccess)
   } catch (error) {
     dispatch(notifications.createAchievementError)
-    dispatch({ type: ASYNC_ACHIEVEMENT_CREATE.failed, payload: { error } })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_CREATE.failed, payload: { error } })
   }
 }
 
 export const updateAchievement = (payload) => async (dispatch, getState) => {
   try {
-    dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.requested })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_UPDATE.requested })
     const { link, title, previousLink } = payload
     const { facebook, wallet } = getState()
     const { accessToken, name, userID } = facebook.data
@@ -282,16 +259,16 @@ export const updateAchievement = (payload) => async (dispatch, getState) => {
       token: accessToken,
       user: userID
     })
-    dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.succeeded })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_UPDATE.succeeded })
     dispatch(notifications.updateAchievementSuccess)
   } catch (error) {
     dispatch(notifications.updateAchievementError)
-    dispatch({ type: ASYNC_ACHIEVEMENT_UPDATE.failed, payload: { error } })
+    dispatch({ type: T.ASYNC_ACHIEVEMENT_UPDATE.failed, payload: { error } })
   }
 }
 
-export const updateTransactionsMeta = (meta) => ({ type: TRANSACTIONS_UPDATE_META, meta })
-export const updateAchievementsMeta = (meta) => ({ type: ACHIEVEMENTS_UPDATE_META, meta })
+export const updateTransactionsMeta = (meta) => ({ type: T.TRANSACTIONS_UPDATE_META, meta })
+export const updateAchievementsMeta = (meta) => ({ type: T.ACHIEVEMENTS_UPDATE_META, meta })
 
 export const displayNotification = (notification) => (dispatch) => {
   dispatch(notification)
@@ -300,9 +277,7 @@ export const displayNotification = (notification) => (dispatch) => {
 export const withdrawFromHotWallet = ({address, amount, fees}) => async (dispatch, getState) => {
   try {
     const { wallet: { meta: { wallet } } } = getState()
-    await wallet.send(address, amount * 1e8, {
-      feeRate: fees
-    })
+    await wallet.send(address, amount * 1e8, { feeRate: fees })
     dispatch(notifications.withdrawTokensSuccess)
   } catch (error) {
     dispatch(notifications.withdrawTokensError)
@@ -310,17 +285,17 @@ export const withdrawFromHotWallet = ({address, amount, fees}) => async (dispatc
 }
 
 // Ui
-export const showHelp = () => ({ type: UI_SHOW_HELP })
-export const hideHelp = () => ({ type: UI_HIDE_HELP })
+export const showHelp = () => ({ type: T.UI_SHOW_HELP })
+export const hideHelp = () => ({ type: T.UI_HIDE_HELP })
 
 // Users
 export const fetchUsers = () => async (dispatch) => {
   try {
-    dispatch({ type: ASYNC_USERS_FETCH.requested })
-    const { data: { usersList } } = await api.fetchUsers()
-    dispatch({ type: ASYNC_USERS_FETCH.succeeded, data: usersList })
+    dispatch({ type: T.ASYNC_USERS_FETCH.requested })
+    const { data: { usersList: items } } = await api.fetchUsers()
+    dispatch({ type: T.ASYNC_USERS_FETCH.succeeded, data: { items } })
   } catch (error) {
-    dispatch({ type: ASYNC_USERS_FETCH.failed, payload: { error } })
+    dispatch({ type: T.ASYNC_USERS_FETCH.failed, payload: { error } })
     dispatch(notifications.fetchUsersError)
   }
 }
@@ -336,50 +311,52 @@ export const checkLastUserTransactions = (transactions) => async (dispatch) => {
 
 export const fetchTransactions = (page = 1) => async (dispatch) => {
   try {
-    dispatch({ type: ASYNC_TRANSACTIONS_FETCH.requested })
+    dispatch({ type: T.ASYNC_TRANSACTIONS_FETCH.requested })
     stream.fetchData(
       'transactions',
-      ({ results, hasMore }) => dispatch({ type: ASYNC_TRANSACTIONS_FETCH.succeeded, results, hasMore }),
+      ({ results: items, hasMore }) => dispatch({
+        type: T.ASYNC_TRANSACTIONS_FETCH.succeeded,
+        data: { items },
+        meta: { hasMore }
+      }),
       () => new Error('Fetch transactions failed'),
       page
     )
   } catch (error) {
-    console.log(error)
-    dispatch({ type: ASYNC_TRANSACTIONS_FETCH.failed })
+    dispatch({ type: T.ASYNC_TRANSACTIONS_FETCH.failed })
     dispatch(notifications.fetchTransactionsError)
   }
 }
 
 export const suscribeToTransactions = () => async (dispatch) => {
-  stream.suscribeWithCallBacks('transactions', ({ new: data }) => {
+  stream.suscribeWithCallBacks('transactions', ({ new: items }) => {
     dispatch(notifications.newTransactions)
-    dispatch({ type: TRANSACTIONS_UPDATE_META, hasUnread: true })
-    dispatch({ type: TRANSACTIONS_UPDATE_DATA, data })
+    dispatch({ type: T.TRANSACTIONS_UPDATE_META, meta: { hasUnread: true } })
+    dispatch({ type: T.TRANSACTIONS_UPDATE_DATA, data: { items } })
   })
 }
 
 export const fetchAchievements = () => async (dispatch) => {
   try {
-    dispatch({ type: ASYNC_ACHIEVEMENTS_FETCH.requested })
+    dispatch({ type: T.ASYNC_ACHIEVEMENTS_FETCH.requested })
     stream.fetchData(
       'achievements',
-      ({ results }) => dispatch({ type: ASYNC_ACHIEVEMENTS_FETCH.succeeded, results }),
+      ({ results: items }) => dispatch({ type: T.ASYNC_ACHIEVEMENTS_FETCH.succeeded, data: { items } }),
       (err) => {
         console.log('error ?', err)
         return new Error('Fetch achievements failed')
       }
     )
   } catch (error) {
-    console.log(error)
-    dispatch({ type: ASYNC_ACHIEVEMENTS_FETCH.failed })
+    dispatch({ type: T.ASYNC_ACHIEVEMENTS_FETCH.failed })
     dispatch(notifications.fetchAchievementsError)
   }
 }
 
 export const suscribeToAchievements = () => async (dispatch) => {
-  stream.suscribeWithCallBacks('achievements', ({ new: data }) => {
+  stream.suscribeWithCallBacks('achievements', ({ new: items }) => {
     dispatch(notifications.newAchievements)
-    dispatch({ type: ACHIEVEMENTS_UPDATE_META, hasUnread: true })
-    dispatch({ type: ACHIEVEMENTS_UPDATE_DATA, data })
+    dispatch({ type: T.ACHIEVEMENTS_UPDATE_META, meta: { hasUnread: true } })
+    dispatch({ type: T.ACHIEVEMENTS_UPDATE_DATA, data: { items } })
   })
 }

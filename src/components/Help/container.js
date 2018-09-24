@@ -1,13 +1,14 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import { hideHelp } from '../../actions'
+import * as A from '../../actions'
+import * as S from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  isHelpDisplayed: state.ui.isHelpDisplayed
+  isHelpDisplayed: S.getUIisHelpedDisplayed(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  hideHelp
+  hideHelp: A.hideHelp
 }, dispatch)
 
 export default WrappedComponent =>

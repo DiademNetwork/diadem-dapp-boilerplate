@@ -5,7 +5,6 @@ import S from '../../../selectors'
 const mapStateToProps = (state) => ({
   accessToken: S.getFacebookAccessToken(state),
   canUserConfirmCreateUpdateSupportDeposit: S.canUserConfirmCreateUpdateSupportDeposit(state),
-  transactions: S.getTransactionsItems(state),
   userID: S.getFacebookUserID(state),
   walletAddress: S.getWalletAddress(state),
   walletBalance: S.getWalletBalance(state)

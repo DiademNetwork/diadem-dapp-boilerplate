@@ -3,8 +3,6 @@ import { bindActionCreators } from 'redux'
 import * as A from '../../actions'
 import S from '../../selectors'
 
-console.log(S.getUIisHelpedDisplayed)
-
 const mapStateToProps = (state) => ({
   isHelpDisplayed: S.getUIisHelpedDisplayed(state)
 })

@@ -19,8 +19,8 @@ export default (state, { type, data, meta }) => {
   }
 
   switch (type) {
-    case T.ACHIEVEMENTS_UPDATE_DATA: return merge(state)(data)
-    case T.ACHIEVEMENTS_UPDATE_META: return merge(state)(meta)
+    case T.ACHIEVEMENTS_UPDATE_DATA: return merge(state)({ data })
+    case T.ACHIEVEMENTS_UPDATE_META: return merge(state)({ meta })
 
     case T.ASYNC_ACHIEVEMENTS_FETCH.requested: return merge(state)({ fetchStatus: 'requested' })
     case T.ASYNC_ACHIEVEMENTS_FETCH.succeeded: return merge(state)({ fetchStatus: 'succeeded', data })

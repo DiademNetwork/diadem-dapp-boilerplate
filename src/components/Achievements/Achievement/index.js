@@ -87,16 +87,13 @@ class Achievement extends Component {
   }
 
   hasUserAlreadyConfirmed = () => {
-    const { displayedHistoryItem: { object } } = this.state
-    const { userID, transactions } = this.props
+    const { displayedHistoryItem: { confirm } } = this.state
+    const { userID } = this.props
+    console.log(confirm)
     return R.compose(
-      R.complement(R.isNil),
-      R.find(R.both(
-        R.propEq('actor', userID),
-        R.propEq('object', object)
-      )),
-      R.filter(R.propEq('verb', 'confirm'))
-    )(transactions)
+      R.contains(userID),
+      R.map(R.prop('actor'))
+    )(confirm)
   }
 
   getUniqueUsersNamesFor = verb => R.compose(
@@ -266,8 +263,7 @@ Achievement.propTypes = {
   userID: T.string,
   walletAddress: T.string,
   walletBalance: T.number,
-  supportAchievement: T.func,
-  transactions: T.array
+  supportAchievement: T.func
 }
 
 export default withContainer(withStyles(styles)(Achievement))

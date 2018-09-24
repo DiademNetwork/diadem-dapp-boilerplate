@@ -34,8 +34,11 @@ const styles = (theme) => ({
 
 class Achievements extends Component {
   componentDidMount () {
-    // remove new items badge from tabs when user navigates to achievements
-    this.props.updateAchievementsMeta({ notificationCount: 0 })
+    const { fetchAchievements, fetchStatus, suscribeToAchievements } = this.props
+    if (fetchStatus === 'none') {
+      fetchAchievements()
+      suscribeToAchievements()
+    }
   }
 
   render () {
@@ -46,6 +49,7 @@ class Achievements extends Component {
       classes,
       createAchievement,
       createAchievementStatus,
+      fetchStatus,
       lastLinkOfUserAchievementOrNull,
       updateAchievement
     } = this.props
@@ -70,7 +74,7 @@ class Achievements extends Component {
       <Grid
         key='list'
         container
-        className={`${className} ${classes.grid}`}
+        className={`${className}  ${classes.grid}`}
         spacing={16}
       >
         {R.keys(achievements).length > 0
@@ -83,7 +87,7 @@ class Achievements extends Component {
             <Grid key='no-item' item xs={12}>
               <Card>
                 <CardContent>
-                  <Typography color="textPrimary">No achievement</Typography>
+                  <Typography color="textPrimary">{fetchStatus === 'requested' ? 'Loading...' : 'No achievements'}</Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -101,9 +105,11 @@ Achievements.propTypes = {
   classes: T.object,
   createAchievement: T.func,
   createAchievementStatus: T.string,
+  fetchAchievements: T.func,
+  fetchStatus: T.string,
+  suscribeToAchievements: T.func,
   lastLinkOfUserAchievementOrNull: T.string,
-  updateAchievement: T.func,
-  updateAchievementsMeta: T.func
+  updateAchievement: T.func
 }
 
 export default withContainer(withStyles(styles)(Achievements))

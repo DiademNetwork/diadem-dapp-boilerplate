@@ -3,6 +3,7 @@ import * as R from 'ramda'
 import insight from '../services/insight'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import notifications from '../services/notifications'
+import stream from '../services/stream'
 import types from './types'
 
 const {
@@ -11,11 +12,13 @@ const {
   ASYNC_ACHIEVEMENT_SUPPORT,
   ASYNC_ACHIEVEMENT_DEPOSIT,
   ASYNC_ACHIEVEMENT_UPDATE,
+  ASYNC_ACHIEVEMENTS_FETCH,
+  ASYNC_TRANSACTIONS_FETCH,
   ASYNC_USERS_FETCH,
   ACHIEVEMENTS_UPDATE_DATA,
-  TRANSACTIONS_UPDATE_DATA,
   ACHIEVEMENTS_UPDATE_META,
   TRANSACTIONS_UPDATE_META,
+  TRANSACTIONS_UPDATE_DATA,
   UI_SHOW_HELP,
   UI_HIDE_HELP,
   WALLET_UPDATE_DATA,
@@ -163,12 +166,8 @@ export const updateAchievementsFail = () => async dispatch => {
   dispatch(notifications.fetchAchievementsError)
 }
 
-export const updateTransactionsSuccess = (data) => async dispatch => {
+export const updateTransactionsData = (data) => async dispatch => {
   dispatch({ type: TRANSACTIONS_UPDATE_DATA, data })
-}
-
-export const updateTransactionsFail = () => async dispatch => {
-  dispatch(notifications.fetchTransactionsError)
 }
 
 export const confirmAchievement = ({ address, link, token, user }) => async dispatch => {
@@ -317,6 +316,7 @@ export const hideHelp = () => ({ type: UI_HIDE_HELP })
 // Users
 export const fetchUsers = () => async (dispatch) => {
   try {
+    dispatch({ type: ASYNC_USERS_FETCH.requested })
     const { data: { usersList } } = await api.fetchUsers()
     dispatch({ type: ASYNC_USERS_FETCH.succeeded, data: usersList })
   } catch (error) {
@@ -332,4 +332,54 @@ export const checkLastUserTransactions = (transactions) => async (dispatch) => {
     hasPendingTransactions = hasPendingTransactions || confirmations === 0
   }
   dispatch(updateWalletMeta({ hasPendingTransactions }))
+}
+
+export const fetchTransactions = (page = 1) => async (dispatch) => {
+  try {
+    dispatch({ type: ASYNC_TRANSACTIONS_FETCH.requested })
+    stream.fetchData(
+      'transactions',
+      ({ results, hasMore }) => dispatch({ type: ASYNC_TRANSACTIONS_FETCH.succeeded, results, hasMore }),
+      () => new Error('Fetch transactions failed'),
+      page
+    )
+  } catch (error) {
+    console.log(error)
+    dispatch({ type: ASYNC_TRANSACTIONS_FETCH.failed })
+    dispatch(notifications.fetchTransactionsError)
+  }
+}
+
+export const suscribeToTransactions = () => async (dispatch) => {
+  stream.suscribeWithCallBacks('transactions', ({ new: data }) => {
+    dispatch(notifications.newTransactions)
+    dispatch({ type: TRANSACTIONS_UPDATE_META, hasUnread: true })
+    dispatch({ type: TRANSACTIONS_UPDATE_DATA, data })
+  })
+}
+
+export const fetchAchievements = () => async (dispatch) => {
+  try {
+    dispatch({ type: ASYNC_ACHIEVEMENTS_FETCH.requested })
+    stream.fetchData(
+      'achievements',
+      ({ results }) => dispatch({ type: ASYNC_ACHIEVEMENTS_FETCH.succeeded, results }),
+      (err) => {
+        console.log('error ?', err)
+        return new Error('Fetch achievements failed')
+      }
+    )
+  } catch (error) {
+    console.log(error)
+    dispatch({ type: ASYNC_ACHIEVEMENTS_FETCH.failed })
+    dispatch(notifications.fetchAchievementsError)
+  }
+}
+
+export const suscribeToAchievements = () => async (dispatch) => {
+  stream.suscribeWithCallBacks('achievements', ({ new: data }) => {
+    dispatch(notifications.newAchievements)
+    dispatch({ type: ACHIEVEMENTS_UPDATE_META, hasUnread: true })
+    dispatch({ type: ACHIEVEMENTS_UPDATE_DATA, data })
+  })
 }

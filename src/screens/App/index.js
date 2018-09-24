@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Nav from '../../components/Nav'
 import Wallet from '../../components/Wallet'
-import StreamFetcher from '../../components/StreamFetcher'
 import Tabs from '../../components/Tabs'
 import Achievements from '../../components/Achievements'
 import Timeline from '../../components/Timeline'
@@ -28,9 +27,9 @@ const styles = (theme) => ({
 class App extends Component {
   render () {
     const {
-      achievementsNotificationCount,
       classes,
-      transactionsNotificationCount,
+      hasUnreadAchievements,
+      hasUnreadTransactions,
       userID
     } = this.props
     return (
@@ -39,12 +38,12 @@ class App extends Component {
         <Wallet className={classes.sm9} userID={userID} />
         <Tabs tabs={[
           {
-            badgeContent: achievementsNotificationCount,
+            badgeContent: hasUnreadAchievements ? '!' : null,
             label: 'Achievements',
             component: <Achievements className={classes.sm9} />
           },
           {
-            badgeContent: transactionsNotificationCount,
+            badgeContent: hasUnreadTransactions ? '!' : null,
             label: 'Timeline',
             component: <Timeline className={classes.sm9} />
           },
@@ -55,16 +54,15 @@ class App extends Component {
         ]} />
         <Notifications />
         <Help />
-        <StreamFetcher />
       </div>
     )
   }
 }
 
 App.propTypes = {
-  achievementsNotificationCount: T.number,
   classes: T.object,
-  transactionsNotificationCount: T.number,
+  hasUnreadAchievements: T.bool,
+  hasUnreadTransactions: T.bool,
   userID: T.string
 }
 

@@ -1,13 +1,23 @@
 import { connect } from 'react-redux'
-import { getSortedTransactions } from '../../selectors'
-import { updateTransactionsMeta } from '../../actions'
+import {
+  getSortedTransactions,
+  getTransactionsFetchStatus,
+  getTransactionsMeta
+} from '../../selectors'
+import {
+  fetchTransactions,
+  suscribeToTransactions
+} from '../../actions'
 
 const mapStateToProps = (state) => ({
+  fetchStatus: getTransactionsFetchStatus(state),
+  hasMoreTransactions: getTransactionsMeta('hasMore')(state),
   transactions: getSortedTransactions(state)
 })
 
 const mapDispatchToProps = {
-  updateTransactionsMeta
+  fetchTransactions,
+  suscribeToTransactions
 }
 
 export default WrappedComponent =>

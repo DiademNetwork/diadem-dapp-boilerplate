@@ -2,16 +2,17 @@ import types from '../actions/types'
 import * as R from 'ramda'
 
 const {
-  TRANSACTIONS_UPDATE_DATA,
-  TRANSACTIONS_UPDATE_META
+  ASYNC_TRANSACTIONS_FETCH,
+  TRANSACTIONS_UPDATE_META,
+  TRANSACTIONS_UPDATE_DATA
 } = types
 
 const intialState = {
-  fetchStatus: 'none',
   data: [],
+  fetchStatus: 'none',
   meta: {
-    loadedOnce: false,
-    notificationCount: 0
+    hasMore: true,
+    hasUnread: false
   }
 }
 
@@ -23,6 +24,14 @@ export default (state, action) => {
   switch (action.type) {
     case TRANSACTIONS_UPDATE_DATA: return mergeState({ data: [ ...state.data, ...action.data ] })
     case TRANSACTIONS_UPDATE_META: return mergeState({ meta: { ...state.meta, ...action.meta } })
+
+    case ASYNC_TRANSACTIONS_FETCH.requested: return mergeState({ fetchStatus: 'requested' })
+    case ASYNC_TRANSACTIONS_FETCH.succeeded: return mergeState({
+      fetchStatus: 'succeeded',
+      data: [ ...state.data, ...action.results ],
+      meta: { ...state.meta, hasMore: action.hasMore }
+    })
+    case ASYNC_TRANSACTIONS_FETCH.failed: return mergeState({ fetchStatus: 'failed' })
     default:
       return state
   }

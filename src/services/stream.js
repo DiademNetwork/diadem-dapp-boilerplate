@@ -3,6 +3,7 @@ import stream from 'getstream'
 import streamMock from '../mocks/stream'
 
 const LIMIT = 100
+const TRANSACTIONS_LIMIT = 10
 
 // dependencies are injected for easier testing /mocking
 export const createStreamClient = (streamTool) => {
@@ -34,7 +35,14 @@ export const createStreamClient = (streamTool) => {
   // idea will be to fetch only the LIMIT first results of search, and have a system of pagination/scroll load
   // while loop is temporary while data amount is low, and filters/search on their way to be implemented
   // Imperative code below is thus temporary
-  async function fetchData (feedName, successCallback, failCallback) {
+  async function fetchData (feedName, successCallback, failCallback, page) {
+    if (feedName === 'transactions') {
+      const { results, next } = await feeds[feedName].get({
+        limit: TRANSACTIONS_LIMIT,
+        offset: TRANSACTIONS_LIMIT * (page - 1)
+      })
+      return successCallback({ results, hasMore: next !== '' })
+    }
     try {
       let items
       const { next, results } = await feeds[feedName].get({ limit: LIMIT })
@@ -52,7 +60,7 @@ export const createStreamClient = (streamTool) => {
           items = [ ...items, ...newResults ]
         }
       }
-      return successCallback(items)
+      return successCallback({ results: items })
     } catch (error) {
       failCallback(error)
       return []

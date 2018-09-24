@@ -9,12 +9,16 @@ import Item from './Item'
 
 class Users extends Component {
   componentDidMount () {
-    this.props.fetchUsers()
+    const { fetchStatus, fetchUsers } = this.props
+    if (fetchStatus === 'none') {
+      fetchUsers()
+    }
   }
 
   render () {
     const {
       className,
+      fetchStatus,
       users
     } = this.props
     return (
@@ -22,7 +26,9 @@ class Users extends Component {
         <CardContent>
           <Typography paragraph color="textSecondary">All registered Diadem Network users</Typography>
           {(users.length === 0) ? (
-            <Typography color="textPrimary">No user registered</Typography>
+            <Typography color="textPrimary">
+              {fetchStatus === 'requested' ? 'Loading...' : 'No user registered'}
+            </Typography>
           ) : (
             <List>
               {users.map((user, idx) => (
@@ -39,6 +45,7 @@ class Users extends Component {
 Users.propTypes = {
   className: T.string,
   fetchUsers: T.func,
+  fetchStatus: T.string,
   users: T.array
 }
 

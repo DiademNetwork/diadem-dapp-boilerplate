@@ -1,7 +1,9 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as A from '../../actions'
-import * as S from '../../selectors'
+import S from '../../selectors'
+
+console.log(S.getUIisHelpedDisplayed)
 
 const mapStateToProps = (state) => ({
   isHelpDisplayed: S.getUIisHelpedDisplayed(state)

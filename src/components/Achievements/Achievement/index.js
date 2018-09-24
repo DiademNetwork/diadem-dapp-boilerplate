@@ -199,6 +199,7 @@ class Achievement extends Component {
             <Deposit
               className={classes.actionsButtons}
               link={object}
+              creatorID={creatorID}
               creatorName={creatorName}
               onDeposit={this.handleDeposit}
               walletBalance={walletBalance}

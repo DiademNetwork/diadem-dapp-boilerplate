@@ -9,7 +9,7 @@ import Item from './Item'
 import withContainer from './container'
 
 class Timeline extends Component {
-  componentDidMount () {
+  async componentDidMount () {
     const { fetchTransactions, fetchStatus, suscribeToTransactions } = this.props
     if (fetchStatus === 'none') {
       fetchTransactions(1)
@@ -17,11 +17,17 @@ class Timeline extends Component {
     }
   }
 
+  handleFetchTransactions = (page) => {
+    const { fetchStatus, fetchTransactions } = this.props
+    if (fetchStatus !== 'requested') {
+      fetchTransactions(page)
+    }
+  }
+
   render () {
     const {
       className,
       fetchStatus,
-      fetchTransactions,
       hasMoreTransactions,
       transactions
     } = this.props
@@ -30,14 +36,14 @@ class Timeline extends Component {
         <CardContent>
           <Typography paragraph color="textSecondary">Do not miss anything! Diadem network last activities:</Typography>
           {(transactions.length === 0) ? (
-            <Typography color="textPrimary">
+            <Typography>
               {fetchStatus === 'requested' ? 'Loading...' : 'No item in timeline'}
             </Typography>
           ) : (
             <List>
               <InfiniteScroll
                 pageStart={1}
-                loadMore={fetchTransactions}
+                loadMore={this.handleFetchTransactions}
                 hasMore={hasMoreTransactions}
                 loader={<Typography key={0}>Loading....</Typography>}
               >

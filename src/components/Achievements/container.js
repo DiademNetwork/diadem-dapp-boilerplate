@@ -1,31 +1,20 @@
 import { connect } from 'react-redux'
-import {
-  createAchievement,
-  fetchAchievements,
-  suscribeToAchievements,
-  updateAchievement
-} from '../../actions'
-import {
-  canUserConfirmCreateUpdateSupportDeposit,
-  getAchievementsFetchStatus,
-  getProcessedAchievements,
-  lastLinkOfUserAchievementOrNull,
-  getAchievementCreateStatus
-} from '../../selectors'
+import * as A from '../../actions'
+import S from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  achievements: getProcessedAchievements(state),
-  canUserConfirmCreateUpdateSupportDeposit: canUserConfirmCreateUpdateSupportDeposit(state),
-  createAchievementStatus: getAchievementCreateStatus(state),
-  fetchStatus: getAchievementsFetchStatus(state),
-  lastLinkOfUserAchievementOrNull: lastLinkOfUserAchievementOrNull(state)
+  achievements: S.getProcessedAchievements(state),
+  canUserConfirmCreateUpdateSupportDeposit: S.canUserConfirmCreateUpdateSupportDeposit(state),
+  createAchievementStatus: S.getAchievementCreateStatus(state),
+  fetchStatus: S.getAchievementsFetchStatus(state),
+  lastLinkOfUserAchievementOrNull: S.lastLinkOfUserAchievementOrNull(state)
 })
 
 const mapDispatchToProps = {
-  createAchievement,
-  fetchAchievements,
-  suscribeToAchievements,
-  updateAchievement
+  createAchievement: A.createAchievement,
+  fetchAchievements: A.fetchAchievements,
+  suscribeToAchievements: A.suscribeToAchievements,
+  updateAchievement: A.updateAchievement
 }
 
 export default WrappedComponent =>

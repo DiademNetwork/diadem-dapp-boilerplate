@@ -1,25 +1,19 @@
-import types from '../actions/types'
-import * as R from 'ramda'
+import T from '../actions/types'
+import merge from './merge-state'
 
-const {
-  ASYNC_USERS_FETCH
-} = types
-
-const intialState = {
-  data: [],
-  fetchStatus: 'none'
-}
-
-export default (state, action) => {
+export default (state, { type, data }) => {
   if (typeof state === 'undefined') {
-    return intialState
+    return {
+      data: {
+        items: []
+      },
+      fetchStatus: 'none'
+    }
   }
-  const mergeState = R.merge(state)
-  switch (action.type) {
-    case ASYNC_USERS_FETCH.requested: return mergeState({ fetchStatus: 'requested' })
-    case ASYNC_USERS_FETCH.succeeded: return mergeState({ fetchStatus: 'succeeded', data: action.data })
-    case ASYNC_USERS_FETCH.failed: return mergeState({ fetchStatus: 'failed' })
-    default:
-      return state
+  switch (type) {
+    case T.ASYNC_USERS_FETCH.requested: return merge(state)({ fetchStatus: 'requested' })
+    case T.ASYNC_USERS_FETCH.succeeded: return merge(state)({ fetchStatus: 'succeeded', data })
+    case T.ASYNC_USERS_FETCH.failed: return merge(state)({ fetchStatus: 'failed' })
+    default: return state
   }
 }

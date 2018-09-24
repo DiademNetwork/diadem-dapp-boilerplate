@@ -1,25 +1,20 @@
 import { connect } from 'react-redux'
-import { confirmAchievement, depositForAchievement, supportAchievement } from '../../../actions'
-import {
-  getFacebook,
-  getWallet,
-  getSortedTransactions,
-  canUserConfirmCreateUpdateSupportDeposit
-} from '../../../selectors'
+import * as A from '../../../actions'
+import S from '../../../selectors'
 
 const mapStateToProps = (state) => ({
-  accessToken: getFacebook('accessToken')(state),
-  canUserConfirmCreateUpdateSupportDeposit: canUserConfirmCreateUpdateSupportDeposit(state),
-  transactions: getSortedTransactions(state),
-  userID: getFacebook('userID')(state),
-  walletAddress: getWallet('addrStr')(state),
-  walletBalance: getWallet('balance')(state)
+  accessToken: S.getFacebookAccessToken(state),
+  canUserConfirmCreateUpdateSupportDeposit: S.canUserConfirmCreateUpdateSupportDeposit(state),
+  transactions: S.getTransactionsItems(state),
+  userID: S.getFacebookUserID(state),
+  walletAddress: S.getWalletAddress(state),
+  walletBalance: S.getWalletBalance(state)
 })
 
 const mapDispatchToProps = {
-  confirmAchievement,
-  depositForAchievement,
-  supportAchievement
+  confirmAchievement: A.confirmAchievement,
+  depositForAchievement: A.depositForAchievement,
+  supportAchievement: A.supportAchievement
 }
 
 export default WrappedComponent =>

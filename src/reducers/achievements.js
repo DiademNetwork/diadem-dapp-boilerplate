@@ -1,59 +1,46 @@
-import types from '../actions/types'
-import * as R from 'ramda'
+import T from '../actions/types'
+import merge from './merge-state'
 
-const {
-  ASYNC_ACHIEVEMENT_CONFIRM,
-  ASYNC_ACHIEVEMENT_CREATE,
-  ASYNC_ACHIEVEMENT_SUPPORT,
-  ASYNC_ACHIEVEMENT_DEPOSIT,
-  ASYNC_ACHIEVEMENTS_FETCH,
-  ACHIEVEMENTS_UPDATE_DATA,
-  ACHIEVEMENTS_UPDATE_META
-} = types
-
-const intialState = {
-  createStatus: 'none',
-  depositStatus: 'none',
-  fetchStatus: 'none',
-  supportStatus: 'none',
-  confirmStatus: 'none',
-  data: [],
-  meta: {
-    hasUnread: false
-  }
-}
-
-export default (state, action) => {
+export default (state, { type, data, meta }) => {
   if (typeof state === 'undefined') {
-    return intialState
+    return {
+      createStatus: 'none',
+      depositStatus: 'none',
+      fetchStatus: 'none',
+      supportStatus: 'none',
+      confirmStatus: 'none',
+      data: {
+        items: []
+      },
+      meta: {
+        hasUnread: false
+      }
+    }
   }
-  const mergeState = R.merge(state)
-  switch (action.type) {
-    case ACHIEVEMENTS_UPDATE_DATA: return mergeState({ data: [ ...state.data, ...action.data ] })
-    case ACHIEVEMENTS_UPDATE_META: return mergeState({ meta: { ...state.meta, ...action.meta } })
 
-    case ASYNC_ACHIEVEMENTS_FETCH.requested: return mergeState({ fetchStatus: 'requested' })
-    case ASYNC_ACHIEVEMENTS_FETCH.succeeded: return mergeState({
-      fetchStatus: 'succeeded',
-      data: [ ...state.data, ...action.results ]
-    })
-    case ASYNC_ACHIEVEMENTS_FETCH.failed: return mergeState({ fetchStatus: 'failed' })
+  switch (type) {
+    case T.ACHIEVEMENTS_UPDATE_DATA: return merge(state)(data)
+    case T.ACHIEVEMENTS_UPDATE_META: return merge(state)(meta)
 
-    case ASYNC_ACHIEVEMENT_CONFIRM.requested: return mergeState({ confirmStatus: 'requested' })
-    case ASYNC_ACHIEVEMENT_CONFIRM.succeeded: return mergeState({ confirmStatus: 'succeeded' })
-    case ASYNC_ACHIEVEMENT_CONFIRM.failed: return mergeState({ confirmStatus: 'failed' })
+    case T.ASYNC_ACHIEVEMENTS_FETCH.requested: return merge(state)({ fetchStatus: 'requested' })
+    case T.ASYNC_ACHIEVEMENTS_FETCH.succeeded: return merge(state)({ fetchStatus: 'succeeded', data })
+    case T.ASYNC_ACHIEVEMENTS_FETCH.failed: return merge(state)({ fetchStatus: 'failed' })
 
-    case ASYNC_ACHIEVEMENT_CREATE.requested: return mergeState({ createStatus: 'requested' })
-    case ASYNC_ACHIEVEMENT_CREATE.succeeded: return mergeState({ createStatus: 'succeeded' })
-    case ASYNC_ACHIEVEMENT_CREATE.failed: return mergeState({ createStatus: 'failed' })
+    case T.ASYNC_ACHIEVEMENT_CONFIRM.requested: return merge(state)({ confirmStatus: 'requested' })
+    case T.ASYNC_ACHIEVEMENT_CONFIRM.succeeded: return merge(state)({ confirmStatus: 'succeeded' })
+    case T.ASYNC_ACHIEVEMENT_CONFIRM.failed: return merge(state)({ confirmStatus: 'failed' })
 
-    case ASYNC_ACHIEVEMENT_SUPPORT.requested: return mergeState({ supportStatus: 'requested' })
-    case ASYNC_ACHIEVEMENT_SUPPORT.succeeded: return mergeState({ supportStatus: 'succeeded' })
-    case ASYNC_ACHIEVEMENT_SUPPORT.failed: return mergeState({ supportStatus: 'failed' })
+    case T.ASYNC_ACHIEVEMENT_CREATE.requested: return merge(state)({ createStatus: 'requested' })
+    case T.ASYNC_ACHIEVEMENT_CREATE.succeeded: return merge(state)({ createStatus: 'succeeded' })
+    case T.ASYNC_ACHIEVEMENT_CREATE.failed: return merge(state)({ createStatus: 'failed' })
 
-    case ASYNC_ACHIEVEMENT_DEPOSIT.requested: return mergeState({ depositStatus: 'requested' })
-    case ASYNC_ACHIEVEMENT_DEPOSIT.succeeded: return mergeState({ depositStatus: 'succeeded' })
-    case ASYNC_ACHIEVEMENT_DEPOSIT.failed: return mergeState({ depositStatus: 'failed' })
+    case T.ASYNC_ACHIEVEMENT_SUPPORT.requested: return merge(state)({ supportStatus: 'requested' })
+    case T.ASYNC_ACHIEVEMENT_SUPPORT.succeeded: return merge(state)({ supportStatus: 'succeeded' })
+    case T.ASYNC_ACHIEVEMENT_SUPPORT.failed: return merge(state)({ supportStatus: 'failed' })
+
+    case T.ASYNC_ACHIEVEMENT_DEPOSIT.requested: return merge(state)({ depositStatus: 'requested' })
+    case T.ASYNC_ACHIEVEMENT_DEPOSIT.succeeded: return merge(state)({ depositStatus: 'succeeded' })
+    case T.ASYNC_ACHIEVEMENT_DEPOSIT.failed: return merge(state)({ depositStatus: 'failed' })
     default: return state
   }
 }

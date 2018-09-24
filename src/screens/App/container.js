@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
-import { getAchievementsMeta, getFacebookUserID, getTransactionsMeta } from '../../selectors'
+import S from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  hasUnreadTransactions: getTransactionsMeta('hasUnread')(state),
-  hasUnreadAchievements: getAchievementsMeta('hasUnread')(state),
-  userID: getFacebookUserID(state)
+  hasUnreadTransactions: S.getTransactionsMeta('hasUnread')(state),
+  hasUnreadAchievements: S.getAchievementsMeta('hasUnread')(state),
+  userID: S.getFacebookUserID(state)
 })
 
 export default WrappedComponent =>

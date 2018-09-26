@@ -39,57 +39,29 @@ const styles = (theme) => ({
   }
 })
 
-class Achievement extends Component {
-  state = {
-    displayedHistoryItem: {},
-    stackedHistoryItems: []
-  }
-
-  setDisplayedAndStackedItems = (achievement) => {
-    this.setState({
-      displayedHistoryItem: R.takeLast(1, achievement)[0],
-      stackedHistoryItems: R.reverse(R.dropLast(1, achievement))
-    })
-  }
-
-  componentDidMount () {
-    this.setDisplayedAndStackedItems(this.props.achievement)
-  }
-
-  componentWillReceiveProps ({ achievement: newAchievement }) {
-    const { achievement } = this.props
-    if (R.complement(R.equals)(newAchievement, achievement)) {
-      this.setDisplayedAndStackedItems(newAchievement)
-    }
-  }
-
+class AchievementsChain extends Component {
   handleConfirm = () => {
-    const { accessToken, confirmAchievement, userID, walletAddress } = this.props
-    const { displayedHistoryItem: { object } } = this.state
+    const { accessToken, confirmAchievement, currentAchievement, userID, walletAddress } = this.props
     confirmAchievement({
       address: walletAddress,
-      link: object,
+      link: currentAchievement.object,
       token: accessToken,
       user: userID
     })
   }
 
   handleSupport = (data) => {
-    const { supportAchievement } = this.props
-    const { displayedHistoryItem: { object } } = this.state
-    supportAchievement({ ...data, link: object })
+    const { currentAchievement, supportAchievement } = this.props
+    supportAchievement({ ...data, link: currentAchievement.object })
   }
 
   handleDeposit = (data) => {
-    const { depositForAchievement } = this.props
-    const { displayedHistoryItem: { object } } = this.state
-    depositForAchievement({ ...data, link: object })
+    const { currentAchievement, depositForAchievement } = this.props
+    depositForAchievement({ ...data, link: currentAchievement.object })
   }
 
   hasUserAlreadyConfirmed = () => {
-    const { displayedHistoryItem: { confirm } } = this.state
-    const { userID } = this.props
-    console.log(confirm)
+    const { currentAchievement: { confirm }, userID } = this.props
     return R.compose(
       R.contains(userID),
       R.map(R.prop('actor'))
@@ -119,22 +91,23 @@ class Achievement extends Component {
     const {
       classes,
       canUserConfirmCreateUpdateSupportDeposit,
+      currentAchievement,
+      pastAchievements,
       userID,
       walletBalance
     } = this.props
-    const { displayedHistoryItem, stackedHistoryItems } = this.state
-    const { actor: creatorID, name: creatorName, title, object } = displayedHistoryItem
+    const { actor: creatorID, name: creatorName, title, object } = currentAchievement
 
-    const uniqConfirmatorsNames = this.getUniqueUsersNamesFor('confirm')(displayedHistoryItem)
-    const uniqSupportersNames = this.getUniqueUsersNamesFor('support')(displayedHistoryItem)
-    const uniqDepositorsNames = this.getUniqueUsersNamesFor('deposit')(displayedHistoryItem)
+    const uniqConfirmatorsNames = this.getUniqueUsersNamesFor('confirm')(currentAchievement)
+    const uniqSupportersNames = this.getUniqueUsersNamesFor('support')(currentAchievement)
+    const uniqDepositorsNames = this.getUniqueUsersNamesFor('deposit')(currentAchievement)
 
     const confirmationsCount = R.length(uniqConfirmatorsNames)
     const supportsCount = R.length(uniqSupportersNames)
     const despositsCount = R.length(uniqDepositorsNames)
 
-    const depositsTotalAmount = this.getTotalAmountFor('deposit')(displayedHistoryItem) / 1e8
-    const supportsTotalAmount = this.getTotalAmountFor('support')(displayedHistoryItem) / 1e8
+    const depositsTotalAmount = this.getTotalAmountFor('deposit')(currentAchievement) / 1e8
+    const supportsTotalAmount = this.getTotalAmountFor('support')(currentAchievement) / 1e8
 
     return [
       <Card key="achievement-card" className={classes.card}>
@@ -212,13 +185,13 @@ class Achievement extends Component {
           </CardActions>
         )}
       </Card>,
-      stackedHistoryItems.length > 0 && (
+      pastAchievements.length > 0 && (
         <ExpansionPanel key={`achievement-previous-history-items`}>
           <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
             <Typography color="textSecondary">View past achievements of {creatorName}</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails className={classes.panelDetails}>
-            {stackedHistoryItems.map((achievement, idx) => {
+            {pastAchievements.map((achievement, idx) => {
               const { title, object } = achievement
               const confirmationsCount = R.length(this.getUniqueUsersNamesFor('confirm')(achievement))
               const supportsCount = R.length(this.getUniqueUsersNamesFor('support')(achievement))
@@ -253,17 +226,21 @@ class Achievement extends Component {
   }
 }
 
-Achievement.propTypes = {
+AchievementsChain.propTypes = {
   accessToken: T.string,
-  achievement: T.array,
-  confirmAchievement: T.func,
-  classes: T.object,
-  depositForAchievement: T.func,
   canUserConfirmCreateUpdateSupportDeposit: T.bool,
+  classes: T.object,
+  confirmAchievement: T.func,
+  currentAchievement: T.object,
+  depositForAchievement: T.func,
+  pastAchievements: T.array,
   userID: T.string,
   walletAddress: T.string,
   walletBalance: T.number,
   supportAchievement: T.func
 }
 
-export default withContainer(withStyles(styles)(Achievement))
+export default R.compose(
+  withContainer,
+  withStyles(styles)
+)(AchievementsChain)

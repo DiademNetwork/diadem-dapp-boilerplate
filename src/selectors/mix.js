@@ -7,19 +7,19 @@ import * as wallet from './wallet'
 export const lastLinkOfUserAchievementOrNull = createSelector([
   wallet.getWalletAddress,
   achievements.getAllAchievementsWallets,
-  achievements.getProcessedAchievements
+  achievements.getProcessedAchievementsChains
 ], (
   userWalletAddress,
   allAchievementsWallets,
-  processedAchievements
+  processedAchievementsChains
 ) => {
-  if (!userWalletAddress || !R.is(Array)(allAchievementsWallets) || processedAchievements === {}) {
+  if (!userWalletAddress || !R.is(Array)(allAchievementsWallets) || processedAchievementsChains === {}) {
     return null
   }
   if (!R.contains(userWalletAddress, allAchievementsWallets)) {
     return null
   } else {
-    const userAchievementsChain = R.propOr([], userWalletAddress, processedAchievements)
+    const userAchievementsChain = R.propOr([], userWalletAddress, processedAchievementsChains)
     const updates = R.filter(R.propEq('verb', 'update'), userAchievementsChain)
     const create = R.find(R.propEq('verb', 'create'), userAchievementsChain)
     return R.compose(

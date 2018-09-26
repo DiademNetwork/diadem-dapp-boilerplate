@@ -3,7 +3,7 @@ import * as A from '../../actions'
 import S from '../../selectors'
 
 const mapStateToProps = (state) => ({
-  achievements: S.getProcessedAchievements(state),
+  achievementsChains: S.getProcessedAchievementsChains(state),
   canUserConfirmCreateUpdateSupportDeposit: S.canUserConfirmCreateUpdateSupportDeposit(state),
   createAchievementStatus: S.getAchievementCreateStatus(state),
   fetchStatus: S.getAchievementsFetchStatus(state),

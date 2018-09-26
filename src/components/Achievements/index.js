@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import Achievement from './Achievement'
+import AchievementsChain from './AchievementsChain'
 import withContainer from './container'
 import Create from './Create'
 import Update from './Update'
@@ -43,7 +43,7 @@ class Achievements extends Component {
 
   render () {
     const {
-      achievements,
+      achievementsChains,
       canUserConfirmCreateUpdateSupportDeposit,
       className,
       classes,
@@ -77,10 +77,10 @@ class Achievements extends Component {
         className={`${className}  ${classes.grid}`}
         spacing={16}
       >
-        {R.keys(achievements).length > 0
-          ? R.keys(achievements).map((key, idx) => (
+        {R.keys(achievementsChains).length > 0
+          ? R.keys(achievementsChains).map((key, idx) => (
             <Grid key={idx} item xs={12}>
-              <Achievement achievement={achievements[key]} />
+              <AchievementsChain achievementsChain={achievementsChains[key]} />
             </Grid>
           ))
           : (
@@ -99,7 +99,7 @@ class Achievements extends Component {
 }
 
 Achievements.propTypes = {
-  achievements: T.object,
+  achievementsChains: T.object,
   canUserConfirmCreateUpdateSupportDeposit: T.bool,
   className: T.string,
   classes: T.object,

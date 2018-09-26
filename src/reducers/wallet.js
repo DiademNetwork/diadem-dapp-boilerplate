@@ -14,8 +14,8 @@ export default (state, { type, data, meta, ...action }) => {
     }
   }
   switch (type) {
-    case T.WALLET_UPDATE_DATA: return merge(state)(data)
-    case T.WALLET_UPDATE_META: return merge(state)(meta)
+    case T.WALLET_UPDATE_DATA: return merge(state)({ data })
+    case T.WALLET_UPDATE_META: return merge(state)({ meta })
     case T.WALLET_UPDATE_STATUS: return merge(state)({ status: action.status })
     default: return state
   }

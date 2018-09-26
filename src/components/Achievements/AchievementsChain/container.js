@@ -2,10 +2,11 @@ import { connect } from 'react-redux'
 import * as A from '../../../actions'
 import S from '../../../selectors'
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, { achievementsChain }) => ({
   accessToken: S.getFacebookAccessToken(state),
   canUserConfirmCreateUpdateSupportDeposit: S.canUserConfirmCreateUpdateSupportDeposit(state),
-  transactions: S.getTransactionsItems(state),
+  currentAchievement: S.getCurrentAchievementFromChain(achievementsChain),
+  pastAchievements: S.getPastAchievementsFromChain(achievementsChain),
   userID: S.getFacebookUserID(state),
   walletAddress: S.getWalletAddress(state),
   walletBalance: S.getWalletBalance(state)

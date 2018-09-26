@@ -16,7 +16,7 @@ export const getAchievementsItems = createSelector([getAchievementsData(['items'
 export const getAchievementsItemsCount = createSelector([getAchievementsItems], R.length)
 export const getAchievementsItemsGroupedByWallet = createSelector([getAchievementsItems], R.groupBy(R.prop('wallet')))
 export const getAllAchievementsWallets = createSelector([getAchievementsItemsGroupedByWallet], R.keys)
-export const getProcessedAchievements = createSelector([getAchievementsItemsGroupedByWallet], R.mapObjIndexed((groupedAchievement) => {
+export const getProcessedAchievementsChains = createSelector([getAchievementsItemsGroupedByWallet], R.mapObjIndexed((groupedAchievement) => {
   let result = R.compose(
     R.curry(mapSort)({ key: 'object', previousKey: 'previousLink' }),
     R.filter(R.compose(
@@ -39,3 +39,6 @@ export const getProcessedAchievements = createSelector([getAchievementsItemsGrou
   )(groupedAchievement)
   return result
 }))
+
+export const getCurrentAchievementFromChain = R.compose(R.head, R.takeLast(1))
+export const getPastAchievementsFromChain = R.compose(R.reverse, R.dropLast(1))

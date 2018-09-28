@@ -4,11 +4,11 @@ import A from 'modules/actions'
 import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
-  isFacebookLogged: S.facebook.login.isLogged(state)
+  recoverFailReason: S.wallets.qtum.recoverFailReason(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  handleFacebookLogin: A.facebook.login.logged
+  recover: A.wallets.qtum.recover
 }, dispatch)
 
 export default WrappedComponent =>

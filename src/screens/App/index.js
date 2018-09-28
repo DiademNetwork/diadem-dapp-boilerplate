@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 import * as R from 'ramda'
 import Nav from '../../components/Nav'
 import Wallet from '../../components/Wallet'
-import Tabs from '../../components/Tabs'
-import Achievements from '../../components/Achievements'
-import Timeline from '../../components/Timeline'
-import Users from '../../components/Users'
-import Notifications from '../../components/Notifications'
+// import Tabs from '../../components/Tabs'
+// import Achievements from '../../components/Achievements'
+// import Timeline from '../../components/Timeline'
+// import Users from '../../components/Users'
+// import Notifications from '../../components/Notifications'
 import Help from '../../components/Help'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
@@ -38,7 +38,7 @@ class App extends Component {
       <div>
         <Nav />
         <Wallet className={classes.sm9} userID={userID} />
-        <Tabs tabs={[
+        {/* <Tabs tabs={[
           {
             badgeContent: hasUnreadAchievements ? '!' : null,
             label: 'Achievements',
@@ -54,7 +54,7 @@ class App extends Component {
             component: <Users className={classes.sm9} />
           }
         ]} />
-        <Notifications />
+        <Notifications /> */}
         <Help />
       </div>
     )

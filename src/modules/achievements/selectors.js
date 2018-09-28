@@ -35,5 +35,5 @@ export const processedList = createSelector([groupedbyWallet], R.mapObjIndexed((
   return result
 }))
 
-export const getCurrentAchievementFromChain = R.compose(R.head, R.takeLast(1))
-export const getPastAchievementsFromChain = R.compose(R.reverse, R.dropLast(1))
+export const currentAchievementFromChain = R.compose(R.head, R.takeLast(1))
+export const pastAchievementsFromChain = R.compose(R.reverse, R.dropLast(1))

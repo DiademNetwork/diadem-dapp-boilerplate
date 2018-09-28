@@ -8,18 +8,11 @@ export const merge = R.mergeDeepWith((state, object) => {
   }
 })
 
-export const createAsyncTypes = (base) => ({
-  requested: `${base}_REQUESTED`,
-  errored: `${base}_ERRORED`,
-  failed: `${base}_FAILED`,
-  succeeded: `${base}_SUCCEEDED`
-})
+const ASYNC_STATES = ['requested', 'errored', 'failed', 'succeeded']
 
-export const createAction = (type, payload = {}) => ({ type, ...payload })
+export const createAsyncTypes = (base) =>
+  R.reduce((acc, curr) => R.merge(acc, { [curr]: `${base}_${curr.toUpperCase()}` }), {}, ASYNC_STATES)
 
-export const createAsyncActions = (asyncType) => ({
-  requested: R.partial(createAction, [asyncType.requested]),
-  errored: R.partial(createAction, [asyncType.errored]),
-  succeeded: R.partial(createAction, [asyncType.succeeded]),
-  failed: R.partial(createAction, [asyncType.failed])
-})
+export const createAction = type => payload => ({ type, ...payload })
+
+export const createAsyncActions = R.mapObjIndexed(createAction)

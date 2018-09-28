@@ -25,7 +25,7 @@ class Recover extends Component {
 
   startFailedOpenModalInterval = () => {
     this.interval = setInterval(() => {
-      this.props.failed && this.handleOpen()
+      this.props.recoverFailReason === 'address-not-matching' && this.handleOpen()
     }, 1000)
   }
 
@@ -58,7 +58,7 @@ class Recover extends Component {
 
   handleSubmit = () => {
     const { mnemonic, privateKey } = this.state
-    this.props.onRecover({ mnemonic, privateKey })
+    this.props.recover({ mnemonic, privateKey })
     this.resetForm()
     this.handleClose()
   }
@@ -86,7 +86,7 @@ class Recover extends Component {
 
   render () {
     const { open, mnemonic, privateKey, isMnemonicValid, isPrivateKeyValid } = this.state
-    const { failed, fullScreen } = this.props
+    const { recoverFailReason, fullScreen } = this.props
     const isFormValid = isMnemonicValid || isPrivateKeyValid
     return [
       <Button
@@ -106,7 +106,7 @@ class Recover extends Component {
       >
         <DialogTitle id="form-dialog-title">Recover your Diadem Network wallet</DialogTitle>
         <DialogContent>
-          {failed && [
+          {recoverFailReason === 'address-not-matching' && [
             <DialogContentText
               key="failure-message-title"
               paragraph
@@ -173,9 +173,9 @@ class Recover extends Component {
 }
 
 Recover.propTypes = {
-  failed: T.bool,
   fullScreen: T.bool,
-  onRecover: T.func
+  recoverFailReason: T.bool,
+  recover: T.func
 }
 
 export default withMobileDialog()(Recover)

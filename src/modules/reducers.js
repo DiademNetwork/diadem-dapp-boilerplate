@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux'
 
-import achievement from 'modules/achievement'
-import achievements from 'modules/achievements'
-import facebookLogin from 'modules/facebook/login'
-import facebookRegistration from 'modules/facebook/registration'
-import transactions from 'modules/transactions'
-import uiGeneral from 'modules/ui/general'
-// import uiNotifications from 'modules/ui/notifications'
-import users from 'modules/users'
-import walletsQtum from 'modules/wallets/qtum'
+import achievement from 'modules/achievement/reducers'
+import achievements from 'modules/achievements/reducers'
+import facebookLogin from 'modules/facebook/login/reducers'
+import facebookRegistration from 'modules/facebook/registration/reducers'
+import transactions from 'modules/transactions/reducers'
+import uiGeneral from 'modules/ui/general/reducers'
+// import uiNotifications from 'modules/ui/notifications/reducers'
+import users from 'modules/users/reducers'
+import walletsQtum from 'modules/wallets/qtum/reducers'
 
 export default combineReducers({
   achievement,

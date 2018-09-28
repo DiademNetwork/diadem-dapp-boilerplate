@@ -34,7 +34,7 @@ const load = function * () {
       yield put(actions.load.failed({ reason: 'no-private-key' }))
     } else {
       const walletUtil = network.fromWIF(privateKey)
-      const walletData = yield call(walletUtil.getInfo)
+      const walletData = yield call([walletUtil, 'getInfo'])
       const isAddressMatchingFacebookID = yield call(checkAddressMatchingFacebookID, {
         facebookUserID,
         walletAddress: walletData.addrStr
@@ -55,8 +55,8 @@ const generate = function * () {
     const walletUtil = network.fromMnemonic(mnemonic)
     const privateKey = walletUtil.toWIF()
     window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKey)
-    const walletData = yield call(walletUtil.getInfo)
-    yield put(actions.generate.succeeded({ walletData, walletUtil }))
+    const walletData = yield call([walletUtil, 'getInfo'])
+    yield put(actions.generate.succeeded({ mnemonic, privateKey, walletData, walletUtil }))
   } catch (error) {
     yield put(actions.generate.errored({ error }))
   }
@@ -74,7 +74,7 @@ const recover = function * ({ mnemonic, privateKey }) {
     } else {
       yield put(actions.generate.failed({ reason: 'no-mnemonic-or-private-key' }))
     }
-    const walletData = yield call(walletUtil.getInfo)
+    const walletData = yield call([walletUtil, 'getInfo'])
     const isAddressMatchingFacebookID = yield call(checkAddressMatchingFacebookID, {
       facebookUserID,
       walletAddress: walletData.addrStr
@@ -94,7 +94,7 @@ const refresh = function * () {
   try {
     const walletUtil = yield select(ownSelectors.util)
     const walletData = yield select(ownSelectors.data)
-    const newWalletData = yield call(walletUtil.getInfo)
+    const newWalletData = yield call([walletUtil, 'getInfo'])
     if (R.complement(R.equals)(newWalletData, walletData)) {
       yield put(actions.refresh.succeeded({ walletData: newWalletData }))
     }
@@ -103,16 +103,16 @@ const refresh = function * () {
   }
 }
 
-const checkPendingTx = function * ({ transactions }) {
+const checkLastTx = function * ({ transactions }) {
   try {
-    let hasPendingTransactions = false
+    let hasPendingTx = false
     for (let transaction of transactions) {
       const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-      hasPendingTransactions = hasPendingTransactions || confirmations === 0
+      hasPendingTx = hasPendingTx || confirmations === 0
     }
-    yield put(actions.checkPendingTx.succeeded({ hasPendingTransactions }))
+    yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
   } catch (error) {
-    yield put(actions.checkPendingTx.errored({ error }))
+    yield put(actions.checkLastTx.errored({ error }))
   }
 }
 
@@ -126,14 +126,14 @@ const withdraw = function * ({address, amount, fees}) {
   }
 }
 
-export const rootSaga = function * () {
+export default function * () {
   yield all([
     takeLatest(types.facebook.registration.CHECK.succeeded, load),
     takeLatest(types.facebook.registration.CHECK.failed, checkIfGenerationNeeded),
     takeLatest(ownTypes.GENERATE.requested, generate),
     takeLatest(ownTypes.RECOVER.requested, recover),
     takeLatest(ownTypes.REFRESH.requested, refresh),
-    takeLatest(ownTypes.CHECK_PENDING_TX.requested, checkPendingTx),
-    takeLatest(ownTypes.WITHDRAW, withdraw)
+    takeLatest(ownTypes.CHECK_LAST_TX.requested, checkLastTx),
+    takeLatest(ownTypes.WITHDRAW.requested, withdraw)
   ])
 }

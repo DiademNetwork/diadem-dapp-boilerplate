@@ -1,13 +1,23 @@
 import * as R from 'ramda'
 import { createSelector } from 'reselect'
 
-const mainPath = ['wallet', 'qtum']
+const getQtum = (path) => R.path(['wallets', 'qtum', ...path])
 
-export const data = R.path([...mainPath, 'data'])
-export const util = R.path([...mainPath, 'util'])
-export const loadFailReason = R.path([...mainPath, 'loadFailReason'])
-export const recoverFailReason = R.path([...mainPath, 'loadFailReason'])
+export const data = getQtum(['data'])
+export const util = getQtum(['util'])
+export const loadFailReason = getQtum(['loadFailReason'])
+export const recoverFailReason = getQtum(['recoverFailReason'])
 
+// generation
+export const mnemonic = getQtum(['mnemonic'])
+export const privateKey = getQtum(['privateKey'])
+export const infoSaved = getQtum(['infoSaved'])
+
+// data
 export const address = createSelector([data], R.prop('addrStr'))
-export const balance = createSelector([data], R.prop('balance'))
+export const balance = getQtum(['data', 'balance'])
 export const unconfirmedBalance = createSelector([data], R.prop('unconfirmedBalance'))
+export const hasPendingTx = createSelector([data], R.prop('hasPendingTx'))
+
+// status
+export const status = getQtum(['status'])

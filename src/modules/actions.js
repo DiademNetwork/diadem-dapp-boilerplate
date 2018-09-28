@@ -1,25 +1,25 @@
-import { achievementActions } from 'modules/achievement'
-import { achievementsActions } from 'modules/achievements'
-import { facebookLoginActions } from 'modules/facebook/login'
-import { facebookRegistrationActions } from 'modules/facebook/registration'
-import { transactionsActions } from 'modules/transactions'
-import { uiGeneralActions } from 'modules/ui/general'
-import { usersActions } from 'modules/users'
-import { walletsQtumActions } from 'modules/wallets/qtum'
+import achievement from 'modules/achievement/actions'
+import achievements from 'modules/achievements/actions'
+import facebookLogin from 'modules/facebook/login/actions'
+import facebookRegistration from 'modules/facebook/registration/actions'
+import transactions from 'modules/transactions/actions'
+import uiGeneral from 'modules/ui/general/actions'
+import users from 'modules/users/actions'
+import walletsQtum from 'modules/wallets/qtum/actions'
 
 export default {
-  achievements: achievementActions,
-  achievement: achievementsActions,
+  achievement,
+  achievements,
   facebook: {
-    login: facebookLoginActions,
-    registration: facebookRegistrationActions
+    login: facebookLogin,
+    registration: facebookRegistration
   },
-  transactions: transactionsActions,
+  transactions,
   ui: {
-    general: uiGeneralActions
+    general: uiGeneral
   },
-  user: usersActions,
+  users,
   wallets: {
-    qtum: walletsQtumActions
+    qtum: walletsQtum
   }
 }

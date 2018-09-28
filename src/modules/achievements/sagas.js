@@ -25,7 +25,7 @@ const suscribe = function * () {
   }
 }
 
-export const rootSaga = function * () {
+export default function * () {
   yield all([
     fork(fetch),
     takeLatest(ownTypes.FETCH.succeeded, suscribe)

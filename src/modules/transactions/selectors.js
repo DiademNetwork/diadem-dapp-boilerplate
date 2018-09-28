@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 import { createSelector } from 'reselect'
-import sortByTime from '/helpers/sort-by-time'
+import sortByTime from 'helpers/sort-by-time'
 
 const getTransactions = (path) => R.path(['transactions', ...path])
 
@@ -10,3 +10,15 @@ export const list = createSelector([rawList], sortByTime.asc)
 export const count = createSelector([rawList], R.length)
 export const hasMore = getTransactions(['hasMore'])
 export const hasUnread = getTransactions(['hasUnread'])
+
+export const lastForUser = (state, { userID }) => {
+  if (!userID) { return [] }
+  const lastTX = R.compose(
+    R.takeLast(2),
+    R.map(R.prop('target')),
+    R.filter(R.propEq('actor', userID)),
+    R.path(['transactions', 'list'])
+  )(state)
+  console.log(lastTX)
+  return lastTX
+}

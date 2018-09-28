@@ -39,13 +39,11 @@ module.exports = {
   },
   resolve: {
     alias: {
-      actions: path.resolve(__dirname, '../src/actions/'),
       components: path.resolve(__dirname, '../src/components/'),
       helpers: path.resolve(__dirname, '../src/helpers/'),
       mocks: path.resolve(__dirname, '../src/mocks/'),
-      reducers: path.resolve(__dirname, '../src/reducers/'),
+      modules: path.resolve(__dirname, '../src/modules/'),
       screens: path.resolve(__dirname, '../src/screens/'),
-      selectors: path.resolve(__dirname, '../src/selectors/'),
       services: path.resolve(__dirname, '../src/services/'),
       stubs: path.resolve(__dirname, '../src/stubs/'),
       tests: path.resolve(__dirname, '../src/tests/')

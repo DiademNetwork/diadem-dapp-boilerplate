@@ -12,7 +12,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import WithdrawIcon from '@material-ui/icons/AccountBalanceWalletOutlined'
 import { withStyles } from '@material-ui/core/styles'
 import Hidden from '@material-ui/core/Hidden'
-import FeesSelector from '../FeesSelector'
+import FeesSelector from '../../../FeesSelector'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
@@ -40,12 +40,11 @@ class Withdraw extends Component {
 
   handleChange = name => e => {
     const value = e.target.value
-    const { balance } = this.props
     if (name === 'address') {
       const isAddressValid = value !== ''
       this.setState({ address: value, isAddressValid })
     } else if (name === 'amount') {
-      const isAmountValid = value > 0 && value <= balance
+      const isAmountValid = value > 0 && value <= this.props.balance
       this.setState({ amount: value, isAmountValid })
     }
   }
@@ -59,9 +58,8 @@ class Withdraw extends Component {
   }
 
   handleSubmit = () => {
-    const { onSubmit } = this.props
     const { address, amount, fees } = this.state
-    onSubmit({ address, amount, fees: FeesSelector.convertFees(fees) })
+    this.props.withdraw({ address, amount, fees: FeesSelector.convertFees(fees) })
     this.resetForm()
     this.handleClose()
   }
@@ -165,7 +163,7 @@ Withdraw.propTypes = {
   classes: T.object,
   className: T.string,
   fullScreen: T.bool,
-  onSubmit: T.func
+  withdraw: T.func
 }
 
 export default R.compose(

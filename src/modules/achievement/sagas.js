@@ -47,7 +47,7 @@ const support = function * ({ amount, fees, link }) {
   try {
     const { data: { address, encodedData } } = yield call(api.encodeSupport, { link })
     const walletUtil = yield select(selectors.wallets.qtum.util)
-    const rawTx = yield call(walletUtil.generateContractSendTx, address, encodedData, {
+    const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
       feeRate: fees
     })
@@ -68,7 +68,7 @@ const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, w
   try {
     const { data: { address, encodedData } } = yield call(api.encodeDeposit, { link, witness: witnessAddress })
     const walletUtil = yield select(selectors.wallets.qtum.util)
-    const rawTx = yield call(walletUtil.generateContractSendTx, address, encodedData, {
+    const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
       feeRate: fees
     })
@@ -87,7 +87,7 @@ const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, w
   }
 }
 
-export const rootSaga = function * () {
+export default function * () {
   yield all([
     takeLatest(ownTypes.CREATE.succeeded, create),
     takeLatest(ownTypes.UPDATE.succeeded, update),

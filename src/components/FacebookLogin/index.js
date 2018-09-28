@@ -8,10 +8,7 @@ import User from './User'
 import facebookStub from '../../stubs/facebook'
 
 class FacebookLogin extends Component {
-  onFacebookLogin = (facebookData) => {
-    if (!facebookData.userID) { return }
-    this.props.handleFacebookLogin(facebookData)
-  }
+  onFacebookLogin = (data) => this.props.handleFacebookLogin({ data })
 
   render () {
     return this.props.isFacebookAuthenticated ? (

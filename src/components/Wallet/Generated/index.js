@@ -8,10 +8,10 @@ import ListItemText from '@material-ui/core/ListItemText'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined'
-import CopyToClipBoardButton from './CopyToClipBoardButton'
-import HelpTooltip from '../HelpTooltip'
+import CopyToClipBoardButton from '../CopyToClipBoardButton'
+import HelpTooltip from '../../HelpTooltip'
 
-const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
+const WalletGenerated = ({ mnemonic, infoSaved, privateKey }) => [
   <Typography key="title" variant="headline">
     Please save your mnemonic and privateKey
     <HelpTooltip text="They will never be shown again. Those are for the hot wallet which was just created for you for Diadem Network. You will need them to recover your funds." />
@@ -38,7 +38,7 @@ const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
     key="button"
     variant="contained"
     color="secondary"
-    onClick={onConfirm}
+    onClick={infoSaved}
   >
     I saved my new hot wallet Mnemomic and PrivateKey somewhere safe
   </Button>
@@ -46,7 +46,7 @@ const WalletGenerated = ({ mnemonic, onConfirm, privateKey }) => [
 
 WalletGenerated.propTypes = {
   mnemonic: T.string,
-  onConfirm: T.func,
+  infoSaved: T.func,
   privateKey: T.string
 }
 

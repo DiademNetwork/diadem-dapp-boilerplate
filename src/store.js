@@ -3,7 +3,7 @@ import thunkMiddleware from 'redux-thunk'
 import createSagaMiddleware from 'redux-saga'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from 'modules/reducers'
-import sagas from 'modules/sagas'
+import rootSaga from 'modules/sagas'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -17,6 +17,6 @@ export default (() => {
       )
     )
   )
-  sagas.forEach(sagaMiddleware.run.bind(sagaMiddleware))
+  sagaMiddleware.run(rootSaga)
   return store
 })()

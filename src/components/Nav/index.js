@@ -51,9 +51,13 @@ class Nav extends Component {
     this.setState({ anchorEl: null })
   }
 
+  handleOpenHelp = () => {
+    this.props.toggleHelp()
+  }
+
   render () {
     const { anchorEl } = this.state
-    const { classes, showHelp } = this.props
+    const { classes } = this.props
     return (
       <AppBar position="static" color="primary">
         <Toolbar>
@@ -79,7 +83,7 @@ class Nav extends Component {
               onClose={this.handleClose}
             >
 
-              <MenuItem onClick={showHelp}>Show help</MenuItem>
+              <MenuItem onClick={this.handleOpenHelp}>Show help</MenuItem>
               <MenuItem component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md">See on Github</MenuItem>
               <Hashtag mobile />
             </Menu>
@@ -88,7 +92,7 @@ class Nav extends Component {
             <IconButton component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md" variant="fab" color="primary" className={classes.button}>
               <Avatar className={classes.github} alt="Github logo" src={GithubImg} />
             </IconButton>
-            <IconButton onClick={showHelp} variant="fab" color="primary">
+            <IconButton onClick={this.handleOpenHelp} variant="fab" color="primary">
               <Avatar className={classes.help} alt="Help logo" src={HelpImg} />
             </IconButton>
             <Hashtag />
@@ -101,7 +105,7 @@ class Nav extends Component {
 
 Nav.propTypes = {
   classes: T.object.isRequired,
-  showHelp: T.func
+  toggleHelp: T.func
 }
 
 export default withContainer(withStyles(styles)(Nav))

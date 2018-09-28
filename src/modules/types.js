@@ -1,25 +1,25 @@
-import { achievementTypes } from 'modules/achievement'
-import { achievementsTypes } from 'modules/achievements'
-import { facebookLoginTypes } from 'modules/facebook/login'
-import { facebookRegistrationTypes } from 'modules/facebook/registration'
-import { transactionsTypes } from 'modules/transactions'
-import { uiGeneralTypes } from 'modules/ui/general'
-import { usersTypes } from 'modules/users'
-import { walletsQtumTypes } from 'modules/wallets/qtum'
+import achievement from 'modules/achievement/types'
+import achievements from 'modules/achievements/types'
+import facebookLogin from 'modules/facebook/login/types'
+import facebookRegistration from 'modules/facebook/registration/types'
+import transactions from 'modules/transactions/types'
+import uiGeneral from 'modules/ui/general/types'
+import users from 'modules/users/types'
+import walletsQtum from 'modules/wallets/qtum/types'
 
 export default {
-  achievements: achievementTypes,
-  achievement: achievementsTypes,
+  achievement,
+  achievements,
   facebook: {
-    login: facebookLoginTypes,
-    registration: facebookRegistrationTypes
+    login: facebookLogin,
+    registration: facebookRegistration
   },
-  transactions: transactionsTypes,
+  transactions,
   ui: {
-    general: uiGeneralTypes
+    general: uiGeneral
   },
-  user: usersTypes,
+  users,
   wallets: {
-    qtum: walletsQtumTypes
+    qtum: walletsQtum
   }
 }

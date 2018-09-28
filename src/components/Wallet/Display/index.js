@@ -11,11 +11,11 @@ import LocalPostOfficeOutlinedIcon from '@material-ui/icons/LocalPostOfficeOutli
 import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
 import Zoom from '@material-ui/core/Zoom'
 import Typography from '@material-ui/core/Typography'
-import CopyToClipBoardButton from './CopyToClipBoardButton'
+import CopyToClipBoardButton from '../CopyToClipBoardButton'
 import { withStyles } from '@material-ui/core/styles'
-import HelpTooltip from '../HelpTooltip'
+import HelpTooltip from '../../HelpTooltip'
 import Withdraw from './Withdraw'
-import truncateText from '../../helpers/truncate-text'
+import truncateText from '../../../helpers/truncate-text'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import LinearProgress from '@material-ui/core/LinearProgress'
 
@@ -53,32 +53,52 @@ CopyToAddressToolip.propTypes = {
 
 class WalletDisplay extends Component {
   componentDidMount () {
-    const { onRefreshWallet } = this.props
-    this.refreshInterval = setInterval(onRefreshWallet, AUTO_WALLET_REFRESH_INTERVAL)
+    this.refreshInterval = setInterval(this.props.refresh, AUTO_WALLET_REFRESH_INTERVAL)
     this.checkLastTransactions()
   }
 
   checkLastTransactions = () => {
-    const { checkLastUserTransactions, lastUserTransactions } = this.props
-    if (lastUserTransactions.length > 0) {
-      checkLastUserTransactions(lastUserTransactions)
+    const { checkLastTx, lastUserTx } = this.props
+    if (lastUserTx.length > 0) {
+      checkLastTx(lastUserTx)
     }
   }
 
   componentWillReceiveProps ({
-    lastUserTransactions: newLastUserTransactions,
-    hasPendingTransactions: newHasPendingTransactions
+    lastUserTx: newLastUserTx,
+    hasPendingTx: newHasPendingTx,
+    unconfirmedBalance: newUnconfirmedBalance
   }) {
     const {
-      checkLastUserTransactions,
-      hasPendingTransactions,
-      lastUserTransactions
+      checkLastTx,
+      hasPendingTx,
+      lastUserTx,
+      unconfirmedBalance
     } = this.props
-    if (newLastUserTransactions.length > 0 && R.complement(R.equals)(lastUserTransactions, newLastUserTransactions)) {
-      checkLastUserTransactions(newLastUserTransactions)
+    if (newLastUserTx.length > 0 && R.complement(R.equals)(lastUserTx, newLastUserTx)) {
+      checkLastTx(newLastUserTx)
     }
-    if (newHasPendingTransactions !== hasPendingTransactions) {
-      newHasPendingTransactions ? this.startCheckTransactionsInterval() : this.stopCheckTransactionsInterval()
+    if (newHasPendingTx !== hasPendingTx) {
+      newHasPendingTx ? this.startCheckTransactionsInterval() : this.stopCheckTransactionsInterval()
+    }
+    if (unconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
+      // When notifications put back
+      // switch (true) {
+      //   case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+      //     displayNotification(notifications.sentTokens)
+      //     break
+      //   case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+      //     displayNotification(notifications.newAvailableTokens)
+      //     break
+      //   case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+      //     displayNotification(notifications.incomingTokens)
+      //     break
+      //   case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+      //     displayNotification(notifications.sendingTokens)
+      //     break
+      //   default:
+      //     break
+      // }
     }
   }
 
@@ -101,11 +121,11 @@ class WalletDisplay extends Component {
       balance,
       classes,
       fullScreen,
-      hasPendingTransactions,
+      hasPendingTx,
       isRegistrationPending,
-      unconfirmedBalance,
-      withdrawFromHotWallet
+      unconfirmedBalance
     } = this.props
+    console.log(balance)
     return (
       <List>
         <ListItem divider>
@@ -122,7 +142,7 @@ class WalletDisplay extends Component {
             </Typography>
           } />
         </ListItem>
-        <ListItem divider={hasPendingTransactions}>
+        <ListItem divider={hasPendingTx}>
           <ListItemIcon>
             <MonetizationOnOutlinedIcon />
           </ListItemIcon>
@@ -132,19 +152,15 @@ class WalletDisplay extends Component {
                 {balance} QTUM{unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} QTUM pending)` : ''}
                 <Hidden xsDown>
                   <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
-                  {balance > 0 &&
-                    <Withdraw
-                      balance={balance}
-                      className={classes.withdraw}
-                      onSubmit={withdrawFromHotWallet}
-                    />
-                  }
+                  {balance > 0 && (
+                    <Withdraw className={classes.withdraw} />
+                  )}
                 </Hidden>
               </Typography>
             }
           />
         </ListItem>
-        {(hasPendingTransactions || isRegistrationPending) && (
+        {(hasPendingTx || isRegistrationPending) && (
           <ListItem className={classes.waitbox}>
             <div className={classes.progress}>
               <LinearProgress color="secondary" />
@@ -160,13 +176,9 @@ class WalletDisplay extends Component {
         <Hidden key="mobile-button" smUp>
           <ListItem>
             <CopyToClipBoardButton variant="button" textToCopy={address} name="address" />
-            {balance > 0 &&
-              <Withdraw
-                balance={balance}
-                className={classes.withdraw}
-                onSubmit={withdrawFromHotWallet}
-              />
-            }
+            {balance > 0 && (
+              <Withdraw cxlassName={classes.withdraw} />
+            )}
           </ListItem>
         </Hidden>
       </List>
@@ -177,15 +189,14 @@ class WalletDisplay extends Component {
 WalletDisplay.propTypes = {
   address: T.string,
   balance: T.number,
-  checkLastUserTransactions: T.func,
+  checkLastTx: T.func,
   classes: T.object,
   fullScreen: T.bool,
-  hasPendingTransactions: T.bool,
+  hasPendingTx: T.bool,
   isRegistrationPending: T.bool,
-  lastUserTransactions: T.array,
-  onRefreshWallet: T.func,
-  unconfirmedBalance: T.number,
-  withdrawFromHotWallet: T.func
+  lastUserTx: T.array,
+  refresh: T.func,
+  unconfirmedBalance: T.number
 }
 
 export default R.compose(

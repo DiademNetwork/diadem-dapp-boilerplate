@@ -1,23 +1,23 @@
-import { achievementSelectors } from 'modules/achievement'
-import { achievementsSelectors } from 'modules/achievements'
-import { facebookLoginSelectors } from 'modules/facebook/login'
-import { transactionsSelectors } from 'modules/transactions'
-import { uiGeneralSelectors } from 'modules/ui/general'
-import { usersSelectors } from 'modules/users'
-import { walletsQtumSelectors } from 'modules/wallets/qtum'
+import * as achievement from 'modules/achievement/selectors'
+import * as achievements from 'modules/achievements/selectors'
+import * as facebookLogin from 'modules/facebook/login/selectors'
+import * as transactions from 'modules/transactions/selectors'
+import * as uiGeneral from 'modules/ui/general/selectors'
+import * as users from 'modules/users/selectors'
+import * as walletsQtum from 'modules/wallets/qtum/selectors'
 
 export default {
-  achievements: achievementSelectors,
-  achievement: achievementsSelectors,
+  achievement,
+  achievements,
   facebook: {
-    login: facebookLoginSelectors
+    login: facebookLogin
   },
-  transactions: transactionsSelectors,
+  transactions,
   ui: {
-    general: uiGeneralSelectors
+    general: uiGeneral
   },
-  user: usersSelectors,
+  users,
   wallets: {
-    qtum: walletsQtumSelectors
+    qtum: walletsQtum
   }
 }

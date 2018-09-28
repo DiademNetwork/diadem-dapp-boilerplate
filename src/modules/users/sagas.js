@@ -12,7 +12,7 @@ const fetch = function * () {
   }
 }
 
-export const rootSaga = function * () {
+export default function * () {
   yield all([
     takeLatest(ownTypes.FETCH.requested, fetch)
   ])

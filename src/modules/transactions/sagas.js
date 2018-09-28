@@ -1,4 +1,4 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects'
+import { all, call, put, takeLatest } from 'redux-saga/effects'
 import ownTypes from './types'
 import actions from './actions'
 import stream from 'services/stream'
@@ -25,9 +25,9 @@ const suscribe = function * () {
   }
 }
 
-export const rootSaga = function * () {
+export default function * () {
   yield all([
-    fork(fetch),
+    takeLatest(ownTypes.FETCH.requested, fetch),
     takeLatest(ownTypes.FETCH.succeeded, suscribe)
   ])
 }

@@ -54,7 +54,7 @@ class Help extends Component {
 
   handleClose = () => {
     this.setState({ open: false })
-    setTimeout(this.props.hideHelp, 300) // TO DO: Improve system of helper (setTimeout can be avoided)
+    setTimeout(this.props.toggleHelp, 300) // TO DO: Improve system of helper (setTimeout can be avoided)
   }
 
   handleCheckboxChange = event => {
@@ -187,7 +187,7 @@ Help.propTypes = {
   classes: T.object,
   fullScreen: T.bool,
   isHelpDisplayed: T.bool,
-  hideHelp: T.func
+  toggleHelp: T.func
 }
 
 export default R.compose(

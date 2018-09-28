@@ -35,13 +35,13 @@ export const createStreamClient = (streamTool) => {
   // idea will be to fetch only the LIMIT first results of search, and have a system of pagination/scroll load
   // while loop is temporary while data amount is low, and filters/search on their way to be implemented
   // Imperative code below is thus temporary
-  async function fetchData (feedName, successCallback, failCallback, page) {
+  async function fetchData (feedName, page) {
     if (feedName === 'transactions') {
       const { results, next } = await feeds[feedName].get({
         limit: TRANSACTIONS_LIMIT,
         offset: TRANSACTIONS_LIMIT * (page - 1)
       })
-      return successCallback({ results, hasMore: next !== '' })
+      return { results, hasMore: next !== '' }
     }
     try {
       let items
@@ -60,10 +60,9 @@ export const createStreamClient = (streamTool) => {
           items = [ ...items, ...newResults ]
         }
       }
-      return successCallback({ results: items })
+      return { results: items }
     } catch (error) {
-      failCallback(error)
-      return []
+      return error
     }
   }
 

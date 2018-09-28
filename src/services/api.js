@@ -5,23 +5,28 @@ import mockAxios from '../mocks/axios'
 
 export const createAPI = (fetcher, url) => {
   const getFullUrl = (path) => `${url}${path}`
-  const post = async (path, data) => fetcher.post(getFullUrl(path), data)
+  const post = async (path, data) => {
+    const { data: responseData } = await fetcher.post(getFullUrl(path), data)
+    return responseData
+  }
   const postPath = path => R.partial(post, [path])
-  const get = async (path) => fetcher.get(getFullUrl(path))
+  const get = async (path) => {
+    const { data } = await fetcher.get(getFullUrl(path))
+    return data
+  }
   const getPath = path => R.partial(get, [path])
 
   return Object.freeze({
-    checkUser: postPath('/check'),
-    checkUserAddress: postPath('/check-qtum-address'),
+    checkFacebookRegistration: postPath('/check'),
+    checkQTUMAddressMatchesFacebookUser: postPath('/check-qtum-address'),
     confirmAchievement: postPath('/confirm'),
-    createAchievement: postPath('/create'),
+    createUpdateAchievement: postPath('/create'),
     depositForAchievement: postPath('/deposit'),
     encodeSupport: postPath('/encode-support'),
     encodeDeposit: postPath('/encode-deposit'),
     fetchUsers: getPath('/users'),
     registerUser: postPath('/register'),
-    supportAchievement: postPath('/support'),
-    updateAchievement: postPath('/create')
+    supportAchievement: postPath('/support')
   })
 }
 

@@ -1,4 +1,6 @@
+
 import React, { Component } from 'react'
+import * as R from 'ramda'
 import Nav from '../../components/Nav'
 import Wallet from '../../components/Wallet'
 import Tabs from '../../components/Tabs'
@@ -66,4 +68,7 @@ App.propTypes = {
   userID: T.string
 }
 
-export default withContainer(withStyles(styles)(App))
+export default R.compose(
+  withContainer,
+  withStyles(styles)
+)(App)

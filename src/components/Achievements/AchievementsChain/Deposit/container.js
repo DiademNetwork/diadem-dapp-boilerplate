@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import * as A from '../../../../actions'
+import usersActions from '../../../../actions/users'
 import S from '../../../../selectors'
 
 const mapStateToProps = (state, { creatorID }) => ({
@@ -7,7 +7,7 @@ const mapStateToProps = (state, { creatorID }) => ({
 })
 
 const mapDispatchToProps = {
-  fetchUsers: A.fetchUsers
+  fetchUsers: usersActions.fetch.requested
 }
 
 export default WrappedComponent =>

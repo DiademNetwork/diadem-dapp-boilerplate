@@ -5,6 +5,7 @@ import achievements from 'modules/achievements/sagas'
 import facebookRegistration from 'modules/facebook/registration/sagas'
 import transactions from 'modules/transactions/sagas'
 import uiGeneral from 'modules/ui/general/sagas'
+import uiNotifications from 'modules/ui/notifications/sagas'
 import users from 'modules/users/sagas'
 import walletsQtum from 'modules/wallets/qtum/sagas'
 
@@ -15,6 +16,7 @@ export default function * rootSaga () {
     fork(facebookRegistration),
     fork(transactions),
     fork(uiGeneral),
+    fork(uiNotifications),
     fork(users),
     fork(walletsQtum)
   ]

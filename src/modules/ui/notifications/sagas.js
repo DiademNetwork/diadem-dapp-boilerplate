@@ -1,46 +1,52 @@
-import Notifications from 'react-notification-system-redux'
-import uuidv1 from 'uuid/v1'
 
-const getNotification = type => ({ title, message }) => Notifications[type]({
-  position: 'bl',
-  title,
-  message: message || '',
-  uid: uuidv1()
-})
+import { all, call, put, takeLatest } from 'redux-saga/effects'
+import types from 'modules/types'
+import ownActions from './actions'
 
-const createSuccessNotification = title => getNotification('success')({ title })
-const createErrorNotification = title => getNotification('error')({ title })
+const display = (actionName) => function * () {
+  yield put(ownActions[actionName])
+}
 
-export default {
-  unknownError: createErrorNotification('An error occured'),
-  fetchAchievementsError: createErrorNotification('Impossible to fetch achievements'),
-  fetchTransactionsError: createErrorNotification('Impossible to fetch transactions'),
-  facebookLoginSuccess: createSuccessNotification('Facebook login success'),
-  walletRestored: createSuccessNotification('Wallet restored'),
-  walletRecoverError: createErrorNotification('Impossible to recover wallet'),
-  walletRefreshError: createErrorNotification('Impossible to refresh wallet'),
-  walletGenerated: createSuccessNotification('Diadem Network QTUM wallet generated'),
-  walletError: createErrorNotification('An error occured with your hot Wallet'),
-  createAchievementSuccess: createSuccessNotification('Achievement created. It will appear once confirmed on blockchain'),
-  createAchievementError: createErrorNotification('Impossible to create achievement. You may have an achievement creation pending'),
-  updateAchievementSuccess: createSuccessNotification('Achievement updated. It will appear once confirmed on blockchain'),
-  updateAchievementError: createErrorNotification('Impossible to update achievement'),
-  confirmAchievementSuccess: createSuccessNotification('Achievement confirmed. It will appear once confirmed on blockchain'),
-  confirmAchievementError: createErrorNotification('Impossible to confirm achievement'),
-  supportAchievementSuccess: createSuccessNotification('Achievement supported. It will appear once confirmed on blockchain'),
-  supportAchievementError: createErrorNotification('Impossible to support achievement. You may need to retry with higher fees'),
-  depositAchievementSuccess: createSuccessNotification('Deposit for achievement successful. It will appear once confirmed on blockchain'),
-  depositAchievementError: createErrorNotification('Impossible to deposit for achievement. You may need to retry with higher fees'),
-  newAchievements: createSuccessNotification('New achievements events'),
-  newTransactions: createSuccessNotification('New user activity'),
-  incomingTokens: createSuccessNotification('Incoming tokens'),
-  newAvailableTokens: createSuccessNotification('New tokens are now available'),
-  pendingUserRegistration: createSuccessNotification('Please wait, your registration is in process. You will be notified when confirmed on blockchain'),
-  userRegistrationSuccess: createSuccessNotification('Registration successful'),
-  withdrawTokensSuccess: createSuccessNotification('Tokens withdrawal successful'),
-  withdrawTokensError: createErrorNotification('Impossible to withdraw tokens. You may need to retry with higher fees'),
-  checkUserError: createErrorNotification('Impossible to check your user existence'),
-  fetchUsersError: createErrorNotification('Impossible to fetch users list'),
-  sendingTokens: createSuccessNotification('Sending tokens. Please wait'),
-  sentTokens: createSuccessNotification('Tokens sent')
+const handleRefreshNotifications = function * ({ changes: {
+  tokensSent,
+  tokensReceived,
+  receivingTokens,
+  sendingTokens
+} }) {
+  if (tokensSent) { yield call(display, 'walletTokensSent') }
+  if (tokensReceived) { yield call(display, 'walletTokensReceived') }
+  if (receivingTokens) { yield call(display, 'walletReceivingTokens') }
+  if (sendingTokens) { yield call(display, 'walletSendingTokens') }
+}
+
+export default function * () {
+  yield all([
+    takeLatest(types.facebook.login.LOGGED, display('facebookLoginSuccess')),
+    takeLatest(types.facebook.registration.CHECK.errored, display('facebookRegistrationCheckError')),
+    takeLatest(types.facebook.registration.REGISTER.succeeded, display('facebookRegistrationSuccess')),
+    takeLatest(types.facebook.registration.REGISTER.errored, display('facebookRegistrationError')),
+    takeLatest(types.achievements.FETCH.errored, display('achievementsFetchError')),
+    takeLatest(types.achievements.RECEIVED, display('achievementsReceived')),
+    takeLatest(types.transactions.FETCH.errored, display('transactionsFetchError')),
+    takeLatest(types.transactions.RECEIVED, display('transactionsReceived')),
+    takeLatest(types.wallets.qtum.RECOVER.succeeded, display('walletRecoverSuccess')),
+    takeLatest(types.wallets.qtum.RECOVER.errored, display('walletRecoverError')),
+    takeLatest(types.wallets.qtum.GENERATE.succeeded, display('walletGenerateSuccess')),
+    takeLatest(types.wallets.qtum.GENERATE.errored, display('walletGenerateError')),
+    takeLatest(types.wallets.qtum.WITHDRAW.succeeded, display('walletWithdrawSuccess')),
+    takeLatest(types.wallets.qtum.WITHDRAW.errored, display('walletWithdrawError')),
+    takeLatest(types.wallets.qtum.REFRESH.succeeded, handleRefreshNotifications),
+    takeLatest(types.wallets.qtum.REFRESH.errored, display('walletRefreshError')),
+    takeLatest(types.achievement.CREATE.succeeded, display('achievementCreateSuccess')),
+    takeLatest(types.achievement.CREATE.errored, display('achievementCreateError')),
+    takeLatest(types.achievement.UPDATE.succeeded, display('achievementUpdateSuccess')),
+    takeLatest(types.achievement.UPDATE.errored, display('achievementUpdateError')),
+    takeLatest(types.achievement.CONFIRM.succeeded, display('achievementConfirmSuccess')),
+    takeLatest(types.achievement.CONFIRM.errored, display('achievementConfirmError')),
+    takeLatest(types.achievement.SUPPORT.succeeded, display('achievementSupportSuccess')),
+    takeLatest(types.achievement.SUPPORT.errored, display('achievementSupportError')),
+    takeLatest(types.achievement.DEPOSIT.succeeded, display('achievementDepositSuccess')),
+    takeLatest(types.achievement.DEPOSIT.errored, display('achievementDepositError')),
+    takeLatest(types.users.FETCH.errored, display('usersFetchError'))
+  ])
 }

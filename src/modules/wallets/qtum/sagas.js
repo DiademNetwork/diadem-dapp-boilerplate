@@ -1,5 +1,6 @@
 
-import { all, call, put, select, takeLatest } from 'redux-saga/effects'
+import { all, call, fork, put, select, take, takeLatest, takeEvery } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 import { networks, generateMnemonic } from 'qtumjs-wallet'
 import * as R from 'ramda'
 import api from 'services/api'
@@ -8,9 +9,13 @@ import types from 'modules/types'
 import selectors from 'modules/selectors'
 import actions from './actions'
 import ownTypes from './types'
-import ownSelectors from './selectors'
+import * as ownSelectors from './selectors'
+import { oneOfTypes } from 'modules/utils'
 
 const network = networks[process.env.QTUM_NETWORK]
+
+const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
+const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 
 const checkIfGenerationNeeded = function * ({ reason }) {
   if (reason === 'not-registered') {
@@ -91,29 +96,74 @@ const recover = function * ({ mnemonic, privateKey }) {
 }
 
 const refresh = function * () {
-  try {
-    const walletUtil = yield select(ownSelectors.util)
-    const walletData = yield select(ownSelectors.data)
-    const newWalletData = yield call([walletUtil, 'getInfo'])
-    if (R.complement(R.equals)(newWalletData, walletData)) {
-      yield put(actions.refresh.succeeded({ walletData: newWalletData }))
+  yield take(oneOfTypes([
+    ownTypes.GENERATE.succeeded,
+    ownTypes.LOAD.succeeded,
+    ownTypes.RECOVER.succeeded
+  ]))
+  while (true) {
+    try {
+      const walletUtil = yield select(ownSelectors.util)
+      const walletData = yield select(ownSelectors.data)
+      const newWalletData = yield call([walletUtil, 'getInfo'])
+      if (R.complement(R.equals)(newWalletData, walletData)) {
+        const changes = { }
+        const { unconfirmedBalance } = walletData
+        const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
+        if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
+          switch (true) {
+            case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+              changes.tokensSent = true
+              break
+            case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+              changes.tokensReceived = true
+              break
+            case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+              changes.receivingTokens = true
+              break
+            case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+              changes.sendingTokens = true
+              break
+            default:
+              break
+          }
+        }
+        yield put(actions.refresh.succeeded({ changes, walletData: newWalletData }))
+      }
+    } catch (error) {
+      yield put(actions.refresh.errored({ error }))
     }
-  } catch (error) {
-    yield put(actions.refresh.errored({ error }))
+    yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
   }
 }
 
-const checkLastTx = function * ({ transactions }) {
-  try {
-    let hasPendingTx = false
-    for (let transaction of transactions) {
-      const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-      hasPendingTx = hasPendingTx || confirmations === 0
+const checkLastTx = function * () {
+  yield takeEvery(oneOfTypes([
+    types.facebook.login.LOGGED,
+    types.transactions.FETCH.succeeded,
+    types.transactions.RECEIVED
+  ]), function * () {
+    yield put(actions.checkLastTx.requested())
+    const facebookUserID = yield select(selectors.facebook.login.userID)
+    if (facebookUserID) {
+      const transactions = yield select(selectors.transactions.lastForUser(facebookUserID))
+      if (transactions.length > 0) {
+        try {
+          let hasPendingTx = true
+          while (hasPendingTx) {
+            for (let transaction of transactions) {
+              const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
+              hasPendingTx = hasPendingTx || confirmations === 0
+            }
+            yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
+            yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
+          }
+        } catch (error) {
+          yield put(actions.checkLastTx.errored({ error }))
+        }
+      }
     }
-    yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
-  } catch (error) {
-    yield put(actions.checkLastTx.errored({ error }))
-  }
+  })
 }
 
 const withdraw = function * ({address, amount, fees}) {
@@ -132,8 +182,8 @@ export default function * () {
     takeLatest(types.facebook.registration.CHECK.failed, checkIfGenerationNeeded),
     takeLatest(ownTypes.GENERATE.requested, generate),
     takeLatest(ownTypes.RECOVER.requested, recover),
-    takeLatest(ownTypes.REFRESH.requested, refresh),
-    takeLatest(ownTypes.CHECK_LAST_TX.requested, checkLastTx),
-    takeLatest(ownTypes.WITHDRAW.requested, withdraw)
+    takeLatest(ownTypes.WITHDRAW.requested, withdraw),
+    fork(refresh),
+    fork(checkLastTx)
   ])
 }

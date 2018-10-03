@@ -13,7 +13,7 @@ export const hasMore = getTransactions(['hasMore'])
 export const hasUnread = getTransactions(['hasUnread'])
 export const fetchStatus = getTransactions(['fetchStatus'])
 
-export const lastForUser = (state, { userID }) => {
+export const lastForUser = userID => (state) => {
   if (!userID) { return [] }
   const lastTX = R.compose(
     R.takeLast(2),

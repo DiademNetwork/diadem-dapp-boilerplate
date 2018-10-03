@@ -16,7 +16,7 @@ import Confirm from './Confirm'
 import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
-import Link from '../../Link'
+import Link from 'components/Link'
 
 const styles = (theme) => ({
   actions: {

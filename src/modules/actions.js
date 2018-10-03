@@ -4,6 +4,7 @@ import facebookLogin from 'modules/facebook/login/actions'
 import facebookRegistration from 'modules/facebook/registration/actions'
 import transactions from 'modules/transactions/actions'
 import uiGeneral from 'modules/ui/general/actions'
+import uiNotifications from 'modules/ui/notifications/actions'
 import users from 'modules/users/actions'
 import walletsQtum from 'modules/wallets/qtum/actions'
 
@@ -16,7 +17,8 @@ export default {
   },
   transactions,
   ui: {
-    general: uiGeneral
+    general: uiGeneral,
+    notifications: uiNotifications
   },
   users,
   wallets: {

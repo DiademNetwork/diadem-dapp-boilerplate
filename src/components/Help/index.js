@@ -13,9 +13,9 @@ import Checkbox from '@material-ui/core/Checkbox'
 import Hidden from '@material-ui/core/Hidden'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { withStyles } from '@material-ui/core/styles'
-import withContainer from './container'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import SendIcon from '@material-ui/icons/SendOutlined'
+import withContainer from './container'
 
 const styles = (theme) => ({
   divider: {

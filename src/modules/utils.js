@@ -18,3 +18,8 @@ export const createAction = type => payload => ({ type, ...payload })
 export const createAsyncActions = R.mapObjIndexed(createAction)
 
 export const createBaseSelector = (basePath) => (path) => R.path([...basePath, ...path])
+
+export const oneOfTypes = (types) => R.compose(
+  R.partialRight(R.contains, [types]),
+  R.prop('type')
+)

@@ -10,6 +10,7 @@ import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined'
 import CopyToClipBoardButton from '../CopyToClipBoardButton'
 import HelpTooltip from '../../HelpTooltip'
+import withContainer from './container'
 
 const WalletGenerated = ({ mnemonic, infoSaved, privateKey }) => [
   <Typography key="title" variant="headline">
@@ -50,4 +51,4 @@ WalletGenerated.propTypes = {
   privateKey: T.string
 }
 
-export default WalletGenerated
+export default withContainer(WalletGenerated)

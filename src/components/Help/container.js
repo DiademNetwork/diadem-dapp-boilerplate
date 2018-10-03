@@ -4,7 +4,7 @@ import A from 'modules/actions'
 import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
-  isHelpDisplayed: S.ui.general.isHelpDisplayed(state)
+  helpDisplay: S.ui.general.helpDisplay(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

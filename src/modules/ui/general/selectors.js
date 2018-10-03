@@ -1,5 +1,5 @@
-import * as R from 'ramda'
+import { createBaseSelector } from 'modules/utils'
 
-const getUiGeneral = (path) => R.path(['ui', 'general', ...path])
+const getUiGeneral = createBaseSelector(['ui', 'general'])
 
-export const isHelpDisplayed = getUiGeneral(['isHelpDisplayed'])
+export const helpDisplay = getUiGeneral(['helpDisplay'])

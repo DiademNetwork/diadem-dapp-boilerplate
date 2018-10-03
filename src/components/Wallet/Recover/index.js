@@ -10,6 +10,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import withContainer from './container'
 
 const MNEMONIC_INITIAL_VALUE = ''
 const PRIVATE_KEY_INITIAL_VALUE = ''
@@ -86,16 +87,18 @@ class Recover extends Component {
 
   render () {
     const { open, mnemonic, privateKey, isMnemonicValid, isPrivateKeyValid } = this.state
-    const { recoverFailReason, fullScreen } = this.props
+    const { recoverFailReason, fullScreen, walletStatus } = this.props
     const isFormValid = isMnemonicValid || isPrivateKeyValid
+    const isRecovering = walletStatus === 'is-recovering'
     return [
       <Button
         color="secondary"
+        disabled={isRecovering}
         key="button"
         onClick={this.handleOpen}
         variant="contained"
       >
-        Recover your wallet
+        {isRecovering ? 'Loading...' : 'Recover your wallet'}
       </Button>,
       <Dialog
         fullScreen={fullScreen}
@@ -160,11 +163,11 @@ class Recover extends Component {
           </Button>
           <Button
             color="secondary"
-            disabled={!isFormValid}
+            disabled={!isFormValid || isRecovering}
             onClick={this.handleSubmit}
             variant="contained"
           >
-            Confirm
+            {isRecovering ? 'Loading...' : 'Confirm'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -174,8 +177,12 @@ class Recover extends Component {
 
 Recover.propTypes = {
   fullScreen: T.bool,
-  recoverFailReason: T.bool,
-  recover: T.func
+  recoverFailReason: T.string,
+  recover: T.func,
+  walletStatus: T.string
 }
 
-export default withMobileDialog()(Recover)
+export default R.compose(
+  withMobileDialog(),
+  withContainer
+)(Recover)

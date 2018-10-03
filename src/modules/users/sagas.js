@@ -1,5 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects'
-import ownTypes from './types'
+import { all, call, fork, put } from 'redux-saga/effects'
 import actions from './actions'
 import api from 'services/api'
 
@@ -14,6 +13,6 @@ const fetch = function * () {
 
 export default function * () {
   yield all([
-    takeLatest(ownTypes.FETCH.requested, fetch)
+    fork(fetch)
   ])
 }

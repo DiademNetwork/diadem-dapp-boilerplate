@@ -1,12 +1,14 @@
 import { createSelector } from 'reselect'
 import * as R from 'ramda'
 import mapSort from 'helpers/map-sort'
+import { createBaseSelector } from 'modules/utils'
 
-const getAchievements = (path) => R.path(['achievements', ...path])
+const getAchievements = createBaseSelector(['achievements'])
 
+export const fetchStatus = getAchievements(['fetchStatus'])
 export const list = createSelector([getAchievements(['list'])], R.filter(R.complement(R.propEq)('ban', true)))
-export const hasUnread = getAchievements(['hasUnread'])
 export const count = createSelector([list], R.length)
+export const hasUnread = getAchievements(['hasUnread'])
 
 const groupedbyWallet = createSelector([list], R.groupBy(R.prop('wallet')))
 
@@ -35,5 +37,22 @@ export const processedList = createSelector([groupedbyWallet], R.mapObjIndexed((
   return result
 }))
 
-export const currentAchievementFromChain = R.compose(R.head, R.takeLast(1))
-export const pastAchievementsFromChain = R.compose(R.reverse, R.dropLast(1))
+export const lastLinkOfUserAchievementOrNull = (userQtumAddress) => (state) => {
+  const walletsAddresses = wallets(state)
+  const achievementsList = processedList(state)
+  if (!userQtumAddress || !R.is(Array)(walletsAddresses) || achievementsList === {}) {
+    return null
+  }
+  if (!R.contains(userQtumAddress, walletsAddresses)) {
+    return null
+  } else {
+    const userAchievementsChain = R.propOr([], userQtumAddress, achievementsList)
+    const updates = R.filter(R.propEq('verb', 'update'), userAchievementsChain)
+    const create = R.find(R.propEq('verb', 'create'), userAchievementsChain)
+    return R.compose(
+      R.prop('object'),
+      R.head,
+      R.takeLast(1)
+    )([ create, ...updates ])
+  }
+}

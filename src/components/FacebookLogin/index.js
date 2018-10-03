@@ -11,7 +11,7 @@ class FacebookLogin extends Component {
   onFacebookLogin = (data) => this.props.handleFacebookLogin({ data })
 
   render () {
-    return this.props.isFacebookAuthenticated ? (
+    return this.props.isFacebookLogged ? (
       <User />
     ) : process.env.ENV !== 'sandbox' ? (
       <ReactFacebookLogin
@@ -29,7 +29,7 @@ class FacebookLogin extends Component {
 
 FacebookLogin.propTypes = {
   handleFacebookLogin: T.func,
-  isFacebookAuthenticated: T.bool
+  isFacebookLogged: T.bool
 }
 
 export default R.compose(

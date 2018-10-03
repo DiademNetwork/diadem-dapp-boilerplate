@@ -18,6 +18,7 @@ import Withdraw from './Withdraw'
 import truncateText from '../../../helpers/truncate-text'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import LinearProgress from '@material-ui/core/LinearProgress'
+import withContainer from './container'
 
 const AUTO_WALLET_REFRESH_INTERVAL = 5000 // in ms
 const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
@@ -125,7 +126,6 @@ class WalletDisplay extends Component {
       isRegistrationPending,
       unconfirmedBalance
     } = this.props
-    console.log(balance)
     return (
       <List>
         <ListItem divider>
@@ -201,5 +201,6 @@ WalletDisplay.propTypes = {
 
 export default R.compose(
   withMobileDialog(),
-  withStyles(styles)
+  withStyles(styles),
+  withContainer
 )(WalletDisplay)

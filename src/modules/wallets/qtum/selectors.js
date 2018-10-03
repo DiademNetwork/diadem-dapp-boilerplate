@@ -1,7 +1,8 @@
 import * as R from 'ramda'
 import { createSelector } from 'reselect'
+import { createBaseSelector } from 'modules/utils'
 
-const getQtum = (path) => R.path(['wallets', 'qtum', ...path])
+const getQtum = createBaseSelector(['wallets', 'qtum'])
 
 export const data = getQtum(['data'])
 export const util = getQtum(['util'])
@@ -21,3 +22,5 @@ export const hasPendingTx = createSelector([data], R.prop('hasPendingTx'))
 
 // status
 export const status = getQtum(['status'])
+
+export const isReady = createSelector([status], R.partialRight(R.contains, [['loaded', 'recovered', 'restoring-info-saved']]))

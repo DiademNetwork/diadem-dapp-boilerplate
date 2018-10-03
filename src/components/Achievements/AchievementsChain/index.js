@@ -90,7 +90,7 @@ class AchievementsChain extends Component {
   render () {
     const {
       classes,
-      canUserConfirmCreateUpdateSupportDeposit,
+      canPerformActions,
       currentAchievement,
       pastAchievements,
       userID,
@@ -150,7 +150,7 @@ class AchievementsChain extends Component {
             <Confirm
               actionAlreadyDone={this.hasUserAlreadyConfirmed()}
               className={classes.actionsButtons}
-              canUserConfirmCreateUpdateSupportDeposit={canUserConfirmCreateUpdateSupportDeposit}
+              canPerformActions={canPerformActions}
               link={object}
               creatorID={creatorID}
               creatorName={creatorName}
@@ -228,7 +228,7 @@ class AchievementsChain extends Component {
 
 AchievementsChain.propTypes = {
   accessToken: T.string,
-  canUserConfirmCreateUpdateSupportDeposit: T.bool,
+  canPerformActions: T.bool,
   classes: T.object,
   confirmAchievement: T.func,
   currentAchievement: T.object,

@@ -2,13 +2,13 @@ import { merge } from 'modules/utils'
 import types from './types'
 
 const initialState = {
-  isHelpDisplayed: false
+  helpDisplay: 'none'
 }
 
-export default function createReducer (state, { type }) {
+export default function createReducer (state, { type, helpDisplay = 'none' }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
-    case types.TOGGLE_HELP: return merge(state)({ isHelpDisplayed: !state.isHelpDisplayed })
+    case types.TOGGLE_HELP: return merge(state)({ helpDisplay })
     default: return state
   }
 }

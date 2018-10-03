@@ -89,10 +89,10 @@ const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, w
 
 export default function * () {
   yield all([
-    takeLatest(ownTypes.CREATE.succeeded, create),
-    takeLatest(ownTypes.UPDATE.succeeded, update),
-    takeLatest(ownTypes.CONFIRM.succeeded, confirm),
-    takeLatest(ownTypes.SUPPORT.succeeded, support),
-    takeLatest(ownTypes.DEPOSIT.succeeded, deposit)
+    takeLatest(ownTypes.CREATE.requested, create),
+    takeLatest(ownTypes.UPDATE.requested, update),
+    takeLatest(ownTypes.CONFIRM.requested, confirm),
+    takeLatest(ownTypes.SUPPORT.requested, support),
+    takeLatest(ownTypes.DEPOSIT.requested, deposit)
   ])
 }

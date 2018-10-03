@@ -32,30 +32,12 @@ const styles = (theme) => ({
 
 class Help extends Component {
   state = {
-    open: false,
     wantsNotToShowSplashAgain: false
   }
 
-  componentWillReceiveProps ({ isHelpDisplayed: newIsHelpDisplayed }) {
-    const { isHelpDisplayed } = this.props
-    if (newIsHelpDisplayed && newIsHelpDisplayed !== isHelpDisplayed) {
-      this.handleOpen()
-    }
-  }
+  handleOpen = () => this.props.toggleHelp({ helpDisplay: 'help' })
 
-  componentDidMount () {
-    const doNotShowSplash = window.localStorage.getItem('do-not-show-splash')
-    if (!doNotShowSplash) {
-      this.handleOpen()
-    }
-  }
-
-  handleOpen = () => this.setState({ open: true })
-
-  handleClose = () => {
-    this.setState({ open: false })
-    setTimeout(this.props.toggleHelp, 300) // TO DO: Improve system of helper (setTimeout can be avoided)
-  }
+  handleClose = () => this.props.toggleHelp({ helpDisplay: 'none' })
 
   handleCheckboxChange = event => {
     const checked = event.target.checked
@@ -66,19 +48,19 @@ class Help extends Component {
   }
 
   render () {
-    const { open, wantsNotToShowSplashAgain } = this.state
-    const { classes, fullScreen, isHelpDisplayed } = this.props
+    const { wantsNotToShowSplashAgain } = this.state
+    const { classes, fullScreen, helpDisplay } = this.props
     return (
       <Dialog
         fullScreen={fullScreen}
-        open={open}
+        open={helpDisplay !== 'none'}
         onClose={this.handleClose}
         maxWidth="md"
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {isHelpDisplayed ? 'Help' : 'Welcome to Diadem Network!'}
+          {helpDisplay === 'welcome' ? 'Welcome to Diadem Network!' : 'Help'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
@@ -151,18 +133,18 @@ class Help extends Component {
             <Typography variant="caption">
               If you need more help, have questions, improvements ideas, or just want to say hello, don't hesitate contacting us at: <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
             </Typography>
-            {!isHelpDisplayed &&
-            <FormControlLabel
-              control={
-                <Checkbox
-                  color="secondary"
-                  checked={wantsNotToShowSplashAgain}
-                  onChange={this.handleCheckboxChange}
-                />
-              }
-              label="I do not want to see this help again in the future"
-            />
-            }
+            {helpDisplay === 'welcome' && (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="secondary"
+                    checked={wantsNotToShowSplashAgain}
+                    onChange={this.handleCheckboxChange}
+                  />
+                }
+                label="I do not want to see this help again in the future"
+              />
+            )}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -175,7 +157,7 @@ class Help extends Component {
             <Hidden smDown>
               <SendIcon className={classes.icon} />
             </Hidden>
-            {isHelpDisplayed ? 'Go back to Diadem Network' : ' Get me to Diadem Network'}
+            {helpDisplay === 'welcome' ? ' Get me to Diadem Network' : 'Go back to Diadem Network'}
           </Button>
         </DialogActions>
       </Dialog>
@@ -186,7 +168,7 @@ class Help extends Component {
 Help.propTypes = {
   classes: T.object,
   fullScreen: T.bool,
-  isHelpDisplayed: T.bool,
+  helpDisplay: T.string,
   toggleHelp: T.func
 }
 

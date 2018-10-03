@@ -16,3 +16,5 @@ export const createAsyncTypes = (base) =>
 export const createAction = type => payload => ({ type, ...payload })
 
 export const createAsyncActions = R.mapObjIndexed(createAction)
+
+export const createBaseSelector = (basePath) => (path) => R.path([...basePath, ...path])

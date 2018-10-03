@@ -6,22 +6,19 @@ import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
 import PermIdentityIcon from '@material-ui/icons/PermIdentityOutlined'
 
-const UserItem = ({ user }) => {
-  const { userAccount, userName } = user
-  return (
-    <ListItem>
-      <Avatar><PermIdentityIcon /></Avatar>
-      <ListItemText primary={[
-        <Typography color="textSecondary" key='time'>
-          {userAccount}
-        </Typography>,
-        <Typography key='text'>
-          {userName}
-        </Typography>
-      ]} />
-    </ListItem>
-  )
-}
+const UserItem = ({ user: { userAccount, userName } }) => (
+  <ListItem>
+    <Avatar><PermIdentityIcon /></Avatar>
+    <ListItemText primary={[
+      <Typography color="textSecondary" key='time'>
+        {userAccount}
+      </Typography>,
+      <Typography key='text'>
+        {userName}
+      </Typography>
+    ]} />
+  </ListItem>
+)
 
 UserItem.propTypes = {
   user: T.object

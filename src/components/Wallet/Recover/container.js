@@ -4,11 +4,12 @@ import A from 'modules/actions'
 import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
-  recoverFailReason: S.wallets.qtum.recoverFailReason(state)
+  recoverFailReason: S.wallets.qtum.recoverFailReason(state),
+  walletStatus: S.wallets.qtum.status(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  recover: A.wallets.qtum.recover
+  recover: A.wallets.qtum.recover.requested
 }, dispatch)
 
 export default WrappedComponent =>

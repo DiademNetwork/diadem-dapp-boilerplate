@@ -52,7 +52,7 @@ class Nav extends Component {
   }
 
   handleOpenHelp = () => {
-    this.props.toggleHelp()
+    this.props.toggleHelp({ helpDisplay: 'help' })
   }
 
   render () {

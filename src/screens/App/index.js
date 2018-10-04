@@ -1,4 +1,6 @@
-import React, { Component } from 'react'
+
+import React from 'react'
+import * as R from 'ramda'
 import Nav from '../../components/Nav'
 import Wallet from '../../components/Wallet'
 import Tabs from '../../components/Tabs'
@@ -24,46 +26,46 @@ const styles = (theme) => ({
   }
 })
 
-class App extends Component {
-  render () {
-    const {
-      classes,
-      hasUnreadAchievements,
-      hasUnreadTransactions,
-      userID
-    } = this.props
-    return (
-      <div>
-        <Nav />
-        <Wallet className={classes.sm9} userID={userID} />
-        <Tabs tabs={[
-          {
-            badgeContent: hasUnreadAchievements ? '!' : null,
-            label: 'Achievements',
-            component: <Achievements className={classes.sm9} />
-          },
-          {
-            badgeContent: hasUnreadTransactions ? '!' : null,
-            label: 'Timeline',
-            component: <Timeline className={classes.sm9} />
-          },
-          {
-            label: 'Users',
-            component: <Users className={classes.sm9} />
-          }
-        ]} />
-        <Notifications />
-        <Help />
-      </div>
-    )
-  }
-}
+const App = ({
+  classes,
+  hasUnreadAchievements,
+  hasUnreadTransactions,
+  userID,
+  userQtumAddress
+}) => (
+  <div>
+    <Nav />
+    <Wallet className={classes.sm9} userID={userID} />
+    <Tabs tabs={[
+      {
+        badgeContent: hasUnreadAchievements ? '!' : null,
+        label: 'Achievements',
+        component: <Achievements className={classes.sm9} userQtumAddress={userQtumAddress} />
+      },
+      {
+        badgeContent: hasUnreadTransactions ? '!' : null,
+        label: 'Timeline',
+        component: <Timeline className={classes.sm9} />
+      },
+      {
+        label: 'Users',
+        component: <Users className={classes.sm9} />
+      }
+    ]} />
+    <Notifications />
+    <Help />
+  </div>
+)
 
 App.propTypes = {
   classes: T.object,
   hasUnreadAchievements: T.bool,
   hasUnreadTransactions: T.bool,
-  userID: T.string
+  userID: T.string,
+  userQtumAddress: T.string
 }
 
-export default withContainer(withStyles(styles)(App))
+export default R.compose(
+  withContainer,
+  withStyles(styles)
+)(App)

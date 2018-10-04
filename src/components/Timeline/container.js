@@ -1,16 +1,15 @@
 import { connect } from 'react-redux'
-import S from '../../selectors'
-import * as A from '../../actions'
+import S from 'modules/selectors'
+import A from 'modules/actions'
 
 const mapStateToProps = (state) => ({
-  fetchStatus: S.getTransactionsFetchStatus(state),
-  hasMoreTransactions: S.getTransactionsHasMore(state),
-  transactions: S.getTransactionsItems(state)
+  fetchStatus: S.transactions.fetchStatus(state),
+  hasMoreTransactions: S.transactions.hasMore(state),
+  transactions: S.transactions.list(state)
 })
 
 const mapDispatchToProps = {
-  fetchTransactions: A.fetchTransactions,
-  suscribeToTransactions: A.suscribeToAchievements
+  fetchTransactions: A.transactions.fetch.requested
 }
 
 export default WrappedComponent =>

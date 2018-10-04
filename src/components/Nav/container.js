@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
-import * as A from '../../actions'
+import A from 'modules/actions'
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  showHelp: A.showHelp
+  toggleHelp: A.ui.general.toggleHelp
 }, dispatch)
 
 export default WrappedComponent =>

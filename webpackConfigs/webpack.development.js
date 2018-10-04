@@ -4,7 +4,7 @@ const path = require('path')
 const Dotenv = require('dotenv-webpack')
 
 module.exports = webpackConfigMerger(commonWebpackConfig, {
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   devServer: {
     contentBase: path.join(__dirname, '../dist'),
     compress: true,

@@ -36,5 +36,17 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.join(__dirname, '../dist')
+  },
+  resolve: {
+    alias: {
+      components: path.resolve(__dirname, '../src/components/'),
+      helpers: path.resolve(__dirname, '../src/helpers/'),
+      mocks: path.resolve(__dirname, '../src/mocks/'),
+      modules: path.resolve(__dirname, '../src/modules/'),
+      screens: path.resolve(__dirname, '../src/screens/'),
+      services: path.resolve(__dirname, '../src/services/'),
+      stubs: path.resolve(__dirname, '../src/stubs/'),
+      tests: path.resolve(__dirname, '../src/tests/')
+    }
   }
 }

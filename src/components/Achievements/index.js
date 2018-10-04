@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Grid from '@material-ui/core/Grid'
@@ -32,84 +32,74 @@ const styles = (theme) => ({
   }
 })
 
-class Achievements extends Component {
-  componentDidMount () {
-    const { fetchAchievements, fetchStatus, suscribeToAchievements } = this.props
-    if (fetchStatus === 'none') {
-      fetchAchievements()
-      suscribeToAchievements()
-    }
-  }
-
-  render () {
-    const {
-      achievementsChains,
-      canUserConfirmCreateUpdateSupportDeposit,
-      className,
-      classes,
-      createAchievement,
-      createAchievementStatus,
-      fetchStatus,
-      lastLinkOfUserAchievementOrNull,
-      updateAchievement
-    } = this.props
-    const displayUpdateButton = canUserConfirmCreateUpdateSupportDeposit && lastLinkOfUserAchievementOrNull
-    const displayCreateButton = canUserConfirmCreateUpdateSupportDeposit && !lastLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
-    return [
-      displayUpdateButton && (
-        <Update
-          className={classes.achievementButton}
-          key="update"
-          onUpdate={updateAchievement}
-          previousLink={lastLinkOfUserAchievementOrNull} // will always be string in this case
-        />
-      ),
-      displayCreateButton && (
-        <Create
-          key="create"
-          className={classes.achievementButton}
-          onCreate={createAchievement}
-        />
-      ),
-      <Grid
-        key='list'
-        container
-        className={`${className}  ${classes.grid}`}
-        spacing={16}
-      >
-        {R.keys(achievementsChains).length > 0
-          ? R.keys(achievementsChains).map((key, idx) => (
-            <Grid key={idx} item xs={12}>
-              <AchievementsChain achievementsChain={achievementsChains[key]} />
-            </Grid>
-          ))
-          : (
-            <Grid key='no-item' item xs={12}>
-              <Card>
-                <CardContent>
-                  <Typography color="textPrimary">{fetchStatus === 'requested' ? 'Loading...' : 'No achievements'}</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          )
-        }
-      </Grid>
-    ]
-  }
+const Achievements = ({
+  achievements,
+  canPerformActions,
+  className,
+  classes,
+  createAchievement,
+  createAchievementStatus,
+  fetchStatus,
+  lastLinkOfUserAchievementOrNull,
+  updateAchievement
+}) => {
+  const displayUpdateButton = canPerformActions && lastLinkOfUserAchievementOrNull
+  const displayCreateButton = canPerformActions && !lastLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
+  return [
+    displayUpdateButton && (
+      <Update
+        className={classes.achievementButton}
+        key="update"
+        onUpdate={updateAchievement}
+        previousLink={lastLinkOfUserAchievementOrNull} // will always be string in this case
+      />
+    ),
+    displayCreateButton && (
+      <Create
+        key="create"
+        className={classes.achievementButton}
+        onCreate={createAchievement}
+      />
+    ),
+    <Grid
+      key='list'
+      container
+      className={`${className}  ${classes.grid}`}
+      spacing={16}
+    >
+      {R.keys(achievements).length > 0
+        ? R.keys(achievements).map((key, idx) => (
+          <Grid key={idx} item xs={12}>
+            <AchievementsChain achievementsChain={achievements[key]} />
+          </Grid>
+        ))
+        : (
+          <Grid key='no-item' item xs={12}>
+            <Card>
+              <CardContent>
+                <Typography color="textPrimary">{fetchStatus === 'requested' ? 'Loading...' : 'No achievements'}</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        )
+      }
+    </Grid>
+  ]
 }
 
 Achievements.propTypes = {
-  achievementsChains: T.object,
-  canUserConfirmCreateUpdateSupportDeposit: T.bool,
+  achievements: T.object,
+  canPerformActions: T.bool,
   className: T.string,
   classes: T.object,
   createAchievement: T.func,
   createAchievementStatus: T.string,
-  fetchAchievements: T.func,
   fetchStatus: T.string,
-  suscribeToAchievements: T.func,
   lastLinkOfUserAchievementOrNull: T.string,
   updateAchievement: T.func
 }
 
-export default withContainer(withStyles(styles)(Achievements))
+export default R.compose(
+  withContainer,
+  withStyles(styles)
+)(Achievements)

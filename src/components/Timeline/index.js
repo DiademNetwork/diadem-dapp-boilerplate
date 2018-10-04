@@ -9,18 +9,10 @@ import Item from './Item'
 import withContainer from './container'
 
 class Timeline extends Component {
-  async componentDidMount () {
-    const { fetchTransactions, fetchStatus, suscribeToTransactions } = this.props
-    if (fetchStatus === 'none') {
-      fetchTransactions(1)
-      suscribeToTransactions()
-    }
-  }
-
   handleFetchTransactions = (page) => {
     const { fetchStatus, fetchTransactions } = this.props
     if (fetchStatus !== 'requested') {
-      fetchTransactions(page)
+      fetchTransactions({ page })
     }
   }
 
@@ -64,8 +56,7 @@ Timeline.propTypes = {
   fetchTransactions: T.func,
   fetchStatus: T.string,
   hasMoreTransactions: T.bool,
-  transactions: T.array,
-  suscribeToTransactions: T.func
+  transactions: T.array
 }
 
 export default withContainer(Timeline)

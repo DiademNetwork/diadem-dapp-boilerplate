@@ -1,15 +1,10 @@
 import { connect } from 'react-redux'
-import * as A from '../../actions'
-import S from '../../selectors'
+import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
-  users: S.getUsersItems(state),
-  fetchStatus: S.getUsersFetchStatus(state)
+  fetchStatus: S.users.fetchStatus(state),
+  users: S.users.list(state)
 })
 
-const mapDispatchToProps = {
-  fetchUsers: A.fetchUsers
-}
-
 export default WrappedComponent =>
-  connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)
+  connect(mapStateToProps)(WrappedComponent)

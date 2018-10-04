@@ -8,13 +8,10 @@ import User from './User'
 import facebookStub from '../../stubs/facebook'
 
 class FacebookLogin extends Component {
-  onFacebookLogin = (facebookData) => {
-    if (!facebookData.userID) { return }
-    this.props.handleFacebookLogin(facebookData)
-  }
+  onFacebookLogin = (data) => this.props.handleFacebookLogin({ data })
 
   render () {
-    return this.props.isFacebookAuthenticated ? (
+    return this.props.isFacebookLogged ? (
       <User />
     ) : process.env.ENV !== 'sandbox' ? (
       <ReactFacebookLogin
@@ -32,7 +29,7 @@ class FacebookLogin extends Component {
 
 FacebookLogin.propTypes = {
   handleFacebookLogin: T.func,
-  isFacebookAuthenticated: T.bool
+  isFacebookLogged: T.bool
 }
 
 export default R.compose(

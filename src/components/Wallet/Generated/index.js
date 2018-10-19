@@ -39,7 +39,7 @@ const WalletGenerated = ({ mnemonic, infoSaved, privateKey }) => [
     key="button"
     variant="contained"
     color="secondary"
-    onClick={infoSaved}
+    onClick={() => infoSaved()}
   >
     I saved my new hot wallet Mnemomic and PrivateKey somewhere safe
   </Button>

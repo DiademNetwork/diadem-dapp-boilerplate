@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Code coverage report for diadem-network-client/src/helpers/map-sort.js</title>
+    <title>Code coverage report for diadem-network-client/src/modules/utils.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -16,35 +16,35 @@
 <div class='wrapper'>
   <div class='pad1'>
     <h1>
-      <a href="../../../index.html">All files</a> / <a href="index.html">diadem-network-client/src/helpers</a> map-sort.js
+      <a href="../../../index.html">All files</a> / <a href="index.html">diadem-network-client/src/modules</a> utils.js
     </h1>
     <div class='clearfix'>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">50% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>15/15</span>
+        <span class='fraction'>9/18</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">0% </span>
         <span class="quiet">Branches</span>
-        <span class='fraction'>2/2</span>
+        <span class='fraction'>0/7</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">25% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>1/1</span>
+        <span class='fraction'>2/8</span>
       </div>
       <div class='fl pad1y space-right2'>
-        <span class="strong">100% </span>
+        <span class="strong">58.33% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>15/15</span>
+        <span class='fraction'>7/12</span>
       </div>
     </div>
     <p class="quiet">
       Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
     </p>
   </div>
-  <div class='status-line high'></div>
+  <div class='status-line medium'></div>
 <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -71,62 +71,56 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// snippet from https://blog.theodorejb.me/linked-list-sorting/
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as R from 'ramda'
 &nbsp;
-const mapSort = ({ key, previousKey }, linkedList) =&gt; {
-  const sortedList = []
-  const map = new Map()
-  let currentKey = null
-&nbsp;
-  for (var i = 0; i &lt; linkedList.length; i++) {
-    const item = linkedList[i]
-    if (item[previousKey] === undefined) { // is first item
-      currentKey = item[key]
-      sortedList.push(item)
-    } else {
-      map.set(item[previousKey], i)
-    }
+export const merge = R.mergeDeepWith(<span class="fstat-no" title="function not covered" >(s</span>tate, object) =&gt; {
+<span class="cstat-no" title="statement not covered" >  switch (true) {</span>
+    case R.is(Array, state) &amp;&amp; R.is(Array, object): <span class="cstat-no" title="statement not covered" >return R.concat(state, object)</span>
+    case R.is(Object, state) &amp;&amp; R.is(Object, object): <span class="cstat-no" title="statement not covered" >return R.mergeDeepRight(state, object)</span>
+    default: <span class="cstat-no" title="statement not covered" >return object</span>
   }
+})
 &nbsp;
-  while (sortedList.length &lt; linkedList.length) {
-    const nextItem = linkedList[map.get(currentKey)]
-    sortedList.push(nextItem)
-    currentKey = nextItem[key]
-  }
+const ASYNC_STATES = ['requested', 'errored', 'failed', 'succeeded']
 &nbsp;
-  return sortedList
-}
+export const createAsyncTypes = <span class="fstat-no" title="function not covered" >(b</span>ase) =&gt;
+<span class="cstat-no" title="statement not covered" >  R.reduce(<span class="fstat-no" title="function not covered" >(a</span>cc, curr) =&gt; <span class="cstat-no" title="statement not covered" >R.merge(acc, { [curr]: `${base}_${curr.toUpperCase()}` }),</span> {}, ASYNC_STATES)</span>
 &nbsp;
-export default mapSort
+export const createAction = <span class="fstat-no" title="function not covered" >ty</span>pe =&gt; <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >pa</span>yload =&gt; (<span class="cstat-no" title="statement not covered" >{ type, ...payload })</span></span>
+&nbsp;
+export const createAsyncActions = R.mapObjIndexed(createAction)
+&nbsp;
+export const createBaseSelector = (basePath) =&gt; (path) =&gt; R.path([...basePath, ...path])
+&nbsp;
+export const oneOfTypes = <span class="fstat-no" title="function not covered" >(t</span>ypes) =&gt; <span class="cstat-no" title="statement not covered" >R.compose(</span>
+  R.partialRight(R.contains, [types]),
+  R.prop('type')
+)
 &nbsp;</pre></td></tr>
 </table></pre>
 <div class='push'></div><!-- for sticky footer -->

@@ -6,7 +6,7 @@ const initialState = {
   list: []
 }
 
-export default function createReducer (state, { type, list }) {
+export default function createReducer (state, { type, list = [] }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
     case types.FETCH.requested: return merge(state)({ fetchStatus: 'requested' })

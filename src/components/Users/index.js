@@ -13,7 +13,8 @@ const Users = ({ className, fetchStatus, users }) => (
       <Typography paragraph color="textSecondary">All registered Diadem Network users</Typography>
       {(users.length === 0) ? (
         <Typography color="textPrimary">
-          {fetchStatus === 'requested' ? 'Loading...' : 'No user registered'}
+          <span data-qa-id='no-user-text'>
+            {fetchStatus === 'requested' ? 'Loading...' : 'No user registered'}</span>
         </Typography>
       ) : (
         <List>
@@ -26,10 +27,16 @@ const Users = ({ className, fetchStatus, users }) => (
   </Card>
 )
 
+Users.defaultProps = {
+  users: []
+}
+
 Users.propTypes = {
   className: T.string,
   fetchStatus: T.string,
   users: T.array
 }
+
+export const Component = Users
 
 export default withContainer(Users)

@@ -29,7 +29,7 @@ export default function createReducer (state, {
     case types.GENERATE.succeeded: return merge(state)({ data, mnemonic, privateKey, util, status: 'generated' })
     case types.RECOVER.requested: return merge(state)({ status: 'is-recovering' })
     case types.RECOVER.succeeded: return merge(state)({ data, util, loadFailReason: 'none', recoverFailReason: 'none', status: 'recovered' })
-    case types.RECOVER.failed: return merge(state)({ recoverFailReason: reason })
+    case types.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })
     case types.REFRESH.succeeded: return merge(state)({ data })
     case types.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
     case types.INFO_SAVED: return merge(state)({ infoSaved: true })

@@ -20,6 +20,13 @@ const UserItem = ({ user: { userAccount, userName } }) => (
   </ListItem>
 )
 
+UserItem.defaultProps = {
+  user: {
+    userAccount: '',
+    userName: ''
+  }
+}
+
 UserItem.propTypes = {
   user: T.object
 }

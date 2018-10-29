@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
@@ -87,73 +87,76 @@ class UpdateAchievement extends Component {
       fullScreen
     } = this.props
     const isFormValid = isLinkValid && isTitleValid
-    return [
-      <Button
-        aria-label="Update"
-        className={className}
-        color="secondary"
-        key="update-achievement-button"
-        onClick={this.handleClickOpen}
-        variant="extendedFab"
-      >
-        <StarIcon className={classes.buttonIcon} />
-        Update your Achievement
-      </Button>,
-      <Dialog
-        fullScreen={fullScreen}
-        key='update-achievement-modal'
-        open={modalOpen}
-        onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Update your achievement</DialogTitle>
-        <DialogContent>
-          <DialogContentText paragraph>
-            To update your achievement, please provide the previous link of your Facebook achievement post and provide a title for it
-          </DialogContentText>
-          <DialogContentText>
-             Please be aware that after updating your achievement, people will not anymore be able to confirm/support/deposit the previous one.
-          </DialogContentText>
-          <FacebookLinkHelp />
-          <TextField
-            autoFocus={!fullScreen}
-            id='link'
-            margin="normal"
-            error={link !== LINK_INITIAL_VALUE && !isLinkValid}
-            label="Your new achievement Facebook post link"
-            value={link}
-            onChange={this.handleChange('link')}
-            placeholder="https://www.facebook.com/username/posts/postid"
-            fullWidth
-            helperText={`max ${MAX_LINK_CARACTERS} caracters`}
-          />
-          <TextField
-            id='title'
-            margin="normal"
-            error={link !== TITLE_INITIAL_VALUE && !isTitleValid}
-            label="Title for you achievement"
-            value={title}
-            onChange={this.handleChange('title')}
-            placeholder="Help the world by my action..."
-            fullWidth
-            helperText={`max ${MAX_TITLE_CARACTERS} caracters`}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose}>
-            Cancel
-          </Button>
-          <Button
-            color="secondary"
-            disabled={!isFormValid}
-            onClick={this.handleSubmit}
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    ]
+    return (
+      <Fragment>
+        <Button
+          aria-label="Update"
+          className={className}
+          color="secondary"
+          data-qa-id="update-achievement-button"
+          key="update-achievement-button"
+          onClick={this.handleClickOpen}
+          variant="extendedFab"
+        >
+          <StarIcon className={classes.buttonIcon} />
+          Update your Achievement
+        </Button>
+        <Dialog
+          fullScreen={fullScreen}
+          key='update-achievement-modal'
+          open={modalOpen}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Update your achievement</DialogTitle>
+          <DialogContent>
+            <DialogContentText paragraph>
+              To update your achievement, please provide the previous link of your Facebook achievement post and provide a title for it
+            </DialogContentText>
+            <DialogContentText>
+              Please be aware that after updating your achievement, people will not anymore be able to confirm/support/deposit the previous one.
+            </DialogContentText>
+            <FacebookLinkHelp />
+            <TextField
+              autoFocus={!fullScreen}
+              id='link'
+              margin="normal"
+              error={link !== LINK_INITIAL_VALUE && !isLinkValid}
+              label="Your new achievement Facebook post link"
+              value={link}
+              onChange={this.handleChange('link')}
+              placeholder="https://www.facebook.com/username/posts/postid"
+              fullWidth
+              helperText={`max ${MAX_LINK_CARACTERS} caracters`}
+            />
+            <TextField
+              id='title'
+              margin="normal"
+              error={link !== TITLE_INITIAL_VALUE && !isTitleValid}
+              label="Title for you achievement"
+              value={title}
+              onChange={this.handleChange('title')}
+              placeholder="Help the world by my action..."
+              fullWidth
+              helperText={`max ${MAX_TITLE_CARACTERS} caracters`}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose}>
+              Cancel
+            </Button>
+            <Button
+              color="secondary"
+              disabled={!isFormValid}
+              onClick={this.handleSubmit}
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    )
   }
 }
 

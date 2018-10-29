@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
@@ -75,72 +75,75 @@ class CreateAchievement extends Component {
     const { isLinkValid, isTitleValid, link, modalOpen, title } = this.state
     const { className, classes, fullScreen } = this.props
     const isFormValid = isLinkValid && isTitleValid
-    return [
-      <Button
-        aria-label="Create"
-        className={className}
-        color="secondary"
-        key="create-achievement-button"
-        onClick={this.handleClickOpen}
-        variant="extendedFab"
-      >
-        <StarIcon className={classes.buttonIcon} />
-        Create your Achievement
-      </Button>,
-      <Dialog
-        fullScreen={fullScreen}
-        key='create-achievement-modal'
-        open={modalOpen}
-        onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Create your achievement</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To create an achievement, please provide the link to your Facebook achievement post and provide a title for it
-          </DialogContentText>
-          <FacebookLinkHelp />
-          <TextField
-            autoFocus={!fullScreen}
-            error={link !== LINK_INITIAL_VALUE && !isLinkValid}
-            margin="normal"
-            id='link'
-            label="Your achievement Facebook post link"
-            value={link}
-            onChange={this.handleChange('link')}
-            placeholder="https://www.facebook.com/username/posts/postid"
-            fullWidth
-            helperText={`max ${MAX_LINK_CARACTERS} caracters`}
-          />
-          <TextField
-            error={title !== TITLE_INITIAL_VALUE && !isTitleValid}
-            margin="normal"
-            id='title'
-            label="Title for you achievement"
-            value={title}
-            onChange={this.handleChange('title')}
-            placeholder='Help the world by my action...'
-            fullWidth
-            helperText={`max ${MAX_TITLE_CARACTERS} caracters`}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={this.handleClose}
-          >
-            Cancel
-          </Button>
-          <Button
-            color="secondary"
-            disabled={!isFormValid}
-            onClick={this.handleSubmit}
-            variant="contained"
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    ]
+    return (
+      <Fragment>
+        <Button
+          aria-label="Create"
+          className={className}
+          color="secondary"
+          data-qa-id="create-achievement-button"
+          key="create-achievement-button"
+          onClick={this.handleClickOpen}
+          variant="extendedFab"
+        >
+          <StarIcon className={classes.buttonIcon} />
+          Create your Achievement
+        </Button>
+        <Dialog
+          fullScreen={fullScreen}
+          key='create-achievement-modal'
+          open={modalOpen}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Create your achievement</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              To create an achievement, please provide the link to your Facebook achievement post and provide a title for it
+            </DialogContentText>
+            <FacebookLinkHelp />
+            <TextField
+              autoFocus={!fullScreen}
+              error={link !== LINK_INITIAL_VALUE && !isLinkValid}
+              margin="normal"
+              id='link'
+              label="Your achievement Facebook post link"
+              value={link}
+              onChange={this.handleChange('link')}
+              placeholder="https://www.facebook.com/username/posts/postid"
+              fullWidth
+              helperText={`max ${MAX_LINK_CARACTERS} caracters`}
+            />
+            <TextField
+              error={title !== TITLE_INITIAL_VALUE && !isTitleValid}
+              margin="normal"
+              id='title'
+              label="Title for you achievement"
+              value={title}
+              onChange={this.handleChange('title')}
+              placeholder='Help the world by my action...'
+              fullWidth
+              helperText={`max ${MAX_TITLE_CARACTERS} caracters`}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={this.handleClose}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="secondary"
+              disabled={!isFormValid}
+              onClick={this.handleSubmit}
+              variant="contained"
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    )
   }
 }
 

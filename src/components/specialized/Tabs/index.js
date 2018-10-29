@@ -44,15 +44,18 @@ class AppTabs extends Component {
         centered
       >
         {R.map(({ badgeContent, label }) => (
-          <Tab key={label} label={
-            badgeContent ? (
-              <Badge className={classes.tabBadge} color="secondary" badgeContent={badgeContent}>
-                {label}
-              </Badge>
-            ) : (
-              label
-            )
-          } />
+          <Tab
+            data-qa-id={`tab-${label.toLowerCase()}`}
+            key={label}
+            label={
+              badgeContent ? (
+                <Badge className={classes.tabBadge} color="secondary" badgeContent={badgeContent}>
+                  {label}
+                </Badge>
+              ) : (
+                label
+              )
+            } />
         ), tabs)}
       </Tabs>,
       <AppTab key='tab'>

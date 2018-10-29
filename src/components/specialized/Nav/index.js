@@ -83,7 +83,12 @@ class Nav extends Component {
               onClose={this.handleClose}
             >
 
-              <MenuItem onClick={this.handleOpenHelp}>Show help</MenuItem>
+              <MenuItem
+                data-qa-id="nav-show-help"
+                onClick={this.handleOpenHelp}
+              >
+                Show help
+              </MenuItem>
               <MenuItem component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md">See on Github</MenuItem>
               <Hashtag mobile />
             </Menu>
@@ -92,7 +97,12 @@ class Nav extends Component {
             <IconButton component="a" target="_blank" href="https://github.com/DiademNetwork/qtum-dapp-documentation/blob/master/README.md" variant="fab" color="primary" className={classes.button}>
               <Avatar className={classes.github} alt="Github logo" src={GithubImg} />
             </IconButton>
-            <IconButton onClick={this.handleOpenHelp} variant="fab" color="primary">
+            <IconButton
+              color="primary"
+              data-qa-id="nav-show-help"
+              onClick={this.handleOpenHelp}
+              variant="fab"
+            >
               <Avatar className={classes.help} alt="Help logo" src={HelpImg} />
             </IconButton>
             <Hashtag />

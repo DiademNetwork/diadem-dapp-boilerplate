@@ -69,8 +69,15 @@ const Achievements = ({
     >
       {R.keys(achievements).length > 0
         ? R.keys(achievements).map((key, idx) => (
-          <Grid key={idx} item xs={12}>
-            <AchievementsChain achievementsChain={achievements[key]} />
+          <Grid
+            key={idx}
+            item
+            xs={12}
+          >
+            <AchievementsChain
+              achievementsChain={achievements[key]}
+              idx={idx}
+            />
           </Grid>
         ))
         : (

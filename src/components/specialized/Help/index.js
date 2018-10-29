@@ -41,9 +41,11 @@ class Help extends Component {
 
   handleCheckboxChange = event => {
     const checked = event.target.checked
-    checked
-      ? window.localStorage.setItem('do-not-show-splash', true)
-      : window.localStorage.removeItem('do-not-show-splash')
+    if (checked) {
+      window.localStorage.setItem('do-not-show-splash', true)
+    } else {
+      window.localStorage.removeItem('do-not-show-splash')
+    }
     this.setState({ wantsNotToShowSplashAgain: checked })
   }
 
@@ -52,6 +54,7 @@ class Help extends Component {
     const { classes, fullScreen, helpDisplay } = this.props
     return (
       <Dialog
+        data-qa-id="help-modal"
         fullScreen={fullScreen}
         open={helpDisplay !== 'none'}
         onClose={this.handleClose}
@@ -138,6 +141,7 @@ class Help extends Component {
                 control={
                   <Checkbox
                     color="secondary"
+                    data-qa-id="help-do-not-show-checkbox"
                     checked={wantsNotToShowSplashAgain}
                     onChange={this.handleCheckboxChange}
                   />

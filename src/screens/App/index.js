@@ -3,7 +3,11 @@ import React from 'react'
 import * as R from 'ramda'
 import Nav from 'components/specialized/Nav'
 import Wallet from 'components/specialized/Wallet'
+<<<<<<< HEAD
 import Tabs from 'components/specialized/Tabs'
+=======
+import Tabs from 'components/shared/Tabs'
+>>>>>>> specialized/shared components
 import Achievements from 'components/specialized/Achievements'
 import Timeline from 'components/specialized/Timeline'
 import Users from 'components/specialized/Users'

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
@@ -63,6 +63,7 @@ class AchievementSupport extends Component {
       className,
       confirmationsCount,
       fullScreen,
+      idx,
       link,
       creatorName,
       title,
@@ -76,82 +77,85 @@ class AchievementSupport extends Component {
       isAmountValid,
       modalOpen
     } = this.state
-    return [
-      <Button
-        aria-label="Support"
-        className={className}
-        color="secondary"
-        disabled={!isBalancePositive}
-        key='achievement-support-button'
-        onClick={this.handleClickOpen}
-        variant={fullScreen ? 'contained' : 'extendedFab'}
-      >
-        <Hidden smDown>
-          <MoneyIcon />
-        </Hidden>
-        Support
-      </Button>,
-      <Dialog
-        fullScreen={fullScreen}
-        key='achievement-support-modal'
-        open={modalOpen}
-        onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Support</DialogTitle>
-        <DialogContent>
-          <DialogContentText paragraph>
-            {confirmationsCount === 0 ? (
-              `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
-            ) : (
-              `This achievement has been confirmed ${confirmationsCount} times`
-            )}
-          </DialogContentText>
-          <Divider style={{ marginBottom: '16px' }} />
-          <DialogContentText paragraph>
-            <Link
-              text="View achievement Facebook post again"
-              href={link}
-              typographyProps={{ paragraph: true }}
+    return (
+      <Fragment>
+        <Button
+          aria-label="Support"
+          className={className}
+          color="secondary"
+          data-qa-id={`achievement-${idx}-support-button`}
+          disabled={!isBalancePositive}
+          key='achievement-support-button'
+          onClick={this.handleClickOpen}
+          variant={fullScreen ? 'contained' : 'extendedFab'}
+        >
+          <Hidden smDown>
+            <MoneyIcon />
+          </Hidden>
+          Support
+        </Button>
+        <Dialog
+          fullScreen={fullScreen}
+          key='achievement-support-modal'
+          open={modalOpen}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Support</DialogTitle>
+          <DialogContent>
+            <DialogContentText paragraph>
+              {confirmationsCount === 0 ? (
+                `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
+              ) : (
+                `This achievement has been confirmed ${confirmationsCount} times`
+              )}
+            </DialogContentText>
+            <Divider style={{ marginBottom: '16px' }} />
+            <DialogContentText paragraph>
+              <Link
+                text="View achievement Facebook post again"
+                href={link}
+                typographyProps={{ paragraph: true }}
+              />
+              Please enter an amount you would like to send to support {creatorName} for his achievement:
+            </DialogContentText>
+            <DialogContentText paragraph color="textPrimary">
+              {title}
+            </DialogContentText>
+            <Divider style={{ marginBottom: '16px' }} />
+            <TextField
+              autoFocus={!fullScreen}
+              error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
+              margin="normal"
+              id='amount'
+              label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
+              value={amount}
+              onChange={this.handleChange}
+              type='number'
+              fullWidth
             />
-            Please enter an amount you would like to send to support {creatorName} for his achievement:
-          </DialogContentText>
-          <DialogContentText paragraph color="textPrimary">
-            {title}
-          </DialogContentText>
-          <Divider style={{ marginBottom: '16px' }} />
-          <TextField
-            autoFocus={!fullScreen}
-            error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
-            margin="normal"
-            id='amount'
-            label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
-            value={amount}
-            onChange={this.handleChange}
-            type='number'
-            fullWidth
-          />
-          <FeesSelector
-            error={!areFeesValid}
-            onChange={this.handleFeesChange}
-            value={fees}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button
-            disabled={!isAmountValid}
-            onClick={this.handleSubmit}
-            variant="contained"
-            color="secondary"
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    ]
+            <FeesSelector
+              error={!areFeesValid}
+              onChange={this.handleFeesChange}
+              value={fees}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              disabled={!isAmountValid}
+              onClick={this.handleSubmit}
+              variant="contained"
+              color="secondary"
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    )
   }
 }
 
@@ -159,6 +163,7 @@ AchievementSupport.propTypes = {
   className: T.string,
   confirmationsCount: T.number,
   fullScreen: T.bool,
+  idx: T.number,
   link: T.string,
   creatorName: T.string,
   onSupport: T.func,

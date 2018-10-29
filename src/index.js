@@ -6,28 +6,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import store from './store'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import ErrorBoundary from './components/ErrorBoundary'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import ErrorBoundary from './components/shared/ErrorBoundary'
 import App from './screens/App'
+import theme from './mui-theme'
 
 dotenv.config()
-
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#9863b0',
-      main: '#84519c',
-      dark: '#73418a',
-      contrastText: '#fff'
-    },
-    secondary: {
-      light: '#6B66AD',
-      main: '#635fa2',
-      dark: '#615D9E',
-      contrastText: '#fff'
-    }
-  }
-})
 
 ReactDOM.render(
   <Provider store={store}>

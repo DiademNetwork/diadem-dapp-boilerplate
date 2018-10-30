@@ -1,5 +1,5 @@
 import { merge } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 const initialState = {
   data: {}
@@ -8,7 +8,7 @@ const initialState = {
 export default function createReducer (state, { type, data }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
-    case types.LOGGED: return merge(state)({ data })
+    case T.LOGGED: return merge(state)({ data })
     default: return state
   }
 }

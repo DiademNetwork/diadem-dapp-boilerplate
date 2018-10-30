@@ -1,6 +1,6 @@
 import { createAction } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 export default {
-  logged: createAction(types.LOGGED)
+  logged: createAction(T.LOGGED)
 }

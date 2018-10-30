@@ -1,6 +1,6 @@
 import { createAsyncActions } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 export default {
-  fetch: createAsyncActions(types.FETCH)
+  fetch: createAsyncActions(T.FETCH)
 }

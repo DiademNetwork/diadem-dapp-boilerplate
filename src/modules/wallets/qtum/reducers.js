@@ -1,5 +1,5 @@
 import { merge } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 const initialState = {
   data: null,
@@ -24,15 +24,15 @@ export default function createReducer (state, {
 }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
-    case types.LOAD.succeeded: return merge(state)({ data, util, loadFailReason: 'none', status: 'loaded' })
-    case types.LOAD.failed: return merge(state)({ loadFailReason: reason, status: 'failed' })
-    case types.GENERATE.succeeded: return merge(state)({ data, mnemonic, privateKey, util, status: 'generated' })
-    case types.RECOVER.requested: return merge(state)({ status: 'is-recovering' })
-    case types.RECOVER.succeeded: return merge(state)({ data, util, loadFailReason: 'none', recoverFailReason: 'none', status: 'recovered' })
-    case types.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })
-    case types.REFRESH.succeeded: return merge(state)({ data })
-    case types.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
-    case types.INFO_SAVED: return merge(state)({ infoSaved: true })
+    case T.LOAD.succeeded: return merge(state)({ data, util, loadFailReason: 'none', status: 'loaded' })
+    case T.LOAD.failed: return merge(state)({ loadFailReason: reason, status: 'failed' })
+    case T.GENERATE.succeeded: return merge(state)({ data, mnemonic, privateKey, util, status: 'generated' })
+    case T.RECOVER.requested: return merge(state)({ status: 'is-recovering' })
+    case T.RECOVER.succeeded: return merge(state)({ data, util, loadFailReason: 'none', recoverFailReason: 'none', status: 'recovered' })
+    case T.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })
+    case T.REFRESH.succeeded: return merge(state)({ data })
+    case T.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
+    case T.INFO_SAVED: return merge(state)({ infoSaved: true })
     default: return state
   }
 }

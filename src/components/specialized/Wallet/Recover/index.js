@@ -26,7 +26,9 @@ class Recover extends Component {
 
   startFailedOpenModalInterval = () => {
     this.interval = setInterval(() => {
-      this.props.recoverFailReason === 'address-not-matching' && this.handleOpen()
+      if (this.props.recoverFailReason === 'address-not-matching') {
+        this.handleOpen()
+      }
     }, 1000)
   }
 

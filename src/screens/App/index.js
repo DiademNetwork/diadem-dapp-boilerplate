@@ -27,9 +27,11 @@ const styles = (theme) => ({
 })
 
 const App = ({
+  achievementsOpenned,
   classes,
   hasUnreadAchievements,
   hasUnreadTransactions,
+  transactionsOpenned,
   userID,
   userQtumAddress
 }) => (
@@ -40,11 +42,13 @@ const App = ({
       {
         badgeContent: hasUnreadAchievements ? '!' : null,
         label: 'Achievements',
+        onOpen: achievementsOpenned,
         component: <Achievements className={classes.sm9} userQtumAddress={userQtumAddress} />
       },
       {
         badgeContent: hasUnreadTransactions ? '!' : null,
         label: 'Timeline',
+        onOpen: transactionsOpenned,
         component: <Timeline className={classes.sm9} />
       },
       {
@@ -61,6 +65,8 @@ App.propTypes = {
   classes: T.object,
   hasUnreadAchievements: T.bool,
   hasUnreadTransactions: T.bool,
+  achievementsOpenned: T.func,
+  transactionsOpenned: T.func,
   userID: T.string,
   userQtumAddress: T.string
 }

@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
 import S from 'modules/selectors'
+import A from 'modules/actions'
 
 const mapStateToProps = (state) => ({
   hasUnreadTransactions: S.transactions.hasUnread(state),
@@ -8,5 +10,10 @@ const mapStateToProps = (state) => ({
   userQtumAddress: S.wallets.qtum.address(state)
 })
 
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  achievementsOpenned: A.achievements.openned,
+  transactionsOpenned: A.transactions.openned
+}, dispatch)
+
 export default WrappedComponent =>
-  connect(mapStateToProps)(WrappedComponent)
+  connect(mapStateToProps, mapDispatchToProps)(WrappedComponent)

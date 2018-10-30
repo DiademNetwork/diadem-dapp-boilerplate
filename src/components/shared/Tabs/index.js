@@ -1,7 +1,8 @@
-import React, { Component } from 'react'
+import React, { Fragment, Component } from 'react'
 import { PropTypes as T } from 'prop-types'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
+import withComponentDidMountHook from 'components/hocs/withComponentDidMountHook'
 import Badge from '@material-ui/core/Badge'
 import { withStyles } from '@material-ui/core/styles'
 import * as R from 'ramda'
@@ -15,53 +16,51 @@ const styles = (theme) => ({
   }
 })
 
-const AppTab = ({ children }) => children
-
-AppTab.propTypes = {
-  component: T.node
-}
-
 class AppTabs extends Component {
   state = {
     tabIdx: 0
   }
 
-  handleChange = (e, tabIdx) => {
-    this.setState({ tabIdx })
-  }
+  handleChange = (e, tabIdx) => this.setState({ tabIdx })
 
   render () {
     const { tabIdx } = this.state
     const { classes, tabs } = this.props
-    return [
-      <Tabs
-        className={classes.tabs}
-        key='tabs'
-        value={tabIdx}
-        onChange={this.handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        {R.map(({ badgeContent, label }) => (
-          <Tab
-            data-qa-id={`tab-${label.toLowerCase()}`}
-            key={label}
-            label={
-              badgeContent ? (
-                <Badge className={classes.tabBadge} color="secondary" badgeContent={badgeContent}>
-                  {label}
-                </Badge>
-              ) : (
-                label
-              )
-            } />
-        ), tabs)}
-      </Tabs>,
-      <AppTab key='tab'>
-        {tabs[tabIdx].component}
-      </AppTab>
-    ]
+    const TabItem = withComponentDidMountHook(
+      ({ children }) => children,
+      tabs[tabIdx].onOpen
+    )
+    return (
+      <Fragment>
+        <Tabs
+          className={classes.tabs}
+          key='tabs'
+          value={tabIdx}
+          onChange={this.handleChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          {R.map(({ badgeContent, label }) => (
+            <Tab
+              data-qa-id={`tab-${label.toLowerCase()}`}
+              key={label}
+              label={
+                badgeContent ? (
+                  <Badge className={classes.tabBadge} color="secondary" badgeContent={badgeContent}>
+                    {label}
+                  </Badge>
+                ) : (
+                  label
+                )
+              } />
+          ), tabs)}
+        </Tabs>
+        <TabItem key='tab'>
+          {tabs[tabIdx].component}
+        </TabItem>
+      </Fragment>
+    )
   }
 }
 

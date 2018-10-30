@@ -4,6 +4,9 @@ describe('Achievements', () => {
     cy.visit('localhost:9000')
   })
 
+  describe('Stream suscription', () => {
+  })
+
   describe('When not logged', () => {
     it('Does not show create or update button', () => {
       cy.get(`[data-qa-id='update-achievement-button']`).should('not.be.visible')

@@ -17,7 +17,8 @@
     "start": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.development.js --https",
     "start:sandbox": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js",
     "storybook": "start-storybook -p 6006",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "test:cypress": "npx cypress run"
   },
   "author": "Clement Bresson",
   "homepage": "http://clement-bresson.github.io/react-modern-boilerplate",
@@ -90,6 +91,7 @@
     "dotenv-webpack": "^1.5.7",
     "eslint-plugin-chai-friendly": "^0.4.1",
     "eslint-plugin-cypress": "^2.0.1",
+    "faker": "^4.1.0",
     "fb": "^2.0.0",
     "file-loader": "^2.0.0",
     "getstream": "^3.20.0",

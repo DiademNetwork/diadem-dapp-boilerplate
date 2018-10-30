@@ -44,9 +44,11 @@ const load = function * () {
         facebookUserID,
         walletAddress: walletData.addrStr
       })
-      isAddressMatchingFacebookID
-        ? yield put(actions.load.succeeded({ walletData, walletUtil }))
-        : yield put(actions.load.failed({ reason: 'address-not-matching' }))
+      if (isAddressMatchingFacebookID) {
+        yield put(actions.load.succeeded({ walletData, walletUtil }))
+      } else {
+        yield put(actions.load.failed({ reason: 'address-not-matching' }))
+      }
     }
   } catch (error) {
     yield put(actions.load.errored({ error }))

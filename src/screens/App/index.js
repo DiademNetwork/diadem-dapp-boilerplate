@@ -1,14 +1,15 @@
 
 import React from 'react'
 import * as R from 'ramda'
-import Nav from 'components/specialized/Nav'
-import Wallet from 'components/specialized/Wallet'
-import Tabs from 'components/shared/Tabs'
 import Achievements from 'components/specialized/Achievements'
+import Help from 'components/specialized/Help'
+import Nav from 'components/specialized/Nav'
+import Notifications from 'components/specialized/Notifications'
+import SandboxConfigEditor from 'components/specialized/SandboxConfigEditor'
+import Tabs from 'components/shared/Tabs'
 import Timeline from 'components/specialized/Timeline'
 import Users from 'components/specialized/Users'
-import Notifications from 'components/specialized/Notifications'
-import Help from 'components/specialized/Help'
+import Wallet from 'components/specialized/Wallet'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
 import { withStyles } from '@material-ui/core/styles'
@@ -58,6 +59,9 @@ const App = ({
     ]} />
     <Notifications />
     <Help />
+    {process.env.ENV === 'sandbox' && (
+      <SandboxConfigEditor />
+    )}
   </div>
 )
 

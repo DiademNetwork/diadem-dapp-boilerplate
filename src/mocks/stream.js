@@ -1,10 +1,11 @@
 import * as R from 'ramda'
-import achievementGenerator from '../stubs/achievementGenerator'
-import achievementsStub from '../stubs/achievements'
-import transactionsStub from '../stubs/transactions'
+import achievementGenerator from 'stubs/achievementGenerator'
+import transactionGenerator from 'stubs/transactionGenerator'
+import achievementsStub from 'stubs/achievements'
+import transactionsStub from 'stubs/transactions'
 
-const FAKE_ACHIEVEMENT_TIMEOUT = 60000
-const FAKE_TIMELINE_TIMEOUT = 45000
+export const FAKE_ACHIEVEMENT_TIMEOUT = 60000
+export const FAKE_TIMELINE_TIMEOUT = 45000
 
 export default (function stream () {
   function subscribe (name, successCallback) {
@@ -13,7 +14,7 @@ export default (function stream () {
         setInterval(() => successCallback({ new: [ ...achievementGenerator() ] }), FAKE_ACHIEVEMENT_TIMEOUT)
         break
       case 'transactions':
-        setInterval(() => successCallback({ new: [ ...achievementGenerator() ] }), FAKE_TIMELINE_TIMEOUT)
+        setInterval(() => successCallback({ new: [ ...transactionGenerator() ] }), FAKE_TIMELINE_TIMEOUT)
         return transactionsStub
       default:
         break

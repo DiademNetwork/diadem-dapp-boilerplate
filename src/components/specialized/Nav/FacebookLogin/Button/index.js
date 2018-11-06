@@ -16,6 +16,7 @@ const styles = (theme) => ({
 const FacebookLoginButton = ({ classes, onClick }) => (
   <Button
     color="secondary"
+    data-qa-id="facebook-login-button"
     onClick={onClick}
     variant="contained"
   >

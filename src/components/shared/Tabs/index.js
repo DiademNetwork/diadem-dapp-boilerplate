@@ -47,7 +47,12 @@ class AppTabs extends Component {
               key={label}
               label={
                 badgeContent ? (
-                  <Badge className={classes.tabBadge} color="secondary" badgeContent={badgeContent}>
+                  <Badge
+                    className={classes.tabBadge}
+                    color="secondary"
+                    data-qa-id={`tab-badge-${label.toLowerCase()}`}
+                    badgeContent={badgeContent}
+                  >
                     {label}
                   </Badge>
                 ) : (

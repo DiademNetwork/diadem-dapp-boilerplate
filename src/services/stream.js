@@ -24,7 +24,7 @@ export const createStreamClient = (streamTool) => {
 
   async function suscribeWithCallBacks (feedName, successCallback) {
     try {
-      await feeds[feedName].subscribe(successCallback) // successCallback is a generator
+      await feeds[feedName].subscribe(successCallback)
       console.log(`Suscribed to getstream feed: ${feedName}`)
     } catch (error) {
       console.log(error)

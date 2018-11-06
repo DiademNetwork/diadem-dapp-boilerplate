@@ -42,7 +42,7 @@ const deposit = () => Object.freeze({
   ...register(),
   object: faker.internet.url(),
   verb: 'deposit',
-  witness: faker.random.number,
+  witness: `${faker.random.number()}`,
   witnessName: faker.name.findName()
 })
 

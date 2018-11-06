@@ -3,8 +3,8 @@ import * as R from 'ramda'
 
 import mockAxios from '../mocks/axios'
 
-export const createAPI = (fetcher, url) => {
-  const getFullUrl = (path) => `${url}${path}`
+export const createAPI = (fetcher, baseURL) => {
+  const getFullUrl = (path) => `${baseURL}${path}`
   const post = async (path, data) => {
     const { data: responseData } = await fetcher.post(getFullUrl(path), data)
     return responseData
@@ -34,8 +34,6 @@ if (process.env.ENV === 'sandbox') {
   mockAxios()
 }
 
-export default createAPI(axios,
-  process.env.ENV === 'sandbox'
-    ? ''
-    : process.env.BACKEND_URL
-)
+const baseURL = process.env.ENV === 'sandbox' ? '' : process.env.BACKEND_URL
+
+export default createAPI(axios, baseURL)

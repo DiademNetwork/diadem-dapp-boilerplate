@@ -1,9 +1,9 @@
-import { createAsyncActions } from 'modules/utils'
+import { createAction, createAsyncActions } from 'modules/utils'
 import T from './types'
 
 export default {
   checkLastTx: createAsyncActions(T.CHECK_LAST_TX),
-  infoSaved: createAsyncActions(T.INFO_SAVED),
+  infoSaved: createAction(T.INFO_SAVED),
   load: createAsyncActions(T.LOAD),
   recover: createAsyncActions(T.RECOVER),
   generate: createAsyncActions(T.GENERATE),

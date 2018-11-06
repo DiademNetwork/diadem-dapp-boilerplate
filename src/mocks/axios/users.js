@@ -13,5 +13,6 @@ export default (axiosMock) => {
   axiosMock.onPost('/check', { user: nonRegisteredUser.userID }).reply(200, { exists: false, pending: false })
   axiosMock.onPost('/check', { user: pendingRegistrationUser.userID }).reply(200, { exists: false, pending: true })
   axiosMock.onPost('/check-qtum-address').reply(200, { ok: true })
+  axiosMock.onPost('/register').reply(200, { ok: true })
   return axiosMock
 }

@@ -10,7 +10,7 @@ import {
   nonRegisteredUser,
   pendingRegistrationUser
 } from 'stubs/facebook'
-import { withSandboxConfigContextConsumer } from 'components/contexts/SandboxConfig'
+import mocksConfig from 'mocks/config'
 
 class FacebookLogin extends Component {
   onFacebookLogin = (data) => {
@@ -18,7 +18,7 @@ class FacebookLogin extends Component {
   }
 
   render () {
-    const { isFacebookLogged, sandboxConfig } = this.props
+    const { isFacebookLogged } = this.props
     if (isFacebookLogged) {
       return <User />
     }
@@ -33,27 +33,26 @@ class FacebookLogin extends Component {
         />
       )
     }
-    const { isUserRegistered, isUserPendingRegistration } = sandboxConfig
-    const facebookUserStub = isUserRegistered
-      ? registeredUser
-      : isUserPendingRegistration
-        ? pendingRegistrationUser
-        : nonRegisteredUser
-    return <Button onClick={() => this.onFacebookLogin(facebookUserStub)} />
+    return <Button
+      onClick={() => {
+        const { isUserRegistered, isUserPendingRegistration } = mocksConfig.get()
+        console.log({ isUserRegistered, isUserPendingRegistration })
+        const facebookUserStub = isUserRegistered
+          ? registeredUser
+          : isUserPendingRegistration
+            ? pendingRegistrationUser
+            : nonRegisteredUser
+        this.onFacebookLogin(facebookUserStub)
+      }}
+    />
   }
 }
 
 FacebookLogin.propTypes = {
   handleFacebookLogin: T.func,
-  isFacebookLogged: T.bool,
-  sandboxConfig: T.object
-}
-
-FacebookLogin.defaultProps = {
-  sandboxConfig: {}
+  isFacebookLogged: T.bool
 }
 
 export default R.compose(
-  withContainer,
-  process.env.ENV === 'sandbox' ? withSandboxConfigContextConsumer : R.identity
+  withContainer
 )(FacebookLogin)

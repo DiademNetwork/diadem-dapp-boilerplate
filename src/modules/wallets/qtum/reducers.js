@@ -4,7 +4,6 @@ import T from './types'
 const initialState = {
   data: null,
   hasPendingTx: false,
-  infoSaved: false,
   loadFailReason: 'none',
   mnemonic: '',
   privateKey: '',
@@ -32,7 +31,7 @@ export default function createReducer (state, {
     case T.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })
     case T.REFRESH.succeeded: return merge(state)({ data })
     case T.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
-    case T.INFO_SAVED: return merge(state)({ infoSaved: true })
+    case T.INFO_SAVED: return merge(state)({ status: 'restoring-info-saved' })
     default: return state
   }
 }

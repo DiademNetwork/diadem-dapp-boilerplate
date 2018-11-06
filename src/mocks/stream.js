@@ -14,7 +14,9 @@ export default (function stream () {
         setInterval(() => successCallback({ new: [ ...achievementGenerator() ] }), FAKE_ACHIEVEMENT_TIMEOUT)
         break
       case 'transactions':
-        setInterval(() => successCallback({ new: [ ...transactionGenerator() ] }), FAKE_TIMELINE_TIMEOUT)
+        setInterval(() => {
+          successCallback({ new: [ ...transactionGenerator({}) ] })
+        }, FAKE_TIMELINE_TIMEOUT)
         return transactionsStub
       default:
         break

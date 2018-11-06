@@ -1,16 +1,18 @@
 
 import { all, call, fork, put, select, take, takeLatest, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-import { networks, generateMnemonic } from 'qtumjs-wallet'
 import * as R from 'ramda'
 import api from 'services/api'
 import insight from 'services/insight'
+import qtumJSWallet from 'services/qtumjs-wallet'
 import types from 'modules/types'
 import selectors from 'modules/selectors'
 import actions from './actions'
 import ownTypes from './types'
 import * as ownSelectors from './selectors'
 import { oneOfTypes } from 'modules/utils'
+
+const { networks, generateMnemonic } = qtumJSWallet
 
 const network = networks[process.env.QTUM_NETWORK]
 
@@ -151,15 +153,14 @@ const checkLastTx = function * () {
       const transactions = yield select(selectors.transactions.lastForUser(facebookUserID))
       if (transactions.length > 0) {
         try {
-          let hasPendingTx = true
-          while (hasPendingTx) {
-            for (let transaction of transactions) {
-              const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-              hasPendingTx = hasPendingTx || confirmations === 0
-            }
-            yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
-            yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
+          let hasPendingTx = false
+          // if at least one of transactions has no confirmation, hasPendingTx is true
+          for (let transaction of transactions) {
+            const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
+            hasPendingTx = hasPendingTx || confirmations === 0
           }
+          yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
+          yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
         } catch (error) {
           yield put(actions.checkLastTx.errored({ error }))
         }

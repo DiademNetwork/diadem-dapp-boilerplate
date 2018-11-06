@@ -6,14 +6,15 @@ import { PropTypes as T } from 'prop-types'
 const SandboxConfigEditorCheckbox = ({
   label,
   name,
-  onChangeSandboxConfig,
-  sandboxConfig
+  onChange,
+  mocksConfig
 }) => (
   <FormControlLabel
     control={
       <Checkbox
-        checked={sandboxConfig[name]}
-        onChange={({ target: { checked } }) => onChangeSandboxConfig(name, checked)}
+        data-qa-id={`sandbox-config-editor-checkbox-${name}`}
+        checked={mocksConfig[name]}
+        onChange={({ target: { checked } }) => onChange(name)(checked)}
         value={name}
         color="primary"
       />
@@ -24,9 +25,9 @@ const SandboxConfigEditorCheckbox = ({
 
 SandboxConfigEditorCheckbox.propTypes = {
   label: T.string,
+  mocksConfig: T.object,
   name: T.string,
-  onChangeSandboxConfig: T.func,
-  sandboxConfig: T.object
+  onChange: T.func
 }
 
 export default SandboxConfigEditorCheckbox

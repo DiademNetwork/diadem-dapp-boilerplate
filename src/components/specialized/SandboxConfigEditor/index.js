@@ -6,11 +6,12 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
+import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
 import SettingsIcon from '@material-ui/icons/Settings'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
-import { withSandboxConfigContextConsumer } from 'components/contexts/SandboxConfig'
 import Checkbox from './Checkbox'
+import mocksConfig from 'mocks/config'
 
 const styles = () => ({
   button: {
@@ -23,6 +24,7 @@ const styles = () => ({
 
 class SandboxConfigEditor extends Component {
   state = {
+    mocksConfig: mocksConfig.get(),
     modalOpen: false
   }
 
@@ -30,8 +32,21 @@ class SandboxConfigEditor extends Component {
 
   handleClose = () => this.setState({ modalOpen: false })
 
+  handleChangeConfig = (name) => (value) => {
+    mocksConfig.set(name)(value)
+    this.setState((prevState) => ({
+      config: {
+        ...prevState,
+        [name]: value
+      }
+    }))
+  }
+
   render () {
-    const { modalOpen } = this.state
+    const {
+      modalOpen,
+      mocksConfig
+    } = this.state
     const {
       classes,
       fullScreen
@@ -41,7 +56,7 @@ class SandboxConfigEditor extends Component {
         <Button
           className={classes.button}
           color="secondary"
-          data-qa-id="open-sandbox-config"
+          data-qa-id="open-sandbox-config-button"
           key="open-sandbox-config"
           onClick={this.handleClickOpen}
           variant="extendedFab"
@@ -49,19 +64,44 @@ class SandboxConfigEditor extends Component {
           <SettingsIcon />
         </Button>
         <Dialog
+          aria-labelledby="form-dialog-title"
           fullScreen={fullScreen}
           key='sandbox-config-modal'
-          open={modalOpen}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
+          open={modalOpen}
         >
           <DialogTitle id="form-dialog-title">Sandbox Config</DialogTitle>
           <DialogContent>
-            <Checkbox {...this.props} name='isUserRegistered' label="Is user registered" />
-            <Checkbox {...this.props} name='isUserPendingRegistration' label="Is user pending registration" />
+            <Checkbox
+              {...this.props}
+              label="Is user registered"
+              mocksConfig={mocksConfig}
+              name='isUserRegistered'
+              onChange={this.handleChangeConfig}
+            />
+            <Checkbox
+              {...this.props}
+              label="Is user pending registration"
+              mocksConfig={mocksConfig}
+              name='isUserPendingRegistration'
+              onChange={this.handleChangeConfig}
+            />
+            <TextField
+              fullWidth
+              id='pendingTx'
+              label="Number of pending Tx"
+              margin="normal"
+              onChange={({ target: { value } }) => this.handleChangeConfig('pendingTx')(value)}
+              placeholder="1"
+              type="number"
+              value={mocksConfig.pendingTx}
+            />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose}>
+            <Button
+              data-qa-id="close-sandbox-config-button"
+              onClick={this.handleClose}
+            >
               Close
             </Button>
           </DialogActions>
@@ -80,6 +120,5 @@ SandboxConfigEditor.propTypes = {
 
 export default R.compose(
   withMobileDialog(),
-  withStyles(styles),
-  withSandboxConfigContextConsumer
+  withStyles(styles)
 )(SandboxConfigEditor)

@@ -15,11 +15,10 @@ export const fetchStatus = getTransactions(['fetchStatus'])
 
 export const lastForUser = userID => (state) => {
   if (!userID) { return [] }
-  const lastTX = R.compose(
+  return R.compose(
     R.takeLast(2),
     R.map(R.prop('target')),
     R.filter(R.propEq('actor', userID)),
     R.path(['transactions', 'list'])
   )(state)
-  return lastTX
 }

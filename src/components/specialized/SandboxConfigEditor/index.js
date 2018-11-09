@@ -88,13 +88,12 @@ class SandboxConfigEditor extends Component {
             />
             <TextField
               fullWidth
-              id='pendingTx'
-              label="Number of pending Tx"
+              id='pendingTxID'
+              label="If not empty, an unconfirmed tx will be generated in next received fake tx"
               margin="normal"
-              onChange={({ target: { value } }) => this.handleChangeConfig('pendingTx')(value)}
-              placeholder="1"
-              type="number"
-              value={mocksConfig.pendingTx}
+              onChange={({ target: { value } }) => this.handleChangeConfig('pendingTxID')(value)}
+              placeholder=""
+              value={mocksConfig.pendingTxID}
             />
           </DialogContent>
           <DialogActions>

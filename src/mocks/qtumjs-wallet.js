@@ -1,4 +1,4 @@
-import qtumWalletData from 'stubs/qtum-wallet-data'
+import qtumWalletDataGenerator from 'stubs/qtumWalletDataGenerator'
 
 export default (function stream () {
   const generateMnemonic = () => 'I am a fake mnemonic not even the right length'
@@ -8,7 +8,7 @@ export default (function stream () {
       const walletUtil = Object.freeze({
         toWIF: () => 'IamAFakePrivateKeyFromMockedQtumJSWallet',
         getInfo: async () => ({
-          ...qtumWalletData
+          ...qtumWalletDataGenerator()
         }),
         send: async () => 'ok'
       })

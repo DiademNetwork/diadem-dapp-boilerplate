@@ -5,12 +5,7 @@ import ReactFacebookLogin from 'react-facebook-login/dist/facebook-login-render-
 import withContainer from './container'
 import Button from './Button'
 import User from './User'
-import {
-  registeredUser,
-  nonRegisteredUser,
-  pendingRegistrationUser
-} from 'stubs/facebook'
-import mocksConfig from 'mocks/config'
+import facebookUser from 'stubs/facebook'
 
 class FacebookLogin extends Component {
   onFacebookLogin = (data) => {
@@ -34,16 +29,7 @@ class FacebookLogin extends Component {
       )
     }
     return <Button
-      onClick={() => {
-        const { isUserRegistered, isUserPendingRegistration } = mocksConfig.get()
-        console.log({ isUserRegistered, isUserPendingRegistration })
-        const facebookUserStub = isUserRegistered
-          ? registeredUser
-          : isUserPendingRegistration
-            ? pendingRegistrationUser
-            : nonRegisteredUser
-        this.onFacebookLogin(facebookUserStub)
-      }}
+      onClick={() => this.onFacebookLogin(facebookUser)}
     />
   }
 }

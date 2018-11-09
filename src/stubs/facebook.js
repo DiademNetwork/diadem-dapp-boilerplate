@@ -1,5 +1,7 @@
 import facebookUserGenerator from './facebookUserGenerator'
+import mockConfig from 'mocks/config'
 
-export const registeredUser = facebookUserGenerator()
-export const nonRegisteredUser = facebookUserGenerator()
-export const pendingRegistrationUser = facebookUserGenerator()
+const facebookUser = facebookUserGenerator()
+mockConfig.set('facebookUserID')(facebookUser.userID)
+
+export default facebookUser

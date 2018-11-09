@@ -1,8 +1,9 @@
 export default (function mockConfig () {
   const config = {
-    pendingTx: 0,
     isUserRegistered: true,
-    isUserPendingRegistration: false
+    isUserPendingRegistration: false,
+    facebookUserID: '',
+    pendingTxID: ''
   }
 
   const set = (name) => (value) => { config[name] = value }

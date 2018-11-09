@@ -1,59 +1,67 @@
 import faker from 'faker'
+import mocksConfig from 'mocks/config'
 
 const getRandomInt = max => Math.floor(Math.random() * Math.floor(max))
 
-const register = () => Object.freeze({
-  actor: faker.random.uuid(),
-  foreign_id: '',
-  id: faker.random.uuid(),
-  name: faker.name.findName(),
+const base = (opts = {}) => {
+  const { facebookUserID, pendingTxID } = mocksConfig.get()
+  return Object.freeze({
+    actor: pendingTxID !== '' ? facebookUserID : faker.random.uuid(),
+    foreign_id: '',
+    id: faker.random.uuid(),
+    name: faker.name.findName(),
+    origin: null,
+    target: pendingTxID !== '' ? pendingTxID : faker.random.uuid(),
+    time: opts.recent ? `${new Date()}` : `${faker.date.past()}`
+  })
+}
+
+const register = (opts = {}) => Object.freeze({
+  ...base(opts),
   object: faker.random.uuid(),
-  origin: null,
-  target: faker.random.uuid(),
-  time: `${faker.date.past()}`,
   verb: 'register'
 })
 
-const create = () => Object.freeze({
-  ...register(),
+const create = (opts = {}) => Object.freeze({
+  ...base(opts),
   object: faker.internet.url(),
   verb: 'create'
 })
 
-const update = () => Object.freeze({
-  ...register(),
+const update = (opts = {}) => Object.freeze({
+  ...base(opts),
   object: faker.internet.url(),
   verb: 'update'
 })
 
-const confirm = () => Object.freeze({
-  ...register(),
+const confirm = (opts = {}) => Object.freeze({
+  ...base(opts),
   object: faker.internet.url(),
   verb: 'confirm'
 })
 
-const support = () => Object.freeze({
-  ...register(),
+const support = (opts = {}) => Object.freeze({
+  ...base(opts),
   object: faker.internet.url(),
   verb: 'support'
 })
 
-const deposit = () => Object.freeze({
-  ...register(),
+const deposit = (opts = {}) => Object.freeze({
+  ...base(opts),
   object: faker.internet.url(),
   verb: 'deposit',
   witness: `${faker.random.number()}`,
   witnessName: faker.name.findName()
 })
 
-export default () => {
+export default (opts) => {
   const random = getRandomInt(6)
   switch (random) {
-    case 0: return register()
-    case 1: return create()
-    case 2: return update()
-    case 3: return confirm()
-    case 4: return support()
-    case 5: return deposit()
+    case 0: return register(opts)
+    case 1: return create(opts)
+    case 2: return update(opts)
+    case 3: return confirm(opts)
+    case 4: return support(opts)
+    case 5: return deposit(opts)
   }
 }

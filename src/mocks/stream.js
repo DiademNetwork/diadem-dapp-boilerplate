@@ -15,7 +15,7 @@ export default (function stream () {
         break
       case 'transactions':
         setInterval(() => {
-          successCallback({ new: [ ...transactionGenerator({}) ] })
+          successCallback({ new: [ transactionGenerator({ recent: true }) ] })
         }, FAKE_TIMELINE_TIMEOUT)
         return transactionsStub
       default:

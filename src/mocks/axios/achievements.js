@@ -1,5 +1,3 @@
-// TODO: use query params to mock different response
-
 export default (axiosMock) => {
   axiosMock.onPost('/confirm').reply(200)
   axiosMock.onPost('/create').reply(200)

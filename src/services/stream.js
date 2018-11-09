@@ -1,6 +1,6 @@
 
 import stream from 'getstream'
-import streamMock from '../mocks/stream'
+import streamMock from 'mocks/stream'
 
 const LIMIT = 100
 const TRANSACTIONS_LIMIT = 30

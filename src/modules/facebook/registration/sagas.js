@@ -32,6 +32,7 @@ const register = function * ({ walletData }) {
     const facebookName = yield select(selectors.facebook.login.name)
     const facebookUserID = yield select(selectors.facebook.login.userID)
     yield call(api.registerUser, {
+      publicKey: walletData.publicKey,
       address: walletData.addrStr,
       name: facebookName,
       user: facebookUserID,

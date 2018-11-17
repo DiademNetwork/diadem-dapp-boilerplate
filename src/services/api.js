@@ -18,7 +18,7 @@ export const createAPI = (fetcher, url) => {
 
   return Object.freeze({
     checkFacebookRegistration: postPath('/check'),
-    checkQTUMAddressMatchesFacebookUser: postPath('/check-qtum-address'),
+    checkQTUMAddressMatchesFacebookUser: postPath('/check-address'),
     confirmAchievement: postPath('/confirm'),
     createUpdateAchievement: postPath('/create'),
     depositForAchievement: postPath('/deposit'),

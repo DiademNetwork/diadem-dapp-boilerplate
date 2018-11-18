@@ -31,7 +31,7 @@ const App = ({
   hasUnreadAchievements,
   hasUnreadTransactions,
   userID,
-  userQtumAddress
+  userDecentAddress
 }) => (
   <div>
     <Nav />
@@ -40,7 +40,7 @@ const App = ({
       {
         badgeContent: hasUnreadAchievements ? '!' : null,
         label: 'Achievements',
-        component: <Achievements className={classes.sm9} userQtumAddress={userQtumAddress} />
+        component: <Achievements className={classes.sm9} userDecentAddress={userDecentAddress} />
       },
       {
         badgeContent: hasUnreadTransactions ? '!' : null,
@@ -62,7 +62,7 @@ App.propTypes = {
   hasUnreadAchievements: T.bool,
   hasUnreadTransactions: T.bool,
   userID: T.string,
-  userQtumAddress: T.string
+  userDecentAddress: T.string
 }
 
 export default R.compose(

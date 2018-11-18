@@ -8,13 +8,13 @@ const mapStateToProps = (state, { achievementsChain }) => ({
   canPerformActions: R.allPass([
     S.facebook.login.isLogged,
     S.facebook.registration.isRegistered,
-    S.wallets.qtum.isReady
+    S.wallets.decent.isReady
   ])(state),
   currentAchievement: S.achievement.currentFrom(achievementsChain),
   pastAchievements: S.achievement.pastFrom(achievementsChain),
   userID: S.facebook.login.userID(state),
-  walletAddress: S.wallets.qtum.address(state),
-  walletBalance: S.wallets.qtum.balance(state)
+  walletAddress: S.wallets.decent.address(state),
+  walletBalance: S.wallets.decent.balance(state)
 })
 
 const mapDispatchToProps = {

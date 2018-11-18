@@ -47,6 +47,6 @@ const register = function * ({ walletData }) {
 export default function * () {
   yield all([
     takeLatest(types.facebook.login.LOGGED, check),
-    takeLatest(types.wallets.qtum.GENERATE.succeeded, register)
+    takeLatest(types.wallets.decent.GENERATE.succeeded, register)
   ])
 }

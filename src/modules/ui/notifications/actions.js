@@ -34,7 +34,7 @@ export default {
   walletRecoverSuccess: createSuccessNotification('Wallet restored'),
   walletRecoverError: createErrorNotification('Impossible to recover wallet'),
   walletRefreshError: createErrorNotification('Impossible to refresh wallet'),
-  walletGenerateSuccess: createSuccessNotification('Diadem Network QTUM wallet generated'),
+  walletGenerateSuccess: createSuccessNotification('Diadem Network Decent wallet generated'),
   walletGenerateError: createErrorNotification('Impossible to generate your wallet'),
   walletWithdrawSuccess: createSuccessNotification('Tokens withdrawal successful'),
   walletWithdrawError: createErrorNotification('Impossible to withdraw tokens. You may need to retry with higher fees'),

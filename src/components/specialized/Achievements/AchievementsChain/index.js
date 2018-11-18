@@ -147,31 +147,12 @@ class AchievementsChain extends Component {
             className={classes.actions}
             disableActionSpacing
           >
-            <Confirm
-              actionAlreadyDone={this.hasUserAlreadyConfirmed()}
-              className={classes.actionsButtons}
-              canPerformActions={canPerformActions}
-              link={object}
-              creatorID={creatorID}
-              creatorName={creatorName}
-              onConfirm={this.handleConfirm}
-              title={title}
-            />
             <Support
               className={classes.actionsButtons}
               confirmationsCount={confirmationsCount}
               link={object}
               creatorName={creatorName}
               onSupport={this.handleSupport}
-              walletBalance={walletBalance}
-              title={title}
-            />
-            <Deposit
-              className={classes.actionsButtons}
-              link={object}
-              creatorID={creatorID}
-              creatorName={creatorName}
-              onDeposit={this.handleDeposit}
               walletBalance={walletBalance}
               title={title}
             />

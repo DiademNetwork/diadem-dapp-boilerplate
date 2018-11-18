@@ -9,6 +9,7 @@ import uiGeneral from 'modules/ui/general/reducers'
 import uiNotifications from 'modules/ui/notifications/reducers'
 import users from 'modules/users/reducers'
 import walletsQtum from 'modules/wallets/qtum/reducers'
+import walletsDecent from 'modules/wallets/decent/reducers'
 
 export default combineReducers({
   achievement,
@@ -24,6 +25,7 @@ export default combineReducers({
   }),
   users,
   wallets: combineReducers({
-    qtum: walletsQtum
+    qtum: walletsQtum,
+    decent: walletsDecent
   })
 })

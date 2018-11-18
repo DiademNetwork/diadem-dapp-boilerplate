@@ -57,63 +57,67 @@ const WalletDisplay = ({
   hasPendingTx,
   isRegistrationPending,
   unconfirmedBalance
-}) => (
-  <List>
-    <ListItem divider>
-      <ListItemIcon>
-        <LocalPostOfficeOutlinedIcon />
-      </ListItemIcon>
-      <ListItemText primary={
-        <Typography>
-          {fullScreen ? `${truncateText(address, 25, '...')}` : `${address}`}
-          <Hidden xsDown>
-            <HelpTooltip text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements" />
-            <CopyToAddressToolip address={address} />
-          </Hidden>
-        </Typography>
-      } />
-    </ListItem>
-    <ListItem divider={hasPendingTx}>
-      <ListItemIcon>
-        <MonetizationOnOutlinedIcon />
-      </ListItemIcon>
-      <ListItemText
-        primary={
+}) => {
+  return (
+    <List>
+      <ListItem divider>
+        <ListItemIcon>
+          <LocalPostOfficeOutlinedIcon/>
+        </ListItemIcon>
+        <ListItemText primary={
           <Typography>
-            {balance} QTUM{unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} QTUM pending)` : ''}
+            {fullScreen ? `${truncateText(address, 25, '...')}` : `${address}`}
             <Hidden xsDown>
-              <HelpTooltip text={`This is your balance. Send QTUM token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`} />
-              {balance > 0 && (
-                <Withdraw className={classes.withdraw} />
-              )}
+              <HelpTooltip
+                text="This is the first address of your hot Diadem Network wallet. Send tokens to it in order to be able to support and deposit for achievements"/>
+              <CopyToAddressToolip address={address}/>
             </Hidden>
           </Typography>
-        }
-      />
-    </ListItem>
-    {(hasPendingTx || isRegistrationPending) && (
-      <ListItem className={classes.waitbox}>
-        <div className={classes.progress}>
-          <LinearProgress color="secondary" />
-        </div>
-        <Typography color="textSecondary">
-          {isRegistrationPending
-            ? 'Your registration is still pending, it can take some minutes...You have to wait for it to be able to user Diadem Network'
-            : 'You have blockchain transactions pending to be mined. Please wait, it can takes some minutes.'
+        }/>
+      </ListItem>
+      <ListItem divider={false}>
+        <ListItemIcon>
+          <MonetizationOnOutlinedIcon/>
+        </ListItemIcon>
+        <ListItemText
+          primary={
+            <Typography>
+              {balance} DCT{unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} DCT pending)` : ''}
+              <Hidden xsDown>
+                <HelpTooltip
+                  text={`This is your balance. Send DCT token(s) to your hot Diadem Network wallet address ${address} to use in Diadem Network`}/>
+                {balance > 0 && (
+                  <Withdraw className={classes.withdraw}/>
+                )}
+              </Hidden>
+            </Typography>
           }
-        </Typography>
+        />
       </ListItem>
-    )}
-    <Hidden key="mobile-button" smUp>
-      <ListItem>
-        <CopyToClipBoardButton variant="button" textToCopy={address} name="address" />
-        {balance > 0 && (
-          <Withdraw cxlassName={classes.withdraw} />
-        )}
-      </ListItem>
-    </Hidden>
-  </List>
-)
+      {(hasPendingTx || isRegistrationPending) && (
+        <ListItem className={classes.waitbox}>
+          <div className={classes.progress}>
+            <LinearProgress color="secondary"/>
+          </div>
+          <Typography color="textSecondary">
+            {isRegistrationPending
+              ? 'Your registration is still pending, it can take some minutes...You have to wait for it to be able to user Diadem Network'
+              : 'You have blockchain transactions pending to be mined. Please wait, it can takes some minutes.'
+            }
+          </Typography>
+        </ListItem>
+      )}
+      <Hidden key="mobile-button" smUp>
+        <ListItem>
+          <CopyToClipBoardButton variant="button" textToCopy={address} name="address"/>
+          {balance > 0 && (
+            <Withdraw cxlassName={classes.withdraw}/>
+          )}
+        </ListItem>
+      </Hidden>
+    </List>
+  )
+}
 
 WalletDisplay.propTypes = {
   address: T.string,

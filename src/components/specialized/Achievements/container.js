@@ -3,16 +3,16 @@ import * as R from 'ramda'
 import A from 'modules/actions'
 import S from 'modules/selectors'
 
-const mapStateToProps = (state, { userQtumAddress }) => ({
+const mapStateToProps = (state, { userDecentAddress }) => ({
   achievements: S.achievements.processedList(state),
   canPerformActions: R.allPass([
     S.facebook.login.isLogged,
     S.facebook.registration.isRegistered,
-    S.wallets.qtum.isReady
+    S.wallets.decent.isReady
   ])(state),
   createAchievementStatus: S.achievement.createStatus(state),
   fetchStatus: S.achievements.fetchStatus(state),
-  lastLinkOfUserAchievementOrNull: S.achievements.lastLinkOfUserAchievementOrNull(userQtumAddress)(state)
+  lastLinkOfUserAchievementOrNull: S.achievements.lastLinkOfUserAchievementOrNull(userDecentAddress)(state)
 })
 
 const mapDispatchToProps = {

@@ -7,6 +7,7 @@ import uiGeneral from 'modules/ui/general/actions'
 import uiNotifications from 'modules/ui/notifications/actions'
 import users from 'modules/users/actions'
 import walletsQtum from 'modules/wallets/qtum/actions'
+import walletsDecent from 'modules/wallets/decent/actions'
 
 export default {
   achievement,
@@ -22,6 +23,7 @@ export default {
   },
   users,
   wallets: {
-    qtum: walletsQtum
+    qtum: walletsQtum,
+    decent: walletsDecent
   }
 }

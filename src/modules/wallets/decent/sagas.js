@@ -1,5 +1,5 @@
-import { all, call, fork, put, select, takeLatest } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { all, fork, put, select, takeLatest, take } from 'redux-saga/effects'
+import { oneOfTypes } from 'modules/utils'
 
 import actions from './actions'
 import selectors from 'modules/selectors'
@@ -8,13 +8,12 @@ import ownTypes from './types'
 
 import * as dcore from 'dcorejs'
 
-const WAIT_INTERVAL = 2000
-const ADDRESS_PREFIX = 'fb'
+const ADDRESS_PREFIX = 'dm'
 
 const init = function * () {
   const chainId = '9c54faed15d4089d3546ac5eb0f1392434a970be15f1452ce1e7764f70f02936'
   const dcoreNetworkWSPaths = ['wss://hackathon2.decent.ch:8090']
-  dcore.initialize({ chainId, dcoreNetworkWSPaths })
+  dcore.initialize({ chainId, dcoreNetworkWSPaths }, false)
   const connection = dcore.connection()
   connection.openConnection().then((res) => {
     console.log(connection.isConnected)
@@ -32,11 +31,13 @@ const maybeGenerate = function * ({ reason }) {
 const load = function * () {
   try {
     const facebookUserID = yield select(selectors.facebook.login.userID)
-    const privateKey = window.localStorage.getItem(`privateKey-${facebookUserID}`)
-    if (!privateKey) {
+    const privateKeyWif = window.localStorage.getItem(`privateKey-${facebookUserID}`)
+    if (!privateKeyWif) {
       yield put(actions.load.failed({ reason: 'no-private-key' }))
     } else {
-      yield put(actions.load.failed({ reason: 'load-not-implemented' }))
+      const privateKey = dcore.KeyPrivate.fromWif(privateKeyWif)
+      const walletData = { privateKey }
+      yield put(actions.load.succeeded({ walletData }))
     }
   } catch (error) {
     yield put(actions.generate.errored({ error }))
@@ -44,14 +45,19 @@ const load = function * () {
 }
 
 const generate = function * () {
+  console.log('GENERATE')
   try {
     const facebookUserID = yield select(selectors.facebook.login.userID)
-    const brainKey = dcore.account().suggestBrainKey()
+    const brainKey = dcore.Utils.suggestBrainKey()
     const [privateKey, publicKey] = dcore.Utils.generateKeys(brainKey)
-    window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKey)
+    const privateKeyWif = privateKey.stringKey
+    const publicKeyRaw = publicKey.stringKey
+    window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKeyWif)
     const addrStr = `${ADDRESS_PREFIX}-${facebookUserID}`
-    yield put(actions.generate.succeeded({ publicKey, addrStr }))
+    const walletData = { publicKey: publicKeyRaw, addrStr }
+    yield put(actions.generate.succeeded({ walletData, privateKey: privateKeyWif, mnemonic: brainKey }))
   } catch (error) {
+    console.error(error)
     yield put(actions.generate.errored({ error }))
   }
 }
@@ -61,7 +67,13 @@ const recover = function * ({ mnemonic, privateKey }) {
 }
 
 const refresh = function * () {
-  yield put(actions.refresh.failed({ reason: 'refresh-not-implemented' }))
+  yield take(oneOfTypes([
+    ownTypes.GENERATE.succeeded,
+    ownTypes.LOAD.succeeded,
+    ownTypes.RECOVER.succeeded
+  ]))
+  const walletData = { balance: 100, addrStr: '0x123', unconfirmedBalance: 200, hasPendingTx: false }
+  yield put(actions.refresh.succeeded({ walletData, changes: {} }))
 }
 
 const withdraw = function * ({ address, amount, fees }) {
@@ -69,8 +81,6 @@ const withdraw = function * ({ address, amount, fees }) {
 }
 
 const checkLastTx = function * () {
-  yield put(actions.checkLastTx.succeeded({ hasPendingTx: true }))
-  yield call(delay, WAIT_INTERVAL)
   yield put(actions.checkLastTx.succeeded({ hasPendingTx: false }))
 }
 

@@ -32,6 +32,7 @@ const register = function * ({ walletData }) {
     const facebookName = yield select(selectors.facebook.login.name)
     const facebookUserID = yield select(selectors.facebook.login.userID)
     yield call(api.registerUser, {
+      publicKey: walletData.publicKey,
       address: walletData.addrStr,
       name: facebookName,
       user: facebookUserID,
@@ -46,6 +47,6 @@ const register = function * ({ walletData }) {
 export default function * () {
   yield all([
     takeLatest(types.facebook.login.LOGGED, check),
-    takeLatest(types.wallets.qtum.GENERATE.succeeded, register)
+    takeLatest(types.wallets.decent.GENERATE.succeeded, register)
   ])
 }

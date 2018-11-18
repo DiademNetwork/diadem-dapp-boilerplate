@@ -24,7 +24,7 @@ const update = function * (payload) {
 
 const handleCreateUpdate = function * ({ link, previousLink = '', title }) {
   yield call(api.createUpdateAchievement, {
-    address: yield select(selectors.wallets.qtum.address),
+    address: yield select(selectors.wallets.decent.address),
     link,
     name: yield select(selectors.facebook.login.name),
     previousLink,
@@ -46,7 +46,7 @@ const confirm = function * (payload) {
 const support = function * ({ amount, fees, link }) {
   try {
     const { data: { address, encodedData } } = yield call(api.encodeSupport, { link })
-    const walletUtil = yield select(selectors.wallets.qtum.util)
+    const walletUtil = yield select(selectors.wallets.decent.util)
     const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
       feeRate: fees

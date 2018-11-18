@@ -6,6 +6,7 @@ import transactions from 'modules/transactions/types'
 import uiGeneral from 'modules/ui/general/types'
 import users from 'modules/users/types'
 import walletsQtum from 'modules/wallets/qtum/types'
+import walletsDecent from 'modules/wallets/decent/types'
 
 export default {
   achievement,
@@ -20,6 +21,7 @@ export default {
   },
   users,
   wallets: {
-    qtum: walletsQtum
+    qtum: walletsQtum,
+    decent: walletsDecent
   }
 }

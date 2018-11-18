@@ -7,7 +7,7 @@ import transactions from 'modules/transactions/sagas'
 import uiGeneral from 'modules/ui/general/sagas'
 import uiNotifications from 'modules/ui/notifications/sagas'
 import users from 'modules/users/sagas'
-import walletsQtum from 'modules/wallets/qtum/sagas'
+import walletsDecent from 'modules/wallets/decent/sagas'
 
 export default function * rootSaga () {
   yield [
@@ -18,6 +18,6 @@ export default function * rootSaga () {
     fork(uiGeneral),
     fork(uiNotifications),
     fork(users),
-    fork(walletsQtum)
+    fork(walletsDecent)
   ]
 }

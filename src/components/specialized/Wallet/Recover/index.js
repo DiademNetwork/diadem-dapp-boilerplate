@@ -95,6 +95,7 @@ class Recover extends Component {
     return [
       <Button
         color="secondary"
+        data-qa-id="wallet-recover-button"
         disabled={isRecovering}
         key="button"
         onClick={this.handleOpen}
@@ -103,11 +104,12 @@ class Recover extends Component {
         {isRecovering ? 'Loading...' : 'Recover your wallet'}
       </Button>,
       <Dialog
+        aria-labelledby="form-dialog-title"
+        data-qa-id="wallet-recover-modal"
         fullScreen={fullScreen}
         key="dialog"
         open={open}
         onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
       >
         <DialogTitle id="form-dialog-title">Recover your Diadem Network wallet</DialogTitle>
         <DialogContent>
@@ -139,6 +141,7 @@ class Recover extends Component {
           </DialogContentText>
           <TextField
             autoFocus={!fullScreen}
+            data-qa-id="wallet-recover-form-mnemonic-input"
             error={mnemonic !== MNEMONIC_INITIAL_VALUE && !isMnemonicValid}
             margin="normal"
             onChange={this.handleChange('mnemonic')}
@@ -149,6 +152,7 @@ class Recover extends Component {
             placeholder='this is a twelve words long key used to recover your wallet'
           />
           <TextField
+            data-qa-id="wallet-recover-form-privatekey-input"
             error={privateKey !== PRIVATE_KEY_INITIAL_VALUE && !isPrivateKeyValid}
             margin="normal"
             onChange={this.handleChange('privateKey')}
@@ -160,11 +164,15 @@ class Recover extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose}>
+          <Button
+            data-qa-id="wallet-recover-cancel-button"
+            onClick={this.handleClose}
+          >
             Cancel
           </Button>
           <Button
             color="secondary"
+            data-qa-id="wallet-recover-submit-button"
             disabled={!isFormValid || isRecovering}
             onClick={this.handleSubmit}
             variant="contained"

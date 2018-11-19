@@ -16,8 +16,8 @@ const mapStateToProps = (state, { userQtumAddress }) => ({
 })
 
 const mapDispatchToProps = {
-  createAchievement: A.achievement.create,
-  updateAchievement: A.achievement.update
+  createAchievement: A.achievement.create.requested,
+  updateAchievement: A.achievement.update.requested
 }
 
 export default WrappedComponent =>

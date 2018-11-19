@@ -135,11 +135,12 @@ class AchievementDeposit extends Component {
           Deposit
         </Button>
         <Dialog
+          aria-labelledby="form-dialog-title"
+          data-qa-id={`achievement-${idx}-deposit-modal`}
           fullScreen={fullScreen}
           key='achievement-deposit-modal'
           open={modalOpen}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
           <DialogContent>
@@ -167,6 +168,7 @@ class AchievementDeposit extends Component {
             <Divider style={{ marginBottom: '16px' }} />
             <TextField
               autoFocus={!fullScreen}
+              data-qa-id={`achievement-${idx}-deposit-form-amount-input`}
               error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
               margin="normal"
               id='amount'
@@ -177,16 +179,21 @@ class AchievementDeposit extends Component {
               fullWidth
             />
             <TextField
+              data-qa-id={`achievement-${idx}-deposit-form-witness-select`}
               error={witnessUserID !== WITNESS_USER_ID_INITIAL_VALUE && !isWitnessUserIDValid}
-              select
+              fullWidth
               label="Select a witness user"
               margin="normal"
               onChange={this.handleChange('witnessUserID')}
-              fullWidth
+              select
               value={witnessUserID}
             >
-              {users.map(({ userAccount, userName }) => (
-                <MenuItem key={userAccount} value={userAccount}>
+              {users.map(({ userAccount, userName }, itemIdx) => (
+                <MenuItem
+                  data-qa-id={`achievement-${idx}-deposit-form-witness-${itemIdx}-select`}
+                  key={userAccount}
+                  value={userAccount}
+                >
                   {userName}
                 </MenuItem>
               ))}
@@ -198,10 +205,15 @@ class AchievementDeposit extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button
+              color="primary"
+              data-qa-id={`achievement-${idx}-deposit-cancel-button`}
+              onClick={this.handleClose}
+            >
               Cancel
             </Button>
             <Button
+              data-qa-id={`achievement-${idx}-deposit-submit-button`}
               disabled={!isWitnessUserIDValid || !isAmountValid}
               onClick={this.handleSubmit}
               variant="contained"

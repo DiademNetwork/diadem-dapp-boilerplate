@@ -7,6 +7,7 @@ export default (function stream () {
     mocked: (function mocked () {
       const walletUtil = Object.freeze({
         toWIF: () => 'IamAFakePrivateKeyFromMockedQtumJSWallet',
+        generateContractSendTx: () => 'sIgN3dRaWtX',
         getInfo: async () => ({
           ...qtumWalletDataGenerator()
         }),

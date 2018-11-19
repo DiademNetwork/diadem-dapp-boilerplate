@@ -18,9 +18,9 @@ const mapStateToProps = (state, { achievementsChain }) => ({
 })
 
 const mapDispatchToProps = {
-  confirmAchievement: A.achievement.confirm,
-  depositForAchievement: A.achievement.deposit,
-  supportAchievement: A.achievement.support
+  confirmAchievement: A.achievement.confirm.requested,
+  depositForAchievement: A.achievement.deposit.requested,
+  supportAchievement: A.achievement.support.requested
 }
 
 export default WrappedComponent =>

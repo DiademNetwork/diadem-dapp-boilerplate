@@ -37,7 +37,7 @@ class AchievementConfirm extends Component {
       className,
       fullScreen,
       idx,
-      canUserConfirmCreateUpdateSupportDeposit,
+      canPerformActions,
       link,
       creatorName,
       title
@@ -51,7 +51,7 @@ class AchievementConfirm extends Component {
           className={className}
           data-qa-id={`achievement-${idx}-confirm-button`}
           key='achievement-confirm-button'
-          disabled={!canUserConfirmCreateUpdateSupportDeposit || actionAlreadyDone}
+          disabled={!canPerformActions || actionAlreadyDone}
           onClick={this.handleClickOpen}
           variant={fullScreen ? 'contained' : 'extendedFab'}
         >
@@ -61,11 +61,12 @@ class AchievementConfirm extends Component {
           {actionAlreadyDone ? 'You confirmed already' : 'Confirm'}
         </Button>
         <Dialog
+          aria-labelledby="form-dialog-title"
+          data-qa-id={`achievement-${idx}-confirm-modal`}
           fullScreen={fullScreen}
           key='achievement-confirm-modal'
           open={modalOpen}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Confirm</DialogTitle>
           <DialogContent>
@@ -88,13 +89,18 @@ class AchievementConfirm extends Component {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button
+              color="primary"
+              data-qa-id={`achievement-${idx}-confirm-cancel-button`}
+              onClick={this.handleClose}
+            >
               I'm not sure
             </Button>
             <Button
+              color="secondary"
+              data-qa-id={`achievement-${idx}-confirm-submit-button`}
               onClick={this.handleConfirm}
               variant="contained"
-              color="secondary"
             >
               yes, {creatorName} has!
             </Button>
@@ -107,7 +113,7 @@ class AchievementConfirm extends Component {
 
 AchievementConfirm.propTypes = {
   actionAlreadyDone: T.bool,
-  canUserConfirmCreateUpdateSupportDeposit: T.bool,
+  canPerformActions: T.bool,
   className: T.string,
   creatorName: T.string,
   fullScreen: T.bool,

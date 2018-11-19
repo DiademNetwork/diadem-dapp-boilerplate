@@ -95,11 +95,12 @@ class AchievementSupport extends Component {
           Support
         </Button>
         <Dialog
+          aria-labelledby="form-dialog-title"
+          data-qa-id={`achievement-${idx}-support-modal`}
           fullScreen={fullScreen}
           key='achievement-support-modal'
           open={modalOpen}
           onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Support</DialogTitle>
           <DialogContent>
@@ -125,6 +126,7 @@ class AchievementSupport extends Component {
             <Divider style={{ marginBottom: '16px' }} />
             <TextField
               autoFocus={!fullScreen}
+              data-qa-id={`achievement-${idx}-support-form-amount-input`}
               error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
               margin="normal"
               id='amount'
@@ -141,10 +143,15 @@ class AchievementSupport extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button
+              color="primary"
+              data-qa-id={`achievement-${idx}-support-cancel-button`}
+              onClick={this.handleClose}
+            >
               Cancel
             </Button>
             <Button
+              data-qa-id={`achievement-${idx}-support-submit-button`}
               disabled={!isAmountValid}
               onClick={this.handleSubmit}
               variant="contained"

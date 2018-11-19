@@ -1,7 +1,8 @@
 node_modules/
 dist/
-cypress/videos/
-cypress/screenshots/
+cypress/videos/**/*
+cypress/videos/*.js.mp4
+cypress/screenshots/*
 envs/.testnet.env
 envs/.mainnet.env
 envs/.development.env

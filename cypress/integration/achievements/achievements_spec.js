@@ -1,5 +1,5 @@
-import { FAKE_ACHIEVEMENT_TIMEOUT } from '../../src/mocks/stream'
-import { INITIAL_ACHIEVEMENT_COUNT } from '../../src/stubs/achievements'
+import { FAKE_ACHIEVEMENT_TIMEOUT } from '../../../src/mocks/stream'
+import { INITIAL_ACHIEVEMENT_COUNT } from '../../../src/stubs/achievements'
 
 describe('Achievements', () => {
   beforeEach(() => {

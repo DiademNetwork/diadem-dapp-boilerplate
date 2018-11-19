@@ -45,7 +45,7 @@ const confirm = function * (payload) {
 
 const support = function * ({ amount, fees, link }) {
   try {
-    const { data: { address, encodedData } } = yield call(api.encodeSupport, { link })
+    const { address, encodedData } = yield call(api.encodeSupport, { link })
     const walletUtil = yield select(selectors.wallets.qtum.util)
     const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
@@ -66,7 +66,7 @@ const support = function * ({ amount, fees, link }) {
 
 const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, witnessUserID }) {
   try {
-    const { data: { address, encodedData } } = yield call(api.encodeDeposit, { link, witness: witnessAddress })
+    const { address, encodedData } = yield call(api.encodeDeposit, { link, witness: witnessAddress })
     const walletUtil = yield select(selectors.wallets.qtum.util)
     const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
@@ -81,9 +81,9 @@ const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, w
       witness: witnessUserID,
       witnessName
     })
-    yield put(actions.support.succeeded())
+    yield put(actions.deposit.succeeded())
   } catch (error) {
-    yield put(actions.support.errored({ error }))
+    yield put(actions.deposit.errored({ error }))
   }
 }
 

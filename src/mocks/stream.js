@@ -1,8 +1,8 @@
 import * as R from 'ramda'
-import achievementGenerator from 'stubs/achievementGenerator'
-import transactionGenerator from 'stubs/transactionGenerator'
-import achievementsStub from 'stubs/achievements'
-import transactionsStub from 'stubs/transactions'
+import achievementGenerator from '../stubs/achievementGenerator'
+import transactionGenerator from '../stubs/transactionGenerator'
+import achievementsStub from '../stubs/achievements'
+import transactionsStub from '../stubs/transactions'
 
 export const FAKE_ACHIEVEMENT_TIMEOUT = 60000
 export const FAKE_TIMELINE_TIMEOUT = 45000

@@ -1,5 +1,5 @@
 import faker from 'faker'
-import mocksConfig from 'mocks/config'
+import mocksConfig from '../mocks/config'
 
 const balance = (function () {
   const initial = {

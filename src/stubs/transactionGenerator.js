@@ -1,5 +1,5 @@
 import faker from 'faker'
-import mocksConfig from 'mocks/config'
+import mocksConfig from '../mocks/config'
 
 const getRandomInt = max => Math.floor(Math.random() * Math.floor(max))
 

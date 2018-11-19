@@ -1,10 +1,13 @@
+.vscode
+
 node_modules/
 dist/
-cypress/videos/**/*
-cypress/videos/*.js.mp4
+
+cypress/screenshots
+cypress/videos
 cypress/screenshots/*
+coverage
+
 envs/.testnet.env
 envs/.mainnet.env
 envs/.development.env
-.vscode
-coverage/**/*

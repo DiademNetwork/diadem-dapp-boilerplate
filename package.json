@@ -72,6 +72,10 @@
       "node_modules",
       "src"
     ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/cypress/",
+      "<rootDir>/.storybook/"
+    ],
     "setupFiles": [
       "./setupTests.js"
     ],
@@ -95,6 +99,7 @@
     "fb": "^2.0.0",
     "file-loader": "^2.0.0",
     "getstream": "^3.20.0",
+    "husky": "^1.1.4",
     "image-webpack-loader": "^4.3.1",
     "is-url": "^1.2.4",
     "moment": "^2.22.2",
@@ -117,5 +122,10 @@
     "storybook-addon-specifications": "^2.1.2",
     "url-loader": "^1.1.1",
     "uuid": "^3.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "yarn run lint && yarn test"
+    }
   }
 }

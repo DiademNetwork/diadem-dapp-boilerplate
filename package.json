@@ -72,6 +72,10 @@
       "node_modules",
       "src"
     ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/cypress/",
+      "<rootDir>/.storybook/"
+    ],
     "setupFiles": [
       "./setupTests.js"
     ],

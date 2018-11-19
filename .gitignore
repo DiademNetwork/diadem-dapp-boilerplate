@@ -4,3 +4,5 @@ envs/.testnet.env
 envs/.mainnet.env
 envs/.development.env
 .vscode
+cypress/videos/
+cypress/screenshots/

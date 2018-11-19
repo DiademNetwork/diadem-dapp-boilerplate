@@ -5,25 +5,32 @@ import ReactFacebookLogin from 'react-facebook-login/dist/facebook-login-render-
 import withContainer from './container'
 import Button from './Button'
 import User from './User'
-import facebookStub from 'stubs/facebook'
+import facebookUser from 'stubs/facebook'
 
 class FacebookLogin extends Component {
-  onFacebookLogin = (data) => this.props.handleFacebookLogin({ data })
+  onFacebookLogin = (data) => {
+    this.props.handleFacebookLogin({ data })
+  }
 
   render () {
-    return this.props.isFacebookLogged ? (
-      <User />
-    ) : process.env.ENV !== 'sandbox' ? (
-      <ReactFacebookLogin
-        appId={process.env.FACEBOOK_APP_ID}
-        fields="name,email,picture"
-        callback={this.onFacebookLogin}
-        version="3.1"
-        render={({ onClick }) => <Button onClick={onClick} />}
-      />
-    ) : (
-      <Button onClick={() => this.props.handleFacebookLogin(facebookStub)} />
-    )
+    const { isFacebookLogged } = this.props
+    if (isFacebookLogged) {
+      return <User />
+    }
+    if (process.env.ENV !== 'sandbox') {
+      return (
+        <ReactFacebookLogin
+          appId={process.env.FACEBOOK_APP_ID}
+          fields="name,email,picture"
+          callback={this.onFacebookLogin}
+          version="3.1"
+          render={({ onClick }) => <Button onClick={onClick} />}
+        />
+      )
+    }
+    return <Button
+      onClick={() => this.onFacebookLogin(facebookUser)}
+    />
   }
 }
 

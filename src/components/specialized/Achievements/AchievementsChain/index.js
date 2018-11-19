@@ -60,13 +60,14 @@ class AchievementsChain extends Component {
     depositForAchievement({ ...data, link: currentAchievement.object })
   }
 
-  hasUserAlreadyConfirmed = () => {
-    const { currentAchievement: { confirm }, userID } = this.props
-    return R.compose(
-      R.contains(userID),
+  hasUserAlreadyConfirmed = R.ifElse(
+    R.isNil,
+    R.F,
+    R.compose(
+      R.contains(this.props.userID),
       R.map(R.prop('actor'))
-    )(confirm)
-  }
+    )
+  )
 
   getUniqueUsersNamesFor = verb => R.compose(
     (list) => {
@@ -92,6 +93,7 @@ class AchievementsChain extends Component {
       classes,
       canPerformActions,
       currentAchievement,
+      idx,
       pastAchievements,
       userID,
       walletBalance
@@ -109,8 +111,20 @@ class AchievementsChain extends Component {
     const depositsTotalAmount = this.getTotalAmountFor('deposit')(currentAchievement) / 1e8
     const supportsTotalAmount = this.getTotalAmountFor('support')(currentAchievement) / 1e8
 
+    const commonActionsButtonsProps = {
+      creatorName,
+      className: classes.actionsButtons,
+      idx,
+      link: object,
+      title
+    }
+
     return [
-      <Card key="achievement-card" className={classes.card}>
+      <Card
+        className={classes.card}
+        data-qa-id={`achievement-item-${idx}`}
+        key="achievement-card"
+      >
         <CardHeader title={[
           <Typography key="achievement-actor" variant="subheading" color="textSecondary">Last achievement of {creatorName}:</Typography>,
           <Typography key="achievement-title" variant="headline">{title}</Typography>
@@ -148,32 +162,23 @@ class AchievementsChain extends Component {
             disableActionSpacing
           >
             <Confirm
-              actionAlreadyDone={this.hasUserAlreadyConfirmed()}
-              className={classes.actionsButtons}
+              {...commonActionsButtonsProps}
+              actionAlreadyDone={this.hasUserAlreadyConfirmed(currentAchievement.confirm)}
               canPerformActions={canPerformActions}
-              link={object}
               creatorID={creatorID}
-              creatorName={creatorName}
               onConfirm={this.handleConfirm}
-              title={title}
             />
             <Support
-              className={classes.actionsButtons}
+              {...commonActionsButtonsProps}
               confirmationsCount={confirmationsCount}
-              link={object}
-              creatorName={creatorName}
               onSupport={this.handleSupport}
               walletBalance={walletBalance}
-              title={title}
             />
             <Deposit
-              className={classes.actionsButtons}
-              link={object}
+              {...commonActionsButtonsProps}
               creatorID={creatorID}
-              creatorName={creatorName}
               onDeposit={this.handleDeposit}
               walletBalance={walletBalance}
-              title={title}
             />
           </CardActions>
         ) : (
@@ -233,6 +238,7 @@ AchievementsChain.propTypes = {
   confirmAchievement: T.func,
   currentAchievement: T.object,
   depositForAchievement: T.func,
+  idx: T.number,
   pastAchievements: T.array,
   userID: T.string,
   walletAddress: T.string,

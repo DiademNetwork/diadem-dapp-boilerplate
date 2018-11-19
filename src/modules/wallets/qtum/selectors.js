@@ -13,12 +13,12 @@ export const recoverFailReason = getQtum(['recoverFailReason'])
 export const mnemonic = getQtum(['mnemonic'])
 export const privateKey = getQtum(['privateKey'])
 export const infoSaved = getQtum(['infoSaved'])
+export const hasPendingTx = getQtum(['hasPendingTx'])
 
 // data
 export const address = createSelector([data], R.prop('addrStr'))
 export const balance = getQtum(['data', 'balance'])
 export const unconfirmedBalance = createSelector([data], R.prop('unconfirmedBalance'))
-export const hasPendingTx = createSelector([data], R.prop('hasPendingTx'))
 
 // status
 export const status = getQtum(['status'])

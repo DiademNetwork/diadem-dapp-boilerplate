@@ -15,8 +15,9 @@ If you do not know what Diadem Network is about, please [Check documentation](ht
 * Webpack 3
 * Babel
 * Eslint (Standard config)
-* Jest/Enzyme (TO DO)
-* Storybook 3 (TO DO)
+* Cypress
+* Jest/Enzyme
+* Storybook 3
 
 ## Develop (non-sandboxed version)
 
@@ -40,21 +41,38 @@ To start sandboxed app, after repository is cloned and dependencies installed:
 1 - `yarn start:sandbox`  
 2 - Go to `http://localhost:9000`
 
+You will notice a sandbox settings button appearing on left of screen in application.
+You can use it to switch mocks/stubs behaviour (For ex is user already registered?)
+
 ## Available scripts
 
+* `cypress:open`: open cypress
 * `start` : start a development version on `localhost:9000`, in watch mode
 * `start:sandbox` : start a **sandboxed** development version on `localhost:9000`, in watch mode
 * `build`: build a development version in `dist` folder
-* `build-production`: build an optimized version in `dist` folder
+* `build:testnet`: build a testnet version of application in`dist` folder
+* `build:mainnet`: build a mainnet version of application in`dist` folder
+* `start`: start a `development` version of application (not minified + with hot reloading). Development is configured to speak with testnet.
+* `start:sandbox`: start a `sandbox` version of application (not minified + with hot reloading). This version is used for cypress acceptance test. Note that all services are mocked in this version. It is completely isolated.
+* `storybook`. Run storybook on port `6006`
 * `lint` : run eslint for you project
-* `test`: run `jest` tests and create a `coverage` directory (you can then open file `/coverage/lcov-report/index.html` to see nice coverage report
+* `test`: run `jest` tests and create a `coverage` directory (you can then open file `/coverage/lcov-report/index.html` to see nice coverage report)
+* `test:cypress` run cypress test. `start:sandbox` should have been started before running this command.
+
+## Testing
+
+UNIT tests:
+ - `yarn test` for JS files
+ - `yarn storybook` + check components for components
+ACCEPTANCE tests:
+ - `yarn start:sandbox` + `yarn test:cypress`
+
+Please always check tests before asking for a Pull Request Review.
 
 ## TO DO (Technical)
 
 - Handling technical debt which resulted from fast coding for Hackathon :
   - Separate components into smaller components
-  - User redux-sagas instead of redux-thunk (and divide ugly actions/index.js in better/smaller chunks)
-  - Cover app with unit/integration/acceptance tests
   - Separate repetitive UI component into their own component + make use of storybook
   - Add Typescript ? => TBD
   - CI Integration

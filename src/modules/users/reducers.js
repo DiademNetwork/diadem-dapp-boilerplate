@@ -1,5 +1,5 @@
 import { merge } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 const initialState = {
   fetchStatus: 'none',
@@ -9,8 +9,8 @@ const initialState = {
 export default function createReducer (state, { type, list = [] }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
-    case types.FETCH.requested: return merge(state)({ fetchStatus: 'requested' })
-    case types.FETCH.succeeded: return merge(state)({ list, fetchStatus: 'succeeded' })
+    case T.FETCH.requested: return merge(state)({ fetchStatus: 'requested' })
+    case T.FETCH.succeeded: return merge(state)({ list, fetchStatus: 'succeeded' })
     default: return state
   }
 }

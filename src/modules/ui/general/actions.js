@@ -1,6 +1,6 @@
 import { createAction } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 export default {
-  toggleHelp: createAction(types.TOGGLE_HELP)
+  toggleHelp: createAction(T.TOGGLE_HELP)
 }

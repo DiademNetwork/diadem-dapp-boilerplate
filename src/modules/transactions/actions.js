@@ -1,8 +1,9 @@
 import { createAction, createAsyncActions } from 'modules/utils'
-import types from './types'
+import T from './types'
 
 export default {
-  fetch: createAsyncActions(types.FETCH),
-  received: createAction(types.RECEIVED),
-  suscribe: createAsyncActions(types.SUSCRIBE)
+  fetch: createAsyncActions(T.FETCH),
+  openned: createAction(T.OPENNED),
+  received: createAction(T.RECEIVED),
+  suscribe: createAsyncActions(T.SUSCRIBE)
 }

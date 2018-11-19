@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
@@ -48,72 +48,77 @@ class Hashtag extends Component {
   render () {
     const { classes, fullScreen, mobile } = this.props
     const { modalOpen } = this.state
+    const openButtonProps = {
+      'aria-label': 'Hashtag',
+      'data-qa-id': 'nav-show-hashtag-modal',
+      key: 'hashtag-button',
+      onClick: this.handleClickOpen
+    }
     const openButton = mobile ? (
-      <MenuItem
-        key='hashtag-button'
-        onClick={this.handleClickOpen}
-      >
+      <MenuItem {...openButtonProps}>
         #DiademNetwork
       </MenuItem>
     ) : (
       <IconButton
-        aria-label="Hashtag"
-        key='hashtag-button'
-        onClick={this.handleClickOpen}
+        {...openButtonProps}
         variant="fab"
         color="primary"
       >
         <Avatar className={classes.hastag} alt="Hashtag logo" src={HashtagImg} />
       </IconButton>
     )
-    return [
-      openButton,
-      <Dialog
-        fullScreen={fullScreen}
-        key='hashtag-modal'
-        open={modalOpen}
-        onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Support the community with #diademnetwork!</DialogTitle>
-        <DialogContent>
-          <DialogContentText component="div">
-            <Typography variant="body1">
-              Help us spreading the love!
-            </Typography>
-            <Typography paragraph variant="body1">
-              Use this hashtag in your achievements posts
-            </Typography>
-            <Typography paragraph variant="title">
-              #diademnetwork
-            </Typography>
-            <Link
-              text="Wow, I want to see #diademnetwork community!"
-              href="https://www.facebook.com/search/top/?q=%23diademnetwork"
-              typographyProps={{
-                paragraph: true
-              }}
-            />
-            <Typography paragraph>
-              Together, we can build a better world! If you have improvements ideas, share them with us at <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
-            </Typography>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            aria-label="Go to application"
-            color="secondary"
-            onClick={this.handleClose}
-            variant={fullScreen ? 'contained' : 'extendedFab'}
-          >
-            <Hidden smDown>
-              <SendIcon className={classes.icon} />
-            </Hidden>
-            Go back to Diadem Network
-          </Button>
-        </DialogActions>
-      </Dialog>
-    ]
+    return (
+      <Fragment>
+        {openButton}
+        <Dialog
+          data-qa-id='hashtag-modal'
+          fullScreen={fullScreen}
+          key='hashtag-modal'
+          open={modalOpen}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Support the community with #diademnetwork!</DialogTitle>
+          <DialogContent>
+            <DialogContentText component="div">
+              <Typography variant="body1">
+                Help us spreading the love!
+              </Typography>
+              <Typography paragraph variant="body1">
+                Use this hashtag in your achievements posts
+              </Typography>
+              <Typography paragraph variant="title">
+                #diademnetwork
+              </Typography>
+              <Link
+                text="Wow, I want to see #diademnetwork community!"
+                href="https://www.facebook.com/search/top/?q=%23diademnetwork"
+                typographyProps={{
+                  paragraph: true
+                }}
+              />
+              <Typography paragraph>
+                Together, we can build a better world! If you have improvements ideas, share them with us at <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a>
+              </Typography>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              aria-label="Go to application"
+              color="secondary"
+              data-qa-id="close-hashtag-modal"
+              onClick={this.handleClose}
+              variant={fullScreen ? 'contained' : 'extendedFab'}
+            >
+              <Hidden smDown>
+                <SendIcon className={classes.icon} />
+              </Hidden>
+              Go back to Diadem Network
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    )
   }
 }
 

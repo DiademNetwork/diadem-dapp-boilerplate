@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import Dialog from '@material-ui/core/Dialog'
@@ -27,7 +27,7 @@ class AchievementConfirm extends Component {
 
   handleConfirm = () => {
     const { onConfirm } = this.props
-    onConfirm && onConfirm()
+    if (onConfirm) { onConfirm() }
     this.handleClose()
   }
 
@@ -36,6 +36,7 @@ class AchievementConfirm extends Component {
       actionAlreadyDone,
       className,
       fullScreen,
+      idx,
       canUserConfirmCreateUpdateSupportDeposit,
       link,
       creatorName,
@@ -43,12 +44,13 @@ class AchievementConfirm extends Component {
     } = this.props
     const { modalOpen } = this.state
     return (
-      <React.Fragment key='achievements-confirm'>
+      <Fragment>
         <Button
           aria-label="Confirm"
           color="secondary"
           className={className}
-          data-qa-id='open-modal-button'
+          data-qa-id={`achievement-${idx}-confirm-button`}
+          key='achievement-confirm-button'
           disabled={!canUserConfirmCreateUpdateSupportDeposit || actionAlreadyDone}
           onClick={this.handleClickOpen}
           variant={fullScreen ? 'contained' : 'extendedFab'}
@@ -60,6 +62,7 @@ class AchievementConfirm extends Component {
         </Button>
         <Dialog
           fullScreen={fullScreen}
+          key='achievement-confirm-modal'
           open={modalOpen}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
@@ -89,36 +92,29 @@ class AchievementConfirm extends Component {
               I'm not sure
             </Button>
             <Button
-              color="secondary"
-              data-qa-id='confirm-button'
               onClick={this.handleConfirm}
               variant="contained"
+              color="secondary"
             >
               yes, {creatorName} has!
             </Button>
           </DialogActions>
         </Dialog>
-      </React.Fragment>
+      </Fragment>
     )
   }
 }
 
-AchievementConfirm.defaultProps = {
-  actionAlreadyDone: false,
-  canUserConfirmCreateUpdateSupportDeposit: false
-}
-
 AchievementConfirm.propTypes = {
   actionAlreadyDone: T.bool,
-  className: T.string,
-  fullScreen: T.bool,
   canUserConfirmCreateUpdateSupportDeposit: T.bool,
-  link: T.string,
+  className: T.string,
   creatorName: T.string,
+  fullScreen: T.bool,
+  idx: T.number,
+  link: T.string,
   onConfirm: T.func,
   title: T.string
 }
-
-export const NackedComponent = AchievementConfirm
 
 export default withMobileDialog()(AchievementConfirm)

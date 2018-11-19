@@ -1,4 +1,5 @@
-import { all, call, fork, put, takeLatest } from 'redux-saga/effects'
+import { all, call, fork, put, take, takeLatest } from 'redux-saga/effects'
+import { eventChannel } from 'redux-saga'
 import ownTypes from './types'
 import actions from './actions'
 import stream from 'services/stream'
@@ -17,9 +18,18 @@ const successCallBack = function * ({ new: items }) {
 }
 
 const suscribe = function * () {
+  let callbackObj = {}
+  const channel = eventChannel(emitter => {
+    callbackObj.call = emitter
+    return () => {}
+  })
   try {
-    yield call(stream.suscribeWithCallBacks, 'transactions', successCallBack)
+    yield call(stream.suscribeWithCallBacks, 'transactions', callbackObj.call)
     yield put(actions.suscribe.succeeded())
+    while (true) {
+      const data = yield take(channel)
+      yield call(successCallBack, data)
+    }
   } catch (error) {
     yield put(actions.suscribe.errored({ error }))
   }

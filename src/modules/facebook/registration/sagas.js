@@ -2,7 +2,7 @@ import { all, call, delay, put, select, takeLatest } from 'redux-saga/effects'
 import actions from './actions'
 import api from 'services/api'
 import selectors from 'modules/selectors'
-import types from 'modules/types'
+import T from 'modules/types'
 
 const CHECK_USER_REGISTRATION_INTERVAL = 5000 // in ms
 
@@ -45,7 +45,7 @@ const register = function * ({ walletData }) {
 
 export default function * () {
   yield all([
-    takeLatest(types.facebook.login.LOGGED, check),
-    takeLatest(types.wallets.qtum.GENERATE.succeeded, register)
+    takeLatest(T.facebook.login.LOGGED, check),
+    takeLatest(T.wallets.qtum.GENERATE.succeeded, register)
   ])
 }

@@ -1,16 +1,18 @@
 
 import { all, call, fork, put, select, take, takeLatest, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-import { networks, generateMnemonic } from 'qtumjs-wallet'
 import * as R from 'ramda'
 import api from 'services/api'
 import insight from 'services/insight'
+import qtumJSWallet from 'services/qtumjs-wallet'
 import types from 'modules/types'
 import selectors from 'modules/selectors'
 import actions from './actions'
 import ownTypes from './types'
 import * as ownSelectors from './selectors'
 import { oneOfTypes } from 'modules/utils'
+
+const { networks, generateMnemonic } = qtumJSWallet
 
 const network = networks[process.env.QTUM_NETWORK]
 
@@ -44,9 +46,11 @@ const load = function * () {
         facebookUserID,
         walletAddress: walletData.addrStr
       })
-      isAddressMatchingFacebookID
-        ? yield put(actions.load.succeeded({ walletData, walletUtil }))
-        : yield put(actions.load.failed({ reason: 'address-not-matching' }))
+      if (isAddressMatchingFacebookID) {
+        yield put(actions.load.succeeded({ walletData, walletUtil }))
+      } else {
+        yield put(actions.load.failed({ reason: 'address-not-matching' }))
+      }
     }
   } catch (error) {
     yield put(actions.load.errored({ error }))
@@ -77,7 +81,7 @@ const recover = function * ({ mnemonic, privateKey }) {
       walletUtil = network.fromMnemonic(mnemonic)
       privateKey = walletUtil.toWIF()
     } else {
-      yield put(actions.generate.failed({ reason: 'no-mnemonic-or-private-key' }))
+      yield put(actions.recover.failed({ reason: 'no-mnemonic-or-private-key' }))
     }
     const walletData = yield call([walletUtil, 'getInfo'])
     const isAddressMatchingFacebookID = yield call(checkAddressMatchingFacebookID, {
@@ -144,24 +148,23 @@ const checkLastTx = function * () {
     types.transactions.RECEIVED
   ]), function * () {
     yield put(actions.checkLastTx.requested())
-    const facebookUserID = yield select(selectors.facebook.login.userID)
-    if (facebookUserID) {
-      const transactions = yield select(selectors.transactions.lastForUser(facebookUserID))
-      if (transactions.length > 0) {
-        try {
-          let hasPendingTx = true
-          while (hasPendingTx) {
-            for (let transaction of transactions) {
-              const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-              hasPendingTx = hasPendingTx || confirmations === 0
-            }
-            yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
-            yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
+    try {
+      let hasPendingTx = false
+      const facebookUserID = yield select(selectors.facebook.login.userID)
+      if (facebookUserID) {
+        const transactions = yield select(selectors.transactions.lastForUser(facebookUserID))
+        if (transactions.length > 0) {
+          // if at least one of transactions has no confirmation, hasPendingTx is true
+          for (let transaction of transactions) {
+            const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
+            hasPendingTx = hasPendingTx || confirmations === 0
           }
-        } catch (error) {
-          yield put(actions.checkLastTx.errored({ error }))
         }
       }
+      yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
+      yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
+    } catch (error) {
+      yield put(actions.checkLastTx.errored({ error }))
     }
   })
 }

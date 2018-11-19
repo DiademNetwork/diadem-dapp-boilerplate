@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
@@ -100,6 +100,7 @@ class AchievementDeposit extends Component {
       classes,
       confirmationsCount,
       fullScreen,
+      idx,
       link,
       creatorName,
       title,
@@ -116,99 +117,102 @@ class AchievementDeposit extends Component {
       isAmountValid,
       witnessUserID
     } = this.state
-    return [
-      <Button
-        aria-label="Deposit"
-        className={className}
-        key='achievement-deposit-button'
-        disabled={!isBalancePositive}
-        onClick={this.handleClickOpen}
-        color="secondary"
-        variant={fullScreen ? 'contained' : 'extendedFab'}
-      >
-        <Hidden smDown>
-          <VpnKeyOutlinedIcon className={classes.icon} />
-        </Hidden>
-        Deposit
-      </Button>,
-      <Dialog
-        fullScreen={fullScreen}
-        key='achievement-deposit-modal'
-        open={modalOpen}
-        onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
-        <DialogContent>
-          <DialogContentText paragraph>
-            {!confirmationsCount || confirmationsCount === 0 ? (
-              `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
-            ) : (
-              `This achievement has been confirmed ${confirmationsCount} times`
-            )}
-          </DialogContentText>
-          <Divider style={{ marginBottom: '16px' }} />
-          <DialogContentText paragraph>
-            <Link
-              text="View achievement Facebook post again"
-              href={link}
-              typographyProps={{ paragraph: true }}
+    return (
+      <Fragment>
+        <Button
+          aria-label="Deposit"
+          className={className}
+          data-qa-id={`achievement-${idx}-deposit-button`}
+          key='achievement-deposit-button'
+          disabled={!isBalancePositive}
+          onClick={this.handleClickOpen}
+          color="secondary"
+          variant={fullScreen ? 'contained' : 'extendedFab'}
+        >
+          <Hidden smDown>
+            <VpnKeyOutlinedIcon className={classes.icon} />
+          </Hidden>
+          Deposit
+        </Button>
+        <Dialog
+          fullScreen={fullScreen}
+          key='achievement-deposit-modal'
+          open={modalOpen}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Deposit</DialogTitle>
+          <DialogContent>
+            <DialogContentText paragraph>
+              {!confirmationsCount || confirmationsCount === 0 ? (
+                `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
+              ) : (
+                `This achievement has been confirmed ${confirmationsCount} times`
+              )}
+            </DialogContentText>
+            <Divider style={{ marginBottom: '16px' }} />
+            <DialogContentText paragraph>
+              <Link
+                text="View achievement Facebook post again"
+                href={link}
+                typographyProps={{ paragraph: true }}
+              />
+            </DialogContentText>
+            <DialogContentText paragraph>
+              Please enter an amount you would like to send to support {creatorName} for his achievement:
+            </DialogContentText>
+            <DialogContentText paragraph color="textPrimary">
+              {title}
+            </DialogContentText>
+            <Divider style={{ marginBottom: '16px' }} />
+            <TextField
+              autoFocus={!fullScreen}
+              error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
+              margin="normal"
+              id='amount'
+              label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
+              value={amount}
+              onChange={this.handleChange('amount')}
+              type='number'
+              fullWidth
             />
-          </DialogContentText>
-          <DialogContentText paragraph>
-            Please enter an amount you would like to send to support {creatorName} for his achievement:
-          </DialogContentText>
-          <DialogContentText paragraph color="textPrimary">
-            {title}
-          </DialogContentText>
-          <Divider style={{ marginBottom: '16px' }} />
-          <TextField
-            autoFocus={!fullScreen}
-            error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
-            margin="normal"
-            id='amount'
-            label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
-            value={amount}
-            onChange={this.handleChange('amount')}
-            type='number'
-            fullWidth
-          />
-          <TextField
-            error={witnessUserID !== WITNESS_USER_ID_INITIAL_VALUE && !isWitnessUserIDValid}
-            select
-            label="Select a witness user"
-            margin="normal"
-            onChange={this.handleChange('witnessUserID')}
-            fullWidth
-            value={witnessUserID}
-          >
-            {users.map(({ userAccount, userName }) => (
-              <MenuItem key={userAccount} value={userAccount}>
-                {userName}
-              </MenuItem>
-            ))}
-          </TextField>
-          <FeesSelector
-            error={!areFeesValid}
-            onChange={this.handleFeesChange}
-            value={fees}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button
-            disabled={!isWitnessUserIDValid || !isAmountValid}
-            onClick={this.handleSubmit}
-            variant="contained"
-            color="secondary"
-          >
-            Submit
-          </Button>
-        </DialogActions>
-      </Dialog>
-    ]
+            <TextField
+              error={witnessUserID !== WITNESS_USER_ID_INITIAL_VALUE && !isWitnessUserIDValid}
+              select
+              label="Select a witness user"
+              margin="normal"
+              onChange={this.handleChange('witnessUserID')}
+              fullWidth
+              value={witnessUserID}
+            >
+              {users.map(({ userAccount, userName }) => (
+                <MenuItem key={userAccount} value={userAccount}>
+                  {userName}
+                </MenuItem>
+              ))}
+            </TextField>
+            <FeesSelector
+              error={!areFeesValid}
+              onChange={this.handleFeesChange}
+              value={fees}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              disabled={!isWitnessUserIDValid || !isAmountValid}
+              onClick={this.handleSubmit}
+              variant="contained"
+              color="secondary"
+            >
+              Submit
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    )
   }
 }
 
@@ -218,6 +222,7 @@ AchievementDeposit.propTypes = {
   confirmationsCount: T.number,
   fetchUsers: T.func,
   fullScreen: T.bool,
+  idx: T.number,
   link: T.string,
   creatorName: T.string,
   onDeposit: T.func,

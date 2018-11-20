@@ -1,4 +1,4 @@
-const namespace = 'facebook/login'
+const namespace = 'login'
 
 export default {
   LOGGED: `${namespace}/LOGGED`

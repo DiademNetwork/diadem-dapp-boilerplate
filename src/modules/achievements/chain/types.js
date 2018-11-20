@@ -1,6 +1,6 @@
 import { createAsyncTypes } from 'modules/utils'
 
-const namespace = 'achievements/achievement'
+const namespace = 'achievements/chain'
 
 export default {
   CONFIRM: createAsyncTypes(`${namespace}/CONFIRM`),

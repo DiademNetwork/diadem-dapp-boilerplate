@@ -5,11 +5,11 @@ import * as R from 'ramda'
 import api from 'services/api'
 import insight from 'services/insight'
 import qtumJSWallet from 'services/qtumjs-wallet'
-import types from 'modules/types'
-import selectors from 'modules/selectors'
-import actions from './actions'
-import ownTypes from './types'
-import * as ownSelectors from './selectors'
+import T from 'modules/types'
+import S from 'modules/selectors'
+import ownA from './actions'
+import ownT from './types'
+import * as ownS from './selectors'
 import { oneOfTypes } from 'modules/utils'
 
 const { networks, generateMnemonic } = qtumJSWallet
@@ -21,7 +21,7 @@ const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 
 const checkIfGenerationNeeded = function * ({ reason }) {
   if (reason === 'not-registered') {
-    yield put(actions.generate.requested())
+    yield put(ownA.generate.requested())
   }
 }
 
@@ -35,10 +35,10 @@ const checkAddressMatchingFacebookID = function * ({ facebookUserID, walletAddre
 
 const load = function * () {
   try {
-    const facebookUserID = yield select(selectors.facebook.login.userID)
+    const facebookUserID = yield select(S.login.userID)
     const privateKey = window.localStorage.getItem(`privateKey-${facebookUserID}`)
     if (!privateKey) {
-      yield put(actions.load.failed({ reason: 'no-private-key' }))
+      yield put(ownA.load.failed({ reason: 'no-private-key' }))
     } else {
       const walletUtil = network.fromWIF(privateKey)
       const walletData = yield call([walletUtil, 'getInfo'])
@@ -47,33 +47,33 @@ const load = function * () {
         walletAddress: walletData.addrStr
       })
       if (isAddressMatchingFacebookID) {
-        yield put(actions.load.succeeded({ walletData, walletUtil }))
+        yield put(ownA.load.succeeded({ walletData, walletUtil }))
       } else {
-        yield put(actions.load.failed({ reason: 'address-not-matching' }))
+        yield put(ownA.load.failed({ reason: 'address-not-matching' }))
       }
     }
   } catch (error) {
-    yield put(actions.load.errored({ error }))
+    yield put(ownA.load.errored({ error }))
   }
 }
 
 const generate = function * () {
   try {
-    const facebookUserID = yield select(selectors.facebook.login.userID)
+    const facebookUserID = yield select(S.login.userID)
     const mnemonic = generateMnemonic()
     const walletUtil = network.fromMnemonic(mnemonic)
     const privateKey = walletUtil.toWIF()
     window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKey)
     const walletData = yield call([walletUtil, 'getInfo'])
-    yield put(actions.generate.succeeded({ mnemonic, privateKey, walletData, walletUtil }))
+    yield put(ownA.generate.succeeded({ mnemonic, privateKey, walletData, walletUtil }))
   } catch (error) {
-    yield put(actions.generate.errored({ error }))
+    yield put(ownA.generate.errored({ error }))
   }
 }
 
 const recover = function * ({ mnemonic, privateKey }) {
   try {
-    const facebookUserID = yield select(selectors.facebook.login.userID)
+    const facebookUserID = yield select(S.login.userID)
     let walletUtil
     if (privateKey) {
       walletUtil = network.fromWIF(privateKey)
@@ -81,7 +81,7 @@ const recover = function * ({ mnemonic, privateKey }) {
       walletUtil = network.fromMnemonic(mnemonic)
       privateKey = walletUtil.toWIF()
     } else {
-      yield put(actions.recover.failed({ reason: 'no-mnemonic-or-private-key' }))
+      yield put(ownA.recover.failed({ reason: 'no-mnemonic-or-private-key' }))
     }
     const walletData = yield call([walletUtil, 'getInfo'])
     const isAddressMatchingFacebookID = yield call(checkAddressMatchingFacebookID, {
@@ -90,25 +90,25 @@ const recover = function * ({ mnemonic, privateKey }) {
     })
     if (isAddressMatchingFacebookID) {
       window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKey)
-      yield put(actions.recover.succeeded({ walletData, walletUtil }))
+      yield put(ownA.recover.succeeded({ walletData, walletUtil }))
     } else {
-      yield put(actions.recover.failed({ reason: 'address-not-matching' }))
+      yield put(ownA.recover.failed({ reason: 'address-not-matching' }))
     }
   } catch (error) {
-    yield put(actions.generate.errored({ error }))
+    yield put(ownA.generate.errored({ error }))
   }
 }
 
 const refresh = function * () {
   yield take(oneOfTypes([
-    ownTypes.GENERATE.succeeded,
-    ownTypes.LOAD.succeeded,
-    ownTypes.RECOVER.succeeded
+    ownT.GENERATE.succeeded,
+    ownT.LOAD.succeeded,
+    ownT.RECOVER.succeeded
   ]))
   while (true) {
     try {
-      const walletUtil = yield select(ownSelectors.util)
-      const walletData = yield select(ownSelectors.data)
+      const walletUtil = yield select(ownS.util)
+      const walletData = yield select(ownS.data)
       const newWalletData = yield call([walletUtil, 'getInfo'])
       if (R.complement(R.equals)(newWalletData, walletData)) {
         const changes = { }
@@ -132,10 +132,10 @@ const refresh = function * () {
               break
           }
         }
-        yield put(actions.refresh.succeeded({ changes, walletData: newWalletData }))
+        yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
       }
     } catch (error) {
-      yield put(actions.refresh.errored({ error }))
+      yield put(ownA.refresh.errored({ error }))
     }
     yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
   }
@@ -143,16 +143,16 @@ const refresh = function * () {
 
 const checkLastTx = function * () {
   yield takeEvery(oneOfTypes([
-    types.facebook.login.LOGGED,
-    types.transactions.FETCH.succeeded,
-    types.transactions.RECEIVED
+    T.login.LOGGED,
+    T.transactions.FETCH.succeeded,
+    T.transactions.RECEIVED
   ]), function * () {
-    yield put(actions.checkLastTx.requested())
+    yield put(ownA.checkLastTx.requested())
     try {
       let hasPendingTx = false
-      const facebookUserID = yield select(selectors.facebook.login.userID)
+      const facebookUserID = yield select(S.login.userID)
       if (facebookUserID) {
-        const transactions = yield select(selectors.transactions.lastForUser(facebookUserID))
+        const transactions = yield select(S.transactions.lastForUser(facebookUserID))
         if (transactions.length > 0) {
           // if at least one of transactions has no confirmation, hasPendingTx is true
           for (let transaction of transactions) {
@@ -161,31 +161,31 @@ const checkLastTx = function * () {
           }
         }
       }
-      yield put(actions.checkLastTx.succeeded({ hasPendingTx }))
+      yield put(ownA.checkLastTx.succeeded({ hasPendingTx }))
       yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
     } catch (error) {
-      yield put(actions.checkLastTx.errored({ error }))
+      yield put(ownA.checkLastTx.errored({ error }))
     }
   })
 }
 
 const withdraw = function * ({address, amount, fees}) {
   try {
-    const walletUtil = yield select(ownSelectors.util)
+    const walletUtil = yield select(ownS.util)
     yield call(walletUtil.send, address, amount * 1e8, { feeRate: fees })
-    yield put(actions.withdraw.succeeded())
+    yield put(ownA.withdraw.succeeded())
   } catch (error) {
-    yield put(actions.withdraw.errored({ error }))
+    yield put(ownA.withdraw.errored({ error }))
   }
 }
 
 export default function * () {
   yield all([
-    takeLatest(types.facebook.registration.CHECK.succeeded, load),
-    takeLatest(types.facebook.registration.CHECK.failed, checkIfGenerationNeeded),
-    takeLatest(ownTypes.GENERATE.requested, generate),
-    takeLatest(ownTypes.RECOVER.requested, recover),
-    takeLatest(ownTypes.WITHDRAW.requested, withdraw),
+    takeLatest(T.registration.CHECK.succeeded, load),
+    takeLatest(T.registration.CHECK.failed, checkIfGenerationNeeded),
+    takeLatest(ownT.GENERATE.requested, generate),
+    takeLatest(ownT.RECOVER.requested, recover),
+    takeLatest(ownT.WITHDRAW.requested, withdraw),
     fork(refresh),
     fork(checkLastTx)
   ])

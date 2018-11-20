@@ -4,12 +4,12 @@ import A from 'modules/actions'
 import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
-  mnemonic: S.wallets.qtum.mnemonic(state),
-  privateKey: S.wallets.qtum.privateKey(state)
+  mnemonic: S.wallets.mnemonic(state),
+  privateKey: S.wallets.privateKey(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  infoSaved: A.wallets.qtum.infoSaved
+  infoSaved: A.wallets.infoSaved
 }, dispatch)
 
 export default WrappedComponent =>

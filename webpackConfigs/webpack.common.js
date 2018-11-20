@@ -40,6 +40,7 @@ module.exports = {
   resolve: {
     alias: {
       components: path.resolve(__dirname, '../src/components/'),
+      configurables: path.resolve(__dirname, '../src/configurables/'),
       helpers: path.resolve(__dirname, '../src/helpers/'),
       mocks: path.resolve(__dirname, '../src/mocks/'),
       modules: path.resolve(__dirname, '../src/modules/'),

@@ -3,12 +3,12 @@ import * as R from 'ramda'
 import mapSort from 'helpers/map-sort'
 import { createBaseSelector } from 'modules/utils'
 
-const getAchievements = createBaseSelector(['achievements'])
+const getAchievementsList = createBaseSelector(['achievements', 'list'])
 
-export const fetchStatus = getAchievements(['fetchStatus'])
-export const list = createSelector([getAchievements(['list'])], R.filter(R.complement(R.propEq)('ban', true)))
+export const fetchStatus = getAchievementsList(['fetchStatus'])
+export const list = createSelector([getAchievementsList(['list'])], R.filter(R.complement(R.propEq)('ban', true)))
 export const count = createSelector([list], R.length)
-export const hasUnread = getAchievements(['hasUnread'])
+export const hasUnread = getAchievementsList(['hasUnread'])
 
 const groupedbyWallet = createSelector([list], R.groupBy(R.prop('wallet')))
 

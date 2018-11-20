@@ -1,20 +1,20 @@
 import { all, call, fork, put, take, takeLatest } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
-import ownTypes from './types'
-import actions from './actions'
+import ownT from './types'
+import ownA from './actions'
 import stream from 'services/stream'
 
 const fetch = function * () {
   try {
     const { results: items } = yield call(stream.fetchData, 'achievements')
-    yield put(actions.fetch.succeeded({ list: items }))
+    yield put(ownA.fetch.succeeded({ list: items }))
   } catch (error) {
-    yield put(actions.fetch.errored({ error }))
+    yield put(ownA.fetch.errored({ error }))
   }
 }
 
 const successCallBack = function * ({ new: items }) {
-  yield put(actions.received({ list: items }))
+  yield put(ownA.received({ list: items }))
 }
 
 const suscribe = function * () {
@@ -25,19 +25,19 @@ const suscribe = function * () {
   })
   try {
     yield call(stream.suscribeWithCallBacks, 'achievements', callbackObj.call)
-    yield put(actions.suscribe.succeeded())
+    yield put(ownA.suscribe.succeeded())
     while (true) {
       const data = yield take(channel)
       yield call(successCallBack, data)
     }
   } catch (error) {
-    yield put(actions.suscribe.errored({ error }))
+    yield put(ownA.suscribe.errored({ error }))
   }
 }
 
 export default function * () {
   yield all([
     fork(fetch),
-    takeLatest(ownTypes.FETCH.succeeded, suscribe)
+    takeLatest(ownT.FETCH.succeeded, suscribe)
   ])
 }

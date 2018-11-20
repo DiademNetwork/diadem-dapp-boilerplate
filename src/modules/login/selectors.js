@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
-const getData = createBaseSelector(['facebook', 'login', 'data'])
+const getData = createBaseSelector(['login', 'data'])
 
 // Simple targets
 export const userID = getData(['userID'])

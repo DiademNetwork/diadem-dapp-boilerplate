@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
-const getQtum = createBaseSelector(['wallets', 'qtum'])
+const getQtum = createBaseSelector(['wallets'])
 
 export const data = getQtum(['data'])
 export const util = getQtum(['util'])

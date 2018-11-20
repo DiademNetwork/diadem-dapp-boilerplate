@@ -1,7 +1,7 @@
 
 import { createAsyncTypes } from 'modules/utils'
 
-const namespace = 'facebook/registration'
+const namespace = 'registration'
 
 export default {
   CHECK: createAsyncTypes(`${namespace}/CHECK`),

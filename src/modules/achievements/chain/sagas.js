@@ -1,98 +1,98 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects'
-import ownTypes from './types'
-import actions from './actions'
+import ownT from './types'
+import ownA from './actions'
 import api from 'services/api'
-import selectors from 'modules/selectors'
+import S from 'modules/selectors'
 
 const create = function * (payload) {
   try {
     yield call(handleCreateUpdate, payload)
-    yield put(actions.create.succeeded())
+    yield put(ownA.create.succeeded())
   } catch (error) {
-    yield put(actions.create.errored({ error }))
+    yield put(ownA.create.errored({ error }))
   }
 }
 
 const update = function * (payload) {
   try {
     yield call(handleCreateUpdate, payload)
-    yield put(actions.update.succeeded())
+    yield put(ownA.update.succeeded())
   } catch (error) {
-    yield put(actions.update.errored({ error }))
+    yield put(ownA.update.errored({ error }))
   }
 }
 
 const handleCreateUpdate = function * ({ link, previousLink = '', title }) {
   yield call(api.createUpdateAchievement, {
-    address: yield select(selectors.wallets.qtum.address),
+    address: yield select(S.wallets.address),
     link,
-    name: yield select(selectors.facebook.login.name),
+    name: yield select(S.login.name),
     previousLink,
     title,
-    token: yield select(selectors.facebook.login.accessToken),
-    user: yield select(selectors.facebook.login.userID)
+    token: yield select(S.login.accessToken),
+    user: yield select(S.login.userID)
   })
 }
 
 const confirm = function * (payload) {
   try {
     yield call(api.confirmAchievement, payload)
-    yield put(actions.confirm.succeeded())
+    yield put(ownA.confirm.succeeded())
   } catch (error) {
-    yield put(actions.confirm.errored({ error }))
+    yield put(ownA.confirm.errored({ error }))
   }
 }
 
 const support = function * ({ amount, fees, link }) {
   try {
     const { address, encodedData } = yield call(api.encodeSupport, { link })
-    const walletUtil = yield select(selectors.wallets.qtum.util)
+    const walletUtil = yield select(S.wallets.util)
     const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
       feeRate: fees
     })
     yield call(api.supportAchievement, {
-      address: yield select(selectors.wallets.qtum.address),
+      address: yield select(S.wallets.qtum.address),
       link,
       rawTx,
-      token: yield select(selectors.facebook.login.accessToken),
-      user: yield select(selectors.facebook.login.userID)
+      token: yield select(S.login.accessToken),
+      user: yield select(S.login.userID)
     })
-    yield put(actions.support.succeeded())
+    yield put(ownA.support.succeeded())
   } catch (error) {
-    yield put(actions.support.errored({ error }))
+    yield put(ownA.support.errored({ error }))
   }
 }
 
 const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, witnessUserID }) {
   try {
     const { address, encodedData } = yield call(api.encodeDeposit, { link, witness: witnessAddress })
-    const walletUtil = yield select(selectors.wallets.qtum.util)
+    const walletUtil = yield select(S.wallets.qtum.util)
     const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
       feeRate: fees
     })
     yield call(api.depositForAchievement, {
-      address: yield select(selectors.wallets.qtum.address),
+      address: yield select(S.wallets.qtum.address),
       link,
       rawTx,
-      token: yield select(selectors.facebook.login.accessToken),
-      user: yield select(selectors.facebook.login.userID),
+      token: yield select(S.login.accessToken),
+      user: yield select(S.login.userID),
       witness: witnessUserID,
       witnessName
     })
-    yield put(actions.deposit.succeeded())
+    yield put(ownA.deposit.succeeded())
   } catch (error) {
-    yield put(actions.deposit.errored({ error }))
+    yield put(ownA.deposit.errored({ error }))
   }
 }
 
 export default function * () {
   yield all([
-    takeLatest(ownTypes.CREATE.requested, create),
-    takeLatest(ownTypes.UPDATE.requested, update),
-    takeLatest(ownTypes.CONFIRM.requested, confirm),
-    takeLatest(ownTypes.SUPPORT.requested, support),
-    takeLatest(ownTypes.DEPOSIT.requested, deposit)
+    takeLatest(ownT.CREATE.requested, create),
+    takeLatest(ownT.UPDATE.requested, update),
+    takeLatest(ownT.CONFIRM.requested, confirm),
+    takeLatest(ownT.SUPPORT.requested, support),
+    takeLatest(ownT.DEPOSIT.requested, deposit)
   ])
 }

@@ -93,7 +93,7 @@ class Hashtag extends Component {
               </Typography>
               <Link
                 text="Wow, I want to see #diademnetwork community!"
-                href={network.hastagUrl}
+                href={network.urls.hastag}
                 typographyProps={{
                   paragraph: true
                 }}

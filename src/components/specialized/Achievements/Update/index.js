@@ -9,7 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
-import FacebookLinkHelp from '../FacebookLinkHelp'
+import NetworkLinkHelp from '../NetworkLinkHelp'
 import StarIcon from '@material-ui/icons/Star'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import network from 'configurables/network'
@@ -41,7 +41,7 @@ class UpdateAchievement extends Component {
   handleChange = name => e => {
     const value = e.target.value
     if (name === 'link') {
-      const isLinkValid = network.inputs.link.isValid(value)
+      const isLinkValid = network.inputs.link.isValid({ previousLink: this.props.previousLink })(value)
       this.setState({ link: value, isLinkValid })
     } else if (name === 'title') {
       const isTitleValid = value.length > 0 && value.length <= MAX_TITLE_CARACTERS
@@ -107,7 +107,7 @@ class UpdateAchievement extends Component {
             <DialogContentText>
               Please be aware that after updating your achievement, people will not anymore be able to confirm/support/deposit the previous one.
             </DialogContentText>
-            <FacebookLinkHelp />
+            <NetworkLinkHelp />
             <TextField
               autoFocus={!fullScreen}
               id='link'

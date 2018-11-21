@@ -5,29 +5,15 @@ import withContainer from './container'
 import User from './User'
 import Button from './Button'
 import network from 'configurables/network'
-import networkLoggedStub from 'stubs/network-logged'
 
-const Login = ({ isLogged, handleLoginSuccess }) => {
-  if (isLogged) {
-    return (
-      <User />
-    )
-  }
-  if (process.env.ENV !== 'sandbox') {
-    return (
-      <network.components.LoginButton
-        onSuccess={(data) => handleLoginSuccess({ data })}
-        buttonComponent={Button}
-      />
-    )
-  }
-  return (
-    <Button
-      name='fake network'
-      onClick={() => handleLoginSuccess({ data: networkLoggedStub })}
+const Login = ({ isLogged, handleLoginSuccess }) => isLogged
+  ? <User />
+  : (
+    <network.components.LoginButton
+      onSuccess={(data) => handleLoginSuccess({ data })}
+      buttonComponent={Button}
     />
   )
-}
 
 Login.propTypes = {
   handleLoginSuccess: T.func,

@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles'
 import Zoom from '@material-ui/core/Zoom'
 import Tooltip from '@material-ui/core/Tooltip'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
+import network from 'configurables/network'
 
 const styles = (theme) => ({
   help: {
@@ -14,26 +15,29 @@ const styles = (theme) => ({
   }
 })
 
-const FacebookLinkHelp = ({ classes, fullScreen }) => fullScreen ? (
-  <Typography variant="caption" color="secondary">
-    To get your Facebook post link, click on time just below your name on your Facebook post to access to your post URL. Copy all link before "?"
+const NetworkLinkHelp = ({ classes, fullScreen }) => fullScreen ? (
+  <Typography
+    variant="caption"
+    color="secondary"
+  >
+    {network.texts.linkHelp}
   </Typography>
 ) : (
   <Tooltip
     TransitionComponent={Zoom}
-    title={`Click on time just below your name on your Facebook post to access to your post URL. Copy all link before "?"`}
+    title={network.texts.linkHelp}
   >
     <Typography
       className={classes.help}
       color="secondary"
       variant="body2"
     >
-      How to get the link of your Facebook post?
+      How to get the link of your {network.name} post?
     </Typography>
   </Tooltip>
 )
 
-FacebookLinkHelp.propTypes = {
+NetworkLinkHelp.propTypes = {
   classes: T.object,
   fullScreen: T.bool
 }
@@ -41,4 +45,4 @@ FacebookLinkHelp.propTypes = {
 export default R.compose(
   withMobileDialog(),
   withStyles(styles)
-)(FacebookLinkHelp)
+)(NetworkLinkHelp)

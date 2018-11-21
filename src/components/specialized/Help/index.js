@@ -69,7 +69,7 @@ class Help extends Component {
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
             <Typography paragraph color="textPrimary">
-              Diadem Network leverages blockchain technology from Blockchains and <a className={classes.link} target="_target" href={network.website}>{network.name}</a>. You can be an achiever and/or a sponsor.
+              Diadem Network leverages blockchain technology from Blockchains and <a className={classes.link} target="_target" href={network.urls.website}>{network.name}</a>. You can be an achiever and/or a sponsor.
             </Typography>
             <Divider className={classes.divider} />
             <Typography color="textPrimary" variant="title">

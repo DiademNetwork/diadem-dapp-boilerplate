@@ -14,23 +14,23 @@ export default Object.freeze({
     LoginButton
   },
   urls: {
-    hashtag: 'https://www.facebook.com/search/top/?q=%23diademnetwork',
-    website: 'https://www.facebook.com/'
+    hashtag: 'https://www.fakenetwork.com/search/top/?q=%23diademnetwork',
+    website: 'https://www.fakenetwork.com/'
   },
   inputs: {
     link: {
       maxCaracters: MAX_LINK_CARACTERS,
-      placeholder: 'https://www.facebook.com/username/posts/postid',
+      placeholder: 'https://www.fakenetwork.com/username/posts/postid',
       isValid: ({ previousLink }) => R.allPass([
         R.complement(R.equals)(previousLink),
         R.compose(R.lte(R.__, MAX_LINK_CARACTERS), R.length),
         R.is(String),
         isUrl,
-        R.test(/.*facebook.*/)
+        R.test(/.*fakenetwork.*/)
       ])
     }
   },
-  name: 'facebook',
+  name: 'fake network',
   // Mapping between info needed in app and data object received from network
   // Array given will be used in app selectors with Ramda to retrieve info in object
   dataPaths: {
@@ -40,6 +40,6 @@ export default Object.freeze({
     userID: ['userID']
   },
   texts: {
-    linkHelp: 'To get your Facebook post link, click on time just below your name on your Facebook post to access to your post URL. Copy all link before "?'
+    linkHelp: 'To get your Fake network post link....well it is not possible!'
   }
 })

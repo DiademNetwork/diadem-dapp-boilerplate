@@ -1,17 +1,17 @@
-describe('Facebook', () => {
+describe('Login', () => {
   beforeEach(() => {
     localStorage.setItem('do-not-show-splash', true)
     cy.visit('localhost:9000')
   })
 
-  it('a Facebook Login button is visible', () => {
-    cy.get(`[data-qa-id='facebook-login-button']`).should('be.visible')
+  it('a Login button is visible', () => {
+    cy.get(`[data-qa-id='login-button']`).should('be.visible')
   })
 
   describe('When registered', () => {
-    it('Facebook user name appears when clicking on login button', () => {
-      cy.get(`[data-qa-id='facebook-login-button']`).click()
-      cy.get(`[data-qa-id='facebook-login-user-name']`).should('be.visible')
+    it('User name appears when clicking on login button', () => {
+      cy.get(`[data-qa-id='login-button']`).click()
+      cy.get(`[data-qa-id='login-userName']`).should('be.visible')
     })
   })
 
@@ -23,8 +23,8 @@ describe('Facebook', () => {
     })
 
     it('shows user name after user is registered', () => {
-      cy.get(`[data-qa-id='facebook-login-button']`).click()
-      cy.get(`[data-qa-id='facebook-login-user-name']`).should('be.visible')
+      cy.get(`[data-qa-id='login-button']`).click()
+      cy.get(`[data-qa-id='login-userName']`).should('be.visible')
     })
   })
 })

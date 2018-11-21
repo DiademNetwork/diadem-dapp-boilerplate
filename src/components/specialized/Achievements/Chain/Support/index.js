@@ -13,6 +13,7 @@ import MoneyIcon from '@material-ui/icons/AttachMoney'
 import Hidden from '@material-ui/core/Hidden'
 import Link from 'components/shared/Link'
 import FeesSelector from 'components/shared/FeesSelector'
+import network from 'configurables/network'
 
 const AMOUNT_INITIAL_VALUE = ''
 
@@ -114,7 +115,7 @@ class AchievementSupport extends Component {
             <Divider style={{ marginBottom: '16px' }} />
             <DialogContentText paragraph>
               <Link
-                text="View achievement Facebook post again"
+                text={`View achievement post on ${network.name} again`}
                 href={link}
                 typographyProps={{ paragraph: true }}
               />

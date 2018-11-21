@@ -11,7 +11,7 @@ import { withStyles } from '@material-ui/core/styles'
 import SettingsIcon from '@material-ui/icons/Settings'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import Checkbox from './Checkbox'
-import mocksConfig from 'mocks/config'
+import mocksController from 'mocks/controller'
 
 const styles = () => ({
   button: {
@@ -24,7 +24,7 @@ const styles = () => ({
 
 class SandboxConfigEditor extends Component {
   state = {
-    mocksConfig: mocksConfig.get(),
+    mocksController: mocksController.get(),
     modalOpen: false
   }
 
@@ -33,7 +33,7 @@ class SandboxConfigEditor extends Component {
   handleClose = () => this.setState({ modalOpen: false })
 
   handleChangeConfig = (name) => (value) => {
-    mocksConfig.set(name)(value)
+    mocksController.set(name)(value)
     this.setState((prevState) => ({
       config: {
         ...prevState,
@@ -45,7 +45,7 @@ class SandboxConfigEditor extends Component {
   render () {
     const {
       modalOpen,
-      mocksConfig
+      mocksController
     } = this.state
     const {
       classes,
@@ -75,14 +75,14 @@ class SandboxConfigEditor extends Component {
             <Checkbox
               {...this.props}
               label="Is user registered"
-              mocksConfig={mocksConfig}
+              mocksController={mocksController}
               name='isUserRegistered'
               onChange={this.handleChangeConfig}
             />
             <Checkbox
               {...this.props}
               label="Is user pending registration"
-              mocksConfig={mocksConfig}
+              mocksController={mocksController}
               name='isUserPendingRegistration'
               onChange={this.handleChangeConfig}
             />
@@ -93,7 +93,7 @@ class SandboxConfigEditor extends Component {
               margin="normal"
               onChange={({ target: { value } }) => this.handleChangeConfig('pendingTxID')(value)}
               placeholder=""
-              value={mocksConfig.pendingTxID}
+              value={mocksController.pendingTxID}
             />
           </DialogContent>
           <DialogActions>

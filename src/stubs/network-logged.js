@@ -1,6 +1,7 @@
 import faker from 'faker'
+import mockController from '../mocks/controller'
 
-export default () => Object.freeze({
+const networkLogged = Object.freeze({
   name: faker.name.findName(),
   email: faker.internet.email(),
   picture: {
@@ -13,3 +14,7 @@ export default () => Object.freeze({
   },
   userID: `${faker.random.number()}`
 })
+
+mockController.set('userID')(networkLogged.userID)
+
+export default networkLogged

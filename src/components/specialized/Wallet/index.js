@@ -7,11 +7,12 @@ import withContainer from './container'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
+import network from 'configurables/network'
 
-const WalletComponent = ({ isFacebookLogged, loadFailReason, walletStatus, userID }) => {
+const WalletComponent = ({ isLogged, loadFailReason, walletStatus, userID }) => {
   switch (true) {
-    case !isFacebookLogged:
-      return <Typography>You must be logged with Facebook to use your wallet</Typography>
+    case !isLogged:
+      return <Typography>You must be logged with {network.name} to use your wallet</Typography>
     case loadFailReason === 'no-private-key':
     case loadFailReason === 'address-not-matching':
       return <Recover />
@@ -27,7 +28,7 @@ const WalletComponent = ({ isFacebookLogged, loadFailReason, walletStatus, userI
 }
 
 WalletComponent.propTypes = {
-  isFacebookLogged: T.bool,
+  isLogged: T.bool,
   loadFailReason: T.string,
   userID: T.string,
   walletStatus: T.string

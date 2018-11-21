@@ -4,14 +4,12 @@ import api from 'services/api'
 import S from 'modules/selectors'
 import T from 'modules/types'
 
-console.log({ S, T })
-
 const CHECK_USER_REGISTRATION_INTERVAL = 5000 // in ms
 
 const check = function * () {
   try {
-    const facebookUserID = yield select(S.login.userID)
-    let { exists, pending } = yield call(api.checkFacebookRegistration, { user: facebookUserID })
+    const userID = yield select(S.login.userID)
+    let { exists, pending } = yield call(api.checkRegistration, { user: userID })
     if (exists) {
       yield put(ownA.check.succeeded())
     } else if (!pending) {
@@ -19,7 +17,7 @@ const check = function * () {
     } else {
       while (pending) {
         yield delay(CHECK_USER_REGISTRATION_INTERVAL)
-        const { pending: newPending } = yield call(api.checkFacebookRegistration, { user: facebookUserID })
+        const { pending: newPending } = yield call(api.checkRegistration, { user: userID })
         pending = newPending
       }
     }
@@ -30,14 +28,14 @@ const check = function * () {
 
 const register = function * ({ walletData }) {
   try {
-    const facebookAccessToken = yield select(S.login.accessToken)
-    const facebookName = yield select(S.login.name)
-    const facebookUserID = yield select(S.login.userID)
+    const userAccessToken = yield select(S.login.userAccessToken)
+    const userName = yield select(S.login.userName)
+    const userID = yield select(S.login.userID)
     yield call(api.registerUser, {
       address: walletData.addrStr,
-      name: facebookName,
-      user: facebookUserID,
-      token: facebookAccessToken
+      name: userName,
+      user: userID,
+      token: userAccessToken
     })
     yield put(ownA.register.succeeded())
   } catch (error) {

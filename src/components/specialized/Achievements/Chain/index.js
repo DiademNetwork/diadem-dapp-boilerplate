@@ -17,6 +17,7 @@ import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'components/shared/Link'
+import network from 'configurables/network'
 
 const styles = (theme) => ({
   actions: {
@@ -134,7 +135,7 @@ class AchievementsChain extends Component {
           <Link
             className={classes.link}
             href={object}
-            text="View achievement post on Facebook"
+            text={`View achievement post on ${network.name}`}
           />
           {confirmationsCount > 0 ? (
             <Typography variant="body1" color="textSecondary">
@@ -212,7 +213,7 @@ class AchievementsChain extends Component {
                 <Link
                   key={`${idx}-link`}
                   href={object}
-                  text="View achievement post on Facebook"
+                  text={`View achievement post on ${network.name}`}
                 />,
                 <Typography
                   color="textSecondary"

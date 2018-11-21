@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  handleFacebookLogin: A.login.logged
+  handleLoginSuccess: A.login.logged
 }, dispatch)
 
 export default WrappedComponent =>

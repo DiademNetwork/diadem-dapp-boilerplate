@@ -13,33 +13,33 @@ const styles = (theme) => ({
   }
 })
 
-const FacebookLoginUser = ({ facebookName, facebookPictureUrl, classes }) => (
+const LoginUser = ({ userName, userPictureUrl, classes }) => (
   <Fragment>
     <Avatar
-      className={classes.img} alt="Facebook profile picture"
-      key="facebook-login-user-avatar"
-      src={facebookPictureUrl}
-    />,
-    <Hidden key="facebook-login-user-username" smDown>
+      className={classes.img} alt="Profile picture"
+      key="login-user-avatar"
+      src={userPictureUrl}
+    />
+    <Hidden key="login-user-username" smDown>
       <Typography
-        data-qa-id="facebook-login-user-name"
+        data-qa-id="login-user-name"
         key="username"
         variant="title"
         color="inherit"
       >
-        {facebookName}
+        {userName}
       </Typography>
     </Hidden>
   </Fragment>
 )
 
-FacebookLoginUser.propTypes = {
+LoginUser.propTypes = {
   classes: T.object,
-  facebookName: T.string,
-  facebookPictureUrl: T.string
+  userName: T.string,
+  userPictureUrl: T.string
 }
 
 export default R.compose(
   withStyles(styles),
   withContainer
-)(FacebookLoginUser)
+)(LoginUser)

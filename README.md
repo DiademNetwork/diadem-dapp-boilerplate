@@ -26,10 +26,7 @@ If you do not know what Diadem Network is about, please [Check documentation](ht
 3 - `yarn install`  
 4 - Create a `.development.env` file (see `.env.example` for ex)
 5 - `yarn start`  
-6 - If it's the first time you develop on application add `127.0.0.1 local.diadem.network` in your `/etc/hosts` file  
-7 - Go to `https://local.diadem.network:9000`
 
-Note: The trick with `/etc/hosts` and `local.diadem.network` instead of `localhost` will make it possible to login with facebook on development version.
 
 ## Develop (sandboxed version)
 
@@ -68,6 +65,23 @@ ACCEPTANCE tests:
  - `yarn start:sandbox` + `yarn test:cypress`
 
 Please always check tests before asking for a Pull Request Review.
+
+## Configurables
+
+### Networks
+
+#### Facebook
+
+You can configure application to use one social network you want.
+
+Configured social networks:
+
+- facebook
+
+TIPS: to use facebook in development mode, you will need to:
+1 - If it's the first time you develop on application add `127.0.0.1 local.diadem.network` in your `/etc/hosts` file  
+2 - Go to `https://local.diadem.network:9000`
+Indeed, facebook force using https
 
 ## TO DO (Technical)
 

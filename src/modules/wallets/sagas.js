@@ -25,28 +25,28 @@ const checkIfGenerationNeeded = function * ({ reason }) {
   }
 }
 
-const checkAddressMatchingFacebookID = function * ({ facebookUserID, walletAddress }) {
-  const { ok: isAddressMatchingFacebookID } = yield call(api.checkQTUMAddressMatchesFacebookUser, {
-    user: facebookUserID,
+const checkAddressMatchingNetworkUserID = function * ({ userID, walletAddress }) {
+  const { ok: isAddressMatchingNetworkUserID } = yield call(api.checkQTUMAddressMatchesRegisteredUser, {
+    user: userID,
     walletAddress
   })
-  return isAddressMatchingFacebookID
+  return isAddressMatchingNetworkUserID
 }
 
 const load = function * () {
   try {
-    const facebookUserID = yield select(S.login.userID)
-    const privateKey = window.localStorage.getItem(`privateKey-${facebookUserID}`)
+    const userID = yield select(S.login.userID)
+    const privateKey = window.localStorage.getItem(`privateKey-${userID}`)
     if (!privateKey) {
       yield put(ownA.load.failed({ reason: 'no-private-key' }))
     } else {
       const walletUtil = network.fromWIF(privateKey)
       const walletData = yield call([walletUtil, 'getInfo'])
-      const isAddressMatchingFacebookID = yield call(checkAddressMatchingFacebookID, {
-        facebookUserID,
+      const isAddressMatchingNetworkUserID = yield call(checkAddressMatchingNetworkUserID, {
+        userID,
         walletAddress: walletData.addrStr
       })
-      if (isAddressMatchingFacebookID) {
+      if (isAddressMatchingNetworkUserID) {
         yield put(ownA.load.succeeded({ walletData, walletUtil }))
       } else {
         yield put(ownA.load.failed({ reason: 'address-not-matching' }))
@@ -59,11 +59,11 @@ const load = function * () {
 
 const generate = function * () {
   try {
-    const facebookUserID = yield select(S.login.userID)
+    const userID = yield select(S.login.userID)
     const mnemonic = generateMnemonic()
     const walletUtil = network.fromMnemonic(mnemonic)
     const privateKey = walletUtil.toWIF()
-    window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKey)
+    window.localStorage.setItem(`privateKey-${userID}`, privateKey)
     const walletData = yield call([walletUtil, 'getInfo'])
     yield put(ownA.generate.succeeded({ mnemonic, privateKey, walletData, walletUtil }))
   } catch (error) {
@@ -73,7 +73,7 @@ const generate = function * () {
 
 const recover = function * ({ mnemonic, privateKey }) {
   try {
-    const facebookUserID = yield select(S.login.userID)
+    const userID = yield select(S.login.userID)
     let walletUtil
     if (privateKey) {
       walletUtil = network.fromWIF(privateKey)
@@ -84,12 +84,12 @@ const recover = function * ({ mnemonic, privateKey }) {
       yield put(ownA.recover.failed({ reason: 'no-mnemonic-or-private-key' }))
     }
     const walletData = yield call([walletUtil, 'getInfo'])
-    const isAddressMatchingFacebookID = yield call(checkAddressMatchingFacebookID, {
-      facebookUserID,
+    const isAddressMatchingNetworkUserID = yield call(checkAddressMatchingNetworkUserID, {
+      userID,
       walletAddress: walletData.addrStr
     })
-    if (isAddressMatchingFacebookID) {
-      window.localStorage.setItem(`privateKey-${facebookUserID}`, privateKey)
+    if (isAddressMatchingNetworkUserID) {
+      window.localStorage.setItem(`privateKey-${userID}`, privateKey)
       yield put(ownA.recover.succeeded({ walletData, walletUtil }))
     } else {
       yield put(ownA.recover.failed({ reason: 'address-not-matching' }))
@@ -150,9 +150,9 @@ const checkLastTx = function * () {
     yield put(ownA.checkLastTx.requested())
     try {
       let hasPendingTx = false
-      const facebookUserID = yield select(S.login.userID)
-      if (facebookUserID) {
-        const transactions = yield select(S.transactions.lastForUser(facebookUserID))
+      const userID = yield select(S.login.userID)
+      if (userID) {
+        const transactions = yield select(S.transactions.lastForUser(userID))
         if (transactions.length > 0) {
           // if at least one of transactions has no confirmation, hasPendingTx is true
           for (let transaction of transactions) {

@@ -26,10 +26,10 @@ const handleCreateUpdate = function * ({ link, previousLink = '', title }) {
   yield call(api.createUpdateAchievement, {
     address: yield select(S.wallets.address),
     link,
-    name: yield select(S.login.name),
+    name: yield select(S.login.userName),
     previousLink,
     title,
-    token: yield select(S.login.accessToken),
+    token: yield select(S.login.userAccessToken),
     user: yield select(S.login.userID)
   })
 }
@@ -55,7 +55,7 @@ const support = function * ({ amount, fees, link }) {
       address: yield select(S.wallets.qtum.address),
       link,
       rawTx,
-      token: yield select(S.login.accessToken),
+      token: yield select(S.login.userAccessToken),
       user: yield select(S.login.userID)
     })
     yield put(ownA.support.succeeded())
@@ -76,7 +76,7 @@ const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, w
       address: yield select(S.wallets.qtum.address),
       link,
       rawTx,
-      token: yield select(S.login.accessToken),
+      token: yield select(S.login.userAccessToken),
       user: yield select(S.login.userID),
       witness: witnessUserID,
       witnessName

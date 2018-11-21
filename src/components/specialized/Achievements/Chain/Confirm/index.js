@@ -11,6 +11,7 @@ import withMobileDialog from '@material-ui/core/withMobileDialog'
 import Hidden from '@material-ui/core/Hidden'
 import DoneIcon from '@material-ui/icons/Done'
 import Link from 'components/shared/Link'
+import network from 'configurables/network'
 
 class AchievementConfirm extends Component {
   state = {
@@ -76,7 +77,7 @@ class AchievementConfirm extends Component {
                 {title}
               </Typography>
               <Link
-                text="View achievement Facebook post again"
+                text={`View achievement post on ${network.name} again`}
                 href={link}
                 typographyProps={{
                   paragraph: true

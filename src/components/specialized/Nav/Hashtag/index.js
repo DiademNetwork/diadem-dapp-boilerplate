@@ -17,6 +17,7 @@ import SendIcon from '@material-ui/icons/SendOutlined'
 import Hidden from '@material-ui/core/Hidden'
 import MenuItem from '@material-ui/core/MenuItem'
 import Link from 'components/shared/Link'
+import network from 'configurables/network'
 
 const styles = (theme) => ({
   hastag: {
@@ -92,7 +93,7 @@ class Hashtag extends Component {
               </Typography>
               <Link
                 text="Wow, I want to see #diademnetwork community!"
-                href="https://www.facebook.com/search/top/?q=%23diademnetwork"
+                href={network.hastagUrl}
                 typographyProps={{
                   paragraph: true
                 }}

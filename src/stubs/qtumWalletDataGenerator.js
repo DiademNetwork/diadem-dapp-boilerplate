@@ -1,5 +1,5 @@
 import faker from 'faker'
-import mocksConfig from '../mocks/config'
+import mocksController from '../mocks/controller'
 
 const balance = (function () {
   const initial = {
@@ -37,7 +37,7 @@ const transactions = (function () {
 const base = Object.freeze({ addrStr: faker.random.uuid() })
 
 export default () => {
-  const { pendingTxID } = mocksConfig.get()
+  const { pendingTxID } = mocksController.get()
   if (pendingTxID !== '') {
     transactions.set('transactions', [
       transactions.get()[0],

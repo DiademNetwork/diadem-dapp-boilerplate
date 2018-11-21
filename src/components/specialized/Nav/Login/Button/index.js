@@ -13,22 +13,23 @@ const styles = (theme) => ({
   }
 })
 
-const FacebookLoginButton = ({ classes, onClick }) => (
+const LoginButton = ({ classes, name, onClick }) => (
   <Button
     color="secondary"
-    data-qa-id="facebook-login-button"
+    data-qa-id="login-button"
     onClick={onClick}
     variant="contained"
   >
-    Login<Hidden smDown> with facebook<PowerSettingsNewIcon className={classes.icon} /></Hidden>
+    Login<Hidden smDown> with {name}<PowerSettingsNewIcon className={classes.icon} /></Hidden>
   </Button>
 )
 
-FacebookLoginButton.propTypes = {
+LoginButton.propTypes = {
   classes: T.object,
+  name: T.string,
   onClick: T.func
 }
 
 export default R.compose(
   withStyles(styles)
-)(FacebookLoginButton)
+)(LoginButton)

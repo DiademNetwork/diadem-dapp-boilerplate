@@ -4,7 +4,7 @@ import A from 'modules/actions'
 import S from 'modules/selectors'
 
 const mapStateToProps = (state, { chain }) => ({
-  accessToken: S.login.accessToken(state),
+  accessToken: S.login.userAccessToken(state),
   canPerformActions: R.allPass([
     S.login.isLogged,
     S.registration.isRegistered,

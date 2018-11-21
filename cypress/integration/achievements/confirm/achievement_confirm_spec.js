@@ -9,7 +9,7 @@ describe('Achievement Confirm', () => {
 
   describe('When logged', () => {
     beforeEach(() => {
-      cy.get(`[data-qa-id='facebook-login-button']`).click()
+      cy.get(`[data-qa-id='login-button']`).click()
       cy.get(`[data-qa-id='wallet-recover-cancel-button']`).click()
     })
 

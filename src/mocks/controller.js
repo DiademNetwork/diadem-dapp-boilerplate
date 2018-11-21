@@ -1,8 +1,8 @@
-export default (function mockConfig () {
+export default (function mocksController () {
   const config = {
     isUserRegistered: true,
     isUserPendingRegistration: false,
-    facebookUserID: '',
+    userID: '',
     pendingTxID: ''
   }
 

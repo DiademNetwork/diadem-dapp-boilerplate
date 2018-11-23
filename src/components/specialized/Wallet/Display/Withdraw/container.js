@@ -8,7 +8,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  withdraw: A.wallets.withdraw
+  withdraw: A.wallets.withdraw.requested
 }, dispatch)
 
 export default WrappedComponent =>

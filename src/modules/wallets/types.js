@@ -1,6 +1,6 @@
 import { createAsyncTypes } from 'modules/utils'
 
-const namespace = 'wallets/qtum'
+const namespace = 'wallets'
 
 export default {
   CHECK_LAST_TX: createAsyncTypes(`${namespace}/CHECK_LAST_TX`),

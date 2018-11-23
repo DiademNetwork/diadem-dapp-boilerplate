@@ -1,4 +1,4 @@
-import { ACHIEVEMENT_SUPPORT_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
+import { ACHIEVEMENTS_CHAIN_SUPPORT_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
 
 describe('Achievement Support', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('Achievement Support', () => {
           cy.get(`[data-qa-id='achievement-0-support-modal']`).should('be.visible')
           cy.get(`[data-qa-id='achievement-0-support-form-amount-input'] input`).type(1)
           cy.get(`[data-qa-id='achievement-0-support-submit-button']`).click()
-          cy.contains(ACHIEVEMENT_SUPPORT_SUCCESS_MESSAGE)
+          cy.contains(ACHIEVEMENTS_CHAIN_SUPPORT_SUCCESS_MESSAGE)
         })
       })
 

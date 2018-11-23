@@ -1,6 +1,6 @@
-import { ACHIEVEMENTS_CHAIN_CONFIRM_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
+import { WALLET_WITHDRAW_SUCCESS_MESSAGE } from '../../../src/modules/ui/notifications/actions'
 
-describe('Achievement Confirm', () => {
+describe('Wallets withdraw', () => {
   beforeEach(() => {
     cy.clock()
     localStorage.setItem('do-not-show-splash', true)
@@ -21,11 +21,12 @@ describe('Achievement Confirm', () => {
       })
 
       describe('When balance is positive', () => {
-        it('Confirm form is working', () => {
-          cy.get(`[data-qa-id='achievement-0-confirm-button']`).click()
-          cy.get(`[data-qa-id='achievement-0-confirm-modal']`).should('be.visible')
-          cy.get(`[data-qa-id='achievement-0-confirm-submit-button']`).click()
-          cy.contains(ACHIEVEMENTS_CHAIN_CONFIRM_SUCCESS_MESSAGE)
+        it('Withdraw form is working', () => {
+          cy.get(`[data-qa-id='withdraw-button']`).click()
+          cy.get(`[data-qa-id='withdraw-form-amount-input'] input`).type(5)
+          cy.get(`[data-qa-id='withdraw-form-address-input'] input`).type('aValiDAdDress')
+          cy.get(`[data-qa-id='withdraw-submit-button']`).click()
+          cy.contains(WALLET_WITHDRAW_SUCCESS_MESSAGE)
         })
       })
 

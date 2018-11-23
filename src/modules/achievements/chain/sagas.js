@@ -52,7 +52,7 @@ const support = function * ({ amount, fees, link }) {
       feeRate: fees
     })
     yield call(api.supportAchievement, {
-      address: yield select(S.wallets.qtum.address),
+      address: yield select(S.wallets.address),
       link,
       rawTx,
       token: yield select(S.login.userAccessToken),
@@ -60,6 +60,7 @@ const support = function * ({ amount, fees, link }) {
     })
     yield put(ownA.support.succeeded())
   } catch (error) {
+    console.log(error)
     yield put(ownA.support.errored({ error }))
   }
 }
@@ -67,13 +68,13 @@ const support = function * ({ amount, fees, link }) {
 const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, witnessUserID }) {
   try {
     const { address, encodedData } = yield call(api.encodeDeposit, { link, witness: witnessAddress })
-    const walletUtil = yield select(S.wallets.qtum.util)
+    const walletUtil = yield select(S.wallets.util)
     const rawTx = yield call([walletUtil, 'generateContractSendTx'], address, encodedData, {
       amount: amount * 1e8,
       feeRate: fees
     })
     yield call(api.depositForAchievement, {
-      address: yield select(S.wallets.qtum.address),
+      address: yield select(S.wallets.address),
       link,
       rawTx,
       token: yield select(S.login.userAccessToken),
@@ -83,6 +84,7 @@ const deposit = function * ({ amount, fees, link, witnessAddress, witnessName, w
     })
     yield put(ownA.deposit.succeeded())
   } catch (error) {
+    console.log(error)
     yield put(ownA.deposit.errored({ error }))
   }
 }

@@ -1,4 +1,4 @@
-import { ACHIEVEMENT_DEPOSIT_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
+import { ACHIEVEMENTS_CHAIN_DEPOSIT_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
 
 describe('Achievement Deposit', () => {
   beforeEach(() => {
@@ -28,7 +28,7 @@ describe('Achievement Deposit', () => {
           cy.get(`[data-qa-id='achievement-0-deposit-form-witness-select']`).click()
           cy.get(`[data-qa-id='achievement-0-deposit-form-witness-0-select']`).click()
           cy.get(`[data-qa-id='achievement-0-deposit-submit-button']`).click({ force: true })
-          cy.contains(ACHIEVEMENT_DEPOSIT_SUCCESS_MESSAGE)
+          cy.contains(ACHIEVEMENTS_CHAIN_DEPOSIT_SUCCESS_MESSAGE)
         })
       })
 

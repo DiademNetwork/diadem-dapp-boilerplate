@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import S from 'modules/selectors'
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state) => ({
   address: S.wallets.address(state),
   balance: S.wallets.balance(state),
   hasPendingTx: S.wallets.hasPendingTx(state),

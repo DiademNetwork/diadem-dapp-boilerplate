@@ -17,12 +17,12 @@ const LoginUser = ({ userName, userPictureUrl, classes }) => (
   <Fragment>
     <Avatar
       className={classes.img} alt="Profile picture"
-      key="login-user-avatar"
+      key="login-userPicture"
       src={userPictureUrl}
     />
-    <Hidden key="login-user-username" smDown>
+    <Hidden key="login-userName" smDown>
       <Typography
-        data-qa-id="login-user-name"
+        data-qa-id="login-userName"
         key="username"
         variant="title"
         color="inherit"

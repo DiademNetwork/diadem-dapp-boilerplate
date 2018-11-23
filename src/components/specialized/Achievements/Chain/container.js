@@ -7,7 +7,7 @@ const mapStateToProps = (state, { chain }) => ({
   accessToken: S.login.userAccessToken(state),
   canPerformActions: R.allPass([
     S.login.isLogged,
-    S.registration.isRegistered,
+    S.wallets.isRegistered,
     S.wallets.isReady
   ])(state),
   currentAchievement: S.achievements.chain.currentFrom(chain),

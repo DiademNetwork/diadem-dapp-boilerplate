@@ -78,10 +78,6 @@ TO ADD a network, you need to create a new folder for it in `src/configurables/n
 
 ```javascript
 {
-  apiEndpoints: {
-    checkRegistration: String (path)
-    register: String (path)
-  },
   components: {
     LoginButton: React component
   },

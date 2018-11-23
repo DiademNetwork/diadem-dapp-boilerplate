@@ -7,7 +7,7 @@ const mapStateToProps = (state, { userQtumAddress }) => ({
   achievements: S.achievements.list.processedList(state),
   canPerformActions: R.allPass([
     S.login.isLogged,
-    S.registration.isRegistered,
+    S.wallets.isRegistered,
     S.wallets.isReady
   ])(state),
   createAchievementStatus: S.achievements.chain.createStatus(state),

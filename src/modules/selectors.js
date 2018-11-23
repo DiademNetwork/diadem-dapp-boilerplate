@@ -1,7 +1,6 @@
 import * as achievementsChain from 'modules/achievements/chain/selectors'
 import * as achievementsList from 'modules/achievements/list/selectors'
 import * as login from 'modules/login/selectors'
-import * as registration from 'modules/registration/selectors'
 import * as transactions from 'modules/transactions/selectors'
 import * as uiGeneral from 'modules/ui/general/selectors'
 import * as uiNotifications from 'modules/ui/notifications/selectors'
@@ -14,7 +13,6 @@ export default {
     list: achievementsList
   },
   login,
-  registration,
   transactions,
   ui: {
     general: uiGeneral,

@@ -24,12 +24,12 @@ export const ACHIEVEMENTS_CHAIN_SUPPORT_ERROR_MESSAGE = 'Impossible to support a
 export const ACHIEVEMENTS_CHAIN_DEPOSIT_SUCCESS_MESSAGE = 'Deposit for achievement successful. It will appear once confirmed on blockchain'
 export const ACHIEVEMENTS_CHAIN_DEPOSIT_ERROR_MESSAGE = 'Impossible to deposit for achievement. You may need to retry with higher fees'
 export const LOGIN_SUCCESS_MESSAGE = 'Login success'
-export const REGISTRATION_CHECK_ERROR_MESSAGE = 'Impossible to check your user existence'
-export const REGISTRATION_SUCCESS_MESSAGE = 'Please wait, your registration is in process. You will be notified when confirmed on blockchain'
-export const REGISTRATION_ERROR_MESSAGE = 'Impossible to register your account'
 export const TRANSACTIONS_FETCH_ERROR_MESSAGE = 'Impossible to fetch transactions'
 export const TRANSACTIONS_RECEIVED_MESSAGE = 'New user activity'
 export const USERS_FETCH_ERROR_MESSAGE = 'Impossible to fetch users list'
+export const WALLET_CHECK_REGISTRATION_ERROR_MESSAGE = 'Impossible to check your user existence'
+export const WALLET_REGISTRATION_SUCCESS_MESSAGE = 'Please wait, your registration is in process. You will be notified when confirmed on blockchain'
+export const WALLET_REGISTRATION_ERROR_MESSAGE = 'Impossible to register your account'
 export const WALLET_RECOVER_SUCCESS_MESSAGE = 'Wallet restored'
 export const WALLET_RECOVER_ERROR_MESSAGE = 'Impossible to recover wallet'
 export const WALLET_REFRESH_ERROR_MESSAGE = 'Impossible to refresh wallet'
@@ -56,12 +56,12 @@ export default {
   achievementDepositSuccess: createSuccessNotification(ACHIEVEMENTS_CHAIN_DEPOSIT_SUCCESS_MESSAGE),
   achievementDepositError: createErrorNotification(ACHIEVEMENTS_CHAIN_DEPOSIT_ERROR_MESSAGE),
   loginSuccess: createSuccessNotification(LOGIN_SUCCESS_MESSAGE),
-  registrationCheckError: createErrorNotification(REGISTRATION_CHECK_ERROR_MESSAGE),
-  registrationSuccess: createSuccessNotification(REGISTRATION_SUCCESS_MESSAGE),
-  registrationError: createErrorNotification(REGISTRATION_ERROR_MESSAGE),
   transactionsFetchError: createErrorNotification(TRANSACTIONS_FETCH_ERROR_MESSAGE),
   transactionsReceived: createSuccessNotification(TRANSACTIONS_RECEIVED_MESSAGE),
   usersFetchError: createErrorNotification(USERS_FETCH_ERROR_MESSAGE),
+  walletCheckRegistrationError: createErrorNotification(WALLET_CHECK_REGISTRATION_ERROR_MESSAGE),
+  walletRegistrationSuccess: createSuccessNotification(WALLET_REGISTRATION_SUCCESS_MESSAGE),
+  walletRegistrationError: createErrorNotification(WALLET_REGISTRATION_ERROR_MESSAGE),
   walletRecoverSuccess: createSuccessNotification(WALLET_RECOVER_SUCCESS_MESSAGE),
   walletRecoverError: createErrorNotification(WALLET_RECOVER_ERROR_MESSAGE),
   walletRefreshError: createErrorNotification(WALLET_REFRESH_ERROR_MESSAGE),

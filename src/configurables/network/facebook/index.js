@@ -5,11 +5,6 @@ import LoginButton from './LoginButton'
 const MAX_LINK_CARACTERS = 91
 
 export default Object.freeze({
-  // Routes used by services/api
-  apiEndpoints: {
-    checkRegistration: '/check', // better would be facebook specific endpoint
-    register: '/register' // better would be facebook specific endpoint
-  },
   components: {
     LoginButton
   },

@@ -2,7 +2,6 @@ import axios from 'axios'
 import * as R from 'ramda'
 
 import mockAxios from 'mocks/axios'
-import network from 'configurables/network'
 
 export const createAPI = (fetcher, baseURL) => {
   const getFullUrl = (path) => `${baseURL}${path}`
@@ -20,7 +19,7 @@ export const createAPI = (fetcher, baseURL) => {
   const getFromPath = path => R.partial(get, [path])
 
   return Object.freeze({
-    checkRegistration: postToPath(network.apiEndpoints.checkRegistration),
+    checkRegistration: postToPath('/check'),
     checkQTUMAddressMatchesRegisteredUser: postToPath('/check-qtum-address'),
     confirmAchievement: postToPath('/confirm'),
     createUpdateAchievement: postToPath('/create'),
@@ -28,7 +27,7 @@ export const createAPI = (fetcher, baseURL) => {
     encodeSupport: postToPath('/encode-support'),
     encodeDeposit: postToPath('/encode-deposit'),
     fetchUsers: getFromPath('/users'),
-    registerUser: postToPath(network.apiEndpoints.register),
+    registerUser: postToPath('/register'),
     supportAchievement: postToPath('/support')
   })
 }

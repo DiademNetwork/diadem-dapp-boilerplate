@@ -18,6 +18,44 @@ const network = networks[process.env.QTUM_NETWORK]
 
 const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
 const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
+const CHECK_REGISTRATION_INTERVAL = 5000 // in ms
+
+const register = function * ({ walletData }) {
+  try {
+    const userAccessToken = yield select(S.login.userAccessToken)
+    const userName = yield select(S.login.userName)
+    const userID = yield select(S.login.userID)
+    yield call(api.registerUser, {
+      address: walletData.addrStr,
+      name: userName,
+      user: userID,
+      token: userAccessToken
+    })
+    yield put(ownA.register.succeeded())
+  } catch (error) {
+    yield put(ownA.register.errored({ error }))
+  }
+}
+
+const checkRegistration = function * () {
+  try {
+    const userID = yield select(S.login.userID)
+    let { exists, pending } = yield call(api.checkRegistration, { user: userID })
+    if (exists) {
+      yield put(ownA.checkRegistration.succeeded())
+    } else if (!pending) {
+      yield put(ownA.checkRegistration.failed({ reason: 'not-registered' }))
+    } else {
+      while (pending) {
+        yield delay(CHECK_REGISTRATION_INTERVAL)
+        const { pending: newPending } = yield call(api.checkRegistration, { user: userID })
+        pending = newPending
+      }
+    }
+  } catch (error) {
+    yield put(ownA.checkRegistration.errored({ error }))
+  }
+}
 
 const checkIfGenerationNeeded = function * ({ reason }) {
   if (reason === 'not-registered') {
@@ -181,9 +219,11 @@ const withdraw = function * ({address, amount, fees}) {
 
 export default function * () {
   yield all([
-    takeLatest(T.registration.CHECK.succeeded, load),
-    takeLatest(T.registration.CHECK.failed, checkIfGenerationNeeded),
+    takeLatest(T.login.LOGGED, checkRegistration),
+    takeLatest(ownT.CHECK_REGISTRATION.succeeded, load),
+    takeLatest(ownT.CHECK_REGISTRATION.failed, checkIfGenerationNeeded),
     takeLatest(ownT.GENERATE.requested, generate),
+    takeLatest(ownT.GENERATE.succeeded, register),
     takeLatest(ownT.RECOVER.requested, recover),
     takeLatest(ownT.WITHDRAW.requested, withdraw),
     fork(refresh),

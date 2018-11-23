@@ -70,6 +70,45 @@ Please always check tests before asking for a Pull Request Review.
 
 ### Networks
 
+You can configure application to use any network supported. Networks supported are in `src/configurables/network/`
+
+TO CHANGE network, you need to edit `src/configurables/network/index.js` to use the network you want before building application
+
+TO ADD a network, you need to create a new folder for it in `src/configurables/network/`. Your logic will need to export an object like:
+
+```javascript
+{
+  apiEndpoints: {
+    checkRegistration: String (path)
+    register: String (path)
+  },
+  components: {
+    LoginButton: React component
+  },
+  urls: {
+    hashtag: String (url),
+    website: String (url)
+  },
+  inputs: {
+    link: {
+      maxCaracters: Number,
+      placeholder: String,
+      isValid: Function taking ({previousLink) as parameter
+    }
+  },
+  name: String,
+  dataPaths: {
+    userName: Array
+    userAccessToken: Array
+    userPictureUrl: Array
+    userID: Array
+  },
+  texts: {
+    linkHelp: String
+  }
+}
+```
+
 #### Facebook
 
 You can configure application to use one social network you want.

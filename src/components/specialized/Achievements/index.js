@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import AchievementsChain from './AchievementsChain'
+import Chain from './Chain'
 import withContainer from './container'
 import Create from './Create'
 import Update from './Update'
@@ -74,8 +74,8 @@ const Achievements = ({
             item
             xs={12}
           >
-            <AchievementsChain
-              achievementsChain={achievements[key]}
+            <Chain
+              chain={achievements[key]}
               idx={idx}
             />
           </Grid>

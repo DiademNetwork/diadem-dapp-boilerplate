@@ -7,13 +7,13 @@ const SandboxConfigEditorCheckbox = ({
   label,
   name,
   onChange,
-  mocksConfig
+  mocksController
 }) => (
   <FormControlLabel
     control={
       <Checkbox
         data-qa-id={`sandbox-config-editor-checkbox-${name}`}
-        checked={mocksConfig[name]}
+        checked={mocksController[name]}
         onChange={({ target: { checked } }) => onChange(name)(checked)}
         value={name}
         color="primary"
@@ -25,7 +25,7 @@ const SandboxConfigEditorCheckbox = ({
 
 SandboxConfigEditorCheckbox.propTypes = {
   label: T.string,
-  mocksConfig: T.object,
+  mocksController: T.object,
   name: T.string,
   onChange: T.func
 }

@@ -13,6 +13,7 @@ import WithdrawIcon from '@material-ui/icons/AccountBalanceWalletOutlined'
 import { withStyles } from '@material-ui/core/styles'
 import Hidden from '@material-ui/core/Hidden'
 import FeesSelector from 'components/shared/FeesSelector'
+import withContainer from './container'
 
 const AMOUNT_INITIAL_VALUE = 0
 const ADDRESS_INITIAL_VALUE = ''
@@ -44,7 +45,7 @@ class Withdraw extends Component {
       const isAddressValid = value !== ''
       this.setState({ address: value, isAddressValid })
     } else if (name === 'amount') {
-      const isAmountValid = value > 0 && value <= this.props.balance
+      const isAmountValid = !!value && value > 0 && value <= this.props.balance
       this.setState({ amount: value, isAmountValid })
     }
   }
@@ -90,6 +91,7 @@ class Withdraw extends Component {
         aria-label="Create"
         className={className}
         color="secondary"
+        data-qa-id="withdraw-button"
         key='withdraw-button'
         onClick={this.handleClickOpen}
         variant={fullScreen ? 'contained' : 'extendedFab'}
@@ -100,11 +102,12 @@ class Withdraw extends Component {
          Withdraw
       </Button>,
       <Dialog
+        aria-labelledby="form-dialog-title"
+        data-qa-id="withdraw-modal"
         fullScreen={fullScreen}
         key='withdraw-modal'
-        open={modalOpen}
         onClose={this.handleClose}
-        aria-labelledby="form-dialog-title"
+        open={modalOpen}
       >
         <DialogTitle id="form-dialog-title">Withdraw</DialogTitle>
         <DialogContent>
@@ -113,26 +116,28 @@ class Withdraw extends Component {
           </DialogContentText>
           <TextField
             autoFocus={!fullScreen}
+            data-qa-id="withdraw-form-amount-input"
+            helperText='Fees are around 0.1 QTUM'
             error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
-            margin="normal"
+            fullWidth
             id='amount'
             label="Amount (in QTUM)"
-            value={amount}
+            margin="normal"
             onChange={this.handleChange('amount')}
-            type='number'
             placeholder={`max ${balance} minus fees`}
-            fullWidth
-            helperText='Fees are around 0.1 QTUM'
+            type='number'
+            value={amount}
           />
           <TextField
+            data-qa-id="withdraw-form-address-input"
             error={address !== ADDRESS_INITIAL_VALUE && !isAddressValid}
-            margin="normal"
-            id='address'
-            label="Target addres"
-            value={address}
-            onChange={this.handleChange('address')}
             fullWidth
             helperText='Please copy address in full. Diadem Network is not responsible if you enter wrong address'
+            id='address'
+            label="Target addres"
+            margin="normal"
+            onChange={this.handleChange('address')}
+            value={address}
           />
           <FeesSelector
             error={!areFeesValid}
@@ -141,14 +146,19 @@ class Withdraw extends Component {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
+          <Button
+            color="primary"
+            data-qa-id="withdraw-cancel-button"
+            onClick={this.handleClose}
+          >
             Cancel
           </Button>
           <Button
+            color="secondary"
+            data-qa-id="withdraw-submit-button"
             disabled={!isFormValid}
             onClick={this.handleSubmit}
             variant="contained"
-            color="secondary"
           >
             Submit
           </Button>
@@ -156,6 +166,10 @@ class Withdraw extends Component {
       </Dialog>
     ]
   }
+}
+
+Withdraw.defaultProps = {
+  balance: 0
 }
 
 Withdraw.propTypes = {
@@ -168,5 +182,6 @@ Withdraw.propTypes = {
 
 export default R.compose(
   withMobileDialog(),
-  withStyles(styles)
+  withStyles(styles),
+  withContainer
 )(Withdraw)

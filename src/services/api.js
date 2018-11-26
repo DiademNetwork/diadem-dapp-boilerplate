@@ -19,8 +19,8 @@ export const createAPI = (fetcher, baseURL) => {
   const getFromPath = path => R.partial(get, [path])
 
   return Object.freeze({
-    checkFacebookRegistration: postToPath('/check'),
-    checkQTUMAddressMatchesFacebookUser: postToPath('/check-qtum-address'),
+    checkRegistration: postToPath('/check'),
+    checkQTUMAddressMatchesRegisteredUser: postToPath('/check-qtum-address'),
     confirmAchievement: postToPath('/confirm'),
     createUpdateAchievement: postToPath('/create'),
     depositForAchievement: postToPath('/deposit'),

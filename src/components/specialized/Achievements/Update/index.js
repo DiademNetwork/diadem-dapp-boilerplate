@@ -9,15 +9,14 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
-import FacebookLinkHelp from '../FacebookLinkHelp'
+import NetworkLinkHelp from '../NetworkLinkHelp'
 import StarIcon from '@material-ui/icons/Star'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
-import isUrl from 'is-url'
+import network from 'configurables/network'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
 const MAX_TITLE_CARACTERS = 60
-const MAX_LINK_CARACTERS = 91
 
 const styles = (theme) => ({
   buttonIcon: {
@@ -42,21 +41,13 @@ class UpdateAchievement extends Component {
   handleChange = name => e => {
     const value = e.target.value
     if (name === 'link') {
-      const isLinkValid = this.isFacebookLinkValid(value)
+      const isLinkValid = network.inputs.link.isValid({ previousLink: this.props.previousLink })(value)
       this.setState({ link: value, isLinkValid })
     } else if (name === 'title') {
       const isTitleValid = value.length > 0 && value.length <= MAX_TITLE_CARACTERS
       this.setState({ title: value, isTitleValid })
     }
   }
-
-  isFacebookLinkValid = R.allPass([
-    R.complement(R.equals)(this.props.previousLink),
-    R.compose(R.lte(R.__, MAX_LINK_CARACTERS), R.length),
-    R.is(String),
-    isUrl,
-    R.test(/.*facebook.*/)
-  ])
 
   handleSubmit = () => {
     const { onUpdate, previousLink } = this.props
@@ -111,23 +102,23 @@ class UpdateAchievement extends Component {
           <DialogTitle id="form-dialog-title">Update your achievement</DialogTitle>
           <DialogContent>
             <DialogContentText paragraph>
-              To update your achievement, please provide the previous link of your Facebook achievement post and provide a title for it
+              {`To update your achievement, please provide the previous link of your ${network.name} achievement post and provide a title for it`}
             </DialogContentText>
             <DialogContentText>
               Please be aware that after updating your achievement, people will not anymore be able to confirm/support/deposit the previous one.
             </DialogContentText>
-            <FacebookLinkHelp />
+            <NetworkLinkHelp />
             <TextField
               autoFocus={!fullScreen}
               id='link'
               margin="normal"
               error={link !== LINK_INITIAL_VALUE && !isLinkValid}
-              label="Your new achievement Facebook post link"
+              label={`Your new achievement ${network.name} post link`}
               value={link}
               onChange={this.handleChange('link')}
-              placeholder="https://www.facebook.com/username/posts/postid"
+              placeholder={network.inputs.link.placeholder}
               fullWidth
-              helperText={`max ${MAX_LINK_CARACTERS} caracters`}
+              helperText={`max ${network.inputs.link.maxCaracters} caracters`}
             />
             <TextField
               id='title'

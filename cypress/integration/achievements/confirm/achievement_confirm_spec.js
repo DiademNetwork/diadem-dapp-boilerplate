@@ -1,4 +1,4 @@
-import { ACHIEVEMENT_CONFIRM_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
+import { ACHIEVEMENTS_CHAIN_CONFIRM_SUCCESS_MESSAGE } from '../../../../src/modules/ui/notifications/actions'
 
 describe('Achievement Confirm', () => {
   beforeEach(() => {
@@ -9,7 +9,7 @@ describe('Achievement Confirm', () => {
 
   describe('When logged', () => {
     beforeEach(() => {
-      cy.get(`[data-qa-id='facebook-login-button']`).click()
+      cy.get(`[data-qa-id='login-button']`).click()
       cy.get(`[data-qa-id='wallet-recover-cancel-button']`).click()
     })
 
@@ -25,7 +25,7 @@ describe('Achievement Confirm', () => {
           cy.get(`[data-qa-id='achievement-0-confirm-button']`).click()
           cy.get(`[data-qa-id='achievement-0-confirm-modal']`).should('be.visible')
           cy.get(`[data-qa-id='achievement-0-confirm-submit-button']`).click()
-          cy.contains(ACHIEVEMENT_CONFIRM_SUCCESS_MESSAGE)
+          cy.contains(ACHIEVEMENTS_CHAIN_CONFIRM_SUCCESS_MESSAGE)
         })
       })
 

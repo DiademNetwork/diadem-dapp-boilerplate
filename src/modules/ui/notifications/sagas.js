@@ -1,10 +1,10 @@
 
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import types from 'modules/types'
-import ownActions from './actions'
+import T from 'modules/types'
+import ownA from './actions'
 
 const display = (actionName) => function * () {
-  yield put(ownActions[actionName])
+  yield put(ownA[actionName])
 }
 
 const handleRefreshNotifications = function * ({ changes: {
@@ -21,32 +21,32 @@ const handleRefreshNotifications = function * ({ changes: {
 
 export default function * () {
   yield all([
-    takeLatest(types.facebook.login.LOGGED, display('facebookLoginSuccess')),
-    takeLatest(types.facebook.registration.CHECK.errored, display('facebookRegistrationCheckError')),
-    takeLatest(types.facebook.registration.REGISTER.succeeded, display('facebookRegistrationSuccess')),
-    takeLatest(types.facebook.registration.REGISTER.errored, display('facebookRegistrationError')),
-    takeLatest(types.achievements.FETCH.errored, display('achievementsFetchError')),
-    takeLatest(types.achievements.RECEIVED, display('achievementsReceived')),
-    takeLatest(types.transactions.FETCH.errored, display('transactionsFetchError')),
-    takeLatest(types.transactions.RECEIVED, display('transactionsReceived')),
-    takeLatest(types.wallets.qtum.RECOVER.succeeded, display('walletRecoverSuccess')),
-    takeLatest(types.wallets.qtum.RECOVER.errored, display('walletRecoverError')),
-    takeLatest(types.wallets.qtum.GENERATE.succeeded, display('walletGenerateSuccess')),
-    takeLatest(types.wallets.qtum.GENERATE.errored, display('walletGenerateError')),
-    takeLatest(types.wallets.qtum.WITHDRAW.succeeded, display('walletWithdrawSuccess')),
-    takeLatest(types.wallets.qtum.WITHDRAW.errored, display('walletWithdrawError')),
-    takeLatest(types.wallets.qtum.REFRESH.succeeded, handleRefreshNotifications),
-    takeLatest(types.wallets.qtum.REFRESH.errored, display('walletRefreshError')),
-    takeLatest(types.achievement.CREATE.succeeded, display('achievementCreateSuccess')),
-    takeLatest(types.achievement.CREATE.errored, display('achievementCreateError')),
-    takeLatest(types.achievement.UPDATE.succeeded, display('achievementUpdateSuccess')),
-    takeLatest(types.achievement.UPDATE.errored, display('achievementUpdateError')),
-    takeLatest(types.achievement.CONFIRM.succeeded, display('achievementConfirmSuccess')),
-    takeLatest(types.achievement.CONFIRM.errored, display('achievementConfirmError')),
-    takeLatest(types.achievement.SUPPORT.succeeded, display('achievementSupportSuccess')),
-    takeLatest(types.achievement.SUPPORT.errored, display('achievementSupportError')),
-    takeLatest(types.achievement.DEPOSIT.succeeded, display('achievementDepositSuccess')),
-    takeLatest(types.achievement.DEPOSIT.errored, display('achievementDepositError')),
-    takeLatest(types.users.FETCH.errored, display('usersFetchError'))
+    takeLatest(T.achievements.chain.CREATE.succeeded, display('achievementCreateSuccess')),
+    takeLatest(T.achievements.chain.CREATE.errored, display('achievementCreateError')),
+    takeLatest(T.achievements.chain.UPDATE.succeeded, display('achievementUpdateSuccess')),
+    takeLatest(T.achievements.chain.UPDATE.errored, display('achievementUpdateError')),
+    takeLatest(T.achievements.chain.CONFIRM.succeeded, display('achievementConfirmSuccess')),
+    takeLatest(T.achievements.chain.CONFIRM.errored, display('achievementConfirmError')),
+    takeLatest(T.achievements.chain.SUPPORT.succeeded, display('achievementSupportSuccess')),
+    takeLatest(T.achievements.chain.SUPPORT.errored, display('achievementSupportError')),
+    takeLatest(T.achievements.chain.DEPOSIT.succeeded, display('achievementDepositSuccess')),
+    takeLatest(T.achievements.chain.DEPOSIT.errored, display('achievementDepositError')),
+    takeLatest(T.achievements.list.FETCH.errored, display('achievementsFetchError')),
+    takeLatest(T.achievements.list.RECEIVED, display('achievementsReceived')),
+    takeLatest(T.login.LOGGED, display('loginSuccess')),
+    takeLatest(T.transactions.FETCH.errored, display('transactionsFetchError')),
+    takeLatest(T.transactions.RECEIVED, display('transactionsReceived')),
+    takeLatest(T.users.FETCH.errored, display('usersFetchError')),
+    takeLatest(T.wallets.CHECK_REGISTRATION.errored, display('walletCheckRegistrationError')),
+    takeLatest(T.wallets.REGISTER.succeeded, display('walletRegistrationSuccess')),
+    takeLatest(T.wallets.REGISTER.errored, display('walletRegistrationError')),
+    takeLatest(T.wallets.RECOVER.succeeded, display('walletRecoverSuccess')),
+    takeLatest(T.wallets.RECOVER.errored, display('walletRecoverError')),
+    takeLatest(T.wallets.GENERATE.succeeded, display('walletGenerateSuccess')),
+    takeLatest(T.wallets.GENERATE.errored, display('walletGenerateError')),
+    takeLatest(T.wallets.WITHDRAW.succeeded, display('walletWithdrawSuccess')),
+    takeLatest(T.wallets.WITHDRAW.errored, display('walletWithdrawError')),
+    takeLatest(T.wallets.REFRESH.succeeded, handleRefreshNotifications),
+    takeLatest(T.wallets.REFRESH.errored, display('walletRefreshError'))
   ])
 }

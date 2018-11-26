@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton'
 import MenuIcon from '@material-ui/icons/Menu'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
-import FacebookLogin from './FacebookLogin'
+import Login from './Login'
 import Hashtag from './Hashtag'
 import LogoImage from './logo.png'
 import HelpImg from './help-logo.png'
@@ -65,7 +65,7 @@ class Nav extends Component {
           <Typography variant="title" color="inherit" className={classes.flex}>
             Diadem Network
           </Typography>
-          <FacebookLogin />
+          <Login />
           <Hidden mdUp>
             <IconButton
               aria-label="Menu"

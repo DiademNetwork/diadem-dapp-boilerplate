@@ -1,12 +1,12 @@
 import faker from 'faker'
-import mocksConfig from '../mocks/config'
+import mocksController from '../mocks/controller'
 
 const getRandomInt = max => Math.floor(Math.random() * Math.floor(max))
 
 const base = (opts = {}) => {
-  const { facebookUserID, pendingTxID } = mocksConfig.get()
+  const { userID, pendingTxID } = mocksController.get()
   return Object.freeze({
-    actor: pendingTxID !== '' ? facebookUserID : faker.random.uuid(),
+    actor: pendingTxID !== '' ? userID : faker.random.uuid(),
     foreign_id: '',
     id: faker.random.uuid(),
     name: faker.name.findName(),

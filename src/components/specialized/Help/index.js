@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import SendIcon from '@material-ui/icons/SendOutlined'
 import withContainer from './container'
+import network from 'configurables/network'
 
 const styles = (theme) => ({
   divider: {
@@ -68,7 +69,7 @@ class Help extends Component {
         <DialogContent>
           <DialogContentText component="div" id="alert-dialog-description">
             <Typography paragraph color="textPrimary">
-              Diadem Network leverages blockchain technology from <a className={classes.link} target="_target" href="https://qtum.org">QTUM</a> and <a className={classes.link} target="_target" href="https://www.facebook.com/">Facebook</a>. You can be an achiever and/or a sponsor.
+              Diadem Network leverages blockchain technology from Blockchains and <a className={classes.link} target="_target" href={network.urls.website}>{network.name}</a>. You can be an achiever and/or a sponsor.
             </Typography>
             <Divider className={classes.divider} />
             <Typography color="textPrimary" variant="title">
@@ -78,10 +79,10 @@ class Help extends Component {
               Fighting for the planet? Helping people out? But you need a boost? Get financial support using Diadem Network!
             </Typography>
             <Typography variant="subheading">
-              1. Publish a Facebook post explaining your achievement (with text, picture(s), video(s)).
+              1. Publish a {network.name} post explaining your achievement (with text, picture(s), video(s)).
             </Typography>
             <Typography variant="subheading">
-              2. CREATE YOUR ACHIEVEMENT on Diadem Network with the link to your Facebook post.
+              2. CREATE YOUR ACHIEVEMENT on Diadem Network with the link to your {network.name} post.
             </Typography>
             <Typography variant="subheading" paragraph>
               3. WITHDRAW QTUM tokens you receive from others supporting your great actions!
@@ -107,10 +108,10 @@ class Help extends Component {
             </Typography>
             <Divider className={classes.divider} />
             <Typography color="textSecondary">
-              - Facebook Login is required to perform most actions.
+              - {network.name} Login is required to perform most actions.
             </Typography >
             <Typography color="textSecondary">
-              - Adblockers seems to cause a Facebook login bug. Please desactivate them to use DiademNetwork.
+              - Adblockers seems to cause a login bug. Please desactivate them to use DiademNetwork.
             </Typography >
             <Typography color="textSecondary">
               - A hot wallet is used to manage QTUM transactions.

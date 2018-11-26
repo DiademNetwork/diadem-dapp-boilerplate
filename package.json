@@ -18,7 +18,7 @@
     "start:sandbox": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js",
     "storybook": "start-storybook -p 6006",
     "test": "jest --coverage",
-    "test:cypress": "npx cypress run"
+    "test:cypress": "npx cypress run --record=false"
   },
   "author": "Clement Bresson",
   "homepage": "http://clement-bresson.github.io/react-modern-boilerplate",

@@ -9,15 +9,14 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { withStyles } from '@material-ui/core/styles'
-import FacebookLinkHelp from '../FacebookLinkHelp'
+import NetworkLinkHelp from '../NetworkLinkHelp'
 import StarIcon from '@material-ui/icons/Star'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
-import isUrl from 'is-url'
+import network from 'configurables/network'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
 const MAX_TITLE_CARACTERS = 60
-const MAX_LINK_CARACTERS = 91
 
 const styles = (theme) => ({
   buttonIcon: {
@@ -41,20 +40,13 @@ class CreateAchievement extends Component {
   handleChange = name => e => {
     const value = e.target.value
     if (name === 'link') {
-      const isLinkValid = this.isFacebookLinkValid(value)
+      const isLinkValid = network.inputs.link.isValid({ previousLink: '' })(value)
       this.setState({ link: value, isLinkValid })
     } else if (name === 'title') {
       const isTitleValid = value.length > 0 && value.length <= MAX_TITLE_CARACTERS
       this.setState({ title: value, isTitleValid })
     }
   }
-
-  isFacebookLinkValid = R.allPass([
-    R.is(String),
-    R.compose(R.lte(R.__, MAX_LINK_CARACTERS), R.length),
-    isUrl,
-    R.test(/.*facebook.*/)
-  ])
 
   handleSubmit = () => {
     const { onCreate } = this.props
@@ -99,20 +91,20 @@ class CreateAchievement extends Component {
           <DialogTitle id="form-dialog-title">Create your achievement</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              To create an achievement, please provide the link to your Facebook achievement post and provide a title for it
+              {`To create an achievement, please provide the link to your ${network.name} achievement post and provide a title for it`}
             </DialogContentText>
-            <FacebookLinkHelp />
+            <NetworkLinkHelp />
             <TextField
               autoFocus={!fullScreen}
               error={link !== LINK_INITIAL_VALUE && !isLinkValid}
               margin="normal"
               id='link'
-              label="Your achievement Facebook post link"
+              label={`Your achievement ${network.name} post link`}
               value={link}
               onChange={this.handleChange('link')}
-              placeholder="https://www.facebook.com/username/posts/postid"
+              placeholder={network.inputs.link.placeholder}
               fullWidth
-              helperText={`max ${MAX_LINK_CARACTERS} caracters`}
+              helperText={`max ${network.inputs.link.maxCaracters} caracters`}
             />
             <TextField
               error={title !== TITLE_INITIAL_VALUE && !isTitleValid}

@@ -10,6 +10,7 @@ import Tabs from 'components/shared/Tabs'
 import Timeline from 'components/specialized/Timeline'
 import Users from 'components/specialized/Users'
 import Wallet from 'components/specialized/Wallet'
+import Wallets from 'components/specialized/Wallets'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
 import { withStyles } from '@material-ui/core/styles'
@@ -38,6 +39,7 @@ const App = ({
 }) => (
   <div>
     <Nav />
+    <Wallets className={classes.sm9} />
     <Wallet className={classes.sm9} userID={userID} />
     <Tabs tabs={[
       {

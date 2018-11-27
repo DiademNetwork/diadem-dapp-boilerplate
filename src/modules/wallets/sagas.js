@@ -10,15 +10,13 @@ import S from 'modules/selectors'
 import ownA from './actions'
 import ownT from './types'
 import * as ownS from './selectors'
-import { oneOfTypes } from 'modules/utils'
-
+import { callForEachBlockchain, oneOfTypes } from 'modules/utils'
 const { networks, generateMnemonic } = qtumJSWallet
 
 const network = networks[process.env.QTUM_NETWORK]
 
 const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
 const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
-const CHECK_REGISTRATION_INTERVAL = 5000 // in ms
 
 const register = function * ({ walletData }) {
   try {
@@ -37,29 +35,17 @@ const register = function * ({ walletData }) {
   }
 }
 
-const checkRegistration = function * () {
+const checkRegistrations = function * () {
   try {
     const userID = yield select(S.login.userID)
-    let { exists, pending } = yield call(api.checkRegistration, { user: userID })
-    if (exists) {
-      yield put(ownA.checkRegistration.succeeded())
-    } else if (!pending) {
-      yield put(ownA.checkRegistration.failed({ reason: 'not-registered' }))
-    } else {
-      while (pending) {
-        yield delay(CHECK_REGISTRATION_INTERVAL)
-        const { pending: newPending } = yield call(api.checkRegistration, { user: userID })
-        pending = newPending
-      }
-    }
+    const registrations = yield callForEachBlockchain(
+      api.checkRegistration,
+      { user: userID },
+      ({ exists, pending }) => ({ isRegistered: exists, isRegistrationPending: pending })
+    )
+    yield put(ownA.checkRegistrations.succeeded({ registrations }))
   } catch (error) {
-    yield put(ownA.checkRegistration.errored({ error }))
-  }
-}
-
-const checkIfGenerationNeeded = function * ({ reason }) {
-  if (reason === 'not-registered') {
-    yield put(ownA.generate.requested())
+    yield put(ownA.checkRegistrations.errored({ error }))
   }
 }
 
@@ -219,9 +205,8 @@ const withdraw = function * ({address, amount, fees}) {
 
 export default function * () {
   yield all([
-    takeLatest(T.login.LOGGED, checkRegistration),
-    takeLatest(ownT.CHECK_REGISTRATION.succeeded, load),
-    takeLatest(ownT.CHECK_REGISTRATION.failed, checkIfGenerationNeeded),
+    takeLatest(T.login.LOGGED, checkRegistrations),
+    takeLatest(ownT.CHECK_REGISTRATIONS.succeeded, load),
     takeLatest(ownT.GENERATE.requested, generate),
     takeLatest(ownT.GENERATE.succeeded, register),
     takeLatest(ownT.RECOVER.requested, recover),

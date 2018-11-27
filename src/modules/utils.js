@@ -1,4 +1,7 @@
 import * as R from 'ramda'
+import blockchains from 'configurables/blockchains'
+import * as U from 'utils'
+import { all, call } from 'redux-saga/effects'
 
 export const merge = R.mergeDeepWith((state, object) => {
   switch (true) {
@@ -23,3 +26,11 @@ export const oneOfTypes = (types) => R.compose(
   R.partialRight(R.contains, [types]),
   R.prop('type')
 )
+
+export const callForEachBlockchain = function * (apiFn, payload, responseTransformer = R.identity) {
+  const results = yield all(U.mapKeys(name => call(apiFn(name), payload))(blockchains))
+  return R.compose(
+    R.zipObj(R.keys(blockchains)),
+    R.map(responseTransformer)
+  )(results)
+}

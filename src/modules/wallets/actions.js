@@ -3,7 +3,7 @@ import T from './types'
 
 export default {
   checkLastTx: createAsyncActions(T.CHECK_LAST_TX),
-  checkRegistration: createAsyncActions(T.CHECK_REGISTRATION),
+  checkRegistrations: createAsyncActions(T.CHECK_REGISTRATIONS),
   infoSaved: createAction(T.INFO_SAVED),
   load: createAsyncActions(T.LOAD),
   recover: createAsyncActions(T.RECOVER),

@@ -19,7 +19,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg|gif)$/,
+        test: /\.(png|woff|woff2|eot|ttf|svg|gif|jpg)$/,
         use: [
           'file-loader',
           {
@@ -47,7 +47,8 @@ module.exports = {
       screens: path.resolve(__dirname, '../src/screens/'),
       services: path.resolve(__dirname, '../src/services/'),
       stubs: path.resolve(__dirname, '../src/stubs/'),
-      tests: path.resolve(__dirname, '../src/tests/')
+      tests: path.resolve(__dirname, '../src/tests/'),
+      utils: path.resolve(__dirname, '../src/utils/')
     }
   }
 }

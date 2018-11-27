@@ -19,16 +19,18 @@ export const createAPI = (fetcher, baseURL) => {
   const getFromPath = path => R.partial(get, [path])
 
   return Object.freeze({
-    checkRegistration: postToPath('/check'),
-    checkQTUMAddressMatchesRegisteredUser: postToPath('/check-qtum-address'),
-    confirmAchievement: postToPath('/confirm'),
-    createUpdateAchievement: postToPath('/create'),
-    depositForAchievement: postToPath('/deposit'),
-    encodeSupport: postToPath('/encode-support'),
-    encodeDeposit: postToPath('/encode-deposit'),
-    fetchUsers: getFromPath('/users'),
-    registerUser: postToPath('/register'),
-    supportAchievement: postToPath('/support')
+    // blockchain-specific calls
+    checkRegistration: (chain) => postToPath(`/${chain}/check`),
+    checkQTUMAddressMatchesRegisteredUser: (chain) => postToPath(`/${chain}/check-address`),
+    createUpdateAchievement: (chain) => postToPath(`/${chain}/create`),
+    depositForAchievement: (chain) => postToPath(`/${chain}/deposit`),
+    encodeSupport: (chain) => postToPath(`/${chain}/encode-support`),
+    encodeDeposit: (chain) => postToPath(`/${chain}/encode-deposit`),
+    fetchUsers: (chain) => getFromPath(`/${chain}/users`),
+    registerUser: (chain) => postToPath(`/${chain}/register`),
+    supportAchievement: (chain) => postToPath(`/${chain}/support`),
+    // non-blockchain-specific calls
+    confirmAchievement: postToPath('/confirm')
   })
 }
 

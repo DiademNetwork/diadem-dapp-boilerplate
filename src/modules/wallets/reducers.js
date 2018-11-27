@@ -19,6 +19,7 @@ export default function createReducer (state, {
   mnemonic,
   privateKey,
   reason,
+  registrations,
   type,
   walletUtil: util,
   walletData: data
@@ -34,8 +35,8 @@ export default function createReducer (state, {
     case T.REFRESH.succeeded: return merge(state)({ data })
     case T.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
     case T.INFO_SAVED: return merge(state)({ status: 'restoring-info-saved' })
-    case T.CHECK_REGISTRATION.succeeded: return merge(state)({ checkRegistrationFailReason: 'none', isRegistered: true })
-    case T.CHECK_REGISTRATION.failed: return merge(state)({ checkRegistrationFailReason: reason, isRegistered: false })
+    case T.CHECK_REGISTRATIONS.succeeded: return merge(state)({ ...registrations })
+    case T.CHECK_REGISTRATIONS.failed: return merge(state)({ checkRegistrationFailReason: reason, isRegistered: false })
     default: return state
   }
 }

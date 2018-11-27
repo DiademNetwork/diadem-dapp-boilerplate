@@ -9,7 +9,7 @@ import SandboxConfigEditor from 'components/specialized/SandboxConfigEditor'
 import Tabs from 'components/shared/Tabs'
 import Timeline from 'components/specialized/Timeline'
 import Users from 'components/specialized/Users'
-import Wallet from 'components/specialized/Wallet'
+// import Wallet from 'components/specialized/Wallet'
 import Wallets from 'components/specialized/Wallets'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
@@ -34,7 +34,7 @@ const App = ({
   hasUnreadAchievements,
   hasUnreadTransactions,
   transactionsOpenned,
-  userID,
+  // userID,
   userQtumAddress
 }) => (
   <div>
@@ -73,7 +73,7 @@ App.propTypes = {
   hasUnreadTransactions: T.bool,
   achievementsOpenned: T.func,
   transactionsOpenned: T.func,
-  userID: T.string,
+  // userID: T.string,
   userQtumAddress: T.string
 }
 

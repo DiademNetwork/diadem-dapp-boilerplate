@@ -40,7 +40,7 @@ const App = ({
   <div>
     <Nav />
     <Wallets className={classes.sm9} />
-    <Wallet className={classes.sm9} userID={userID} />
+    {/* <Wallet className={classes.sm9} userID={userID} /> */}
     <Tabs tabs={[
       {
         badgeContent: hasUnreadAchievements ? '!' : null,

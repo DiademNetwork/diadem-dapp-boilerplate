@@ -8,49 +8,32 @@ import Typography from '@material-ui/core/Typography'
 import blockchains from 'configurables/blockchains'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
-import Avatar from '@material-ui/core/Avatar'
-import { withStyles } from '@material-ui/core/styles'
+import Wallet from './Wallet'
+import withContainer from './container'
+import network from 'configurables/network'
 
-const styles = (theme) => ({
-  img: {
-    display: 'inline-block',
-    marginRight: theme.spacing.unit * 2,
-    verticalAlign: 'middle'
-  }
-})
-
-const Wallets = ({ classes, className }) => (
+const Wallets = ({ className, isLogged }) => (
   <Card className={className}>
     <CardContent>
       <Typography paragraph color="textSecondary">Your Diadem Network wallets</Typography>
-      <Table>
-        <TableBody>
-          {U.mapObj(blockchain => (
-            <TableRow key={name}>
-              <TableCell component="th" scope="row">
-                <Avatar
-                  className={classes.img}
-                  alt={`${blockchain.name} logo`}
-                  src={blockchain.logo}
-                />
-                {blockchain.name}
-              </TableCell>
-              <TableCell>None</TableCell>
-            </TableRow>
-          ))(blockchains)}
-        </TableBody>
-      </Table>
+      {isLogged ? (
+        <Table>
+          <TableBody>
+            {U.mapObj(blockchain => <Wallet blockchain={blockchain} />)(blockchains)}
+          </TableBody>
+        </Table>
+      ) : (
+        <Typography>You must be logged with {network.name} to use your wallet</Typography>
+      )}
     </CardContent>
   </Card>
 )
 
 Wallets.propTypes = {
-  classes: T.object,
-  className: T.string
+  className: T.string,
+  isLogged: T.bool
 }
 
 export default R.compose(
-  withStyles(styles)
+  withContainer
 )(Wallets)

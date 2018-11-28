@@ -4,7 +4,7 @@ import networkLoggedStub from 'stubs/network-logged'
 
 const FakeLoginLoginButton = ({ buttonComponent, onSuccess }) =>
   React.createElement(buttonComponent, {
-    name: 'fake',
+    name: 'Fake network',
     onClick: () => onSuccess(networkLoggedStub)
   }, null)
 

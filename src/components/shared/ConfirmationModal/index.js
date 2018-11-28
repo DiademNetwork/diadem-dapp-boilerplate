@@ -44,6 +44,7 @@ class ConfirmationModal extends Component {
       name,
       noCancelButton,
       openButtonText,
+      maxWidth,
       title
     } = this.props
     const { modalOpen } = this.state
@@ -70,6 +71,7 @@ class ConfirmationModal extends Component {
           key={`${name}-modal`}
           open={modalOpen}
           onClose={this.handleClose}
+          maxWidth={maxWidth}
         >
           <DialogTitle id="form-dialog-title">{title}</DialogTitle>
           <DialogContent>
@@ -106,6 +108,7 @@ ConfirmationModal.defaultProps = {
   cancelButtonText: 'Cancel',
   confirmButtonText: 'Confirm',
   disabled: false,
+  maxWidth: 'sm',
   noCancelButton: false,
   startsOpen: false
 }
@@ -119,6 +122,7 @@ ConfirmationModal.propTypes = {
   fullScreen: T.bool,
   icon: T.node,
   startsOpen: T.bool,
+  maxWidth: T.string,
   name: T.string,
   onConfirm: T.func,
   noCancelButton: T.bool,

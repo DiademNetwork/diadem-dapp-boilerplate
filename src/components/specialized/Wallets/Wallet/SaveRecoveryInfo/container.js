@@ -9,7 +9,7 @@ const mapStateToProps = (state, { blockchain }) => ({
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  generateWallet: A.wallets.generate.requested
+  infoSaved: A.wallets.infoSaved
 }, dispatch)
 
 export default WrappedComponent =>

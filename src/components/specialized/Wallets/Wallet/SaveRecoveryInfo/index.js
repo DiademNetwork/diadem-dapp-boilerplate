@@ -14,6 +14,8 @@ import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined'
 
 class SaveRecoveryInfo extends Component {
   handleConfirm = () => {
+    const { blockchain, infoSaved } = this.props
+    infoSaved({ blockchainKey: blockchain.key })
   }
 
   render () {
@@ -73,6 +75,7 @@ class SaveRecoveryInfo extends Component {
 
 SaveRecoveryInfo.propTypes = {
   blockchain: T.object,
+  infoSaved: T.func,
   mnemonic: T.string,
   privateKey: T.string
 }

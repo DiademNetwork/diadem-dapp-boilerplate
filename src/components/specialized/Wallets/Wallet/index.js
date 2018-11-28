@@ -32,6 +32,9 @@ const Wallet = ({ blockchain, classes, isRegistered, status }) => (
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }
+        if (status === 'recovery-info-saved') {
+          return <span>Display</span>
+        }
         if (!isRegistered) {
           return <Register blockchain={blockchain} />
         }

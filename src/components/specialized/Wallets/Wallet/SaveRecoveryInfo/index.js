@@ -29,7 +29,7 @@ class SaveRecoveryInfo extends Component {
         maxWidth="lg"
         title={`Save ${blockchain.name} wallet recovery info!`}
       >
-        <Typography variant="body">
+        <Typography variant="body1">
           Your mnemonic and privateKey will never be shown again.<br />
           Those are for the {blockchain.name} hot wallet which was just created for you for Diadem Network. <br />
           You will need them to recover your funds.

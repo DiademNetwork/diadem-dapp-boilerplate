@@ -12,6 +12,6 @@ export default (axiosMock) => {
     }]
   }))
   axiosMock.onPost('/check-qtum-address').reply(createMockResponse(200, { ok: true }))
-  axiosMock.onPost('/register').reply(createMockResponse(200, { ok: true }))
+  axiosMock.onPost(/^\/.+\/register/).reply(createMockResponse(200, { ok: true }))
   return axiosMock
 }

@@ -2,6 +2,7 @@ import faker from 'faker'
 import mockController from '../mocks/controller'
 
 const networkLogged = Object.freeze({
+  accessToken: faker.random.number(),
   name: faker.name.findName(),
   email: faker.internet.email(),
   picture: {

@@ -29,7 +29,6 @@ const Wallet = ({ blockchain, classes, isRegistered, status }) => (
     </TableCell>
     <TableCell numeric>
       {(() => {
-        console.log(isRegistered)
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }

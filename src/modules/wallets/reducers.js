@@ -14,18 +14,18 @@ const initialState = {
 
 export default function createReducer (state, {
   hasPendingTx,
-  generationInfo,
+  blockchainKey,
+  data,
   reason,
   registrations,
   type,
-  walletUtil: util,
-  walletData: data
+  walletUtil: util
 }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
     case T.LOAD.succeeded: return merge(state)({ data, util, loadFailReason: 'none', status: 'loaded' })
     case T.LOAD.failed: return merge(state)({ loadFailReason: reason, status: 'failed' })
-    case T.GENERATE.succeeded: return merge(state)({ ...generationInfo })
+    case T.GENERATE.succeeded: return merge(state)({ [blockchainKey]: data })
     case T.RECOVER.requested: return merge(state)({ status: 'is-recovering' })
     case T.RECOVER.succeeded: return merge(state)({ data, util, loadFailReason: 'none', recoverFailReason: 'none', status: 'recovered' })
     case T.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })

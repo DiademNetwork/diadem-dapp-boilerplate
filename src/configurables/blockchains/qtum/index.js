@@ -13,7 +13,7 @@ export default (function qtum () {
     return { mnemonic, privateKey }
   }
 
-  const getWalletBalanceData = async () => {
+  const getWalletInfo = async () => {
     if (!walletUtil) {
       throw new Error('Wallet does not exist. Please load a generate before getting data')
     }
@@ -24,7 +24,7 @@ export default (function qtum () {
     key: 'qtum',
     logo,
     name: 'Qtum',
-    getWalletBalanceData,
+    getWalletInfo,
     generateWallet
   })
 })()

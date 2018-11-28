@@ -19,13 +19,14 @@ const network = networks[process.env.QTUM_NETWORK]
 const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
 const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 
-const register = function * ({ walletData }) {
+const register = function * ({ blockchainKey, data }) {
   try {
     const userAccessToken = yield select(S.login.userAccessToken)
     const userName = yield select(S.login.userName)
     const userID = yield select(S.login.userID)
-    yield call(api.registerUser, {
-      address: walletData.addrStr,
+    const walletAddress = data.walletInfo.addrStr
+    yield call(api.registerUser(blockchainKey), {
+      address: walletAddress,
       name: userName,
       user: userID,
       token: userAccessToken
@@ -85,12 +86,12 @@ const load = function * () {
 const generate = function * ({ blockchainKey }) {
   try {
     const userID = yield select(S.login.userID)
-    const { generateWallet, getWalletBalanceData } = blockchains[blockchainKey]
+    const { generateWallet, getWalletInfo } = blockchains[blockchainKey]
     const { mnemonic, privateKey } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
-    const balanceData = yield call(getWalletBalanceData)
-    const generationInfo = { [blockchainKey]: { mnemonic, privateKey, balanceData, status: 'generated' } }
-    yield put(ownA.generate.succeeded({ generationInfo }))
+    const walletInfo = yield call(getWalletInfo)
+    const data = { mnemonic, privateKey, walletInfo, status: 'generated' }
+    yield put(ownA.generate.succeeded({ blockchainKey, data }))
   } catch (error) {
     yield put(ownA.generate.errored({ error }))
   }

@@ -11,8 +11,8 @@ export const loadFailReason = getWallets(['loadFailReason'])
 export const recoverFailReason = getWallets(['recoverFailReason'])
 
 // generation
-export const mnemonic = getWallets(['mnemonic'])
-export const privateKey = getWallets(['privateKey'])
+export const mnemonic = (name) => getWallet(name)(['mnemonic'])
+export const privateKey = (name) => getWallet(name)(['privateKey'])
 export const infoSaved = getWallets(['infoSaved'])
 export const hasPendingTx = getWallets(['hasPendingTx'])
 
@@ -25,6 +25,6 @@ export const balance = getWallets(['data', 'balance'])
 export const unconfirmedBalance = createSelector([data], R.prop('unconfirmedBalance'))
 
 // status
-export const status = getWallets(['status'])
+export const status = (name) => getWallet(name)(['status'])
 
 export const isReady = createSelector([status], R.partialRight(R.contains, [['loaded', 'recovered', 'restoring-info-saved']]))

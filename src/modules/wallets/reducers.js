@@ -7,8 +7,6 @@ const initialState = {
   hasPendingTx: false,
   isRegistered: false,
   loadFailReason: 'none',
-  mnemonic: '',
-  privateKey: '',
   recoverFailReason: 'none',
   status: 'none',
   util: null
@@ -16,8 +14,7 @@ const initialState = {
 
 export default function createReducer (state, {
   hasPendingTx,
-  mnemonic,
-  privateKey,
+  generationInfo,
   reason,
   registrations,
   type,
@@ -28,7 +25,7 @@ export default function createReducer (state, {
   switch (type) {
     case T.LOAD.succeeded: return merge(state)({ data, util, loadFailReason: 'none', status: 'loaded' })
     case T.LOAD.failed: return merge(state)({ loadFailReason: reason, status: 'failed' })
-    case T.GENERATE.succeeded: return merge(state)({ data, mnemonic, privateKey, util, status: 'generated' })
+    case T.GENERATE.succeeded: return merge(state)({ ...generationInfo })
     case T.RECOVER.requested: return merge(state)({ status: 'is-recovering' })
     case T.RECOVER.succeeded: return merge(state)({ data, util, loadFailReason: 'none', recoverFailReason: 'none', status: 'recovered' })
     case T.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })

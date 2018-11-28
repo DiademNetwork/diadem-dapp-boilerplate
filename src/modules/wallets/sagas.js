@@ -11,7 +11,8 @@ import ownA from './actions'
 import ownT from './types'
 import * as ownS from './selectors'
 import { callForEachBlockchain, oneOfTypes } from 'modules/utils'
-const { networks, generateMnemonic } = qtumJSWallet
+import blockchains from 'configurables/blockchains'
+const { networks } = qtumJSWallet
 
 const network = networks[process.env.QTUM_NETWORK]
 
@@ -81,15 +82,15 @@ const load = function * () {
   }
 }
 
-const generate = function * () {
+const generate = function * ({ blockchainKey }) {
   try {
     const userID = yield select(S.login.userID)
-    const mnemonic = generateMnemonic()
-    const walletUtil = network.fromMnemonic(mnemonic)
-    const privateKey = walletUtil.toWIF()
-    window.localStorage.setItem(`privateKey-${userID}`, privateKey)
-    const walletData = yield call([walletUtil, 'getInfo'])
-    yield put(ownA.generate.succeeded({ mnemonic, privateKey, walletData, walletUtil }))
+    const { generateWallet, getWalletBalanceData } = blockchains[blockchainKey]
+    const { mnemonic, privateKey } = generateWallet()
+    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
+    const balanceData = yield call(getWalletBalanceData)
+    const generationInfo = { [blockchainKey]: { mnemonic, privateKey, balanceData, status: 'generated' } }
+    yield put(ownA.generate.succeeded({ generationInfo }))
   } catch (error) {
     yield put(ownA.generate.errored({ error }))
   }

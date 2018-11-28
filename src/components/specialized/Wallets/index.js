@@ -19,7 +19,7 @@ const Wallets = ({ className, isLogged }) => (
       {isLogged ? (
         <Table>
           <TableBody>
-            {U.mapObj(blockchain => <Wallet blockchain={blockchain} />)(blockchains)}
+            {U.mapObj(blockchain => <Wallet key={blockchain.name} blockchain={blockchain} />)(blockchains)}
           </TableBody>
         </Table>
       ) : (

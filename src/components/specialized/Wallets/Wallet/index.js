@@ -5,6 +5,8 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
+import Register from './Register'
+import SaveRecoveryInfo from './SaveRecoveryInfo'
 import withContainer from './container'
 
 const styles = (theme) => ({
@@ -15,7 +17,7 @@ const styles = (theme) => ({
   }
 })
 
-const Wallet = ({ blockchain, classes, isRegistered }) => (
+const Wallet = ({ blockchain, classes, isRegistered, status }) => (
   <TableRow key={name}>
     <TableCell component="th" scope="row">
       <Avatar
@@ -25,14 +27,26 @@ const Wallet = ({ blockchain, classes, isRegistered }) => (
       />
       {blockchain.name}
     </TableCell>
-    <TableCell>{isRegistered ? 'isRegistered' : 'FU'}</TableCell>
+    <TableCell numeric>
+      {(() => {
+        console.log(isRegistered)
+        if (status === 'generated') {
+          return <SaveRecoveryInfo blockchain={blockchain} />
+        }
+        if (!isRegistered) {
+          return <Register blockchain={blockchain} />
+        }
+        return <span>Registered baby</span>
+      })()}
+    </TableCell>
   </TableRow>
 )
 
 Wallet.propTypes = {
   blockchain: T.object,
   classes: T.object,
-  isRegistered: T.bool
+  isRegistered: T.bool,
+  status: T.string
 }
 
 export default R.compose(

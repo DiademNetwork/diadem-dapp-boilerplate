@@ -14,4 +14,9 @@ describe('Utils', () => {
     const result = U.mapKeys(toUpper)(obj)
     expect(result).toEqual(['A', 'B', 'C'])
   })
+
+  it('oneOf', () => {
+    expect(U.oneOf(['A', 'B', 'C'])('C')).toEqual(true)
+    expect(U.oneOf(['A', 'B', 'C'])('D')).toEqual(false)
+  })
 })

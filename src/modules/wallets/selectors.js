@@ -1,9 +1,11 @@
 import * as R from 'ramda'
+import * as U from 'utils'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
 const getWallets = createBaseSelector(['wallets'])
 const getWallet = name => createBaseSelector(['wallets', name])
+const wallets = R.path(['wallets'])
 
 export const data = getWallets(['data'])
 export const util = getWallets(['util'])
@@ -26,5 +28,6 @@ export const unconfirmedBalance = createSelector([data], R.prop('unconfirmedBala
 
 // status
 export const status = (name) => getWallet(name)(['status'])
-
-export const isReady = createSelector([status], R.partialRight(R.contains, [['loaded', 'recovered', 'restoring-info-saved']]))
+const isReadyStatus = U.oneOf(['loaded', 'recovered', 'recovery-info-saved'])
+export const isReady = (name) => createSelector([status(name)], isReadyStatus(status))
+export const getReadyWallets = createSelector([wallets], R.pickBy(({ status }) => isReadyStatus(status)))

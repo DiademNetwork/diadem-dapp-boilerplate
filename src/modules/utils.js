@@ -27,7 +27,7 @@ export const oneOfTypes = (types) => R.compose(
   R.prop('type')
 )
 
-export const callForEachBlockchain = function * (apiFn, payload, responseTransformer = R.identity) {
+export const callForAllBlockchain = function * (apiFn, payload, responseTransformer = R.identity) {
   const results = yield all(U.mapKeys(name => call(apiFn(name), payload))(blockchains))
   return R.compose(
     R.zipObj(R.keys(blockchains)),

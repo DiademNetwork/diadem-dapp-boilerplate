@@ -10,7 +10,7 @@ import S from 'modules/selectors'
 import ownA from './actions'
 import ownT from './types'
 import * as ownS from './selectors'
-import { callForEachBlockchain, oneOfTypes } from 'modules/utils'
+import { callForAllBlockchain, oneOfTypes } from 'modules/utils'
 import blockchains from 'configurables/blockchains'
 const { networks } = qtumJSWallet
 
@@ -40,12 +40,12 @@ const register = function * ({ blockchainKey, data }) {
 const checkRegistrations = function * () {
   try {
     const userID = yield select(S.login.userID)
-    const registrations = yield callForEachBlockchain(
+    const registrationsData = yield callForAllBlockchain(
       api.checkRegistration,
       { user: userID },
       ({ exists, pending }) => ({ isRegistered: exists, isRegistrationPending: pending })
     )
-    yield put(ownA.checkRegistrations.succeeded({ registrations }))
+    yield put(ownA.checkRegistrations.succeeded({ data: registrationsData }))
   } catch (error) {
     yield put(ownA.checkRegistrations.errored({ error }))
   }
@@ -133,33 +133,43 @@ const refresh = function * () {
   ]))
   while (true) {
     try {
-      const walletUtil = yield select(ownS.util)
-      const walletData = yield select(ownS.data)
-      const newWalletData = yield call([walletUtil, 'getInfo'])
-      if (R.complement(R.equals)(newWalletData, walletData)) {
-        const changes = { }
-        const { unconfirmedBalance } = walletData
-        const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
-        if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
-          switch (true) {
-            case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
-              changes.tokensSent = true
-              break
-            case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
-              changes.tokensReceived = true
-              break
-            case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
-              changes.receivingTokens = true
-              break
-            case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
-              changes.sendingTokens = true
-              break
-            default:
-              break
-          }
-        }
-        yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
+      const readyWalletsInfo = R.map(R.prop('walletInfo'))(yield select(ownS.getReadyWallets))
+      const readyWalletsKeys = R.keys(readyWalletsInfo)
+      const newReadyWalletsInfo = yield all(
+        readyWalletsKeys.map(key => call(blockchains[key].getWalletInfo))
+      )
+      const formattedNewReadyWalletsinfo = R.compose(
+        R.zipObj(readyWalletsKeys),
+        R.map(R.objOf('walletInfo'))
+      )(newReadyWalletsInfo)
+
+      if (!R.equals(formattedNewReadyWalletsinfo, readyWalletsInfo)) {
+        yield put(ownA.refresh.succeeded({ data: formattedNewReadyWalletsinfo }))
       }
+      // if (R.complement(R.equals)(newWalletData, walletData)) {
+      //   const changes = { }
+      //   const { unconfirmedBalance } = walletData
+      //   const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
+      //   if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
+      //     switch (true) {
+      //       case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+      //         changes.tokensSent = true
+      //         break
+      //       case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+      //         changes.tokensReceived = true
+      //         break
+      //       case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+      //         changes.receivingTokens = true
+      //         break
+      //       case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+      //         changes.sendingTokens = true
+      //         break
+      //       default:
+      //         break
+      //     }
+      //   }
+      //   yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
+      // }
     } catch (error) {
       yield put(ownA.refresh.errored({ error }))
     }
@@ -208,12 +218,12 @@ const withdraw = function * ({address, amount, fees}) {
 export default function * () {
   yield all([
     takeLatest(T.login.LOGGED, checkRegistrations),
-    takeLatest(ownT.CHECK_REGISTRATIONS.succeeded, load),
+    // takeLatest(ownT.CHECK_REGISTRATIONS.succeeded, load),
     takeLatest(ownT.GENERATE.requested, generate),
     takeLatest(ownT.GENERATE.succeeded, register),
     takeLatest(ownT.RECOVER.requested, recover),
     takeLatest(ownT.WITHDRAW.requested, withdraw),
     fork(refresh),
-    fork(checkLastTx)
+    // fork(checkLastTx)
   ])
 }

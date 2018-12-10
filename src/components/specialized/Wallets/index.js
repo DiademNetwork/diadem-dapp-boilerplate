@@ -5,11 +5,11 @@ import { PropTypes as T } from 'prop-types'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
-import blockchains from 'configurables/blockchains'
 import Table from '@material-ui/core/Table'
 import TableBody from '@material-ui/core/TableBody'
 import Wallet from './Wallet'
 import withContainer from './container'
+import blockchains from 'configurables/blockchains'
 import network from 'configurables/network'
 
 const Wallets = ({ className, isLogged }) => (

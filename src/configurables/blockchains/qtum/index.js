@@ -13,19 +13,37 @@ export default (function qtum () {
     return { mnemonic, privateKey }
   }
 
-  const getWalletInfo = async () => {
+  const initFromPrivateKey = (privateKey) => {
+    walletUtil = network.fromWIF(privateKey)
+  }
+
+  const initFromMnemonic = (mnemonic) => {
+    walletUtil = network.fromMnemonic(mnemonic)
+  }
+
+  const getPrivateKey = () => {
     if (!walletUtil) {
-      throw new Error('Wallet does not exist. Please load a generate before getting data')
+      throw new Error('Wallet does not exist. Please initialize or generate before getting privateKey')
+    }
+    return walletUtil.toWIF()
+  }
+
+  const getWalletData = async () => {
+    if (!walletUtil) {
+      throw new Error('Wallet does not exist. Please initialize or generate before getting data')
     }
     return walletUtil.getInfo()
   }
 
   return Object.freeze({
+    initFromMnemonic,
+    initFromPrivateKey,
     key: 'qtum',
     logo,
     name: 'Qtum',
-    getWalletInfo,
+    getWalletData,
     generateWallet,
+    getPrivateKey,
     symbol: 'QTUM'
   })
 })()

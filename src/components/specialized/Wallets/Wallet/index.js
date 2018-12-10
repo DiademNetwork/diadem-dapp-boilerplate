@@ -5,6 +5,7 @@ import TableCell from '@material-ui/core/TableCell'
 import TableRow from '@material-ui/core/TableRow'
 import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
+import Recover from './Recover'
 import Register from './Register'
 import SaveRecoveryInfo from './SaveRecoveryInfo'
 import CopyToClipboardButton from 'components/shared/CopyToClipboardButton'
@@ -66,6 +67,9 @@ const Wallet = ({
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }
+        if (status === 'no-private-key' || status === 'address-not-matching') {
+          return <Recover blockchain={blockchain} />
+        }
         if (!isRegistered && !isRegistrationPending) {
           return <Register blockchain={blockchain} />
         }
@@ -80,7 +84,7 @@ Wallet.defaultProps = {
 }
 
 Wallet.propTypes = {
-  address: T.sgtring,
+  address: T.string,
   balance: T.number,
   blockchain: T.object,
   classes: T.object,

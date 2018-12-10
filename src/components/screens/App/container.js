@@ -6,8 +6,7 @@ import A from 'modules/actions'
 const mapStateToProps = (state) => ({
   hasUnreadTransactions: S.transactions.hasUnread(state),
   hasUnreadAchievements: S.achievements.list.hasUnread(state),
-  userID: S.login.userID(state),
-  userQtumAddress: S.wallets.address(state)
+  userID: S.login.userID(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

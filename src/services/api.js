@@ -21,7 +21,7 @@ export const createAPI = (fetcher, baseURL) => {
   return Object.freeze({
     // blockchain-specific calls
     checkRegistration: (chain) => postToPath(`/${chain}/check`),
-    checkQTUMAddressMatchesRegisteredUser: (chain) => postToPath(`/${chain}/check-address`),
+    checkWalletAddressMatchesRegisteredUser: (chain) => postToPath(`/${chain}/check-address`),
     createUpdateAchievement: (chain) => postToPath(`/${chain}/create`),
     depositForAchievement: (chain) => postToPath(`/${chain}/deposit`),
     encodeSupport: (chain) => postToPath(`/${chain}/encode-support`),

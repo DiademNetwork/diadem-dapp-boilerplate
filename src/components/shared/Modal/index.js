@@ -10,7 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import Hidden from '@material-ui/core/Hidden'
 
-class ConfirmationModal extends Component {
+class Modal extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -35,9 +35,9 @@ class ConfirmationModal extends Component {
   render () {
     const {
       cancelButtonText,
-      children,
       className,
       confirmButtonText,
+      confirmButtonDisabled,
       disabled,
       fullScreen,
       icon,
@@ -45,6 +45,7 @@ class ConfirmationModal extends Component {
       noCancelButton,
       openButtonText,
       maxWidth,
+      render,
       title
     } = this.props
     const { modalOpen } = this.state
@@ -76,7 +77,7 @@ class ConfirmationModal extends Component {
           <DialogTitle id="form-dialog-title">{title}</DialogTitle>
           <DialogContent>
             <DialogContentText component="div">
-              {children}
+              {render({ fullScreen })}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -92,6 +93,7 @@ class ConfirmationModal extends Component {
             <Button
               color="secondary"
               data-qa-id={`${name}-confirm-button`}
+              disabled={confirmButtonDisabled}
               onClick={this.handleConfirm}
               variant="contained"
             >
@@ -104,20 +106,21 @@ class ConfirmationModal extends Component {
   }
 }
 
-ConfirmationModal.defaultProps = {
+Modal.defaultProps = {
   cancelButtonText: 'Cancel',
   confirmButtonText: 'Confirm',
+  confirmButtonDisabled: false,
   disabled: false,
   maxWidth: 'sm',
   noCancelButton: false,
   startsOpen: false
 }
 
-ConfirmationModal.propTypes = {
+Modal.propTypes = {
   cancelButtonText: T.string,
-  children: T.node,
   className: T.string,
   confirmButtonText: T.string,
+  confirmButtonDisabled: T.bool,
   disabled: T.bool,
   fullScreen: T.bool,
   icon: T.node,
@@ -127,9 +130,10 @@ ConfirmationModal.propTypes = {
   onConfirm: T.func,
   noCancelButton: T.bool,
   openButtonText: T.string,
+  render: T.func,
   title: T.string
 }
 
 export default R.compose(
   withMobileDialog()
-)(ConfirmationModal)
+)(Modal)

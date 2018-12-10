@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { PropTypes as T } from 'prop-types'
 import Typography from '@material-ui/core/Typography'
-import ConfirmationModal from 'components/shared/ConfirmationModal'
+import Modal from 'components/shared/Modal'
 import CopyToClipboardButton from 'components/shared/CopyToClipboardButton'
 import * as R from 'ramda'
 import withContainer from './container'
@@ -21,7 +21,7 @@ class WalletSaveRecoveryInfo extends Component {
   render () {
     const { blockchain, mnemonic, privateKey } = this.props
     return (
-      <ConfirmationModal
+      <Modal
         name={`${blockchain.key}-recovery-info-modal`}
         onConfirm={this.handleConfirm}
         openButtonText="Save Recovery Info"
@@ -30,45 +30,48 @@ class WalletSaveRecoveryInfo extends Component {
         noCancelButton
         maxWidth="lg"
         title={`Save ${blockchain.name} wallet recovery info!`}
-      >
-        <Typography variant="body1">
-          Your mnemonic and privateKey will never be shown again.<br />
-          Those are for the {blockchain.name} hot wallet which was just created for you for Diadem Network. <br />
-          You will need them to recover your funds.
-        </Typography>
-        <List>
-          <ListItem disableGutters divider dense>
-            <ListItemIcon>
-              <AssignmentOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary={
-              <Typography>
-                {mnemonic}
-                <CopyToClipboardButton
-                  textToCopy={mnemonic}
-                  name="mnemonic"
-                  variant="icon"
-                />
-              </Typography>
-            } />
-          </ListItem>
-          <ListItem disableGutters dense>
-            <ListItemIcon>
-              <VpnKeyOutlinedIcon />
-            </ListItemIcon>
-            <ListItemText primary={
-              <Typography>
-                {privateKey}
-                <CopyToClipboardButton
-                  textToCopy={privateKey}
-                  name="privateKey"
-                  variant="icon"
-                />
-              </Typography>
-            } />
-          </ListItem>
-        </List>
-      </ConfirmationModal>
+        render={() => (
+          <Fragment>
+            <Typography key="text" variant="body1">
+              Your mnemonic and privateKey will never be shown again.<br />
+              Those are for the {blockchain.name} hot wallet which was just created for you for Diadem Network. <br />
+              You will need them to recover your funds.
+            </Typography>
+            <List key="list">
+              <ListItem disableGutters divider dense>
+                <ListItemIcon>
+                  <AssignmentOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary={
+                  <Typography>
+                    {mnemonic}
+                    <CopyToClipboardButton
+                      textToCopy={mnemonic}
+                      name="mnemonic"
+                      variant="icon"
+                    />
+                  </Typography>
+                } />
+              </ListItem>
+              <ListItem disableGutters dense>
+                <ListItemIcon>
+                  <VpnKeyOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText primary={
+                  <Typography>
+                    {privateKey}
+                    <CopyToClipboardButton
+                      textToCopy={privateKey}
+                      name="privateKey"
+                      variant="icon"
+                    />
+                  </Typography>
+                } />
+              </ListItem>
+            </List>
+          </Fragment>
+        )}
+      />
     )
   }
 }

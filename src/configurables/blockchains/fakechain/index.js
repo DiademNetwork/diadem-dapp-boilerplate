@@ -44,7 +44,7 @@ export default (function fakeChain () {
     return { mnemonic, privateKey }
   }
 
-  const getWalletInfo = async () => {
+  const getWalletData = async () => {
     const { pendingTxID } = mocksController.get()
     if (pendingTxID !== '') {
       transactions.set('transactions', [
@@ -59,12 +59,25 @@ export default (function fakeChain () {
     }
   }
 
+  const initFromPrivateKey = () => {
+    console.log('Fakechain initialized')
+  }
+
+  const initFromMnemonic = () => {
+    console.log('Fakechain initialized')
+  }
+
+  const getPrivateKey = () => 'PrIv4t3K3yF0rF4K3ch4In'
+
   return Object.freeze({
+    initFromMnemonic,
+    initFromPrivateKey,
     key: 'fakechain',
     logo,
     name: 'Fakechain',
-    getWalletInfo,
+    getWalletData,
     generateWallet,
+    getPrivateKey,
     symbol: 'FKC'
   })
 })()

@@ -9,13 +9,14 @@ const wallets = R.path(['wallets'])
 
 export const data = getWallets(['data'])
 export const util = getWallets(['util'])
-export const loadFailReason = getWallets(['loadFailReason'])
-export const recoverFailReason = getWallets(['recoverFailReason'])
+
+export const loadFailReason = (name) => getWallets(name)(['loadFailReason'])
+export const recoverFailReason = (name) => getWallet(name)(['recoverFailReason'])
 
 // generation
 export const mnemonic = (name) => getWallet(name)(['mnemonic'])
 export const privateKey = (name) => getWallet(name)(['privateKey'])
-export const infoSaved = getWallets(['infoSaved'])
+export const infoSaved = (name) => getWallet(name)(['infoSaved'])
 // export const hasPendingTx = getWallets(['hasPendingTx'])
 
 // registration

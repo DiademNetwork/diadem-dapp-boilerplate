@@ -31,7 +31,7 @@ const register = function * ({ blockchainKey, data }) {
       user: userID,
       token: userAccessToken
     })
-    yield put(ownA.register.succeeded())
+    yield put(ownA.register.succeeded({ blockchainKey }))
   } catch (error) {
     yield put(ownA.register.errored({ error }))
   }
@@ -223,7 +223,7 @@ export default function * () {
     takeLatest(ownT.GENERATE.succeeded, register),
     takeLatest(ownT.RECOVER.requested, recover),
     takeLatest(ownT.WITHDRAW.requested, withdraw),
-    fork(refresh),
+    fork(refresh)
     // fork(checkLastTx)
   ])
 }

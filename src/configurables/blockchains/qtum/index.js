@@ -25,6 +25,7 @@ export default (function qtum () {
     logo,
     name: 'Qtum',
     getWalletInfo,
-    generateWallet
+    generateWallet,
+    symbol: 'QTUM'
   })
 })()

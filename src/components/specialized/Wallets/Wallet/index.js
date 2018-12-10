@@ -7,7 +7,11 @@ import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
 import Register from './Register'
 import SaveRecoveryInfo from './SaveRecoveryInfo'
+import CopyToClipboardButton from 'components/shared/CopyToClipboardButton'
+import Tooltip from '@material-ui/core/Tooltip'
+import Zoom from '@material-ui/core/Zoom'
 import withContainer from './container'
+import blockchains from 'configurables/blockchains'
 
 const styles = (theme) => ({
   img: {
@@ -17,7 +21,29 @@ const styles = (theme) => ({
   }
 })
 
-const Wallet = ({ blockchain, classes, isRegistered, status }) => (
+const CopyToAddressToolip = ({ address }) => (
+  <Tooltip
+    TransitionComponent={Zoom}
+    title='Copy address to clipboard'
+  >
+    <CopyToClipboardButton variant="icon" textToCopy={address} name="address" />
+  </Tooltip>
+)
+
+CopyToAddressToolip.propTypes = {
+  address: T.string
+}
+
+const Wallet = ({
+  address,
+  balance,
+  blockchain,
+  classes,
+  isRegistered,
+  isRegistrationPending,
+  status,
+  unconfirmedBalance
+}) => (
   <TableRow key={name}>
     <TableCell component="th" scope="row">
       <Avatar
@@ -27,28 +53,41 @@ const Wallet = ({ blockchain, classes, isRegistered, status }) => (
       />
       {blockchain.name}
     </TableCell>
+    {!!address && (
+      <TableCell>
+        {address} <CopyToAddressToolip address={address} />
+      </TableCell>
+    )}
+    <TableCell>
+      {`${balance} ${blockchains[blockchain.key].symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
+    </TableCell>
     <TableCell numeric>
       {(() => {
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }
-        if (status === 'recovery-info-saved') {
-          return <span>Display</span>
-        }
-        if (!isRegistered) {
+        if (!isRegistered && !isRegistrationPending) {
           return <Register blockchain={blockchain} />
         }
-        return <span>Registered baby</span>
       })()}
     </TableCell>
   </TableRow>
 )
 
+Wallet.defaultProps = {
+  balance: 0,
+  unconfirmedBalance: 0
+}
+
 Wallet.propTypes = {
+  address: T.sgtring,
+  balance: T.number,
   blockchain: T.object,
   classes: T.object,
   isRegistered: T.bool,
-  status: T.string
+  isRegistrationPending: T.bool,
+  status: T.string,
+  unconfirmedBalance: T.number
 }
 
 export default R.compose(

@@ -64,6 +64,7 @@ export default (function fakeChain () {
     logo,
     name: 'Fakechain',
     getWalletInfo,
-    generateWallet
+    generateWallet,
+    symbol: 'FKC'
   })
 })()

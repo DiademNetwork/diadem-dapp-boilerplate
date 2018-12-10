@@ -20,10 +20,10 @@ export default function createReducer (state, {
     case T.RECOVER.succeeded: return merge(state)({ data, util, loadFailReason: 'none', recoverFailReason: 'none', status: 'recovered' })
     case T.RECOVER.failed: return merge(state)({ recoverFailReason: reason, status: 'none' })
     case T.REFRESH.succeeded: return merge(state)({ ...data })
+    case T.REGISTER.succeeded: return merge(state)({ [blockchainKey]: { isRegistered: false, isRegistrationPending: true } })
     case T.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
     case T.INFO_SAVED: return merge(state)({ [blockchainKey]: { status: 'recovery-info-saved' } })
     case T.CHECK_REGISTRATIONS.succeeded: return merge(state)({ ...data })
-    case T.CHECK_REGISTRATIONS.failed: return merge(state)({ checkRegistrationFailReason: reason, isRegistered: false })
     default: return state
   }
 }

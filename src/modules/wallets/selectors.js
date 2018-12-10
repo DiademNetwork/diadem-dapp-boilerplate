@@ -16,15 +16,16 @@ export const recoverFailReason = getWallets(['recoverFailReason'])
 export const mnemonic = (name) => getWallet(name)(['mnemonic'])
 export const privateKey = (name) => getWallet(name)(['privateKey'])
 export const infoSaved = getWallets(['infoSaved'])
-export const hasPendingTx = getWallets(['hasPendingTx'])
+// export const hasPendingTx = getWallets(['hasPendingTx'])
 
 // registration
 export const isRegistered = (name) => getWallet(name)(['isRegistered'])
+export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
-export const address = createSelector([data], R.prop('addrStr'))
-export const balance = getWallets(['data', 'balance'])
-export const unconfirmedBalance = createSelector([data], R.prop('unconfirmedBalance'))
+export const address = (name) => getWallet(name)(['walletInfo', 'addrStr'])
+export const balance = (name) => getWallet(name)(['walletInfo', 'balance'])
+export const unconfirmedBalance = (name) => getWallet(name)(['walletInfo', 'unconfirmedBalance'])
 
 // status
 export const status = (name) => getWallet(name)(['status'])

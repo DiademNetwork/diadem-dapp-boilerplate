@@ -5,7 +5,7 @@ import ConfirmationModal from 'components/shared/ConfirmationModal'
 import * as R from 'ramda'
 import withContainer from './container'
 
-class RegisterWallet extends Component {
+class WalletRegister extends Component {
   handleConfirm = () => {
     const { blockchain, generateWallet } = this.props
     generateWallet({ blockchainKey: blockchain.key })
@@ -28,11 +28,11 @@ class RegisterWallet extends Component {
   }
 }
 
-RegisterWallet.propTypes = {
+WalletRegister.propTypes = {
   blockchain: T.object,
   generateWallet: T.func
 }
 
 export default R.compose(
   withContainer
-)(RegisterWallet)
+)(WalletRegister)

@@ -12,7 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon'
 import VpnKeyOutlinedIcon from '@material-ui/icons/VpnKeyOutlined'
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined'
 
-class SaveRecoveryInfo extends Component {
+class WalletSaveRecoveryInfo extends Component {
   handleConfirm = () => {
     const { blockchain, infoSaved } = this.props
     infoSaved({ blockchainKey: blockchain.key })
@@ -73,7 +73,7 @@ class SaveRecoveryInfo extends Component {
   }
 }
 
-SaveRecoveryInfo.propTypes = {
+WalletSaveRecoveryInfo.propTypes = {
   blockchain: T.object,
   infoSaved: T.func,
   mnemonic: T.string,
@@ -82,4 +82,4 @@ SaveRecoveryInfo.propTypes = {
 
 export default R.compose(
   withContainer
-)(SaveRecoveryInfo)
+)(WalletSaveRecoveryInfo)

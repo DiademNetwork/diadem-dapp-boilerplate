@@ -38,6 +38,7 @@ class Modal extends Component {
       className,
       confirmButtonText,
       confirmButtonDisabled,
+      controlledOpen,
       disabled,
       fullScreen,
       icon,
@@ -49,6 +50,7 @@ class Modal extends Component {
       title
     } = this.props
     const { modalOpen } = this.state
+    const open = R.is(Boolean)(controlledOpen) ? controlledOpen : modalOpen
     return (
       <Fragment>
         <Button
@@ -70,7 +72,7 @@ class Modal extends Component {
           data-qa-id={`${name}-modal`}
           fullScreen={fullScreen}
           key={`${name}-modal`}
-          open={modalOpen}
+          open={open}
           onClose={this.handleClose}
           maxWidth={maxWidth}
         >
@@ -121,6 +123,7 @@ Modal.propTypes = {
   className: T.string,
   confirmButtonText: T.string,
   confirmButtonDisabled: T.bool,
+  controlledOpen: T.bool,
   disabled: T.bool,
   fullScreen: T.bool,
   icon: T.node,

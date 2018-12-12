@@ -24,9 +24,9 @@ export const isRegistered = (name) => getWallet(name)(['isRegistered'])
 export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
-export const address = (name) => getWallet(name)(['walletInfo', 'addrStr'])
-export const balance = (name) => getWallet(name)(['walletInfo', 'balance'])
-export const unconfirmedBalance = (name) => getWallet(name)(['walletInfo', 'unconfirmedBalance'])
+export const address = (name) => getWallet(name)(['addrStr'])
+export const balance = (name) => getWallet(name)(['balance'])
+export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance'])
 
 // status
 export const status = (name) => getWallet(name)(['status'])

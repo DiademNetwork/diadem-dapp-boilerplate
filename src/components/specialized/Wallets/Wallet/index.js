@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import TableCell from '@material-ui/core/TableCell'
@@ -13,6 +13,7 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Zoom from '@material-ui/core/Zoom'
 import withContainer from './container'
 import blockchains from 'configurables/blockchains'
+import Typography from '@material-ui/core/Typography'
 
 const styles = (theme) => ({
   img: {
@@ -45,7 +46,7 @@ const Wallet = ({
   status,
   unconfirmedBalance
 }) => (
-  <TableRow key={name}>
+  <TableRow key={name} hover>
     <TableCell component="th" scope="row">
       <Avatar
         className={classes.img}
@@ -54,15 +55,21 @@ const Wallet = ({
       />
       {blockchain.name}
     </TableCell>
-    {!!address && (
+    {status !== 'registration-failed' ? (
+      <Fragment>
+        <TableCell key="address">
+          {address ? (<span>{address} <CopyToAddressToolip address={address} /></span>) : ''}
+        </TableCell>
+        <TableCell key="balance">
+          {`${balance} ${blockchains[blockchain.key].symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
+        </TableCell>
+      </Fragment>
+    ) : (
       <TableCell>
-        {address} <CopyToAddressToolip address={address} />
+        Registration failed. Please try later
       </TableCell>
     )}
-    <TableCell>
-      {`${balance} ${blockchains[blockchain.key].symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
-    </TableCell>
-    <TableCell numeric>
+    <TableCell numeric>`
       {(() => {
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
@@ -70,7 +77,7 @@ const Wallet = ({
         if (status === 'no-private-key' || status === 'address-not-matching') {
           return <Recover blockchain={blockchain} />
         }
-        if (!isRegistered && !isRegistrationPending) {
+        if (!isRegistered && !isRegistrationPending && status !== 'registration-failed') {
           return <Register blockchain={blockchain} />
         }
       })()}

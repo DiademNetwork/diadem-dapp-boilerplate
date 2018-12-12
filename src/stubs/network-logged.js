@@ -13,7 +13,7 @@ const networkLogged = Object.freeze({
       width: 50
     }
   },
-  userID: `${faker.random.number()}`
+  userID: '11111'
 })
 
 mockController.set('userID')(networkLogged.userID)

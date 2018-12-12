@@ -1,6 +1,7 @@
 // Goal of this function is to add logging capabilities for better debugging experience
 export const createMockResponse = (...args) => function (config) {
   const { method, url } = config
+  console.log(config)
   console.log(`axiosMock call: ${method.toUpperCase()} - ${url}`, config)
 
   // response code or function

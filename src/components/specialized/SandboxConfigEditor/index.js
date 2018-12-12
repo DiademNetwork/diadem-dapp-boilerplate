@@ -8,10 +8,12 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 import { withStyles } from '@material-ui/core/styles'
+import Typography from '@material-ui/core/Typography'
 import SettingsIcon from '@material-ui/icons/Settings'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import Checkbox from './Checkbox'
 import mocksController from 'mocks/controller'
+import blockchains from 'configurables/blockchains'
 
 const styles = () => ({
   button: {
@@ -32,14 +34,10 @@ class SandboxConfigEditor extends Component {
 
   handleClose = () => this.setState({ modalOpen: false })
 
-  handleChangeConfig = (name) => (value) => {
-    mocksController.set(name)(value)
-    this.setState((prevState) => ({
-      config: {
-        ...prevState,
-        [name]: value
-      }
-    }))
+  handleChangeConfig = (blockchainKey) => (name) => (value) => {
+    const path = [blockchainKey, name]
+    mocksController.set(path)(value)
+    this.setState(R.set(R.lensPath(['mocksController', ...path]), value))
   }
 
   render () {
@@ -51,6 +49,11 @@ class SandboxConfigEditor extends Component {
       classes,
       fullScreen
     } = this.props
+    const checkboxesCommonProps = {
+      ...this.props,
+      mocksController,
+      onChange: this.handleChangeConfig
+    }
     return (
       <Fragment>
         <Button
@@ -72,29 +75,53 @@ class SandboxConfigEditor extends Component {
         >
           <DialogTitle id="form-dialog-title">Sandbox Config</DialogTitle>
           <DialogContent>
-            <Checkbox
-              {...this.props}
-              label="Is user registered"
-              mocksController={mocksController}
-              name='isUserRegistered'
-              onChange={this.handleChangeConfig}
-            />
-            <Checkbox
-              {...this.props}
-              label="Is user pending registration"
-              mocksController={mocksController}
-              name='isUserPendingRegistration'
-              onChange={this.handleChangeConfig}
-            />
-            <TextField
-              fullWidth
-              id='pendingTxID'
-              label="If not empty, an unconfirmed tx will be generated in next received fake tx"
-              margin="normal"
-              onChange={({ target: { value } }) => this.handleChangeConfig('pendingTxID')(value)}
-              placeholder=""
-              value={mocksController.pendingTxID}
-            />
+            {Object.keys(blockchains).map(blockchainKey => (
+              <Fragment>
+                <Typography
+                  key="tile"
+                  variant="title"
+                >
+                  {blockchainKey}
+                </Typography>
+                <Checkbox
+                  {...checkboxesCommonProps}
+                  blockchainKey={blockchainKey}
+                  key={`${blockchainKey}-is-registered`}
+                  label="Is user registered"
+                  name='isRegistered'
+                />
+                <Checkbox
+                  {...checkboxesCommonProps}
+                  blockchainKey={blockchainKey}
+                  key={`${blockchainKey}-is-registration-pending`}
+                  label="Is user pending registration"
+                  name='isPendingRegistration'
+                />
+                <Checkbox
+                  {...checkboxesCommonProps}
+                  blockchainKey={blockchainKey}
+                  key={`${blockchainKey}-is-address-matching`}
+                  label="Is address matching"
+                  name='isAddressMatchingTheOneRegistered'
+                />
+                <Checkbox
+                  {...checkboxesCommonProps}
+                  blockchainKey={blockchainKey}
+                  key={`${blockchainKey}-is-registration-success`}
+                  label="Is registration success"
+                  name='isRegistrationSuccess'
+                />
+                <TextField
+                  fullWidth
+                  key={`${blockchainKey}-pendingTx`}
+                  label="If not empty, an unconfirmed tx will be generated in next received fake tx"
+                  margin="normal"
+                  onChange={({ target: { value } }) => this.handleChangeConfig(blockchainKey)('pendingTxID')(value)}
+                  placeholder=""
+                  value={mocksController.pendingTxID}
+                />
+              </Fragment>
+            ))}
           </DialogContent>
           <DialogActions>
             <Button

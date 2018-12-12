@@ -4,7 +4,6 @@ import { delay } from 'redux-saga'
 import * as R from 'ramda'
 import api from 'services/api'
 import insight from 'services/insight'
-import qtumJSWallet from 'services/qtumjs-wallet'
 import T from 'modules/types'
 import S from 'modules/selectors'
 import ownA from './actions'
@@ -12,9 +11,6 @@ import ownT from './types'
 import * as ownS from './selectors'
 import { oneOfTypes } from 'modules/utils'
 import blockchains from 'configurables/blockchains'
-const { networks } = qtumJSWallet
-
-const network = networks[process.env.QTUM_NETWORK]
 
 const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
 const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
@@ -51,8 +47,8 @@ const generateWallet = function * ({ blockchainKey }) {
     const { generateWallet, getWalletData } = blockchains[blockchainKey]
     const { mnemonic, privateKey } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
-    const walletInfo = yield call(getWalletData)
-    const data = { mnemonic, privateKey, walletInfo, status: 'generated' }
+    const walletData = yield call(getWalletData)
+    const data = { mnemonic, privateKey, ...walletData, status: 'generated' }
     yield put(ownA.generate.succeeded({ blockchainKey, data }))
   } catch (error) {
     yield put(ownA.generate.errored({ error }))
@@ -65,14 +61,18 @@ const registerWallet = function * ({ blockchainKey, data }) {
     const userAccessToken = yield select(S.login.userAccessToken)
     const userName = yield select(S.login.userName)
     const userID = yield select(S.login.userID)
-    const walletAddress = data.walletInfo.addrStr
-    yield call(api.registerUser(blockchainKey), {
+    const walletAddress = data.addrStr
+    const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
       address: walletAddress,
       name: userName,
       user: userID,
       token: userAccessToken
     })
-    yield put(ownA.register.succeeded({ blockchainKey }))
+    if (registrationSucceeded) {
+      yield put(ownA.register.succeeded({ blockchainKey }))
+    } else {
+      yield put(ownA.register.failed({ blockchainKey }))
+    }
   } catch (error) {
     yield put(ownA.register.errored({ error }))
   }
@@ -85,7 +85,7 @@ const loadWallets = function * ({ data: registrationsData }) {
       Object.keys(registrationsData)
         .filter(blockchainKey => {
           const { isRegistered, isRegistrationPending } = registrationsData[blockchainKey]
-          return { isRegistered, isRegistrationPending }
+          return isRegistered && !isRegistrationPending
         })
         .map(blockchainKey => {
           return call(loadWallet, { blockchainKey })
@@ -164,7 +164,6 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
       yield put(ownA.recover.failed({ blockchainKey, status: 'address-not-matching' }))
     }
   } catch (error) {
-    console.log(error)
     yield put(ownA.recover.errored({ error }))
   }
 }
@@ -266,8 +265,8 @@ export default function * () {
     takeLatest(ownT.GENERATE.requested, generateWallet),
     takeLatest(ownT.GENERATE.succeeded, registerWallet),
     takeLatest(ownT.RECOVER.requested, recoverWallet),
-    takeLatest(ownT.WITHDRAW.requested, withdraw),
-    fork(refresh)
+    takeLatest(ownT.WITHDRAW.requested, withdraw)
+    // fork(refresh)
     // fork(checkLastTx)
   ])
 }

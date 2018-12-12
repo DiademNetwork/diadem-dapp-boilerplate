@@ -64,26 +64,31 @@ class WalletRecover extends Component {
         confirmButtonDisabled={!isFormValid || isRecovering}
         confirmButtonText={isRecovering ? 'Loading...' : 'Confirm'}
         name={`${blockchain.name}-recover-modal`}
+        noCancelButton
         onConfirm={this.handleConfirm}
         openButtonText="Recover"
         title={`Recover your ${blockchain.name} wallet`}
+        controlledOpen={status === 'address-not-matching' ? true : undefined}
+        startsOpen
         render={({ fullScreen }) => (
           <Fragment>
-            {status === 'address-not-matching' && [
-              <DialogContentText
-                key="failure-message-title"
-                paragraph
-                variant="title"
-              >
-                Wallet found is not the one you registered with initially!
-              </DialogContentText>,
-              <DialogContentText
-                key="failure-message-2"
-                paragraph
-              >
-                Please provide info you received on very first visit.
-              </DialogContentText>
-            ]}
+            {status === 'address-not-matching' && (
+              <Fragment>
+                <DialogContentText
+                  key="failure-message-title"
+                  paragraph
+                  variant="title"
+                >
+                  Wallet found is not the one you registered with initially!
+                </DialogContentText>
+                <DialogContentText
+                  key="failure-message-2"
+                  paragraph
+                >
+                  Please provide info you received on very first visit.
+                </DialogContentText>
+              </Fragment>
+            )}
             <DialogContentText key="text">
               Please enter your mnemonic or privateKey (one is enough) that were generated when you first visited Diadem Network
             </DialogContentText>

@@ -1,13 +1,24 @@
+import blockchains from 'configurables/blockchains'
+import * as R from 'ramda'
+
+const initalFakechainsValues = {
+  isRegistered: true,
+  isPendingRegistration: false,
+  isAddressMatchingTheOneRegistered: true,
+  isRegistrationSuccess: true,
+  pendingTxID: ''
+}
+
+const fakechains = Object.keys(blockchains)
+
 export default (function mocksController () {
-  const config = {
-    isUserRegistered: true,
-    isUserPendingRegistration: false,
+  let config = {
     userID: '',
-    pendingTxID: ''
+    ...R.zipObj(fakechains)(fakechains.map(x => initalFakechainsValues))
   }
 
-  const set = (name) => (value) => { config[name] = value }
-  const get = (name) => name ? config[name] : config
+  const set = (path) => (value) => { config = R.set(R.lensPath(path), value, config) }
+  const get = (path) => path ? R.path(path, config) : config
 
   return Object.freeze({
     get,

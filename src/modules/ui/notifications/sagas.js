@@ -40,6 +40,7 @@ export default function * () {
     takeLatest(T.wallets.CHECK_REGISTRATIONS.errored, display('walletCheckRegistrationError')),
     takeLatest(T.wallets.REGISTER.succeeded, display('walletRegistrationSuccess')),
     takeLatest(T.wallets.REGISTER.errored, display('walletRegistrationError')),
+    takeLatest(T.wallets.REGISTER.failed, display('walletRegistrationError')),
     takeLatest(T.wallets.RECOVER.succeeded, display('walletRecoverSuccess')),
     takeLatest(T.wallets.RECOVER.errored, display('walletRecoverError')),
     takeLatest(T.wallets.GENERATE.succeeded, display('walletGenerateSuccess')),

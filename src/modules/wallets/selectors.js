@@ -5,7 +5,7 @@ import { createBaseSelector } from 'modules/utils'
 
 const getWallets = createBaseSelector(['wallets'])
 const getWallet = name => createBaseSelector(['wallets', name])
-const wallets = R.path(['wallets'])
+const getAll = R.path(['wallets'])
 
 export const data = getWallets(['data'])
 export const util = getWallets(['util'])
@@ -32,4 +32,5 @@ export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance
 export const status = (name) => getWallet(name)(['status'])
 const isReadyStatus = U.oneOf(['loaded', 'recovered', 'recovery-info-saved'])
 export const isReady = (name) => createSelector([status(name)], isReadyStatus(status))
-export const getReadyWallets = createSelector([wallets], R.pickBy(({ status }) => isReadyStatus(status)))
+export const getOnesReady = createSelector([getAll], R.pickBy(({ status }) => isReadyStatus(status)))
+export const areAllReady = createSelector([getOnesReady, getAll], R.equals)

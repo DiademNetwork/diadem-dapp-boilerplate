@@ -1,7 +1,11 @@
 import { merge } from 'modules/utils'
+import blockchains from 'configurables/blockchains'
+import * as R from 'ramda'
 import T from './types'
 
-const initialState = {}
+const initialState = R.mapObjIndexed(R.always({
+  status: 'initial'
+}), blockchains)
 
 export default function createReducer (state, {
   hasPendingTx,

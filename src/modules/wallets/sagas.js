@@ -1,5 +1,5 @@
 
-import { all, call, fork, put, select, take, takeLatest, takeEvery } from 'redux-saga/effects'
+import { all, call, put, select, take, takeLatest, takeEvery } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import * as R from 'ramda'
 import api from 'services/api'

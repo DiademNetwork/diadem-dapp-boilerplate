@@ -13,7 +13,6 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Zoom from '@material-ui/core/Zoom'
 import withContainer from './container'
 import blockchains from 'configurables/blockchains'
-import Typography from '@material-ui/core/Typography'
 
 const styles = (theme) => ({
   img: {
@@ -46,7 +45,7 @@ const Wallet = ({
   status,
   unconfirmedBalance
 }) => (
-  <TableRow key={name} hover>
+  <TableRow key={name}>
     <TableCell component="th" scope="row">
       <Avatar
         className={classes.img}
@@ -77,7 +76,7 @@ const Wallet = ({
         if (status === 'no-private-key' || status === 'address-not-matching') {
           return <Recover blockchain={blockchain} />
         }
-        if (!isRegistered && !isRegistrationPending && status !== 'registration-failed') {
+        if (!isRegistered && !isRegistrationPending && status !== 'registration-failed' && status !== 'initial') {
           return <Register blockchain={blockchain} />
         }
       })()}

@@ -54,7 +54,12 @@ const Wallet = ({
       />
       {blockchain.name}
     </TableCell>
-    {status !== 'registration-failed' ? (
+    {status === 'registration-failed' && (
+      <TableCell>
+        Registration failed. Please try later
+      </TableCell>
+    )}
+    {!status !== 'registration-failed' && (
       <Fragment>
         <TableCell key="address">
           {address ? (<span>{address} <CopyToAddressToolip address={address} /></span>) : ''}
@@ -63,10 +68,6 @@ const Wallet = ({
           {`${balance} ${blockchains[blockchain.key].symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
         </TableCell>
       </Fragment>
-    ) : (
-      <TableCell>
-        Registration failed. Please try later
-      </TableCell>
     )}
     <TableCell numeric>`
       {(() => {

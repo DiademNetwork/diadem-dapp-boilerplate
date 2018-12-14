@@ -18,7 +18,7 @@ const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 const checkRegistration = function * ({ blockchainKey, userID }) {
   try {
     const { exists: isRegistered, pending: isRegistrationPending } = yield call(api.checkRegistration(blockchainKey), { user: userID })
-    return { isRegistered, isRegistrationPending }
+    return { isRegistered, isRegistrationPending, status: 'registration-checked' }
   } catch (error) {
     throw error
   }
@@ -83,10 +83,7 @@ const loadWallets = function * ({ data: registrationsData }) {
   try {
     yield all(
       Object.keys(registrationsData)
-        .filter(blockchainKey => {
-          const { isRegistered, isRegistrationPending } = registrationsData[blockchainKey]
-          return isRegistered && !isRegistrationPending
-        })
+        .filter(blockchainKey => registrationsData[blockchainKey].isRegistered)
         .map(blockchainKey => {
           return call(loadWallet, { blockchainKey })
         })

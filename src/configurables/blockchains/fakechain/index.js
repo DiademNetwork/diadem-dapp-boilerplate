@@ -3,6 +3,8 @@ import faker from 'faker'
 import mocksController from '../../../mocks/controller'
 
 export default (function fakeChain () {
+  const symbol = 'FKC'
+
   const balance = (function () {
     const initial = {
       balance: faker.random.number(),
@@ -69,6 +71,12 @@ export default (function fakeChain () {
 
   const getPrivateKey = () => 'PrIv4t3K3yF0rF4K3ch4In'
 
+  const withdraw = ({ amount }) => {
+    console.log(`${amount} ${symbol} tokens withdrawn`)
+    const balanceData = balance.get()
+    balance.set('balance', balanceData.balance - amount)
+  }
+
   return Object.freeze({
     initFromMnemonic,
     initFromPrivateKey,
@@ -78,6 +86,12 @@ export default (function fakeChain () {
     getWalletData,
     generateWallet,
     getPrivateKey,
-    symbol: 'FKC'
+    symbol,
+    withdraw,
+    fees: {
+      initial: 0.008,
+      max: 0.1,
+      min: 0.004
+    }
   })
 })()

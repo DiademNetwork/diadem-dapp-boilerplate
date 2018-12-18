@@ -245,12 +245,13 @@ const checkLastTx = function * () {
   })
 }
 
-const withdraw = function * ({address, amount, fees}) {
+const withdraw = function * ({ blockchainKey, ...payload }) {
   try {
-    const walletUtil = yield select(ownS.util)
-    yield call(walletUtil.send, address, amount * 1e8, { feeRate: fees })
+    const { withdraw } = blockchains[blockchainKey]
+    yield call(withdraw, payload)
     yield put(ownA.withdraw.succeeded())
   } catch (error) {
+    console.log(error)
     yield put(ownA.withdraw.errored({ error }))
   }
 }

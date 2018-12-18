@@ -7,6 +7,7 @@ import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
 import Recover from './Recover'
 import Register from './Register'
+import Withdraw from './Withdraw'
 import SaveRecoveryInfo from './SaveRecoveryInfo'
 import CopyToClipboardButton from 'components/shared/CopyToClipboardButton'
 import Tooltip from '@material-ui/core/Tooltip'
@@ -80,6 +81,7 @@ const Wallet = ({
         if (!isRegistered && !isRegistrationPending && status !== 'registration-failed' && status !== 'initial') {
           return <Register blockchain={blockchain} />
         }
+        return <Withdraw blockchain={blockchain} />
       })()}
     </TableCell>
   </TableRow>

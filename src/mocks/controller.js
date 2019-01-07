@@ -9,7 +9,7 @@ const initalFakechainsValues = {
   pendingTxID: ''
 }
 
-const fakechains = Object.keys(blockchains)
+const fakechains = blockchains.keys
 
 export default (function mocksController () {
   let config = {

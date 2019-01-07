@@ -5,7 +5,7 @@ import T from './types'
 
 const initialState = R.mapObjIndexed(R.always({
   status: 'initial'
-}), blockchains)
+}), blockchains.all)
 
 export default function createReducer (state, {
   hasPendingTx,

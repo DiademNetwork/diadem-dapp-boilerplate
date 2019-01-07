@@ -6,7 +6,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import blockchains from 'configurables/blockchains'
 
-const getInitialFees = (blockchainKey) => blockchains[blockchainKey].fees.initial
+const getInitialFees = (blockchainKey) => blockchains.get(blockchainKey).fees.initial
 
 const getInitialForm = (blockchainKey) => ({
   useCustomFees: false,
@@ -24,8 +24,8 @@ export class FeesSelector extends Component {
 
   static areFeesValid = ({ blockchainKey, fees }) => R.allPass([
     R.is(Number),
-    R.lte(R.__, blockchains[blockchainKey].fees.max),
-    R.gte(R.__, blockchains[blockchainKey].fees.min)
+    R.lte(R.__, blockchains.get(blockchainKey).fees.max),
+    R.gte(R.__, blockchains.get(blockchainKey).fees.min)
   ])(fees)
 
   useCustomFees = () => this.setState({
@@ -72,7 +72,7 @@ export class FeesSelector extends Component {
             fullWidth
             helperText='The less you pay, the more time it will take to be confirmed'
             id='fees'
-            label={`max ${blockchains[blockchain.key].fees.max} - min ${blockchains[blockchain.key].fees.min}`}
+            label={`max ${blockchains.get(blockchain.key).fees.max} - min ${blockchains.get(blockchain.key).fees.min}`}
             margin="normal"
             onChange={this.handleChange}
             type='number'

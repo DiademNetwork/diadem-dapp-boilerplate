@@ -2,10 +2,19 @@ import qtum from './qtum'
 import fakechain from './fakechain'
 import fakechain2 from './fakechain2'
 
-export default process.env.ENV === 'sandbox'
-  ? Object.freeze({ fakechain, fakechain2 })
-  : Object.freeze({
-    // You can configure here all blokchain you desire
-    // Note that each blokchain object must respect interface (check examples)
-    qtum
+export default (function blockchains () {
+  // You can change blockchain for smart contracts here
+  const primary = process.env.ENV === 'sandbox' ? fakechain : qtum
+
+  // You can add/change/remove blokchains for value transfert here
+  const others = process.env.ENV === 'sandbox' ? { fakechain2 } : {}
+
+  const all = { [primary.key]: primary, ...others }
+
+  return Object.freeze({
+    primary,
+    all,
+    keys: Object.keys(all),
+    get: (blockchainKey) => all[blockchainKey]
   })
+})()

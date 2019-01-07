@@ -66,7 +66,7 @@ const Wallet = ({
           {address ? (<span>{address} <CopyToAddressToolip address={address} /></span>) : ''}
         </TableCell>
         <TableCell key="balance">
-          {`${balance} ${blockchains[blockchain.key].symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
+          {`${balance} ${blockchains.get(blockchain.key).symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
         </TableCell>
       </Fragment>
     )}

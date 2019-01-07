@@ -80,8 +80,8 @@ class SandboxConfigEditor extends Component {
               Sandbox Config
           </DialogTitle>
           <DialogContent>
-            {Object.keys(blockchains).map(blockchainKey => (
-              <Fragment key={`${blockchainKey}-config`}>
+            {blockchains.keys.map(blockchainKey => (
+              <Fragment key={`${blockchainKey}-sandbox-config`}>
                 <Typography
                   key={`${blockchainKey}-title`}
                   variant="title"

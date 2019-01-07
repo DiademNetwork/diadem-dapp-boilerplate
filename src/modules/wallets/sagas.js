@@ -29,12 +29,12 @@ const checkRegistrations = function * () {
   try {
     const userID = yield select(S.login.userID)
     const registrationsData = yield all(
-      Object.keys(blockchains)
+      blockchains.keys
         .map(blockchainKey => {
           return call(checkRegistration, { blockchainKey, userID })
         })
     )
-    yield put(ownA.checkRegistrations.succeeded({ data: R.zipObj(Object.keys(blockchains))(registrationsData) }))
+    yield put(ownA.checkRegistrations.succeeded({ data: R.zipObj(blockchains.keys)(registrationsData) }))
   } catch (error) {
     yield put(ownA.checkRegistrations.errored({ error }))
   }
@@ -44,7 +44,7 @@ const checkRegistrations = function * () {
 const generateWallet = function * ({ blockchainKey }) {
   try {
     const userID = yield select(S.login.userID)
-    const { generateWallet, getWalletData } = blockchains[blockchainKey]
+    const { generateWallet, getWalletData } = blockchains.get(blockchainKey)
     const { mnemonic, privateKey } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
     const walletData = yield call(getWalletData)
@@ -112,7 +112,7 @@ const loadWallet = function * ({ blockchainKey }) {
     if (!privateKey) {
       yield put(ownA.load.failed({ blockchainKey, status: 'no-private-key' }))
     } else {
-      const { initFromPrivateKey, getWalletData } = blockchains[blockchainKey]
+      const { initFromPrivateKey, getWalletData } = blockchains.get(blockchainKey)
       yield call(initFromPrivateKey, privateKey)
       const walletData = yield call(getWalletData)
       const isWalletAddressTheOneRegistered = yield call(checkIsWalletAddressTheOneRegistered, {
@@ -138,7 +138,7 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
       initFromMnemonic,
       getPrivateKey,
       getWalletData
-    } = blockchains[blockchainKey]
+    } = blockchains.get(blockchainKey)
     const userID = yield select(S.login.userID)
     if (privateKey) {
       yield call(initFromPrivateKey, privateKey)
@@ -176,7 +176,7 @@ const refresh = function * () {
       const readyWalletsInfo = R.map(R.prop('walletInfo'))(yield select(ownS.getReadyWallets))
       const readyWalletsKeys = R.keys(readyWalletsInfo)
       const newReadyWalletsInfo = yield all(
-        readyWalletsKeys.map(key => call(blockchains[key].getWalletData))
+        readyWalletsKeys.map(key => call(blockchains.get(key).getWalletData))
       )
       const formattedNewReadyWalletsinfo = R.compose(
         R.zipObj(readyWalletsKeys),
@@ -217,41 +217,40 @@ const refresh = function * () {
   }
 }
 
-const checkLastTx = function * () {
-  yield takeEvery(oneOfTypes([
-    T.login.LOGGED,
-    T.transactions.FETCH.succeeded,
-    T.transactions.RECEIVED
-  ]), function * () {
-    yield put(ownA.checkLastTx.requested())
-    try {
-      let hasPendingTx = false
-      const userID = yield select(S.login.userID)
-      if (userID) {
-        const transactions = yield select(S.transactions.lastForUser(userID))
-        if (transactions.length > 0) {
-          // if at least one of transactions has no confirmation, hasPendingTx is true
-          for (let transaction of transactions) {
-            const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-            hasPendingTx = hasPendingTx || confirmations === 0
-          }
-        }
-      }
-      yield put(ownA.checkLastTx.succeeded({ hasPendingTx }))
-      yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
-    } catch (error) {
-      yield put(ownA.checkLastTx.errored({ error }))
-    }
-  })
-}
+// const checkLastTx = function * () {
+//   yield takeEvery(oneOfTypes([
+//     T.login.LOGGED,
+//     T.transactions.FETCH.succeeded,
+//     T.transactions.RECEIVED
+//   ]), function * () {
+//     yield put(ownA.checkLastTx.requested())
+//     try {
+//       let hasPendingTx = false
+//       const userID = yield select(S.login.userID)
+//       if (userID) {
+//         const transactions = yield select(S.transactions.lastForUser(userID))
+//         if (transactions.length > 0) {
+//           // if at least one of transactions has no confirmation, hasPendingTx is true
+//           for (let transaction of transactions) {
+//             const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
+//             hasPendingTx = hasPendingTx || confirmations === 0
+//           }
+//         }
+//       }
+//       yield put(ownA.checkLastTx.succeeded({ hasPendingTx }))
+//       yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
+//     } catch (error) {
+//       yield put(ownA.checkLastTx.errored({ error }))
+//     }
+//   })
+// }
 
 const withdraw = function * ({ blockchainKey, ...payload }) {
   try {
-    const { withdraw } = blockchains[blockchainKey]
+    const { withdraw } = blockchains.get(blockchainKey)
     yield call(withdraw, payload)
     yield put(ownA.withdraw.succeeded())
   } catch (error) {
-    console.log(error)
     yield put(ownA.withdraw.errored({ error }))
   }
 }

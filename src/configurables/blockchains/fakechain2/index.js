@@ -1,6 +1,7 @@
 import logo from './logo.jpg'
 import faker from 'faker'
 import mocksController from '../../../mocks/controller'
+import * as R from 'ramda'
 
 export default (function fakeChain () {
   const symbol = 'FKC2'
@@ -89,7 +90,8 @@ export default (function fakeChain () {
     symbol,
     withdraw,
     fees: {
-      initial: 0.008,
+      convert: R.identity,
+      initial: 0.002,
       max: 0.1,
       min: 0.004
     }

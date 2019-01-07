@@ -27,6 +27,7 @@ export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationP
 export const address = (name) => getWallet(name)(['addrStr'])
 export const balance = (name) => getWallet(name)(['balance'])
 export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance'])
+export const balances = createSelector([getAll], R.mapObjIndexed(R.propOr(0, 'balance')))
 
 // status
 export const status = (name) => getWallet(name)(['status'])

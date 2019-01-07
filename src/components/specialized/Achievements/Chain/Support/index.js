@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
+import MenuItem from '@material-ui/core/MenuItem'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -14,16 +15,30 @@ import Hidden from '@material-ui/core/Hidden'
 import Link from 'components/shared/Link'
 import FeesSelector from 'components/shared/FeesSelector'
 import network from 'configurables/network'
+import blockchains from 'configurables/blockchains'
+import * as R from 'ramda'
+import withContainer from './container'
 
-const AMOUNT_INITIAL_VALUE = ''
+const AMOUNT_INITIAL_VALUE = 0
+
+const initialForm = (blockchainKey) => ({
+  amount: AMOUNT_INITIAL_VALUE,
+  areFeesValid: true,
+  fees: FeesSelector.getInitialFees(blockchainKey),
+  blockchainKey,
+  isAmountValid: false
+})
 
 class AchievementSupport extends Component {
   state = {
-    amount: AMOUNT_INITIAL_VALUE,
-    areFeesValid: true,
-    fees: FeesSelector.INITIAL_FEES,
-    isAmountValid: false,
+    ...initialForm(blockchains.primary.key),
     modalOpen: false
+  }
+
+  handleSelectCurrency = e => {
+    this.setState({
+      ...initialForm(e.target.value)
+    })
   }
 
   handleClickOpen = () => this.setState({ modalOpen: true })
@@ -36,18 +51,15 @@ class AchievementSupport extends Component {
     this.setState({ amount, isAmountValid })
   }
 
-  handleFeesChange = (fees) => {
-    const areFeesValid = FeesSelector.areFeesValid(fees)
-    this.setState({
-      fees,
-      areFeesValid
-    })
-  }
+  handleFeesChange = (fees) => this.setState(({ blockchainKey }) => ({
+    areFeesValid: FeesSelector.areFeesValid({ blockchainKey, fees }),
+    fees
+  }))
 
   handleSubmit = () => {
-    const { onSupport } = this.props
+    const { currentAchievement, supportAchievement } = this.props
     const { amount, fees } = this.state
-    onSupport({ amount, fees: FeesSelector.convertFees(fees) })
+    supportAchievement({ amount, fees: FeesSelector.convertFees(fees), link: currentAchievement.object })
     this.resetForm()
     this.handleClose()
   }
@@ -59,6 +71,12 @@ class AchievementSupport extends Component {
     isAmountValid: false
   })
 
+  areAllBalancesEmpty = R.compose(
+    R.equals(0),
+    R.sum,
+    R.values
+  )
+
   render () {
     const {
       className,
@@ -68,16 +86,18 @@ class AchievementSupport extends Component {
       link,
       creatorName,
       title,
-      walletBalance
+      walletsBalances
     } = this.props
-    const isBalancePositive = walletBalance && walletBalance > 0
     const {
       amount,
       areFeesValid,
       fees,
       isAmountValid,
+      blockchainKey,
       modalOpen
     } = this.state
+    const noBalance = this.areAllBalancesEmpty(walletsBalances)
+    const blockchainSymbol = blockchains.all[blockchainKey].symbol
     return (
       <Fragment>
         <Button
@@ -85,7 +105,7 @@ class AchievementSupport extends Component {
           className={className}
           color="secondary"
           data-qa-id={`achievement-${idx}-support-button`}
-          disabled={!isBalancePositive}
+          disabled={noBalance}
           key='achievement-support-button'
           onClick={this.handleClickOpen}
           variant={fullScreen ? 'contained' : 'extendedFab'}
@@ -103,9 +123,15 @@ class AchievementSupport extends Component {
           open={modalOpen}
           onClose={this.handleClose}
         >
-          <DialogTitle id="form-dialog-title">Support</DialogTitle>
+          <DialogTitle id="form-dialog-title">Support {creatorName}</DialogTitle>
           <DialogContent>
             <DialogContentText paragraph>
+              Achievement: {title}
+              <Link
+                text={`View post on ${network.name} again`}
+                href={link}
+                typographyProps={{ paragraph: true }}
+              />
               {confirmationsCount === 0 ? (
                 `Are you sure of what you do ? This achievement has not been confirmed by anyone yet`
               ) : (
@@ -113,31 +139,39 @@ class AchievementSupport extends Component {
               )}
             </DialogContentText>
             <Divider style={{ marginBottom: '16px' }} />
-            <DialogContentText paragraph>
-              <Link
-                text={`View achievement post on ${network.name} again`}
-                href={link}
-                typographyProps={{ paragraph: true }}
-              />
-              Please enter an amount you would like to send to support {creatorName} for his achievement:
-            </DialogContentText>
-            <DialogContentText paragraph color="textPrimary">
-              {title}
-            </DialogContentText>
-            <Divider style={{ marginBottom: '16px' }} />
+            <TextField
+              data-qa-id={`achievement-${idx}-support-form-currency-select`}
+              fullWidth
+              label="Select currency for support"
+              margin="normal"
+              onChange={this.handleSelectCurrency}
+              select
+              value={blockchainKey}
+            >
+              {Object.keys(walletsBalances).map((key, itemIdx) => (
+                <MenuItem
+                  data-qa-id={`achievement-${idx}-support-form-currency-${itemIdx}-select`}
+                  key={key}
+                  value={key}
+                >
+                  {blockchains.get(key).name}
+                </MenuItem>
+              ))}
+            </TextField>
             <TextField
               autoFocus={!fullScreen}
               data-qa-id={`achievement-${idx}-support-form-amount-input`}
               error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
               margin="normal"
               id='amount'
-              label={`Amount in QTUM - maximum ${walletBalance} QTUM minus fees)`}
+              label={`Amount in ${blockchainSymbol} - maximum ${walletsBalances[blockchainKey]} ${blockchainSymbol} minus fees)`}
               value={amount}
               onChange={this.handleChange}
               type='number'
               fullWidth
             />
             <FeesSelector
+              blockchain={blockchains.get(blockchainKey)}
               error={!areFeesValid}
               onChange={this.handleFeesChange}
               value={fees}
@@ -170,13 +204,17 @@ class AchievementSupport extends Component {
 AchievementSupport.propTypes = {
   className: T.string,
   confirmationsCount: T.number,
+  creatorName: T.string,
+  currentAchievement: T.object,
   fullScreen: T.bool,
   idx: T.number,
   link: T.string,
-  creatorName: T.string,
-  onSupport: T.func,
+  supportAchievement: T.func,
   title: T.string,
-  walletBalance: T.number
+  walletsBalances: T.object
 }
 
-export default withMobileDialog()(AchievementSupport)
+export default R.compose(
+  withMobileDialog(),
+  withContainer
+)(AchievementSupport)

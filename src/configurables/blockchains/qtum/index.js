@@ -48,6 +48,7 @@ export default (function qtum () {
     symbol: 'QTUM',
     withdraw: needsWallet(withdraw),
     fees: {
+      convert: (fees) => Math.ceil(fees * 1e8 / 1024),
       initial: 0.008,
       max: 0.1,
       min: 0.004

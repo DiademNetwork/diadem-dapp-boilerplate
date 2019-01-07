@@ -13,7 +13,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Divider from '@material-ui/core/Divider'
 import withContainer from './container'
 import Confirm from './Confirm'
-import Deposit from './Deposit'
 import Support from './Support'
 import { withStyles } from '@material-ui/core/styles'
 import Link from 'components/shared/Link'
@@ -41,35 +40,6 @@ const styles = (theme) => ({
 })
 
 class AchievementsChain extends Component {
-  handleConfirm = () => {
-    const { accessToken, confirmAchievement, currentAchievement, userID, walletAddress } = this.props
-    confirmAchievement({
-      address: walletAddress,
-      link: currentAchievement.object,
-      token: accessToken,
-      user: userID
-    })
-  }
-
-  handleSupport = (data) => {
-    const { currentAchievement, supportAchievement } = this.props
-    supportAchievement({ ...data, link: currentAchievement.object })
-  }
-
-  handleDeposit = (data) => {
-    const { currentAchievement, depositForAchievement } = this.props
-    depositForAchievement({ ...data, link: currentAchievement.object })
-  }
-
-  hasUserAlreadyConfirmed = R.ifElse(
-    R.isNil,
-    R.F,
-    R.compose(
-      R.contains(this.props.userID),
-      R.map(R.prop('actor'))
-    )
-  )
-
   getUniqueUsersNamesFor = verb => R.compose(
     (list) => {
       const nameKey = verb === 'confirm' ? 'witnessName' : 'name'
@@ -92,12 +62,10 @@ class AchievementsChain extends Component {
   render () {
     const {
       classes,
-      canPerformActions,
       currentAchievement,
       idx,
       pastAchievements,
-      userID,
-      walletBalance
+      userID
     } = this.props
     const { actor: creatorID, name: creatorName, title, object } = currentAchievement
 
@@ -114,6 +82,7 @@ class AchievementsChain extends Component {
 
     const commonActionsButtonsProps = {
       creatorName,
+      currentAchievement,
       className: classes.actionsButtons,
       idx,
       link: object,
@@ -164,22 +133,10 @@ class AchievementsChain extends Component {
           >
             <Confirm
               {...commonActionsButtonsProps}
-              actionAlreadyDone={this.hasUserAlreadyConfirmed(currentAchievement.confirm)}
-              canPerformActions={canPerformActions}
-              creatorID={creatorID}
-              onConfirm={this.handleConfirm}
             />
             <Support
               {...commonActionsButtonsProps}
               confirmationsCount={confirmationsCount}
-              onSupport={this.handleSupport}
-              walletBalance={walletBalance}
-            />
-            <Deposit
-              {...commonActionsButtonsProps}
-              creatorID={creatorID}
-              onDeposit={this.handleDeposit}
-              walletBalance={walletBalance}
             />
           </CardActions>
         ) : (
@@ -233,18 +190,11 @@ class AchievementsChain extends Component {
 }
 
 AchievementsChain.propTypes = {
-  accessToken: T.string,
-  canPerformActions: T.bool,
   classes: T.object,
-  confirmAchievement: T.func,
   currentAchievement: T.object,
-  depositForAchievement: T.func,
   idx: T.number,
   pastAchievements: T.array,
-  userID: T.string,
-  walletAddress: T.string,
-  walletBalance: T.number,
-  supportAchievement: T.func
+  userID: T.string
 }
 
 export default R.compose(

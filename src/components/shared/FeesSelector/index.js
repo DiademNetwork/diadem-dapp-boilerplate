@@ -28,6 +28,8 @@ export class FeesSelector extends Component {
     R.gte(R.__, blockchains.get(blockchainKey).fees.min)
   ])(fees)
 
+  static convertFees = ({ blockchainKey, fees }) => blockchains.get(blockchainKey).fees.convert(fees)
+
   useCustomFees = () => this.setState({
     useCustomFees: true
   })
@@ -54,17 +56,6 @@ export class FeesSelector extends Component {
     const { blockchain, error, value } = this.props
     return (
       <React.Fragment>
-        <FormControlLabel
-          control={
-            <Checkbox
-              id='fees-selector-checkbox'
-              color="secondary"
-              checked={useCustomFees}
-              onChange={this.handleCheckboxChange}
-            />
-          }
-          label={`I want to use custom fees instead of default ${getInitialFees(blockchain.key)} ${blockchain.name} per kilobyte`}
-        />
         {useCustomFees && (
           <TextField
             data-qa-id='fees-selector-input'
@@ -79,6 +70,17 @@ export class FeesSelector extends Component {
             value={value}
           />
         )}
+        <FormControlLabel
+          control={
+            <Checkbox
+              id='fees-selector-checkbox'
+              color="secondary"
+              checked={useCustomFees}
+              onChange={this.handleCheckboxChange}
+            />
+          }
+          label={`I want to use custom fees instead of default ${getInitialFees(blockchain.key)} ${blockchain.name} per kilobyte`}
+        />
       </React.Fragment>
     )
   }

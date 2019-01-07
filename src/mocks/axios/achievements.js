@@ -2,6 +2,7 @@ import { createMockResponse } from './utils'
 
 export default (axiosMock) => {
   axiosMock.onPost('/confirm').reply(createMockResponse(200))
+  axiosMock.onPost(/^\/.+\/(create)$/).reply(createMockResponse(200))
   axiosMock.onPost('/create').reply(createMockResponse(200))
   axiosMock.onPost('/deposit').reply(createMockResponse(200))
   axiosMock.onPost('/support').reply(createMockResponse(200))

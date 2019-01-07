@@ -6,6 +6,7 @@ const commonWebpackConfig = require('./webpack.common')
 
 module.exports = webpackConfigMerger(commonWebpackConfig, {
   devtool: 'inline-source-map',
+  mode: 'production',
   plugins: [
     new UglifyJsPlugin({
       sourceMap: true,

@@ -1,19 +1,19 @@
 
-import { all, call, put, select, take, takeLatest, takeEvery } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { all, call, put, select, takeLatest } from 'redux-saga/effects'
+// import { delay } from 'redux-saga'
 import * as R from 'ramda'
 import api from 'services/api'
-import insight from 'services/insight'
+// import insight from 'services/insight'
 import T from 'modules/types'
 import S from 'modules/selectors'
 import ownA from './actions'
 import ownT from './types'
-import * as ownS from './selectors'
-import { oneOfTypes } from 'modules/utils'
+// import * as ownS from './selectors'
+// import { oneOfTypes } from 'modules/utils'
 import blockchains from 'configurables/blockchains'
 
-const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
-const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
+// const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
+// const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 
 const checkRegistration = function * ({ blockchainKey, userID }) {
   try {
@@ -165,57 +165,57 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
   }
 }
 
-const refresh = function * () {
-  yield take(oneOfTypes([
-    ownT.GENERATE.succeeded,
-    ownT.LOAD.succeeded,
-    ownT.RECOVER.succeeded
-  ]))
-  while (true) {
-    try {
-      const readyWalletsInfo = R.map(R.prop('walletInfo'))(yield select(ownS.getReadyWallets))
-      const readyWalletsKeys = R.keys(readyWalletsInfo)
-      const newReadyWalletsInfo = yield all(
-        readyWalletsKeys.map(key => call(blockchains.get(key).getWalletData))
-      )
-      const formattedNewReadyWalletsinfo = R.compose(
-        R.zipObj(readyWalletsKeys),
-        R.map(R.objOf('walletInfo'))
-      )(newReadyWalletsInfo)
+// const refresh = function * () {
+//   yield take(oneOfTypes([
+//     ownT.GENERATE.succeeded,
+//     ownT.LOAD.succeeded,
+//     ownT.RECOVER.succeeded
+//   ]))
+//   while (true) {
+//     try {
+//       const readyWalletsInfo = R.map(R.prop('walletInfo'))(yield select(ownS.getReadyWallets))
+//       const readyWalletsKeys = R.keys(readyWalletsInfo)
+//       const newReadyWalletsInfo = yield all(
+//         readyWalletsKeys.map(key => call(blockchains.get(key).getWalletData))
+//       )
+//       const formattedNewReadyWalletsinfo = R.compose(
+//         R.zipObj(readyWalletsKeys),
+//         R.map(R.objOf('walletInfo'))
+//       )(newReadyWalletsInfo)
 
-      if (!R.equals(formattedNewReadyWalletsinfo, readyWalletsInfo)) {
-        yield put(ownA.refresh.succeeded({ data: formattedNewReadyWalletsinfo }))
-      }
-      // if (R.complement(R.equals)(newWalletData, walletData)) {
-      //   const changes = { }
-      //   const { unconfirmedBalance } = walletData
-      //   const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
-      //   if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
-      //     switch (true) {
-      //       case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
-      //         changes.tokensSent = true
-      //         break
-      //       case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
-      //         changes.tokensReceived = true
-      //         break
-      //       case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
-      //         changes.receivingTokens = true
-      //         break
-      //       case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
-      //         changes.sendingTokens = true
-      //         break
-      //       default:
-      //         break
-      //     }
-      //   }
-      //   yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
-      // }
-    } catch (error) {
-      yield put(ownA.refresh.errored({ error }))
-    }
-    yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
-  }
-}
+//       if (!R.equals(formattedNewReadyWalletsinfo, readyWalletsInfo)) {
+//         yield put(ownA.refresh.succeeded({ data: formattedNewReadyWalletsinfo }))
+//       }
+//       // if (R.complement(R.equals)(newWalletData, walletData)) {
+//       //   const changes = { }
+//       //   const { unconfirmedBalance } = walletData
+//       //   const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
+//       //   if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
+//       //     switch (true) {
+//       //       case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+//       //         changes.tokensSent = true
+//       //         break
+//       //       case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+//       //         changes.tokensReceived = true
+//       //         break
+//       //       case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+//       //         changes.receivingTokens = true
+//       //         break
+//       //       case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+//       //         changes.sendingTokens = true
+//       //         break
+//       //       default:
+//       //         break
+//       //     }
+//       //   }
+//       //   yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
+//       // }
+//     } catch (error) {
+//       yield put(ownA.refresh.errored({ error }))
+//     }
+//     yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
+//   }
+// }
 
 // const checkLastTx = function * () {
 //   yield takeEvery(oneOfTypes([

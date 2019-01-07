@@ -69,16 +69,21 @@ class SandboxConfigEditor extends Component {
         <Dialog
           aria-labelledby="form-dialog-title"
           fullScreen={fullScreen}
-          key='sandbox-config-modal'
+          key="sandbox-config-modal"
           onClose={this.handleClose}
           open={modalOpen}
         >
-          <DialogTitle id="form-dialog-title">Sandbox Config</DialogTitle>
+          <DialogTitle
+            key="sandbox-config-modal-title"
+            id="form-dialog-title"
+          >
+              Sandbox Config
+          </DialogTitle>
           <DialogContent>
             {Object.keys(blockchains).map(blockchainKey => (
-              <Fragment>
+              <Fragment key={`${blockchainKey}-config`}>
                 <Typography
-                  key="tile"
+                  key={`${blockchainKey}-title`}
                   variant="title"
                 >
                   {blockchainKey}

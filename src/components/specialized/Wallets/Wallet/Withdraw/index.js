@@ -69,6 +69,7 @@ class WalletWithdraw extends Component {
       <Modal
         confirmButtonDisabled={!isFormValid}
         confirmButtonText="Confirm"
+        disabled={balance === 0}
         name={`${blockchain.name}-withdraw-modal`}
         onConfirm={this.handleConfirm}
         openButtonText="Withdraw"

@@ -1,7 +1,6 @@
-import bip39 from "bip39"
-
 import { Client, LocalAddress, CryptoUtils, LoomProvider } from "loom-js"
 
+import bip39 from "./bip39.english.js"
 import DiademCoin from './DiademCoin.json'
 import logo from './logo.jpg'
 

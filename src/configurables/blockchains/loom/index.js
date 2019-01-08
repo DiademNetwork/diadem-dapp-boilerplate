@@ -1,6 +1,7 @@
-import { Client, LocalAddress, CryptoUtils, LoomProvider } from "loom-js"
+import Web3 from 'web3'
+import { Client, LocalAddress, CryptoUtils, LoomProvider } from 'loom-js'
 
-import bip39 from "./bip39.english.js"
+import bip39 from './bip39.english.js'
 import DiademCoin from './DiademCoin.json'
 import logo from './logo.jpg'
 
@@ -36,13 +37,13 @@ export default (function loom () {
   const generateWallet = () => {
     const mnemonic = bip39.generateMnemonic()
     const seed = bip39.mnemonicToSeed(mnemonic)
-    const privateKey = CryptoUtils.generatePrivateKeyFromSeed(mnemonic)
+    const privateKey = CryptoUtils.generatePrivateKeyFromSeed(seed)
     return { mnemonic, privateKey }
   }
 
   const initFromMnemonic = async (mnemonic) => {
     const seed = bip39.mnemonicToSeed(mnemonic)
-    const privateKey = CryptoUtils.generatePrivateKeyFromSeed(mnemonic)
+    const privateKey = CryptoUtils.generatePrivateKeyFromSeed(seed)
     initFromPrivateKey(privateKey)
   }
 
@@ -59,7 +60,7 @@ export default (function loom () {
   }
 
   const getWalletData = async () => {
-    const balance = await token.methods.balanceOf(address).call({ from: wallet.address })
+    const balance = await contracts.token.methods.balanceOf(wallet.address).call({ from: wallet.address })
 
     return {
       addrStr: wallet.address,

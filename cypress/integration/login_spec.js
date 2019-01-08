@@ -18,7 +18,7 @@ describe('Login', () => {
   describe('When not registered', () => {
     beforeEach(() => {
       cy.get(`[data-qa-id='open-sandbox-config-button']`).click()
-      cy.get(`[data-qa-id='sandbox-config-editor-checkbox-isUserRegistered']`).click()
+      cy.get(`[data-qa-id='sandbox-config-editor-checkbox-isRegistered']`).click()
       cy.get(`[data-qa-id='close-sandbox-config-button']`).click()
     })
 

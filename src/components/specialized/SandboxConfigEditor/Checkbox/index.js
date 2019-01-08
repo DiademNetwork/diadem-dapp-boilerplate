@@ -4,19 +4,20 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { PropTypes as T } from 'prop-types'
 
 const SandboxConfigEditorCheckbox = ({
+  blockchainKey,
   label,
+  mocksController,
   name,
-  onChange,
-  mocksController
+  onChange
 }) => (
   <FormControlLabel
     control={
       <Checkbox
-        data-qa-id={`sandbox-config-editor-checkbox-${name}`}
-        checked={mocksController[name]}
-        onChange={({ target: { checked } }) => onChange(name)(checked)}
-        value={name}
+        checked={mocksController[blockchainKey][name]}
         color="primary"
+        data-qa-id={`sandbox-config-editor-checkbox-${name}`}
+        onChange={({ target: { checked } }) => onChange(blockchainKey)(name)(checked)}
+        value={name}
       />
     }
     label={label}
@@ -24,6 +25,7 @@ const SandboxConfigEditorCheckbox = ({
 )
 
 SandboxConfigEditorCheckbox.propTypes = {
+  blockchainKey: T.string,
   label: T.string,
   mocksController: T.object,
   name: T.string,

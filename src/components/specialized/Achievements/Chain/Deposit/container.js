@@ -7,6 +7,7 @@ const mapStateToProps = (state, { creatorID }) => ({
 })
 
 const mapDispatchToProps = {
+  depositForAchievement: A.achievements.chain.deposit.requested,
   fetchUsers: A.users.fetch.requested
 }
 

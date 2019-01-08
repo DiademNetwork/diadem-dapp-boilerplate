@@ -5,7 +5,7 @@ import IconButton from '@material-ui/core/IconButton'
 import copy from 'copy-to-clipboard'
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined'
 
-class WalletCopyToClipBoardButton extends Component {
+class CopyToClipboardButton extends Component {
   handleCopy = () => {
     copy(this.props.textToCopy)
   }
@@ -32,10 +32,10 @@ class WalletCopyToClipBoardButton extends Component {
   }
 }
 
-WalletCopyToClipBoardButton.propTypes = {
+CopyToClipboardButton.propTypes = {
   name: T.string,
   textToCopy: T.string,
   variant: T.string
 }
 
-export default WalletCopyToClipBoardButton
+export default CopyToClipboardButton

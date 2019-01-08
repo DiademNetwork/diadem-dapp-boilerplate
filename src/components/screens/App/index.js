@@ -7,9 +7,7 @@ import Nav from 'components/specialized/Nav'
 import Notifications from 'components/specialized/Notifications'
 import SandboxConfigEditor from 'components/specialized/SandboxConfigEditor'
 import Tabs from 'components/shared/Tabs'
-import Timeline from 'components/specialized/Timeline'
-import Users from 'components/specialized/Users'
-import Wallet from 'components/specialized/Wallet'
+import Wallets from 'components/specialized/Wallets'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
 import { withStyles } from '@material-ui/core/styles'
@@ -30,31 +28,17 @@ const styles = (theme) => ({
 const App = ({
   achievementsOpenned,
   classes,
-  hasUnreadAchievements,
-  hasUnreadTransactions,
-  transactionsOpenned,
-  userID,
-  userQtumAddress
+  hasUnreadAchievements
 }) => (
   <div>
     <Nav />
-    <Wallet className={classes.sm9} userID={userID} />
+    <Wallets className={classes.sm9} />
     <Tabs tabs={[
       {
         badgeContent: hasUnreadAchievements ? '!' : null,
         label: 'Achievements',
         onOpen: achievementsOpenned,
-        component: <Achievements className={classes.sm9} userQtumAddress={userQtumAddress} />
-      },
-      {
-        badgeContent: hasUnreadTransactions ? '!' : null,
-        label: 'Timeline',
-        onOpen: transactionsOpenned,
-        component: <Timeline className={classes.sm9} />
-      },
-      {
-        label: 'Users',
-        component: <Users className={classes.sm9} />
+        component: <Achievements className={classes.sm9} />
       }
     ]} />
     <Notifications />
@@ -68,11 +52,7 @@ const App = ({
 App.propTypes = {
   classes: T.object,
   hasUnreadAchievements: T.bool,
-  hasUnreadTransactions: T.bool,
-  achievementsOpenned: T.func,
-  transactionsOpenned: T.func,
-  userID: T.string,
-  userQtumAddress: T.string
+  achievementsOpenned: T.func
 }
 
 export default R.compose(

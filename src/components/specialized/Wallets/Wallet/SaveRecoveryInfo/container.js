@@ -3,12 +3,13 @@ import { bindActionCreators } from 'redux'
 import A from 'modules/actions'
 import S from 'modules/selectors'
 
-const mapStateToProps = (state) => ({
-  balance: S.wallets.balance(state)
+const mapStateToProps = (state, { blockchain }) => ({
+  mnemonic: S.wallets.mnemonic(blockchain.key)(state),
+  privateKey: S.wallets.privateKey(blockchain.key)(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  withdraw: A.wallets.withdraw.requested
+  infoSaved: A.wallets.infoSaved
 }, dispatch)
 
 export default WrappedComponent =>

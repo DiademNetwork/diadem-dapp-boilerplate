@@ -1,30 +1,37 @@
 import * as R from 'ramda'
+import * as U from 'utils'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
-const getQtum = createBaseSelector(['wallets'])
+const getWallets = createBaseSelector(['wallets'])
+const getWallet = name => createBaseSelector(['wallets', name])
+const getAll = R.path(['wallets'])
 
-export const data = getQtum(['data'])
-export const util = getQtum(['util'])
-export const loadFailReason = getQtum(['loadFailReason'])
-export const recoverFailReason = getQtum(['recoverFailReason'])
+export const data = getWallets(['data'])
+export const util = getWallets(['util'])
+
+export const loadFailReason = (name) => getWallets(name)(['loadFailReason'])
+export const recoverFailReason = (name) => getWallet(name)(['recoverFailReason'])
 
 // generation
-export const mnemonic = getQtum(['mnemonic'])
-export const privateKey = getQtum(['privateKey'])
-export const infoSaved = getQtum(['infoSaved'])
-export const hasPendingTx = getQtum(['hasPendingTx'])
+export const mnemonic = (name) => getWallet(name)(['mnemonic'])
+export const privateKey = (name) => getWallet(name)(['privateKey'])
+export const infoSaved = (name) => getWallet(name)(['infoSaved'])
+// export const hasPendingTx = getWallets(['hasPendingTx'])
 
 // registration
-
-export const isRegistered = getQtum(['isRegistered'])
+export const isRegistered = (name) => getWallet(name)(['isRegistered'])
+export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
-export const address = createSelector([data], R.prop('addrStr'))
-export const balance = getQtum(['data', 'balance'])
-export const unconfirmedBalance = createSelector([data], R.prop('unconfirmedBalance'))
+export const address = (name) => getWallet(name)(['addrStr'])
+export const balance = (name) => getWallet(name)(['balance'])
+export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance'])
+export const balances = createSelector([getAll], R.mapObjIndexed(R.propOr(0, 'balance')))
 
 // status
-export const status = getQtum(['status'])
-
-export const isReady = createSelector([status], R.partialRight(R.contains, [['loaded', 'recovered', 'restoring-info-saved']]))
+export const status = (name) => getWallet(name)(['status'])
+const isReadyStatus = U.oneOf(['loaded', 'recovered', 'recovery-info-saved'])
+export const isReady = (name) => createSelector([status(name)], isReadyStatus(status))
+export const getOnesReady = createSelector([getAll], R.pickBy(({ status }) => isReadyStatus(status)))
+export const areAllReady = createSelector([getOnesReady, getAll], R.equals)

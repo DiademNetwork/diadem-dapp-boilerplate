@@ -3,10 +3,8 @@ import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
   isLogged: S.login.isLogged(state),
-  loadFailReason: S.wallets.loadFailReason(state),
-  userID: S.login.userID(state),
-  walletStatus: S.wallets.status(state)
+  areAllWalletsReady: S.wallets.areAllReady(state)
 })
 
 export default WrappedComponent =>
-  connect(mapStateToProps, null)(WrappedComponent)
+  connect(mapStateToProps)(WrappedComponent)

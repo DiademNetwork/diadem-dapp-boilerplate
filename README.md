@@ -12,7 +12,7 @@ If you do not know what Diadem Network is about, please [Check documentation](ht
 * Qtumjs-wallet
 * Qtumjs
 * Getstream
-* Webpack 3
+* Webpack 4
 * Babel
 * Eslint (Standard config)
 * Cypress

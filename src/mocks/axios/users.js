@@ -1,16 +1,24 @@
 import usersStub from 'stubs/users'
 import mocksController from 'mocks/controller'
+import { createMockResponse } from './utils'
+
+const getBlockchainKey = config => config.url.split('/')[1]
 
 export default (axiosMock) => {
-  axiosMock.onGet('/users').reply(200, usersStub)
-  axiosMock.onPost('/check').reply(function () {
-    const { isUserRegistered, isUserPendingRegistration } = mocksController.get()
+  axiosMock.onGet(/^\/.+\/(users)$/).reply(createMockResponse(200, usersStub))
+  axiosMock.onPost(/^\/.+\/(check)$/).reply(createMockResponse((config) => {
+    const { [getBlockchainKey(config)]: { isRegistered, isPendingRegistration } } = mocksController.get()
     return [200, {
-      exists: isUserRegistered,
-      pending: isUserPendingRegistration
+      exists: isRegistered,
+      pending: isPendingRegistration
     }]
-  })
-  axiosMock.onPost('/check-qtum-address').reply(200, { ok: true })
-  axiosMock.onPost('/register').reply(200, { ok: true })
-  return axiosMock
+  }))
+  axiosMock.onPost(/^\/.+\/(check-address)$/).reply(createMockResponse((config) => {
+    const { [getBlockchainKey(config)]: { isAddressMatchingTheOneRegistered: ok } } = mocksController.get()
+    return [200, { ok }]
+  }))
+  axiosMock.onPost(/^\/.+\/(register)$/).reply(createMockResponse((config) => {
+    const { [getBlockchainKey(config)]: { isRegistrationSuccess: ok } } = mocksController.get()
+    return [200, { ok }]
+  }))
 }

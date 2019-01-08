@@ -12,6 +12,8 @@ import Hidden from '@material-ui/core/Hidden'
 import DoneIcon from '@material-ui/icons/Done'
 import Link from 'components/shared/Link'
 import network from 'configurables/network'
+import * as R from 'ramda'
+import withContainer from './container'
 
 class AchievementConfirm extends Component {
   state = {
@@ -26,24 +28,39 @@ class AchievementConfirm extends Component {
     this.setState({ modalOpen: false })
   }
 
+  hasUserAlreadyConfirmed = R.ifElse(
+    R.isNil,
+    R.F,
+    R.compose(
+      R.contains(this.props.userID),
+      R.map(R.prop('actor'))
+    )
+  )
+
   handleConfirm = () => {
-    const { onConfirm } = this.props
-    if (onConfirm) { onConfirm() }
+    const { accessToken, confirmAchievement, currentAchievement, userID, walletAddress } = this.props
+    confirmAchievement({
+      address: walletAddress,
+      link: currentAchievement.object,
+      token: accessToken,
+      user: userID
+    })
     this.handleClose()
   }
 
   render () {
     const {
-      actionAlreadyDone,
+      canPerformActions,
       className,
+      currentAchievement,
       fullScreen,
       idx,
-      canPerformActions,
       link,
-      creatorName,
       title
     } = this.props
     const { modalOpen } = this.state
+    const { name: creatorName } = currentAchievement
+    const hadConfirmedAlready = this.hasUserAlreadyConfirmed(currentAchievement.confirm)
     return (
       <Fragment>
         <Button
@@ -52,14 +69,14 @@ class AchievementConfirm extends Component {
           className={className}
           data-qa-id={`achievement-${idx}-confirm-button`}
           key='achievement-confirm-button'
-          disabled={!canPerformActions || actionAlreadyDone}
+          disabled={!canPerformActions || hadConfirmedAlready}
           onClick={this.handleClickOpen}
           variant={fullScreen ? 'contained' : 'extendedFab'}
         >
           <Hidden smDown>
             <DoneIcon />
           </Hidden>
-          {actionAlreadyDone ? 'You confirmed already' : 'Confirm'}
+          {hadConfirmedAlready ? 'You confirmed already' : 'Confirm'}
         </Button>
         <Dialog
           aria-labelledby="form-dialog-title"
@@ -113,15 +130,20 @@ class AchievementConfirm extends Component {
 }
 
 AchievementConfirm.propTypes = {
-  actionAlreadyDone: T.bool,
+  accessToken: T.string,
+  confirmAchievement: T.func,
+  currentAchievement: T.object,
   canPerformActions: T.bool,
   className: T.string,
-  creatorName: T.string,
   fullScreen: T.bool,
   idx: T.number,
   link: T.string,
-  onConfirm: T.func,
-  title: T.string
+  title: T.string,
+  userID: T.string,
+  walletAddress: T.string
 }
 
-export default withMobileDialog()(AchievementConfirm)
+export default R.compose(
+  withMobileDialog(),
+  withContainer
+)(AchievementConfirm)

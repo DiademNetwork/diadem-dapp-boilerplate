@@ -3,6 +3,7 @@ import ownT from './types'
 import ownA from './actions'
 import api from 'services/api'
 import S from 'modules/selectors'
+import blockchains from 'configurables/blockchains'
 
 const create = function * (payload) {
   try {
@@ -23,8 +24,9 @@ const update = function * (payload) {
 }
 
 const handleCreateUpdate = function * ({ link, previousLink = '', title }) {
-  yield call(api.createUpdateAchievement, {
-    address: yield select(S.wallets.address),
+  const primaryBlockchainKey = blockchains.primary.key
+  yield call(api.createUpdateAchievement(blockchains.primary.key), {
+    address: yield select(S.wallets.address(primaryBlockchainKey)),
     link,
     name: yield select(S.login.userName),
     previousLink,

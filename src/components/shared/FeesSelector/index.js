@@ -4,28 +4,31 @@ import { PropTypes as T } from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
-import InputAdornment from '@material-ui/core/InputAdornment'
+import blockchains from 'configurables/blockchains'
 
-const INITIAL_FEES = parseFloat(process.env.DEFAULT_QTUM_FEES_PER_KILOBYTE) || 0.008
-const MAX_FEES = process.env.MAX_QTUM_FEES_PER_KILOBYTE || 0.1
-const MIN_FEES = INITIAL_FEES / 2
+const getInitialFees = (blockchainKey) => blockchains.get(blockchainKey).fees.initial
+
+const getInitialForm = (blockchainKey) => ({
+  useCustomFees: false,
+  fees: getInitialFees(blockchainKey),
+  areFeesValid: true
+})
 
 export class FeesSelector extends Component {
-  state = {
-    useCustomFees: false,
-    fees: INITIAL_FEES,
-    areFeesValid: true
+  constructor (props) {
+    super(props)
+    this.state = getInitialForm(props.blockchain.key)
   }
 
-  static INITIAL_FEES = INITIAL_FEES
+  static getInitialFees = getInitialFees
 
-  static convertFees = (fees) => Math.ceil(fees * 1e8 / 1024)
-
-  static areFeesValid = R.allPass([
+  static areFeesValid = ({ blockchainKey, fees }) => R.allPass([
     R.is(Number),
-    R.lte(R.__, MAX_FEES),
-    R.gte(R.__, MIN_FEES)
-  ])
+    R.lte(R.__, blockchains.get(blockchainKey).fees.max),
+    R.gte(R.__, blockchains.get(blockchainKey).fees.min)
+  ])(fees)
+
+  static convertFees = ({ blockchainKey, fees }) => blockchains.get(blockchainKey).fees.convert(fees)
 
   useCustomFees = () => this.setState({
     useCustomFees: true
@@ -33,14 +36,11 @@ export class FeesSelector extends Component {
 
   useDefaultFees = () => {
     this.setState({ useCustomFees: false })
-    this.props.onChange(INITIAL_FEES)
+    this.props.onChange(getInitialFees(this.props.blockchain.key))
     this.resetForm()
   }
 
-  resetForm = () => this.setState({
-    fees: INITIAL_FEES,
-    areFeesValid: true
-  })
+  resetForm = () => this.setState(getInitialForm(this.props.blockchain.key))
 
   handleCheckboxChange = event => {
     const checked = event.target.checked
@@ -53,9 +53,23 @@ export class FeesSelector extends Component {
 
   render () {
     const { useCustomFees } = this.state
-    const { error, value } = this.props
+    const { blockchain, error, value } = this.props
     return (
       <React.Fragment>
+        {useCustomFees && (
+          <TextField
+            data-qa-id='fees-selector-input'
+            error={error}
+            fullWidth
+            helperText='The less you pay, the more time it will take to be confirmed'
+            id='fees'
+            label={`max ${blockchains.get(blockchain.key).fees.max} - min ${blockchains.get(blockchain.key).fees.min}`}
+            margin="normal"
+            onChange={this.handleChange}
+            type='number'
+            value={value}
+          />
+        )}
         <FormControlLabel
           control={
             <Checkbox
@@ -65,31 +79,15 @@ export class FeesSelector extends Component {
               onChange={this.handleCheckboxChange}
             />
           }
-          label={`I want to use custom fees instead of default ${INITIAL_FEES} QTUM per kilobyte`}
+          label={`I want to use custom fees instead of default ${getInitialFees(blockchain.key)} ${blockchain.name} per kilobyte`}
         />
-        {useCustomFees && (
-          <TextField
-            data-qa-id='fees-selector-input'
-            error={error}
-            fullWidth
-            helperText='The less you pay, the more time it will take to be confirmed'
-            id='fees'
-            InputProps={{
-              endAdornment: <InputAdornment position="end">QTUM/kB</InputAdornment>
-            }}
-            label={`max ${MAX_FEES} - min ${MIN_FEES}`}
-            margin="normal"
-            onChange={this.handleChange}
-            type='number'
-            value={value}
-          />
-        )}
       </React.Fragment>
     )
   }
 }
 
 FeesSelector.propTypes = {
+  blockchain: T.object.isRequired,
   error: T.bool,
   onChange: T.func,
   value: T.number

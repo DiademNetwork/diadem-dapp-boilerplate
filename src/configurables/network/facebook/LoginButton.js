@@ -4,7 +4,7 @@ import ReactFacebookLogin from 'react-facebook-login/dist/facebook-login-render-
 
 const FacebookLoginButton = ({ buttonComponent, onSuccess }) => (
   <ReactFacebookLogin
-    appId={process.env.FACEBOOK_APP_ID}
+    appId={2107292709536080}
     fields="name,email,picture"
     callback={onSuccess}
     version="3.1"

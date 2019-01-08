@@ -3,7 +3,12 @@ const path = require('path')
 module.exports = {
   entry: path.join(__dirname, '../src/index'),
   node: {
-    fs: 'empty'
+    fs: 'empty',
+    child_process: 'empty',
+    path: true,
+    crypto: true,
+    util: true,
+    stream: true
   },
   module: {
     rules: [

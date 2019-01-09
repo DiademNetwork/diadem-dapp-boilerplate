@@ -1,15 +1,17 @@
 
+<<<<<<< HEAD
 import { all, call, put, select, takeLatest, fork } from 'redux-saga/effects'
 // import { delay } from 'redux-saga'
+=======
+import { all, call, put, select, takeLatest } from 'redux-saga/effects'
+>>>>>>> WIP
 import * as R from 'ramda'
 import api from 'services/api'
-// import insight from 'services/insight'
+import streamApi from 'services/stream-api'
 import T from 'modules/types'
 import S from 'modules/selectors'
 import ownA from './actions'
 import ownT from './types'
-// import * as ownS from './selectors'
-// import { oneOfTypes } from 'modules/utils'
 import blockchains from 'configurables/blockchains'
 
 // const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
@@ -166,86 +168,6 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
   }
 }
 
-// const refresh = function * () {
-//   yield take(oneOfTypes([
-//     ownT.GENERATE.succeeded,
-//     ownT.LOAD.succeeded,
-//     ownT.RECOVER.succeeded
-//   ]))
-//   while (true) {
-//     try {
-//       const readyWalletsInfo = R.map(R.prop('walletInfo'))(yield select(ownS.getReadyWallets))
-//       const readyWalletsKeys = R.keys(readyWalletsInfo)
-//       const newReadyWalletsInfo = yield all(
-//         readyWalletsKeys.map(key => call(blockchains.get(key).getWalletData))
-//       )
-//       const formattedNewReadyWalletsinfo = R.compose(
-//         R.zipObj(readyWalletsKeys),
-//         R.map(R.objOf('walletInfo'))
-//       )(newReadyWalletsInfo)
-
-//       if (!R.equals(formattedNewReadyWalletsinfo, readyWalletsInfo)) {
-//         yield put(ownA.refresh.succeeded({ data: formattedNewReadyWalletsinfo }))
-//       }
-//       // if (R.complement(R.equals)(newWalletData, walletData)) {
-//       //   const changes = { }
-//       //   const { unconfirmedBalance } = walletData
-//       //   const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
-//       //   if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
-//       //     switch (true) {
-//       //       case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
-//       //         changes.tokensSent = true
-//       //         break
-//       //       case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
-//       //         changes.tokensReceived = true
-//       //         break
-//       //       case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
-//       //         changes.receivingTokens = true
-//       //         break
-//       //       case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
-//       //         changes.sendingTokens = true
-//       //         break
-//       //       default:
-//       //         break
-//       //     }
-//       //   }
-//       //   yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
-//       // }
-//     } catch (error) {
-//       yield put(ownA.refresh.errored({ error }))
-//     }
-//     yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
-//   }
-// }
-
-// const checkLastTx = function * () {
-//   yield takeEvery(oneOfTypes([
-//     T.login.LOGGED,
-//     T.transactions.FETCH.succeeded,
-//     T.transactions.RECEIVED
-//   ]), function * () {
-//     yield put(ownA.checkLastTx.requested())
-//     try {
-//       let hasPendingTx = false
-//       const userID = yield select(S.login.userID)
-//       if (userID) {
-//         const transactions = yield select(S.transactions.lastForUser(userID))
-//         if (transactions.length > 0) {
-//           // if at least one of transactions has no confirmation, hasPendingTx is true
-//           for (let transaction of transactions) {
-//             const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-//             hasPendingTx = hasPendingTx || confirmations === 0
-//           }
-//         }
-//       }
-//       yield put(ownA.checkLastTx.succeeded({ hasPendingTx }))
-//       yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
-//     } catch (error) {
-//       yield put(ownA.checkLastTx.errored({ error }))
-//     }
-//   })
-// }
-
 const withdraw = function * ({ blockchainKey, ...payload }) {
   try {
     const { withdraw } = blockchains.get(blockchainKey)
@@ -253,6 +175,21 @@ const withdraw = function * ({ blockchainKey, ...payload }) {
     yield put(ownA.withdraw.succeeded())
   } catch (error) {
     yield put(ownA.withdraw.errored({ error }))
+  }
+}
+
+const checkIfGeneratingGetstreamUserTokenNeeded = function * (payload) {
+  if (blockchains.isPrimary(blockchains.get(payload.blockchainKey))) {
+    yield put(ownA.getGetstreamToken.requested(payload))
+  }
+}
+
+const getGetstreamToken = function * ({ data: { addrStr } }) {
+  try {
+    const { token } = yield call(streamApi.getUserToken, { userID: addrStr })
+    yield put(ownA.getGetstreamToken.succeeded({ getstreamUserToken: token }))
+  } catch (error) {
+    yield put(ownA.getGetstreamToken.errored({ error }))
   }
 }
 
@@ -264,8 +201,12 @@ export default function * () {
     takeLatest(ownT.GENERATE.requested, generateWallet),
     takeLatest(ownT.GENERATE.succeeded, registerWallet),
     takeLatest(ownT.RECOVER.requested, recoverWallet),
-    takeLatest(ownT.WITHDRAW.requested, withdraw)
-    // fork(refresh)
-    // fork(checkLastTx)
+    takeLatest(ownT.WITHDRAW.requested, withdraw),
+    takeLatest([
+      ownT.GENERATE.succeeded,
+      ownT.LOAD.succeeded,
+      ownT.RECOVER.succeeded
+    ], checkIfGeneratingGetstreamUserTokenNeeded),
+    takeLatest(ownT.GET_GETSTREAM_TOKEN.requested, getGetstreamToken)
   ])
 }

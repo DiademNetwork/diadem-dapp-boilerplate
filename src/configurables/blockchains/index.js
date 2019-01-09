@@ -6,15 +6,17 @@ export default (function blockchains () {
   // You can change blockchain for smart contracts here
   const primary = process.env.ENV === 'sandbox' ? fakechain : qtum
 
-  // You can add/change/remove blokchains for value transfers here
-  const others = process.env.ENV === 'sandbox' ? { fakechain2 } : {}
+  // You can add/change/remove blokchains for value transfert here
+  const nonPrimary = process.env.ENV === 'sandbox' ? { fakechain2 } : { }
 
-  const all = { [primary.key]: primary, ...others }
+  const all = { [primary.key]: primary, ...nonPrimary }
 
   return Object.freeze({
     primary,
+    nonPrimary,
     all,
     keys: Object.keys(all),
-    get: (blockchainKey) => all[blockchainKey]
+    get: (blockchainKey) => all[blockchainKey],
+    isPrimary: blockchain => blockchain.name === primary.name
   })
 })()

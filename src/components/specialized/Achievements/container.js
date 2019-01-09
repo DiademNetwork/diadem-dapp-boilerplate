@@ -9,8 +9,8 @@ const mapStateToProps = (state) => ({
     S.login.isLogged,
     S.wallets.areAllReady
   ])(state),
-  createAchievementStatus: S.achievements.chain.createStatus(state),
-  fetchStatus: S.achievements.list.fetchStatus(state)
+  createAchievementStatus: S.achievements.chain.createStatus(state)
+  // fetchStatus: S.achievements.list.fetchStatus(state)
   // lastLinkOfUserAchievementOrNull: S.achievements.list.lastLinkOfUserAchievementOrNull(userQtumAddress)(state)
 })
 

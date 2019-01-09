@@ -10,16 +10,16 @@ export const createStreamClient = (streamTool) => {
   const client = streamTool.connect(process.env.STREAM_KEY, null, process.env.STREAM_APPID)
 
   const feeds = {
-    achievements: client.feed(
-      process.env.STREAM_ACHIEVEMENTS_FEED,
-      'common',
-      process.env.STREAM_ACHIEVEMENTS_FEED_TOKEN
-    ),
-    transactions: client.feed(
-      process.env.STREAM_TRANSACTIONS_FEED,
-      'common',
-      process.env.STREAM_TRANSACTIONS_FEED_TOKEN
-    )
+    // achievements: client.feed(
+    //   process.env.STREAM_ACHIEVEMENTS_FEED,
+    //   'common',
+    //   process.env.STREAM_ACHIEVEMENTS_FEED_TOKEN
+    // ),
+    // transactions: client.feed(
+    //   process.env.STREAM_TRANSACTIONS_FEED,
+    //   'common',
+    //   process.env.STREAM_TRANSACTIONS_FEED_TOKEN
+    // )
   }
 
   async function suscribeWithCallBacks (feedName, successCallback) {

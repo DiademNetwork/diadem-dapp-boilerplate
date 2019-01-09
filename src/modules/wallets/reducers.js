@@ -3,16 +3,19 @@ import blockchains from 'configurables/blockchains'
 import * as R from 'ramda'
 import T from './types'
 
-const initialState = R.mapObjIndexed(R.always({
+const initialState = Object.assign({
+  getstreamUserToken: ''
+}, R.mapObjIndexed(R.always({
   status: 'initial'
-}), blockchains.all)
+}), blockchains.all))
 
 export default function createReducer (state, {
   hasPendingTx,
   blockchainKey,
   data,
   status,
-  type
+  type,
+  getstreamUserToken
 }) {
   if (typeof state === 'undefined') { return initialState }
   switch (type) {
@@ -28,6 +31,7 @@ export default function createReducer (state, {
     case T.CHECK_LAST_TX.succeeded: return merge(state)({ hasPendingTx })
     case T.INFO_SAVED: return merge(state)({ [blockchainKey]: { status: 'recovery-info-saved' } })
     case T.CHECK_REGISTRATIONS.succeeded: return merge(state)({ ...data })
+    case T.GET_GETSTREAM_TOKEN.succeeded: return merge(state)({ getstreamUserToken })
     default: return state
   }
 }

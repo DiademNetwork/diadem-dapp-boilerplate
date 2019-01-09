@@ -4,7 +4,7 @@ import S from 'modules/selectors'
 import A from 'modules/actions'
 
 const mapStateToProps = (state) => ({
-  hasUnreadAchievements: S.achievements.list.hasUnread(state),
+  hasUnreadAchievements: false,
   userID: S.login.userID(state)
 })
 

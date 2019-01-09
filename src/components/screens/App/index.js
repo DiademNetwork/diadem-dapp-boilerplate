@@ -1,7 +1,7 @@
 
 import React from 'react'
 import * as R from 'ramda'
-import Achievements from 'components/specialized/Achievements'
+import Achievements from 'components/specialized/Achievements2'
 import Help from 'components/specialized/Help'
 import Nav from 'components/specialized/Nav'
 import Notifications from 'components/specialized/Notifications'

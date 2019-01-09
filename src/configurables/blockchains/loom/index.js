@@ -5,14 +5,16 @@ import bip39 from './bip39.english.js'
 import DiademCoin from './DiademCoin.json'
 import logo from './logo.jpg'
 
+const LOOM_URL = process.env.ENV === 'mainnet' ? 'ws://loom.diadem.host' : 'ws://127.0.0.1:46658'
+
 const chainId = 'default'
-const writeUrl = `${process.env.LOOM_URL}/websocket`
-const readUrl = `${process.env.LOOM_URL}/queryws`
+const writeUrl = `${LOOM_URL}/websocket`
+const readUrl = `${LOOM_URL}/queryws`
 
 const metadata = {
   name: 'Loom',
   key: 'loom',
-  symbol: 'LOOM',
+  symbol: 'DDM',
   logo: logo,
   fees: {
     convert: (fees) => fees,

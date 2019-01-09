@@ -5,10 +5,7 @@ module.exports = {
   node: {
     fs: 'empty',
     child_process: 'empty',
-    path: true,
-    crypto: true,
-    util: true,
-    stream: true
+    crypto: true
   },
   module: {
     rules: [

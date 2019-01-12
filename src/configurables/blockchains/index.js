@@ -6,7 +6,7 @@ export default (function blockchains () {
   // You can change blockchain for smart contracts here
   const primary = process.env.ENV === 'sandbox' ? fakechain : qtum
 
-  // You can add/change/remove blokchains for value transfert here
+  // You can add/change/remove blokchains for value transfers here
   const others = process.env.ENV === 'sandbox' ? { fakechain2 } : {}
 
   const all = { [primary.key]: primary, ...others }

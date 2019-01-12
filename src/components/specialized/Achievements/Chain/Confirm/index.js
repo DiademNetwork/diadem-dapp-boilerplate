@@ -69,7 +69,7 @@ class AchievementConfirm extends Component {
           className={className}
           data-qa-id={`achievement-${idx}-confirm-button`}
           key='achievement-confirm-button'
-          disabled={!canPerformActions || hadConfirmedAlready}
+          disabled={hadConfirmedAlready}
           onClick={this.handleClickOpen}
           variant={fullScreen ? 'contained' : 'extendedFab'}
         >

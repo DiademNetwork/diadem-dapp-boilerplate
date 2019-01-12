@@ -46,21 +46,6 @@ const Achievements = ({
   const displayUpdateButton = canPerformActions && lastLinkOfUserAchievementOrNull
   const displayCreateButton = canPerformActions && !lastLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
   return [
-    displayUpdateButton && (
-      <Update
-        className={classes.achievementButton}
-        key="update"
-        onUpdate={updateAchievement}
-        previousLink={lastLinkOfUserAchievementOrNull} // will always be string in this case
-      />
-    ),
-    displayCreateButton && (
-      <Create
-        key="create"
-        className={classes.achievementButton}
-        onCreate={createAchievement}
-      />
-    ),
     <Grid
       key='list'
       container

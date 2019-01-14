@@ -89,8 +89,10 @@
     "@storybook/addon-console": "^1.0.8",
     "axios": "^0.18.0",
     "axios-mock-adapter": "^1.15.0",
+    "axios-observable": "^1.0.7",
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "base-58": "^0.0.1",
     "bs58": "^4.0.1",
     "copy-to-clipboard": "^3.0.8",
     "dotenv-webpack": "^1.5.7",
@@ -117,16 +119,13 @@
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
+    "rxjs": "^6.3.3",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.3",
     "storybook-addon-material-ui": "^0.9.0-alpha.16",
     "storybook-addon-specifications": "^2.1.2",
+    "tweetnacl": "^1.0.0",
     "url-loader": "^1.1.1",
     "uuid": "^3.3.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn run lint && yarn test"
-    }
   }
 }

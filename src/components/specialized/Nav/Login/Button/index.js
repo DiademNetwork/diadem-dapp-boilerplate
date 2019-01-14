@@ -18,7 +18,7 @@ const LoginButton = ({ classes, name, onClick }) => (
     color="secondary"
     data-qa-id="login-button"
     onClick={onClick}
-    variant="contained"
+    variant="extendedFab"
   >
     Login<Hidden smDown> with {name}<PowerSettingsNewIcon className={classes.icon} /></Hidden>
   </Button>

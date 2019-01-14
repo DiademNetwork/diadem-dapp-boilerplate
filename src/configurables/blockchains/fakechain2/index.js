@@ -47,6 +47,8 @@ export default (function fakeChain () {
     return { mnemonic, privateKey }
   }
 
+  const registerWallet = () => ({ ok: true })
+
   const getWalletData = async () => {
     const { pendingTxID } = mocksController.get()
     if (pendingTxID !== '') {
@@ -86,6 +88,7 @@ export default (function fakeChain () {
     name: 'Fakechain2',
     getWalletData,
     generateWallet,
+    registerWallet,
     getPrivateKey,
     symbol,
     withdraw,

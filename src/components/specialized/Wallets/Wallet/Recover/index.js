@@ -69,7 +69,6 @@ class WalletRecover extends Component {
         openButtonText="Recover"
         title={`Recover your ${blockchain.name} wallet`}
         controlledOpen={status === 'address-not-matching' ? true : undefined}
-        startsOpen
         render={({ fullScreen }) => (
           <Fragment>
             {status === 'address-not-matching' && (

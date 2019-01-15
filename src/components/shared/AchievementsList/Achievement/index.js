@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography'
 import Confirm from './Confirm'
 import Support from './Support'
 import withContainer from './container'
+import * as U from 'utils'
 
 const styles = (theme) => ({
   item: {
@@ -27,24 +28,15 @@ const styles = (theme) => ({
   }
 })
 
-const getCreationActivity = R.compose(
-  R.head,
-  R.filter(R.propEq('verb', 'create'))
-)
-
-const getConfirmActivities = R.compose(
-  R.filter(R.propEq('verb', 'confirm'))
-)
-
-const AchievementsListItem = ({
+const Achievement = ({
   classes,
-  item,
+  achievement,
   idx,
   userAddress
 }) => {
-  const { activities } = item
-  const creationActivity = getCreationActivity(activities)
-  const { actor: creator, title, object } = creationActivity
+  const { actor: creator, title, object } = U.achievement.getActivities('create')(achievement)
+  const confirmActivities = U.achievement.getActivities('confirm')(achievement)
+  const supportActivities = U.achievement.getActivities('support')(achievement)
   return (
     <Card
       className={classes.item}
@@ -63,20 +55,29 @@ const AchievementsListItem = ({
             />
           </Typography>
         }
-        subheader={<Typography key="achievement-creator" variant="subheading" color="textSecondary">by <UserName actor={creator} /></Typography>}
+        subheader={<Typography key="achievement-creator" variant="subheading" color="textSecondary">Created by <UserName actor={creator} /></Typography>}
       />
       <Divider />
       <CardContent>
-        This achievement has been confirmed {getConfirmActivities(activities).length}
+        {confirmActivities.length > 0 && (
+          <Typography>
+            {`This achievement has been confirmed by ${U.actor.getUserName(U.achievement.firstActor('confirm')(achievement))}${confirmActivities.length - 1 > 0 ? `and ${confirmActivities.length - 1} other people.` : ''}`}
+          </Typography>
+        )}
+        {supportActivities.length > 0 && (
+          <Typography>
+            {`This achievement has been supported by ${U.actor.getUserName(U.achievement.firstActor('support')(achievement))}${supportActivities.length - 1 > 0 ? `and ${supportActivities.length - 1} other people.` : ''}`}
+          </Typography>
+        )}
       </CardContent>
       <CardActions
         className={classes.actions}
         disableActionSpacing
       >
-        {UserName.getUserAddress(creator) !== userAddress ? (
+        {U.achievement.isCreator(userAddress)(achievement) ? (
           <Fragment>
-            <Confirm key='confirm' achievement={item} />
-            <Support key='support' />
+            <Confirm key='confirm' achievement={achievement} idx={idx} />
+            <Support key='support' achievement={achievement} idx={idx} />
           </Fragment>
         ) : (
           <Typography>This is your achievement</Typography>
@@ -86,14 +87,14 @@ const AchievementsListItem = ({
   )
 }
 
-AchievementsListItem.propTypes = {
+Achievement.propTypes = {
+  achievement: T.object,
   classes: T.object,
   idx: T.number,
-  item: T.object,
   userAddress: T.string
 }
 
 export default R.compose(
   withContainer,
   withStyles(styles)
-)(AchievementsListItem)
+)(Achievement)

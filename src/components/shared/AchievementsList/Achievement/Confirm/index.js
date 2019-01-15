@@ -8,34 +8,19 @@ import withContainer from './container'
 import Modal from 'components/shared/Modal'
 import Link from 'components/shared/Link'
 import UserName from 'components/shared/UserName'
+import * as U from 'utils'
 
 class ConfirmAchievement extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      hasConfirmedAlready: this.hasUserAlreadyConfirmed(props.achievement),
-      creatorAddress: R.prop('id')(this.getCreationActivity(props.achievement.activities))
-    }
-  }
-
-  hasUserAlreadyConfirmed = () => false
-
   handleConfirm = () => {
     const { accessToken, confirmAchievement, achievement, userID, userAddress } = this.props
-    const { creatorAddress } = this.state
     confirmAchievement({
-      userAddress: userAddress,
-      creatorAddress,
-      link: achievement.group,
+      userAddress,
+      creatorAddress: U.achievement.getCreatorAddress(achievement),
+      link: U.achievement.getLink(achievement),
       token: accessToken,
       user: userID
     })
   }
-
-  getCreationActivity = R.compose(
-    R.head,
-    R.filter(R.propEq('verb', 'create'))
-  )
 
   render () {
     const {
@@ -43,18 +28,19 @@ class ConfirmAchievement extends Component {
       canPerformActions,
       idx,
       link,
-      title
+      title,
+      userAddress
     } = this.props
-    const { hasConfirmedAlready } = this.state
-    const { actor } = this.getCreationActivity(achievement.activities)
+    const hasUserAlreadyConfirmed = U.achievement.hasAlready(userAddress)('confirm')(achievement)
+    const { actor } = U.achievement.getActivities('create')(achievement)
     return (
       <Modal
         confirmButtonText="Confirm"
         data-qa-id={`achievement-${idx}-confirm-modal`}
-        disabled={hasConfirmedAlready || !canPerformActions}
+        disabled={hasUserAlreadyConfirmed || !canPerformActions}
         name={`achievement-${idx}-confirm-button`}
         onConfirm={this.handleConfirm}
-        openButtonText={hasConfirmedAlready ? 'You confirmed already' : 'Confirm'}
+        openButtonText={hasUserAlreadyConfirmed ? 'You confirmed already' : 'Confirm'}
         title="Confirm"
         render={() => (
           <DialogContentText component="div">

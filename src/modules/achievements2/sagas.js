@@ -11,7 +11,7 @@ import blockchains from 'configurables/blockchains'
 const create = function * ({ link, title }) {
   try {
     const primaryBlockchainKey = blockchains.primary.key
-    const userAddress = yield select(S.wallets.address(primaryBlockchainKey))
+    const userAddress = yield select(S.wallets.primaryAddress)
     yield call(api.createAchievement(primaryBlockchainKey), {
       address: userAddress,
       link,
@@ -103,6 +103,37 @@ const suscribeUserAchievements = function * ({ userAddress }) {
   }
 }
 
+const support = function * ({ amount, blockchainKey, creatorAddress, fees, link }) {
+  try {
+    const { address, encodedData } = yield call(api.encodeSupport(blockchainKey), { link })
+    const rawTx = blockchains.get(blockchainKey).generateContractSendTx({
+      address,
+      encodedData,
+      amount,
+      feeRate: fees
+    })
+    yield call(api.supportAchievement(blockchainKey), {
+      address: yield select(S.wallets.primaryAddress),
+      link,
+      rawTx,
+      token: yield select(S.login.userAccessToken),
+      user: yield select(S.login.userID)
+    })
+    yield put(ownA.support.succeeded())
+    // GETSTREAM SERVICE
+    const userAddress = yield select(S.wallets.primaryAddress)
+    yield call(stream.supportAchievement, {
+      link,
+      userAddress,
+      creatorAddress,
+      amount
+    })
+  } catch (error) {
+    console.log(error)
+    yield put(ownA.support.errored({ error }))
+  }
+}
+
 export default function * () {
   yield all([
     fork(fetch),
@@ -111,6 +142,7 @@ export default function * () {
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, suscribeUserAchievements),
     takeLatest(ownT.CREATE.requested, create),
     takeLatest(ownT.FETCH.requested, fetch),
-    takeLatest(ownT.CONFIRM.requested, confirm)
+    takeLatest(ownT.CONFIRM.requested, confirm),
+    takeLatest(ownT.SUPPORT.requested, support)
   ])
 }

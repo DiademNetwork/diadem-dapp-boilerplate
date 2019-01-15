@@ -38,12 +38,23 @@ export default (function qtum () {
     walletUtil.send(address, amount * 1e8, { feeRate: Math.ceil(fees * 1e8 / 1024) })
   }
 
+  const generateContractSendTx = ({
+    address,
+    encodedData,
+    amount,
+    feeRate: fees
+  }) => walletUtil.generateContractSendTx(address, encodedData, {
+    amount: amount * 1e8,
+    feeRate: fees
+  })
+
   return Object.freeze({
     initFromMnemonic,
     initFromPrivateKey,
     key: 'qtum',
     logo,
     name: 'Qtum',
+    generateContractSendTx,
     getWalletData: needsWallet(getWalletData),
     generateWallet,
     registerWallet,

@@ -80,6 +80,8 @@ export default (function fakeChain () {
     balance.set('balance', balanceData.balance - amount)
   }
 
+  const generateContractSendTx = () => 'raxTxString'
+
   return Object.freeze({
     initFromMnemonic,
     initFromPrivateKey,
@@ -87,6 +89,7 @@ export default (function fakeChain () {
     logo,
     name: 'Fakechain2',
     getWalletData,
+    generateContractSendTx,
     generateWallet,
     registerWallet,
     getPrivateKey,

@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import * as U from 'utils'
+import blockchains from 'configurables/blockchains'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
@@ -26,6 +27,7 @@ export const isRegistered = (name) => getWallet(name)(['isRegistered'])
 export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
+export const primaryAddress = getWallet(blockchains.primary.key)(['addrStr'])
 export const address = (name) => getWallet(name)(['addrStr'])
 export const balance = (name) => getWallet(name)(['balance'])
 export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance'])

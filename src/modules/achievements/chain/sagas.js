@@ -26,7 +26,7 @@ const update = function * (payload) {
 const handleCreateUpdate = function * ({ link, previousLink = '', title }) {
   const primaryBlockchainKey = blockchains.primary.key
   yield call(api.createAchievement(blockchains.primary.key), {
-    address: yield select(S.wallets.address(primaryBlockchainKey)),
+    address: yield select(S.wallets.primaryAddress),
     link,
     name: yield select(S.login.userName),
     previousLink,

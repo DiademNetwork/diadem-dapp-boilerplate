@@ -6,7 +6,7 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import Item from './Item'
+import Achievement from './Achievement'
 
 const styles = (theme) => ({
   grid: {
@@ -25,10 +25,10 @@ const AchievementsList = ({ classes, list: { list }, noAchievementText }) => (
   >
     <Grid key='no-item' item xs={12}>
       {list.length > 0 ? (
-        list.map((item, idx) => (
-          <Item
+        list.map((achievement, idx) => (
+          <Achievement
+            achievement={achievement}
             key={idx}
-            item={item}
             idx={idx}
           />
         ))

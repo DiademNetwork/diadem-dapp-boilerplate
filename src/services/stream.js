@@ -88,6 +88,7 @@ export const createStreamClient = (fetcher, baseURL, streamTool) => {
     confirmAchievement: postToPath(`/achievements/confirm`),
     getUserToken: postToPath(`/get-user-token`),
     setUser,
+    supportAchievement: postToPath(`/achievements/support`),
     userClient
   })
 }

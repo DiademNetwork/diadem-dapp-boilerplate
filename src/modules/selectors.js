@@ -1,4 +1,4 @@
-import * as achievements from 'modules/achievements2/selectors'
+import * as achievements from 'modules/achievements/selectors'
 import * as login from 'modules/login/selectors'
 import * as timeline from 'modules/timeline/selectors'
 import * as transactions from 'modules/transactions/selectors'

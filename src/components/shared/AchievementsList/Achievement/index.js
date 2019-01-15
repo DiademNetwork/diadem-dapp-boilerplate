@@ -75,12 +75,12 @@ const Achievement = ({
         disableActionSpacing
       >
         {U.achievement.isCreator(userAddress)(achievement) ? (
+          <Typography>This is your achievement</Typography>
+        ) : (
           <Fragment>
             <Confirm key='confirm' achievement={achievement} idx={idx} />
             <Support key='support' achievement={achievement} idx={idx} />
           </Fragment>
-        ) : (
-          <Typography>This is your achievement</Typography>
         )}
       </CardActions>
     </Card>

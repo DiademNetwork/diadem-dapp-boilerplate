@@ -1,6 +1,6 @@
 import { all, fork } from 'redux-saga/effects'
 
-import achievements from 'modules/achievements2/sagas'
+import achievements from 'modules/achievements/sagas'
 import timeline from 'modules/timeline/sagas'
 import uiGeneral from 'modules/ui/general/sagas'
 import uiNotifications from 'modules/ui/notifications/sagas'

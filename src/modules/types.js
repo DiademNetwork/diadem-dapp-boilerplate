@@ -1,4 +1,4 @@
-import achievements from 'modules/achievements2/types'
+import achievements from 'modules/achievements/types'
 import login from 'modules/login/types'
 import timeline from 'modules/timeline/types'
 import transactions from 'modules/transactions/types'

@@ -6,7 +6,8 @@ import withContainer from './container'
 
 const UserName = ({ actor, userAddress }) => (
   <span>
-    {U.actor.getAddress(actor) === userAddress ? 'you' : U.actor.getUserName(actor)}
+    {console.log({ actor })}
+    {U.actor.is(userAddress)(actor) ? 'you' : U.actor.getUserName(actor)}
   </span>
 )
 

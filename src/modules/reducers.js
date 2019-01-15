@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 
-import achievements from 'modules/achievements2/reducers'
+import achievements from 'modules/achievements/reducers'
 import login from 'modules/login/reducers'
 import timeline from 'modules/timeline/reducers'
 import transactions from 'modules/transactions/reducers'

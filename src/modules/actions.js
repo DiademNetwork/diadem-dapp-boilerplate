@@ -1,4 +1,4 @@
-import achievements from 'modules/achievements2/actions'
+import achievements from 'modules/achievements/actions'
 import login from 'modules/login/actions'
 import transactions from 'modules/transactions/actions'
 import uiGeneral from 'modules/ui/general/actions'

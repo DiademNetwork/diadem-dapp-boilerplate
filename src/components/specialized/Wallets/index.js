@@ -17,9 +17,9 @@ import LinearProgress from '@material-ui/core/LinearProgress'
 import Button from '@material-ui/core/Button'
 import PaymentIcon from '@material-ui/icons/Payment'
 import PeopleIcon from '@material-ui/icons/People'
-import Login from '../Nav/Login'
-import Update from '../Achievements/Update'
-import Create from '../Achievements/Create'
+import Login from 'components/specialized/Nav/Login'
+import Update from 'components/specialized/Achievements/Update'
+import Create from 'components/specialized/Achievements/Create'
 import { withStyles } from '@material-ui/core'
 
 const styles = (theme) => ({

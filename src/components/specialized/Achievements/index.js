@@ -43,8 +43,6 @@ const Achievements = ({
   lastLinkOfUserAchievementOrNull,
   updateAchievement
 }) => {
-  const displayUpdateButton = canPerformActions && lastLinkOfUserAchievementOrNull
-  const displayCreateButton = canPerformActions && !lastLinkOfUserAchievementOrNull && createAchievementStatus !== 'succeeded'
   return [
     <Grid
       key='list'

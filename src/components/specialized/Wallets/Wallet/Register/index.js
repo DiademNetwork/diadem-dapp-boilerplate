@@ -13,14 +13,13 @@ class WalletRegister extends Component {
 
   render () {
     const { blockchain, pending } = this.props
-    const disabled = pending ? true : false
     const openButtonText = pending ? 'Waiting...' : 'Register'
     return (
       <Modal
         name={`${blockchain.name}-register-modal`}
         onConfirm={this.handleConfirm}
         openButtonText={openButtonText}
-        disabled={disabled}
+        disabled={pending}
         title={`Register to ${blockchain.name}`}
         render={() => (
           <Typography paragraph variant="body1">

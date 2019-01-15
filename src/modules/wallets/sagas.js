@@ -1,13 +1,8 @@
 
-<<<<<<< HEAD
-import { all, call, put, select, takeLatest, fork } from 'redux-saga/effects'
-// import { delay } from 'redux-saga'
-=======
-import { all, call, put, select, takeLatest } from 'redux-saga/effects'
->>>>>>> WIP
+import { all, call, put, select, takeLatest, takeEvery, fork } from 'redux-saga/effects'
 import * as R from 'ramda'
 import api from 'services/api'
-import streamApi from 'services/stream-api'
+import stream from 'services/stream'
 import T from 'modules/types'
 import S from 'modules/selectors'
 import ownA from './actions'
@@ -178,19 +173,26 @@ const withdraw = function * ({ blockchainKey, ...payload }) {
   }
 }
 
-const checkIfGeneratingGetstreamUserTokenNeeded = function * (payload) {
-  if (blockchains.isPrimary(blockchains.get(payload.blockchainKey))) {
-    yield put(ownA.getGetstreamToken.requested(payload))
+const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrStr: userAddress } }) {
+  if (blockchains.isPrimary(blockchains.get(blockchainKey))) {
+    try {
+      const { token } = yield call(stream.getUserToken, { userAddress })
+      if (!token) {
+        yield put(ownA.getGetstreamToken.failed({ status: 'no-token' }))
+      } else {
+        yield call(stream.userToken.set, token)
+        yield call(stream.userClient.init)
+        yield put(ownA.getGetstreamToken.succeeded({ userAddress }))
+      }
+    } catch (error) {
+      yield put(ownA.getGetstreamToken.errored({ error }))
+    }
   }
 }
 
-const getGetstreamToken = function * ({ data: { addrStr } }) {
-  try {
-    const { token } = yield call(streamApi.getUserToken, { userID: addrStr })
-    yield put(ownA.getGetstreamToken.succeeded({ getstreamUserToken: token }))
-  } catch (error) {
-    yield put(ownA.getGetstreamToken.errored({ error }))
-  }
+const setUser = function * () {
+  const data = yield select((S.login.data))
+  yield call(stream.setUser, { data })
 }
 
 export default function * () {
@@ -202,11 +204,11 @@ export default function * () {
     takeLatest(ownT.GENERATE.succeeded, registerWallet),
     takeLatest(ownT.RECOVER.requested, recoverWallet),
     takeLatest(ownT.WITHDRAW.requested, withdraw),
-    takeLatest([
+    takeEvery([
       ownT.GENERATE.succeeded,
       ownT.LOAD.succeeded,
       ownT.RECOVER.succeeded
-    ], checkIfGeneratingGetstreamUserTokenNeeded),
-    takeLatest(ownT.GET_GETSTREAM_TOKEN.requested, getGetstreamToken)
+    ], getGetstreamTokenIfNecessary),
+    takeLatest(ownT.GET_GETSTREAM_TOKEN.succeeded, setUser)
   ])
 }

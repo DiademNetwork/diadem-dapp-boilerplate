@@ -130,8 +130,8 @@ Modal.propTypes = {
   startsOpen: T.bool,
   maxWidth: T.string,
   name: T.string,
-  onConfirm: T.func,
   noCancelButton: T.bool,
+  onConfirm: T.func,
   openButtonText: T.string,
   render: T.func,
   title: T.string

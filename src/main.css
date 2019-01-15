@@ -5,7 +5,7 @@ html, body {
 }
 
 body {
-  overflow-y: scroll;
+  overflow-y: hidden;
   min-height: 100vh;
 }
 

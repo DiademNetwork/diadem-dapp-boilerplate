@@ -7,6 +7,8 @@ const getWallets = createBaseSelector(['wallets'])
 const getWallet = name => createBaseSelector(['wallets', name])
 const getAll = R.path(['wallets'])
 
+export const getstreamUserToken = getWallet('getstreamUserToken')
+
 export const data = getWallets(['data'])
 export const util = getWallets(['util'])
 

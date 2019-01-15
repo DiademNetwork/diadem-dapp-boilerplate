@@ -10,14 +10,14 @@ const styles = (theme) => ({
   }
 })
 
-const Link = ({ className, classes, href, text, typographyProps }) => (
+const Link = ({ className, classes, href, text, typographyProps, variant }) => (
   <Typography
     className={`${classes.link} ${className}`}
     color="primary"
     component="a"
     href={href}
     target="_blank"
-    variant="body2"
+    variant={variant}
     {...typographyProps}
   >
     {text}
@@ -25,7 +25,8 @@ const Link = ({ className, classes, href, text, typographyProps }) => (
 )
 
 Link.defaultProps = {
-  classes: {}
+  classes: {},
+  variant: 'body1'
 }
 
 Link.propTypes = {

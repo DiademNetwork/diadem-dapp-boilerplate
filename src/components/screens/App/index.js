@@ -1,12 +1,14 @@
 
 import React from 'react'
 import * as R from 'ramda'
-import Achievements from 'components/specialized/Achievements2'
+import AllAchievements from 'components/specialized/Achievements2/All'
+import UserAchievements from 'components/specialized/Achievements2/User'
 import Help from 'components/specialized/Help'
 import Nav from 'components/specialized/Nav'
 import Notifications from 'components/specialized/Notifications'
 import SandboxConfigEditor from 'components/specialized/SandboxConfigEditor'
 import Tabs from 'components/shared/Tabs'
+import Timeline from 'components/specialized/Timeline'
 import Wallets from 'components/specialized/Wallets'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
@@ -26,21 +28,27 @@ const styles = (theme) => ({
 })
 
 const App = ({
-  achievementsOpenned,
-  classes,
-  hasUnreadAchievements
+  classes
 }) => (
   <div>
     <Nav />
     <Wallets className={classes.sm9} />
-    <Tabs tabs={[
-      {
-        badgeContent: hasUnreadAchievements ? '!' : null,
-        label: 'Achievements',
-        onOpen: achievementsOpenned,
-        component: <Achievements className={classes.sm9} />
-      }
-    ]} />
+    <div className={classes.sm9}>
+      <Tabs tabs={[
+        {
+          label: 'Achievements',
+          component: <AllAchievements />
+        },
+        {
+          label: 'Your achievements',
+          component: <UserAchievements />
+        },
+        {
+          label: 'Your timeline',
+          component: <Timeline />
+        }
+      ]} />
+    </div>
     <Notifications />
     <Help />
     {process.env.ENV === 'sandbox' && (
@@ -50,9 +58,7 @@ const App = ({
 )
 
 App.propTypes = {
-  classes: T.object,
-  hasUnreadAchievements: T.bool,
-  achievementsOpenned: T.func
+  classes: T.object
 }
 
 export default R.compose(

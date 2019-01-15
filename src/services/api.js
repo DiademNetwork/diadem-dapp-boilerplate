@@ -22,7 +22,7 @@ export const createAPI = (fetcher, baseURL) => {
     // blockchain-specific calls
     checkRegistration: (chain) => postToPath(`/${chain}/check`),
     checkWalletAddressMatchesRegisteredUser: (chain) => postToPath(`/${chain}/check-address`),
-    createUpdateAchievement: (chain) => postToPath(`/${chain}/create`),
+    createAchievement: (chain) => postToPath(`/${chain}/create`),
     depositForAchievement: (chain) => postToPath(`/${chain}/deposit`),
     encodeSupport: (chain) => postToPath(`/${chain}/encode-support`),
     encodeDeposit: (chain) => postToPath(`/${chain}/encode-deposit`),

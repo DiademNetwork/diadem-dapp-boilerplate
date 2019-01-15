@@ -1,79 +1,101 @@
 
 import stream from 'getstream'
-import streamMock from 'mocks/stream'
+// import streamMock from 'mocks/stream'
+import axios from 'axios'
+import * as R from 'ramda'
 
-const LIMIT = 100
-const TRANSACTIONS_LIMIT = 30
+const LIMIT = 25
+const APP_KEY = 'bf5kra2xwhbs'
+const APP_ID = '46377'
 
-// dependencies are injected for easier testing /mocking
-export const createStreamClient = (streamTool) => {
-  const client = streamTool.connect(process.env.STREAM_KEY, null, process.env.STREAM_APPID)
+export const createStreamClient = (fetcher, baseURL, streamTool) => {
+  const getFullUrl = (path) => `${baseURL}${path}`
 
-  const feeds = {
-    // achievements: client.feed(
-    //   process.env.STREAM_ACHIEVEMENTS_FEED,
-    //   'common',
-    //   process.env.STREAM_ACHIEVEMENTS_FEED_TOKEN
-    // ),
-    // transactions: client.feed(
-    //   process.env.STREAM_TRANSACTIONS_FEED,
-    //   'common',
-    //   process.env.STREAM_TRANSACTIONS_FEED_TOKEN
-    // )
+  const post = async (path, requestData) => {
+    const { data: responseData } = await fetcher.post(getFullUrl(path), requestData)
+    return responseData
   }
+  const postToPath = path => R.partial(post, [path])
 
-  async function suscribeWithCallBacks (feedName, successCallback) {
+  const client = streamTool.connect(APP_KEY, null, APP_ID)
+
+  const userClient = (function () {
+    let userClient = null
+    const get = () => userClient
+    const init = () => { userClient = streamTool.connect(APP_KEY, userToken.get(), APP_ID) }
+    return Object.freeze({ get, init })
+  })()
+
+  const userToken = (function () {
+    let userToken = null
+    const get = () => userToken
+    const set = token => { userToken = token }
+    return Object.freeze({ get, set })
+  })()
+
+  // Feeds clients encapsulated
+  const feeds = (function () {
+    const data = {
+      achievement_aggregated: {
+        common: client.feed('achievement_aggregated', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6ImFjaGlldmVtZW50X2FnZ3JlZ2F0ZWRjb21tb24ifQ.8YZXCTBLlKCoMr-D56gU-tDjbdlNpOISXf--3Ew-mWQ')
+      },
+      timeline: {}
+    }
+
+    const get = (feedName, group) => {
+      if (data[feedName][group]) {
+        return data[feedName][group]
+      }
+      const token = userToken.get()
+      if (!token) {
+        throw new Error('userToken is not available')
+      }
+      const feed = client.feed(feedName, group, token)
+      data[feedName][group] = feed
+      return feed
+    }
+
+    return Object.freeze({ get })
+  })()
+
+  async function suscribeWithCallBacks (feedName, group, successCallback) {
     try {
-      await feeds[feedName].subscribe(successCallback)
-      console.log(`Suscribed to getstream feed: ${feedName}`)
+      await feeds.get(feedName, group).subscribe(successCallback)
+      console.log(`Suscribed to getstream feed ${feedName}:${group}`)
     } catch (error) {
       console.log(error)
     }
   }
 
-  // For now, all data is fetched. Later, when filters will be implemented
-  // idea will be to fetch only the LIMIT first results of search, and have a system of pagination/scroll load
-  // while loop is temporary while data amount is low, and filters/search on their way to be implemented
-  // Imperative code below is thus temporary
-  async function fetchData (feedName, page) {
-    if (feedName === 'transactions') {
-      const { results, next } = await feeds[feedName].get({
-        limit: TRANSACTIONS_LIMIT,
-        offset: TRANSACTIONS_LIMIT * (page - 1)
-      })
-      return { results, hasMore: next !== '' }
-    }
-    try {
-      let items
-      const { next, results } = await feeds[feedName].get({ limit: LIMIT })
-      items = results
-      let allFetched = next === ''
-      if (!allFetched) {
-        let previousRequestsCount = 1
-        while (!allFetched) {
-          const { results: newResults, next: newNext } = await feeds[feedName].get({
-            limit: LIMIT,
-            offset: LIMIT * previousRequestsCount
-          })
-          previousRequestsCount += 1
-          allFetched = newNext === ''
-          items = [ ...items, ...newResults ]
-        }
-      }
-      return { results: items }
-    } catch (error) {
-      return error
-    }
+  async function fetchData (feedName, group, page = 1) {
+    const { results, next } = await feeds.get(feedName, group).get({
+      limit: LIMIT,
+      offset: LIMIT * (page - 1)
+    })
+    console.log(`Fetch succeeded for ${feedName}:${group}`, results)
+    return { results, hasMore: next !== '' }
+  }
+
+  async function setUser ({ data }) {
+    await userClient.get().setUser(data)
   }
 
   return Object.freeze({
     fetchData,
-    suscribeWithCallBacks
+    userToken,
+    suscribeWithCallBacks,
+    createAchievement: postToPath(`/achievements/create`),
+    confirmAchievement: postToPath(`/achievements/confirm`),
+    getUserToken: postToPath(`/get-user-token`),
+    setUser,
+    userClient
   })
 }
 
 export default createStreamClient(
+  axios,
+  'http://localhost:8080/api',
   process.env.ENV === 'sandbox'
-    ? streamMock
+    ? stream
     : stream
 )

@@ -9,4 +9,7 @@ export default function mockAxios () {
   mockAchievements(axiosMock)
   mockInsight(axiosMock)
   mockUsers(axiosMock)
+  // let calls to api (getstream-service) pass
+  axiosMock.onGet(/\/api/).passThrough()
+  axiosMock.onPost(/\/api/).passThrough()
 }

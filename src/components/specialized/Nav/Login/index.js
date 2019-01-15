@@ -10,7 +10,16 @@ const Login = ({ isLogged, handleLoginSuccess }) => isLogged
   ? <User />
   : (
     <network.components.LoginButton
-      onSuccess={(data) => handleLoginSuccess({ data })}
+      onSuccess={(data) => {
+        handleLoginSuccess({
+          data: {
+            userID: R.path(network.dataPaths.userID)(data),
+            userName: R.path(network.dataPaths.userName)(data),
+            userAccessToken: R.path(network.dataPaths.userAccessToken)(data),
+            userPictureUrl: R.path(network.dataPaths.userPictureUrl)(data)
+          }
+        })
+      }}
       buttonComponent={Button}
     />
   )

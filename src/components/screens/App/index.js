@@ -1,8 +1,8 @@
 
 import React from 'react'
 import * as R from 'ramda'
-import AllAchievements from 'components/specialized/Achievements2/All'
-import UserAchievements from 'components/specialized/Achievements2/User'
+import AllAchievements from 'components/specialized/Achievements/All'
+import UserAchievements from 'components/specialized/Achievements/User'
 import Help from 'components/specialized/Help'
 import Nav from 'components/specialized/Nav'
 import Notifications from 'components/specialized/Notifications'

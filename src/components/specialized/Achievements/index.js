@@ -7,8 +7,6 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import Chain from './Chain'
 import withContainer from './container'
-import Create from './Create'
-import Update from './Update'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
@@ -16,32 +14,14 @@ const styles = (theme) => ({
     [theme.breakpoints.down('sm')]: {
       marginBottom: `${theme.spacing.unit * 7} !important`
     }
-  },
-  achievementButton: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
-    [theme.breakpoints.down('sm')]: {
-      bottom: 0,
-      right: 0,
-      left: 0,
-      width: '100vw',
-      borderRadius: 'initial',
-      zIndex: 1000
-    }
   }
 })
 
 const Achievements = ({
   achievements,
-  canPerformActions,
   className,
   classes,
-  createAchievement,
-  createAchievementStatus,
-  fetchStatus,
-  lastLinkOfUserAchievementOrNull,
-  updateAchievement
+  fetchStatus
 }) => {
   return [
     <Grid
@@ -79,14 +59,9 @@ const Achievements = ({
 
 Achievements.propTypes = {
   achievements: T.object,
-  canPerformActions: T.bool,
   className: T.string,
   classes: T.object,
-  createAchievement: T.func,
-  createAchievementStatus: T.string,
-  fetchStatus: T.string,
-  lastLinkOfUserAchievementOrNull: T.string,
-  updateAchievement: T.func
+  fetchStatus: T.string
 }
 
 export default R.compose(

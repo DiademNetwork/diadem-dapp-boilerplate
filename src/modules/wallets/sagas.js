@@ -111,18 +111,6 @@ const loadWallets = function * ({ data: registrationsData }) {
   }
 }
 
-const checkIsWalletAddressTheOneRegistered = function * ({
-  blockchainKey,
-  userID,
-  walletAddress
-}) {
-  const { ok: isWalletAddressTheOneRegistered } = yield call(api.checkWalletAddressMatchesRegisteredUser(blockchainKey), {
-    user: userID,
-    walletAddress
-  })
-  return isWalletAddressTheOneRegistered
-}
-
 const loadWallet = function * ({ blockchainKey }) {
   try {
     const privateKey = window.localStorage.getItem(`${blockchainKey}-privateKey-${userID}`)

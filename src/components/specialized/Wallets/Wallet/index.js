@@ -82,7 +82,7 @@ const Wallet = ({
           return <Withdraw blockchain={blockchain} />
         }
         if (isRegistrationPending) {
-          return <Register blockchain={blockchain} pending={true} />
+          return <Register blockchain={blockchain} pending />
         }
         return (
           <Fragment>

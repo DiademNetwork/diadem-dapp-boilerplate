@@ -47,6 +47,12 @@ export default (function fakeChain () {
     return { mnemonic, privateKey }
   }
 
+  const registerWallet = ({ addrStr }) => {
+    return new Promise(resolve => setTimeout(() => {
+      resolve({ ok: true })
+    }, 5000))
+  }
+
   const getWalletData = async () => {
     const { pendingTxID } = mocksController.get()
     if (pendingTxID !== '') {
@@ -86,6 +92,7 @@ export default (function fakeChain () {
     name: 'Fakechain',
     getWalletData,
     generateWallet,
+    registerWallet,
     getPrivateKey,
     symbol,
     withdraw,

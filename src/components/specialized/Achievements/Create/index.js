@@ -65,7 +65,7 @@ class CreateAchievement extends Component {
 
   render () {
     const { isLinkValid, isTitleValid, link, modalOpen, title } = this.state
-    const { className, classes, fullScreen } = this.props
+    const { className, classes, fullScreen, disabled } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return (
       <Fragment>
@@ -77,6 +77,7 @@ class CreateAchievement extends Component {
           key="create-achievement-button"
           onClick={this.handleClickOpen}
           variant="extendedFab"
+          disabled={disabled}
         >
           <StarIcon className={classes.buttonIcon} />
           Create your Achievement

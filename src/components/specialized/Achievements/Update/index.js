@@ -75,7 +75,8 @@ class UpdateAchievement extends Component {
     const {
       className,
       classes,
-      fullScreen
+      fullScreen,
+      disabled
     } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return (
@@ -87,6 +88,7 @@ class UpdateAchievement extends Component {
           data-qa-id="update-achievement-button"
           key="update-achievement-button"
           onClick={this.handleClickOpen}
+          disabled={disabled}
           variant="extendedFab"
         >
           <StarIcon className={classes.buttonIcon} />

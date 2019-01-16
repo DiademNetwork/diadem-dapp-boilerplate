@@ -1,5 +1,5 @@
 
-import { all, call, put, select, takeLatest } from 'redux-saga/effects'
+import { all, call, put, select, takeLatest, fork } from 'redux-saga/effects'
 // import { delay } from 'redux-saga'
 import * as R from 'ramda'
 import api from 'services/api'
@@ -15,10 +15,12 @@ import blockchains from 'configurables/blockchains'
 // const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
 // const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
 
+const userID = 'default'
+
 const checkRegistration = function * ({ blockchainKey, userID }) {
   try {
-    const { exists: isRegistered, pending: isRegistrationPending } = yield call(api.checkRegistration(blockchainKey), { user: userID })
-    return { isRegistered, isRegistrationPending, status: 'registration-checked' }
+    const privateKey = window.localStorage.getItem(`${blockchainKey}-privateKey-${userID}`)
+    return { isRegistered: !!privateKey, status: 'registration-checked' }
   } catch (error) {
     throw error
   }
@@ -27,7 +29,6 @@ const checkRegistration = function * ({ blockchainKey, userID }) {
 // Check all blokchain registrations
 const checkRegistrations = function * () {
   try {
-    const userID = yield select(S.login.userID)
     const registrationsData = yield all(
       blockchains.keys
         .map(blockchainKey => {
@@ -43,7 +44,6 @@ const checkRegistrations = function * () {
 // generate a new wallet locally
 const generateWallet = function * ({ blockchainKey }) {
   try {
-    const userID = yield select(S.login.userID)
     const { generateWallet, getWalletData } = blockchains.get(blockchainKey)
     const { mnemonic, privateKey } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
@@ -55,19 +55,12 @@ const generateWallet = function * ({ blockchainKey }) {
   }
 }
 
-// register a new wallet on blockchain
+// register wallet on blockchain
+// needed for EOS, Decent, and other blockchains that require creation of account
 const registerWallet = function * ({ blockchainKey, data }) {
+  const { registerWallet } = blockchains.get(blockchainKey)
   try {
-    const userAccessToken = yield select(S.login.userAccessToken)
-    const userName = yield select(S.login.userName)
-    const userID = yield select(S.login.userID)
-    const walletAddress = data.addrStr
-    const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
-      address: walletAddress,
-      name: userName,
-      user: userID,
-      token: userAccessToken
-    })
+    const { ok: registrationSucceeded } = yield call(registerWallet, data)
     if (registrationSucceeded) {
       yield put(ownA.register.succeeded({ blockchainKey }))
     } else {
@@ -78,9 +71,37 @@ const registerWallet = function * ({ blockchainKey, data }) {
   }
 }
 
+const registerUser = function * () {
+  try {
+    const blockchainKey = blockchains.primary.key
+    const userAccessToken = yield select(S.login.userAccessToken)
+    const userName = yield select(S.login.userName)
+    const userID = yield select(S.login.userID)
+    const walletAddress = yield select(S.wallets.address(blockchainKey))
+    const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
+      address: walletAddress,
+      name: userName,
+      user: userID,
+      token: userAccessToken
+    })
+    if (registrationSucceeded) {
+      yield put(ownA.connect.succeeded({ blockchainKey }))
+    } else {
+      yield put(ownA.connect.failed({ blockchainKey }))
+    }
+  } catch (error) {
+    yield put(ownA.connect.errored({ error }))
+  }
+}
+
 // initialize load wallet for all which are registered and not pending registration
+// initialize primary wallet automatically on first visit
 const loadWallets = function * ({ data: registrationsData }) {
   try {
+    const isPrimaryBlockchainRegistered = registrationsData[blockchains.primary.key].isRegistered
+    if (!isPrimaryBlockchainRegistered) {
+      yield call(generateWallet, { blockchainKey: blockchains.primary.key })
+    }
     yield all(
       Object.keys(registrationsData)
         .filter(blockchainKey => registrationsData[blockchainKey].isRegistered)
@@ -107,7 +128,6 @@ const checkIsWalletAddressTheOneRegistered = function * ({
 
 const loadWallet = function * ({ blockchainKey }) {
   try {
-    const userID = yield select(S.login.userID)
     const privateKey = window.localStorage.getItem(`${blockchainKey}-privateKey-${userID}`)
     if (!privateKey) {
       yield put(ownA.load.failed({ blockchainKey, status: 'no-private-key' }))
@@ -115,16 +135,7 @@ const loadWallet = function * ({ blockchainKey }) {
       const { initFromPrivateKey, getWalletData } = blockchains.get(blockchainKey)
       yield call(initFromPrivateKey, privateKey)
       const walletData = yield call(getWalletData)
-      const isWalletAddressTheOneRegistered = yield call(checkIsWalletAddressTheOneRegistered, {
-        blockchainKey,
-        userID,
-        walletAddress: walletData.addrStr
-      })
-      if (isWalletAddressTheOneRegistered) {
-        yield put(ownA.load.succeeded({ blockchainKey, data: walletData }))
-      } else {
-        yield put(ownA.load.failed({ blockchainKey, status: 'address-not-matching' }))
-      }
+      yield put(ownA.load.succeeded({ blockchainKey, data: walletData }))
     }
   } catch (error) {
     throw error
@@ -139,7 +150,6 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
       getPrivateKey,
       getWalletData
     } = blockchains.get(blockchainKey)
-    const userID = yield select(S.login.userID)
     if (privateKey) {
       yield call(initFromPrivateKey, privateKey)
     } else if (mnemonic) {
@@ -149,17 +159,8 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
       return
     }
     const walletData = yield call(getWalletData)
-    const isWalletAddressTheOneRegistered = yield call(checkIsWalletAddressTheOneRegistered, {
-      blockchainKey,
-      userID,
-      walletAddress: walletData.addrStr
-    })
-    if (isWalletAddressTheOneRegistered) {
-      window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, yield call(getPrivateKey))
-      yield put(ownA.recover.succeeded({ blockchainKey, data: walletData }))
-    } else {
-      yield put(ownA.recover.failed({ blockchainKey, status: 'address-not-matching' }))
-    }
+    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, yield call(getPrivateKey))
+    yield put(ownA.recover.succeeded({ blockchainKey, data: walletData }))
   } catch (error) {
     yield put(ownA.recover.errored({ error }))
   }
@@ -257,7 +258,8 @@ const withdraw = function * ({ blockchainKey, ...payload }) {
 
 export default function * () {
   yield all([
-    takeLatest(T.login.LOGGED, checkRegistrations),
+    fork(checkRegistrations),
+    takeLatest(T.login.LOGGED, registerUser),
     takeLatest(ownT.CHECK_REGISTRATIONS.succeeded, loadWallets),
     takeLatest(ownT.GENERATE.requested, generateWallet),
     takeLatest(ownT.GENERATE.succeeded, registerWallet),

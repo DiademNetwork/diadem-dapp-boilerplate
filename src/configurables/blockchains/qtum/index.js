@@ -13,6 +13,8 @@ export default (function qtum () {
     return { mnemonic, privateKey }
   }
 
+  const registerWallet = () => ({ ok: true })
+
   const initFromPrivateKey = (privateKey) => {
     walletUtil = network.fromWIF(privateKey)
   }
@@ -44,6 +46,7 @@ export default (function qtum () {
     name: 'Qtum',
     getWalletData: needsWallet(getWalletData),
     generateWallet,
+    registerWallet,
     getPrivateKey: needsWallet(getPrivateKey),
     symbol: 'QTUM',
     withdraw: needsWallet(withdraw),

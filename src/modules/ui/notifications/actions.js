@@ -24,8 +24,8 @@ export const ACHIEVEMENTS_CHAIN_SUPPORT_ERROR_MESSAGE = 'Impossible to support a
 export const ACHIEVEMENTS_CHAIN_DEPOSIT_SUCCESS_MESSAGE = 'Deposit for achievement successful. It will appear once confirmed on blockchain'
 export const ACHIEVEMENTS_CHAIN_DEPOSIT_ERROR_MESSAGE = 'Impossible to deposit for achievement. You may need to retry with higher fees'
 export const LOGIN_SUCCESS_MESSAGE = 'Login success'
-export const TRANSACTIONS_FETCH_ERROR_MESSAGE = 'Impossible to fetch transactions'
-export const TRANSACTIONS_RECEIVED_MESSAGE = 'New user activity'
+export const TIMELINE_FETCH_ERROR_MESSAGE = 'Impossible to fetch timeline'
+export const TIMELINE_RECEIVED_MESSAGE = 'New timeline items'
 export const USERS_FETCH_ERROR_MESSAGE = 'Impossible to fetch users list'
 export const WALLET_CHECK_REGISTRATION_ERROR_MESSAGE = 'Impossible to check your user existence'
 export const WALLET_REGISTRATION_SUCCESS_MESSAGE = 'Please wait, your registration is in process. You will be notified when confirmed on blockchain'
@@ -56,8 +56,8 @@ export default {
   achievementDepositSuccess: createSuccessNotification(ACHIEVEMENTS_CHAIN_DEPOSIT_SUCCESS_MESSAGE),
   achievementDepositError: createErrorNotification(ACHIEVEMENTS_CHAIN_DEPOSIT_ERROR_MESSAGE),
   loginSuccess: createSuccessNotification(LOGIN_SUCCESS_MESSAGE),
-  transactionsFetchError: createErrorNotification(TRANSACTIONS_FETCH_ERROR_MESSAGE),
-  transactionsReceived: createSuccessNotification(TRANSACTIONS_RECEIVED_MESSAGE),
+  timelineFetchError: createErrorNotification(TIMELINE_FETCH_ERROR_MESSAGE),
+  timelineReceived: createSuccessNotification(TIMELINE_RECEIVED_MESSAGE),
   usersFetchError: createErrorNotification(USERS_FETCH_ERROR_MESSAGE),
   walletCheckRegistrationError: createErrorNotification(WALLET_CHECK_REGISTRATION_ERROR_MESSAGE),
   walletRegistrationSuccess: createSuccessNotification(WALLET_REGISTRATION_SUCCESS_MESSAGE),

@@ -7,23 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import withContainer from './container'
 import Modal from 'components/shared/Modal'
 import NetworkLinkHelp from './NetworkLinkHelp'
-import { withStyles } from '@material-ui/core/styles'
-
-const styles = (theme) => ({
-  openButton: {
-    position: 'fixed',
-    bottom: theme.spacing.unit * 2,
-    right: theme.spacing.unit * 2,
-    [theme.breakpoints.down('sm')]: {
-      bottom: 0,
-      right: 0,
-      left: 0,
-      width: '100vw',
-      borderRadius: 'initial',
-      zIndex: 1000
-    }
-  }
-})
+import StarIcon from '@material-ui/icons/Star'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
@@ -61,17 +45,17 @@ class CreateAchievement extends Component {
 
   render () {
     const { isLinkValid, isTitleValid, link, title } = this.state
-    const { canCreateAchievement, classes } = this.props
+    const { canCreateAchievement } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return (
       <Modal
-        className={classes.openButton}
         confirmButtonDisabled={!isFormValid}
         confirmButtonText="Create"
         disabled={!canCreateAchievement}
         name={`achivement-create-modal`}
         onConfirm={this.handleConfirm}
         openButtonText="Create your Achievement"
+        openButtonIcon={<StarIcon />}
         title="Create your Achievement"
         render={({ fullScreen }) => (
           <Fragment>
@@ -113,11 +97,10 @@ class CreateAchievement extends Component {
 
 CreateAchievement.propTypes = {
   canCreateAchievement: T.bool,
-  classes: T.object,
   createAchievement: T.func
 }
 
 export default R.compose(
-  withContainer,
-  withStyles(styles)
+  withContainer
+  // withStyles(styles)
 )(CreateAchievement)

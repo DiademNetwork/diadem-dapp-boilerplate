@@ -1,9 +1,12 @@
-import React, { Fragment } from 'react'
-import List from './List'
+import React from 'react'
+import * as R from 'ramda'
+import AchievementsList from 'components/shared/AchievementsList'
+import withContainer from './container'
 
-const Achievements = () => (
-  <Fragment>
-    <List />
-  </Fragment>
+const AllAchievementsList = (props) => (
+  <AchievementsList {...props} noAchievementText='No achievements' />
 )
-export default Achievements
+
+export default R.compose(
+  withContainer
+)(AllAchievementsList)

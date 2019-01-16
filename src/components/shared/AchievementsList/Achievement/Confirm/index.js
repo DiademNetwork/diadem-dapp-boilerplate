@@ -9,6 +9,7 @@ import Modal from 'components/shared/Modal'
 import Link from 'components/shared/Link'
 import UserName from 'components/shared/UserName'
 import * as U from 'utils'
+import DoneIcon from '@material-ui/icons/Done'
 
 class ConfirmAchievement extends Component {
   handleConfirm = () => {
@@ -40,6 +41,7 @@ class ConfirmAchievement extends Component {
         disabled={hasUserAlreadyConfirmed || !canPerformActions}
         name={`achievement-${idx}-confirm-button`}
         onConfirm={this.handleConfirm}
+        openButtonIcon={<DoneIcon />}
         openButtonText={hasUserAlreadyConfirmed ? 'You confirmed already' : 'Confirm'}
         title="Confirm"
         render={() => (

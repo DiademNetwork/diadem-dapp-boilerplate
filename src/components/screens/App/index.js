@@ -10,6 +10,8 @@ import SandboxConfigEditor from 'components/specialized/SandboxConfigEditor'
 import Tabs from 'components/shared/Tabs'
 import Timeline from 'components/specialized/Timeline'
 import Wallets from 'components/specialized/Wallets'
+import Networks from 'components/specialized/Networks'
+import Actions from 'components/specialized/Actions'
 import { PropTypes as T } from 'prop-types'
 import withContainer from './container'
 import { withStyles } from '@material-ui/core/styles'
@@ -32,8 +34,10 @@ const App = ({
 }) => (
   <div>
     <Nav />
-    <Wallets className={classes.sm9} />
     <div className={classes.sm9}>
+      <Wallets />
+      <Networks />
+      <Actions />
       <Tabs tabs={[
         {
           label: 'Achievements',

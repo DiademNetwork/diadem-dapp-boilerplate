@@ -4,16 +4,16 @@ import * as R from 'ramda'
 import * as U from 'utils'
 import withContainer from './container'
 
-const UserName = ({ actor, userAddress }) => (
+const UserName = ({ actor, userAddress, userName }) => (
   <span>
-    {console.log({ actor })}
-    {U.actor.is(userAddress)(actor) ? 'you' : U.actor.getUserName(actor)}
+    {userName || (U.actor.is(userAddress)(actor) ? 'you' : U.actor.getUserName(actor))}
   </span>
 )
 
 UserName.propTypes = {
   actor: T.object,
-  userAddress: T.string
+  userAddress: T.string,
+  userName: T.string
 }
 
 export default R.compose(

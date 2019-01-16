@@ -1,35 +1,26 @@
 import React, { Fragment } from 'react'
 import * as R from 'ramda'
-import Typography from '@material-ui/core/Typography'
-import Avatar from '@material-ui/core/Avatar'
 import withContainer from './container'
-import Hidden from '@material-ui/core/Hidden'
 import { withStyles } from '@material-ui/core/styles'
 import { PropTypes as T } from 'prop-types'
+import UserAvatar from 'components/shared/UserAvatar'
 
 const styles = (theme) => ({
   img: {
-    marginRight: theme.spacing.unit * 2
+    display: 'inline-block',
+    marginRight: theme.spacing.unit * 2,
+    verticalAlign: 'middle'
   }
 })
 
 const LoginUser = ({ userName, userPictureUrl, classes }) => (
   <Fragment>
-    <Avatar
-      className={classes.img} alt="Profile picture"
+    <UserAvatar
+      className={classes.img}
       key="login-userPicture"
-      src={userPictureUrl}
+      pictureUrl={userPictureUrl}
     />
-    <Hidden key="login-userName" smDown>
-      <Typography
-        data-qa-id="login-userName"
-        key="username"
-        variant="title"
-        color="inherit"
-      >
-        {userName}
-      </Typography>
-    </Hidden>
+    {userName}
   </Fragment>
 )
 

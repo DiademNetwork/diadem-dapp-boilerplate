@@ -1,4 +1,5 @@
 import React from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -39,4 +40,6 @@ Link.propTypes = {
 
 export const NackedComponent = Link
 
-export default withStyles(styles)(Link)
+export default R.compose(
+  withStyles(styles)
+)(Link)

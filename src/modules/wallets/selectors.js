@@ -8,8 +8,6 @@ const getWallets = createBaseSelector(['wallets'])
 const getWallet = name => createBaseSelector(['wallets', name])
 const getAll = R.path(['wallets'])
 
-export const getstreamUserToken = getWallet('getstreamUserToken')
-
 export const data = getWallets(['data'])
 export const util = getWallets(['util'])
 
@@ -36,6 +34,7 @@ export const balances = createSelector([getAll], R.mapObjIndexed(R.propOr(0, 'ba
 // status
 export const status = (name) => getWallet(name)(['status'])
 const isReadyStatus = U.oneOf(['loaded', 'recovered', 'recovery-info-saved'])
-export const isReady = (name) => createSelector([status(name)], isReadyStatus(status))
+export const isReady = (name) => createSelector([status(name)], isReadyStatus)
+export const isPrimaryReady = isReady(blockchains.primary.key)
 export const getOnesReady = createSelector([getAll], R.pickBy(({ status }) => isReadyStatus(status)))
 export const areAllReady = createSelector([getOnesReady, getAll], R.equals)

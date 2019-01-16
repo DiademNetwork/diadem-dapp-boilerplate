@@ -125,6 +125,7 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
     yield call(stream.supportAchievement, {
       link,
       userAddress,
+      blockchain: blockchainKey,
       creatorAddress,
       amount
     })

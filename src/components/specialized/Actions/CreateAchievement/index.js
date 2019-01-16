@@ -45,18 +45,18 @@ class CreateAchievement extends Component {
 
   render () {
     const { isLinkValid, isTitleValid, link, title } = this.state
-    const { canCreateAchievement } = this.props
+    const { isPrimaryWalletReady } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return (
       <Modal
         confirmButtonDisabled={!isFormValid}
         confirmButtonText="Create"
-        disabled={!canCreateAchievement}
+        disabled={!isPrimaryWalletReady}
         name={`achivement-create-modal`}
         onConfirm={this.handleConfirm}
-        openButtonText="Create your Achievement"
+        openButtonText="Create an achievement"
         openButtonIcon={<StarIcon />}
-        title="Create your Achievement"
+        title="Create an achievement"
         render={({ fullScreen }) => (
           <Fragment>
             <DialogContentText key="help">
@@ -96,7 +96,7 @@ class CreateAchievement extends Component {
 }
 
 CreateAchievement.propTypes = {
-  canCreateAchievement: T.bool,
+  isPrimaryWalletReady: T.bool,
   createAchievement: T.func
 }
 

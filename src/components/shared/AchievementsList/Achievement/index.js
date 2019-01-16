@@ -34,7 +34,7 @@ const Achievement = ({
   idx,
   userAddress
 }) => {
-  const { actor: creator, title, object } = U.achievement.getActivities('create')(achievement)
+  const { actor: creator, title, object } = U.achievement.getActivities('create')(achievement)[0]
   const confirmActivities = U.achievement.getActivities('confirm')(achievement)
   const supportActivities = U.achievement.getActivities('support')(achievement)
   return (
@@ -66,7 +66,7 @@ const Achievement = ({
         )}
         {supportActivities.length > 0 && (
           <Typography>
-            {`This achievement has been supported by ${U.actor.getUserName(U.achievement.firstActor('support')(achievement))}${supportActivities.length - 1 > 0 ? `and ${supportActivities.length - 1} other people.` : ''}`}
+            {`This achievement has been supported by ${U.actor.getUserName(U.achievement.firstActor('support')(achievement))}${supportActivities.length - 1 > 0 ? `and ${supportActivities.length - 1} other people.` : ''} for a total amount of ${U.achievement.getAmount('support')(achievement)}`}
           </Typography>
         )}
       </CardContent>

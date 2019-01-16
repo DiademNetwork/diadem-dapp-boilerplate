@@ -14,11 +14,6 @@ export const oneOf = array => R.partialRight(R.contains, [array])
 
 export const achievement = (function achievement () {
   const getActivities = (verb) => R.compose(
-    R.ifElse(
-      R.compose(R.equals(1), R.length),
-      R.head,
-      R.identity
-    ),
     R.filter(R.propEq('verb', verb)),
     R.prop('activities')
   )
@@ -52,8 +47,15 @@ export const achievement = (function achievement () {
     firstActor('create')
   )
 
+  const getAmount = verb => R.compose(
+    R.sum,
+    R.map(R.prop('amount')),
+    getActivities(verb)
+  )
+
   return Object.freeze({
     firstActor,
+    getAmount,
     getActivities,
     getCreatorAddress,
     getLink,

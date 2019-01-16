@@ -3,6 +3,7 @@ import { PropTypes as T } from 'prop-types'
 import * as R from 'ramda'
 import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
+import user from './user.png'
 
 const styles = (theme) => ({
   img: {
@@ -16,7 +17,7 @@ const Username = ({ actor, classes, className, pictureUrl }) => (
     className={`${className} ${classes.img}`} alt="Profile picture"
     key="login-userPicture"
     src={
-      pictureUrl || (R.path(['data', 'userPictureUrl'])(actor))
+      pictureUrl || (R.path(['data', 'userPictureUrl'])(actor)) || user
     }
   />
 )

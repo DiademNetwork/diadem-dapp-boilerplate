@@ -78,8 +78,9 @@ class SupportAchievement extends Component {
     const noBalance = this.areAllBalancesEmpty(walletsBalances)
     const blockchainSymbol = blockchains.all[blockchainKey].symbol
     const isFormValid = isAmountValid && areFeesValid
-    const { title } = U.achievement.getActivities('create')(achievement)
+    const { title } = U.achievement.getActivities('create')(achievement)[0]
     const confirmationsCount = U.achievement.getActivities('confirm')(achievement).length
+    console.log('BALANCES', walletsBalances)
     return (
       <Modal
         confirmButtonDisabled={!isFormValid}

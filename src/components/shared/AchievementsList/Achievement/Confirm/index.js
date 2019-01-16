@@ -33,7 +33,7 @@ class ConfirmAchievement extends Component {
       userAddress
     } = this.props
     const hasUserAlreadyConfirmed = U.achievement.hasAlready(userAddress)('confirm')(achievement)
-    const { actor } = U.achievement.getActivities('create')(achievement)
+    const { actor } = U.achievement.getActivities('create')(achievement)[0]
     return (
       <Modal
         confirmButtonText="Confirm"

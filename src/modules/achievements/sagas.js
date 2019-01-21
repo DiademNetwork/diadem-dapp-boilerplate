@@ -21,12 +21,6 @@ const create = function * ({ link, title }) {
       user: yield select(S.login.userID)
     })
     yield put(ownA.create.succeeded())
-    // GETSTREAM SERVICE
-    yield call(stream.createAchievement, {
-      link,
-      title,
-      userAddress
-    })
   } catch (error) {
     yield put(ownA.create.errored({ error }))
   }
@@ -36,12 +30,6 @@ const confirm = function * (payload) {
   try {
     yield call(api.confirmAchievement, payload)
     yield put(ownA.confirm.succeeded())
-    // GETSTREAM SERVICE
-    yield call(stream.confirmAchievement, {
-      link: payload.link,
-      userAddress: payload.userAddress,
-      creatorAddress: payload.creatorAddress
-    })
   } catch (error) {
     yield put(ownA.confirm.errored({ error }))
   }
@@ -115,22 +103,16 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
       feeRate: fees
     })
     yield call(api.supportAchievement(blockchainKey), {
+      amount,
       address: yield select(S.wallets.primaryAddress),
+      blockchain: blockchainKey,
+      creatorAddress,
       link,
       rawTx,
       token: yield select(S.login.userAccessToken),
       user: yield select(S.login.userID)
     })
     yield put(ownA.support.succeeded())
-    // GETSTREAM SERVICE
-    const userAddress = yield select(S.wallets.primaryAddress)
-    yield call(stream.supportAchievement, {
-      link,
-      userAddress,
-      blockchain: blockchainKey,
-      creatorAddress,
-      amount
-    })
   } catch (error) {
     yield put(ownA.support.errored({ error }))
   }

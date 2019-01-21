@@ -61,12 +61,12 @@ const Achievement = ({
       <CardContent>
         {confirmActivities.length > 0 && (
           <Typography>
-            {`This achievement has been confirmed by ${U.actor.getUserName(U.achievement.firstActor('confirm')(achievement))}${confirmActivities.length - 1 > 0 ? `and ${confirmActivities.length - 1} other people.` : ''}`}
+            {`This achievement has been confirmed by ${U.actor.getUserNameOrAddress(U.achievement.firstActor('confirm')(achievement))}${confirmActivities.length - 1 > 0 ? `and ${confirmActivities.length - 1} other people.` : ''}`}
           </Typography>
         )}
         {supportActivities.length > 0 && (
           <Typography>
-            {`This achievement has been supported by ${U.actor.getUserName(U.achievement.firstActor('support')(achievement))}${supportActivities.length - 1 > 0 ? `and ${supportActivities.length - 1} other people.` : ''} for a total amount of ${U.achievement.getAmount('support')(achievement)}`}
+            {`This achievement has been supported by ${U.actor.getUserNameOrAddress(U.achievement.firstActor('support')(achievement))}${supportActivities.length - 1 > 0 ? `and ${supportActivities.length - 1} other people.` : ''} for a total amount of ${U.achievement.getAmount('support')(achievement)}`}
           </Typography>
         )}
       </CardContent>

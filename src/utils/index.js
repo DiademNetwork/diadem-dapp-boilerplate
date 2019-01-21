@@ -63,9 +63,14 @@ export const achievement = (function achievement () {
 })()
 
 export const actor = (function actor () {
+  const getAddress = R.prop('id')
   const getUserName = R.path(['data', 'userName'])
 
-  const getAddress = R.prop('id')
+  const getUserNameOrAddress = R.ifElse(
+    R.pathSatisfies(R.complement(R.isNil), ['data', 'userName']),
+    getUserName,
+    getAddress
+  )
 
   const is = (userAddress) => R.compose(
     R.equals(userAddress),
@@ -74,7 +79,7 @@ export const actor = (function actor () {
 
   return Object.freeze({
     getAddress,
-    getUserName,
+    getUserNameOrAddress,
     is
   })
 })()

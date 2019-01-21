@@ -28,7 +28,8 @@ export const createAPI = (fetcher, baseURL) => {
     registerUser: (chain) => postToPath(`/${chain}/register`),
     supportAchievement: (chain) => postToPath(`/${chain}/support`),
     // non-blockchain-specific calls
-    confirmAchievement: postToPath('/confirm')
+    confirmAchievement: postToPath('/confirm'),
+    getUserToken: postToPath('/get-user-token')
   })
 }
 

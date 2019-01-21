@@ -12,7 +12,7 @@ const styles = (theme) => ({
   }
 })
 
-const Username = ({ actor, classes, className, pictureUrl }) => (
+const UserAvatar = ({ actor, classes, className, pictureUrl }) => (
   <Avatar
     className={`${className} ${classes.img}`} alt="Profile picture"
     key="login-userPicture"
@@ -22,7 +22,7 @@ const Username = ({ actor, classes, className, pictureUrl }) => (
   />
 )
 
-Username.propTypes = {
+UserAvatar.propTypes = {
   actor: T.object,
   classes: T.object,
   className: T.string,
@@ -31,4 +31,4 @@ Username.propTypes = {
 
 export default R.compose(
   withStyles(styles)
-)(Username)
+)(UserAvatar)

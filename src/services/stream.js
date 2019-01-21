@@ -1,22 +1,13 @@
 
 import stream from 'getstream'
-// import streamMock from 'mocks/stream'
-import axios from 'axios'
-import * as R from 'ramda'
+import streamMock from 'mocks/stream'
 
 const LIMIT = 100
-const APP_KEY = 'bf5kra2xwhbs'
+const APP_KEY = process.env.STREAM_APP_KEY
 const APP_ID = '46377'
+const ACHIEVEMENT_COMMON_TOKEN = process.env.STREAM_ACHIEVEMENT_COMMON_TOKEN
 
-export const createStreamClient = (fetcher, baseURL, streamTool) => {
-  const getFullUrl = (path) => `${baseURL}${path}`
-
-  const post = async (path, requestData) => {
-    const { data: responseData } = await fetcher.post(getFullUrl(path), requestData)
-    return responseData
-  }
-  const postToPath = path => R.partial(post, [path])
-
+export const createStreamClient = (streamTool) => {
   const client = streamTool.connect(APP_KEY, null, APP_ID)
 
   const userClient = (function () {
@@ -37,7 +28,7 @@ export const createStreamClient = (fetcher, baseURL, streamTool) => {
   const feeds = (function () {
     const data = {
       achievement_aggregated: {
-        common: client.feed('achievement_aggregated', 'common', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZSI6IioiLCJhY3Rpb24iOiJyZWFkIiwiZmVlZF9pZCI6ImFjaGlldmVtZW50X2FnZ3JlZ2F0ZWRjb21tb24ifQ.8YZXCTBLlKCoMr-D56gU-tDjbdlNpOISXf--3Ew-mWQ')
+        common: client.feed('achievement_aggregated', 'common', ACHIEVEMENT_COMMON_TOKEN)
       },
       timeline: {}
     }
@@ -89,19 +80,13 @@ export const createStreamClient = (fetcher, baseURL, streamTool) => {
     fetchData,
     userToken,
     suscribeWithCallBacks,
-    createAchievement: postToPath(`/achievements/create`),
-    confirmAchievement: postToPath(`/achievements/confirm`),
-    getUserToken: postToPath(`/get-user-token`),
     setUser,
-    supportAchievement: postToPath(`/achievements/support`),
     userClient
   })
 }
 
 export default createStreamClient(
-  axios,
-  'http://localhost:8080/api',
   process.env.ENV === 'sandbox'
-    ? stream
+    ? streamMock
     : stream
 )

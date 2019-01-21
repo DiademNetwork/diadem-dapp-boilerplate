@@ -39,7 +39,7 @@ export default (function fakeChain () {
     return { get, set }
   })()
 
-  const base = Object.freeze({ addrStr: '9' })
+  const base = Object.freeze({ addrStr: faker.random.uuid() })
 
   const generateWallet = () => {
     const mnemonic = 'Here is a mnemonic for Fakechain ... What did you expect?'
@@ -47,7 +47,7 @@ export default (function fakeChain () {
     return { mnemonic, privateKey }
   }
 
-  const registerWallet = ({ addrStr }) => {
+  const registerWallet = () => {
     return new Promise(resolve => setTimeout(() => {
       resolve({ ok: true })
     }, 5000))

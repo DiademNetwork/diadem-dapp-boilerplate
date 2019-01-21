@@ -88,7 +88,6 @@ const registerUser = function * () {
     } else {
       yield put(ownA.connect.failed({ blockchainKey }))
     }
-    yield call(setUser)
   } catch (error) {
     yield put(ownA.connect.errored({ error }))
   }
@@ -167,7 +166,7 @@ const withdraw = function * ({ blockchainKey, ...payload }) {
 const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrStr: userAddress } }) {
   if (blockchains.isPrimary(blockchains.get(blockchainKey))) {
     try {
-      const { token } = yield call(stream.getUserToken, { userAddress })
+      const { token } = yield call(api.getUserToken, { userAddress })
       if (!token) {
         yield put(ownA.getGetstreamToken.failed({ status: 'no-token' }))
       } else {

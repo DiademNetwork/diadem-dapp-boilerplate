@@ -25,7 +25,7 @@ const AchievementsList = ({ classes, loadMore, list: { hasMore, list }, noAchiev
     spacing={16}
   >
     <Grid item xs={12}>
-      {list.length > 0 ? (
+      {list && list.length > 0 ? (
         <InfiniteScroll
           pageStart={1}
           loadMore={loadMore}

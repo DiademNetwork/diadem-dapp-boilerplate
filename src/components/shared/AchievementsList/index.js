@@ -7,6 +7,7 @@ import CardContent from '@material-ui/core/CardContent'
 import { withStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import Achievement from './Achievement'
+import InfiniteScroll from 'react-infinite-scroller'
 
 const styles = (theme) => ({
   grid: {
@@ -16,22 +17,29 @@ const styles = (theme) => ({
   }
 })
 
-const AchievementsList = ({ classes, list: { list }, noAchievementText }) => (
+const AchievementsList = ({ classes, loadMore, list: { hasMore, list }, noAchievementText }) => (
   <Grid
     key='list'
     container
     className={classes.grid}
     spacing={16}
   >
-    <Grid key='no-item' item xs={12}>
+    <Grid item xs={12}>
       {list.length > 0 ? (
-        list.map((achievement, idx) => (
-          <Achievement
-            achievement={achievement}
-            key={idx}
-            idx={idx}
-          />
-        ))
+        <InfiniteScroll
+          pageStart={1}
+          loadMore={loadMore}
+          hasMore={hasMore}
+          loader={<Typography key={0}>Loading....</Typography>}
+        >
+          {list.map((achievement, idx) => (
+            <Achievement
+              achievement={achievement}
+              key={idx}
+              idx={idx}
+            />
+          ))}
+        </InfiniteScroll>
       ) : (
         <Card>
           <CardContent>
@@ -44,9 +52,10 @@ const AchievementsList = ({ classes, list: { list }, noAchievementText }) => (
 )
 
 AchievementsList.propTypes = {
-  noAchievementText: T.string,
   classes: T.object,
-  list: T.object
+  list: T.object,
+  loadMore: T.func,
+  noAchievementText: T.string
 }
 
 export default R.compose(

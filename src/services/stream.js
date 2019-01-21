@@ -4,7 +4,7 @@ import stream from 'getstream'
 import axios from 'axios'
 import * as R from 'ramda'
 
-const LIMIT = 25
+const LIMIT = 100
 const APP_KEY = 'bf5kra2xwhbs'
 const APP_ID = '46377'
 
@@ -76,8 +76,13 @@ export const createStreamClient = (fetcher, baseURL, streamTool) => {
     return { results, hasMore: next !== '' }
   }
 
-  async function setUser ({ data }) {
-    await userClient.get().setUser(data)
+  async function setUser ({ data, userAddress }) {
+    const client = userClient.get()
+    try {
+      await client.user(userAddress).update(data)
+    } catch (error) {
+      await client.setUser(data)
+    }
   }
 
   return Object.freeze({

@@ -1,13 +1,15 @@
-import { all, call, put, take, takeLatest } from 'redux-saga/effects'
+import { all, call, put, select, take, takeLatest } from 'redux-saga/effects'
 import { eventChannel } from 'redux-saga'
 import T from 'modules/types'
+import S from 'modules/selectors'
 import ownT from './types'
 import ownA from './actions'
 import stream from 'services/stream'
 
-const fetch = function * ({ userAddress }) {
+const fetch = function * ({ page }) {
   try {
-    const { results: items, hasMore } = yield call(stream.fetchData, 'timeline', userAddress)
+    const userAddress = yield select(S.wallets.primaryAddress)
+    const { results: items, hasMore } = yield call(stream.fetchData, 'timeline', userAddress, page)
     yield put(ownA.fetch.succeeded({ list: items, hasMore, userAddress }))
   } catch (error) {
     yield put(ownA.fetch.errored({ error }))
@@ -39,6 +41,7 @@ const suscribe = function * ({ userAddress }) {
 
 export default function * () {
   yield all([
+    takeLatest(T.wallets.CONNECT.succeeded, fetch),
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, fetch),
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, suscribe),
     takeLatest(ownT.FETCH.requested, fetch)

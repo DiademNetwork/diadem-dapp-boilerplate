@@ -27,11 +27,9 @@ export const achievement = (function achievement () {
 
   const hasAlready = (userAddress) => (verb) => R.compose(
     R.complement(R.isEmpty),
-    R.tap((x) => console.log('Yo man', x, userAddress)),
     R.filter(
       R.pathEq(['actor', 'id'], userAddress)
     ),
-    R.tap((x) => console.log('Yo man 2', x)),
     getActivities(verb)
   )
 

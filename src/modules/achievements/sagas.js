@@ -47,9 +47,9 @@ const confirm = function * (payload) {
   }
 }
 
-const fetch = function * () {
+const fetch = function * ({ page }) {
   try {
-    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', 'common')
+    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', 'common', page)
     yield put(ownA.fetch.succeeded({ list: items, hasMore }))
   } catch (error) {
     yield put(ownA.fetch.errored({ error }))
@@ -75,11 +75,13 @@ const suscribe = function * () {
   }
 }
 
-const fetchUserAchievements = function * ({ userAddress }) {
+const fetchUserAchievements = function * ({ page }) {
   try {
-    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', userAddress)
+    const userAddress = yield select(S.wallets.primaryAddress)
+    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', userAddress, page)
     yield put(ownA.fetchUser.succeeded({ list: items, hasMore }))
   } catch (error) {
+    console
     yield put(ownA.fetchUser.errored({ error }))
   }
 }
@@ -130,19 +132,21 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
       amount
     })
   } catch (error) {
-    console.log(error)
     yield put(ownA.support.errored({ error }))
   }
 }
 
 export default function * () {
   yield all([
-    fork(fetch),
+    fork(fetch, {}),
     fork(suscribe),
+    takeLatest(T.wallets.CONNECT.succeeded, fetchUserAchievements),
+    takeLatest(T.wallets.CONNECT.succeeded, fetch),
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, fetchUserAchievements),
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, suscribeUserAchievements),
     takeLatest(ownT.CREATE.requested, create),
     takeLatest(ownT.FETCH.requested, fetch),
+    takeLatest(ownT.FETCH_USER.requested, fetchUserAchievements),
     takeLatest(ownT.CONFIRM.requested, confirm),
     takeLatest(ownT.SUPPORT.requested, support)
   ])

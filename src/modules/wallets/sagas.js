@@ -7,6 +7,7 @@ import T from 'modules/types'
 import S from 'modules/selectors'
 import ownA from './actions'
 import ownT from './types'
+import * as ownS from './selectors'
 import blockchains from 'configurables/blockchains'
 
 // const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
@@ -75,6 +76,7 @@ const registerUser = function * () {
     const userName = yield select(S.login.userName)
     const userID = yield select(S.login.userID)
     const walletAddress = yield select(S.wallets.address(blockchainKey))
+    yield call(setUser)
     const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
       address: walletAddress,
       name: userName,
@@ -82,10 +84,11 @@ const registerUser = function * () {
       token: userAccessToken
     })
     if (registrationSucceeded) {
-      yield put(ownA.connect.succeeded({ blockchainKey }))
+      yield put(ownA.connect.succeeded({ userAddress: walletAddress, blockchainKey }))
     } else {
       yield put(ownA.connect.failed({ blockchainKey }))
     }
+    yield call(setUser)
   } catch (error) {
     yield put(ownA.connect.errored({ error }))
   }
@@ -179,8 +182,9 @@ const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrSt
 }
 
 const setUser = function * () {
-  const data = yield select((S.login.data))
-  yield call(stream.setUser, { data })
+  const userAddress = yield select(ownS.primaryAddress)
+  const data = yield select(S.login.data)
+  yield call(stream.setUser, { data, userAddress })
 }
 
 export default function * () {

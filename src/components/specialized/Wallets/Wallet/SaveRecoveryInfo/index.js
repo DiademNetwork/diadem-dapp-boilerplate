@@ -33,7 +33,7 @@ class WalletSaveRecoveryInfo extends Component {
         render={() => (
           <Fragment>
             <Typography key="text" variant="body1">
-              We just created for you a wallet to use on Diadem Network.
+              We just created for you a wallet to use on Diadem Network.<br />
               Your mnemonic and privateKey below will never be shown again.<br />
               You will need them to recover your funds.
             </Typography>

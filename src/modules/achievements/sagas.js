@@ -97,7 +97,7 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
       fees,
       userAddress
     })
-    const rawTx = blockchains.get(blockchainKey).generateContractSendTx({
+    const signedRawTx = blockchains.get(blockchainKey).generateContractSendTx({
       address,
       encodedData,
       amount,
@@ -109,7 +109,7 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
       blockchain: blockchainKey,
       creatorAddress,
       link,
-      rawTx
+      signedRawTx
     })
     yield put(ownA.support.succeeded())
   } catch (error) {

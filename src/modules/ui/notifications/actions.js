@@ -32,7 +32,6 @@ export const WALLET_REGISTRATION_SUCCESS_MESSAGE = 'Please wait, your registrati
 export const WALLET_REGISTRATION_ERROR_MESSAGE = 'Impossible to register your account'
 export const WALLET_RECOVER_SUCCESS_MESSAGE = 'Wallet restored'
 export const WALLET_RECOVER_ERROR_MESSAGE = 'Impossible to recover wallet'
-export const WALLET_REFRESH_ERROR_MESSAGE = 'Impossible to refresh wallet'
 export const WALLET_GENERATE_SUCCESS_MESSAGE = 'Wallet generated'
 export const WALLET_GENERATE_ERROR_MESSAGE = 'Impossible to generate your wallet'
 export const WALLET_WITHDRAW_SUCCESS_MESSAGE = 'Tokens withdrawal successful'
@@ -64,7 +63,6 @@ export default {
   walletRegistrationError: createErrorNotification(WALLET_REGISTRATION_ERROR_MESSAGE),
   walletRecoverSuccess: createSuccessNotification(WALLET_RECOVER_SUCCESS_MESSAGE),
   walletRecoverError: createErrorNotification(WALLET_RECOVER_ERROR_MESSAGE),
-  walletRefreshError: createErrorNotification(WALLET_REFRESH_ERROR_MESSAGE),
   walletGenerateSuccess: createSuccessNotification(WALLET_GENERATE_SUCCESS_MESSAGE),
   walletGenerateError: createErrorNotification(WALLET_GENERATE_ERROR_MESSAGE),
   walletWithdrawSuccess: createSuccessNotification(WALLET_WITHDRAW_SUCCESS_MESSAGE),

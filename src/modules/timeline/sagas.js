@@ -17,25 +17,24 @@ const fetch = function * ({ page }) {
 }
 
 const successCallBack = function * ({ new: items }) {
-  console.log('timeline items received')
   yield put(ownA.received({ list: items }))
 }
 
-const suscribe = function * ({ userAddress }) {
+const subscribe = function * ({ userAddress }) {
   let callbackObj = {}
   const channel = eventChannel(emitter => {
     callbackObj.call = emitter
     return () => {}
   })
   try {
-    yield call(stream.suscribeWithCallBacks, 'timeline', userAddress, callbackObj.call)
-    yield put(ownA.suscribe.succeeded())
+    yield call(stream.subscribeWithCallBacks, 'timeline', userAddress, callbackObj.call)
+    yield put(ownA.subscribe.succeeded())
     while (true) {
       const data = yield take(channel)
       yield call(successCallBack, data)
     }
   } catch (error) {
-    yield put(ownA.suscribe.errored({ error }))
+    yield put(ownA.subscribe.errored({ error }))
   }
 }
 
@@ -43,7 +42,7 @@ export default function * () {
   yield all([
     takeLatest(T.wallets.CONNECT.succeeded, fetch),
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, fetch),
-    takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, suscribe),
+    takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, subscribe),
     takeLatest(ownT.FETCH.requested, fetch)
   ])
 }

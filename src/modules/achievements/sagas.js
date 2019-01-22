@@ -10,15 +10,10 @@ import blockchains from 'configurables/blockchains'
 
 const create = function * ({ link, title }) {
   try {
-    const primaryBlockchainKey = blockchains.primary.key
-    const userAddress = yield select(S.wallets.primaryAddress)
-    yield call(api.createAchievement(primaryBlockchainKey), {
-      address: userAddress,
+    yield call(api.createAchievement(blockchains.primary.key), {
+      userAddress: yield select(S.wallets.primaryAddress),
       link,
-      name: yield select(S.login.userName),
-      title,
-      token: yield select(S.login.userAccessToken),
-      user: yield select(S.login.userID)
+      title
     })
     yield put(ownA.create.succeeded())
   } catch (error) {
@@ -44,22 +39,22 @@ const fetch = function * ({ page }) {
   }
 }
 
-const suscribe = function * () {
+const subscribe = function * () {
   let callbackObj = {}
   const channel = eventChannel(emitter => {
     callbackObj.call = emitter
     return () => {}
   })
   try {
-    yield call(stream.suscribeWithCallBacks, 'achievement_aggregated', 'common', callbackObj.call)
-    yield put(ownA.suscribe.succeeded())
+    yield call(stream.subscribeWithCallBacks, 'achievement_aggregated', 'common', callbackObj.call)
+    yield put(ownA.subscribe.succeeded())
     while (true) {
       yield take(channel)
       yield call(fetch)
       yield put(ownA.received())
     }
   } catch (error) {
-    yield put(ownA.suscribe.errored({ error }))
+    yield put(ownA.subscribe.errored({ error }))
   }
 }
 
@@ -74,22 +69,22 @@ const fetchUserAchievements = function * ({ page }) {
   }
 }
 
-const suscribeUserAchievements = function * ({ userAddress }) {
+const subscribeUserAchievements = function * ({ userAddress }) {
   let callbackObj = {}
   const channel = eventChannel(emitter => {
     callbackObj.call = emitter
     return () => {}
   })
   try {
-    yield call(stream.suscribeWithCallBacks, 'achievement_aggregated', userAddress, callbackObj.call)
-    yield put(ownA.suscribe.succeeded())
+    yield call(stream.subscribeWithCallBacks, 'achievement_aggregated', userAddress, callbackObj.call)
+    yield put(ownA.subscribe.succeeded())
     while (true) {
       yield take(channel)
       yield call(fetchUserAchievements, { userAddress })
       yield put(ownA.receivedUser())
     }
   } catch (error) {
-    yield put(ownA.suscribe.errored({ error }))
+    yield put(ownA.subscribe.errored({ error }))
   }
 }
 
@@ -104,13 +99,11 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
     })
     yield call(api.supportAchievement(blockchainKey), {
       amount,
-      address: yield select(S.wallets.primaryAddress),
+      userAddress: yield select(S.wallets.primaryAddress),
       blockchain: blockchainKey,
       creatorAddress,
       link,
-      rawTx,
-      token: yield select(S.login.userAccessToken),
-      user: yield select(S.login.userID)
+      rawTx
     })
     yield put(ownA.support.succeeded())
   } catch (error) {
@@ -121,11 +114,11 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
 export default function * () {
   yield all([
     fork(fetch, {}),
-    fork(suscribe),
+    fork(subscribe),
     takeLatest(T.wallets.CONNECT.succeeded, fetchUserAchievements),
     takeLatest(T.wallets.CONNECT.succeeded, fetch),
     takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, fetchUserAchievements),
-    takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, suscribeUserAchievements),
+    takeLatest(T.wallets.GET_GETSTREAM_TOKEN.succeeded, subscribeUserAchievements),
     takeLatest(ownT.CREATE.requested, create),
     takeLatest(ownT.FETCH.requested, fetch),
     takeLatest(ownT.FETCH_USER.requested, fetchUserAchievements),

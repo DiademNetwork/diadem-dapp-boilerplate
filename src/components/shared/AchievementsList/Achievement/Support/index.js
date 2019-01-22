@@ -64,7 +64,7 @@ class SupportAchievement extends Component {
   render () {
     const {
       achievement,
-      canPerformActions,
+      isPrimaryWalletReady,
       idx,
       walletsBalances
     } = this.props
@@ -84,7 +84,7 @@ class SupportAchievement extends Component {
       <Modal
         confirmButtonDisabled={!isFormValid}
         confirmButtonText="Support"
-        disabled={!canPerformActions || noBalance}
+        disabled={!isPrimaryWalletReady || noBalance}
         name={`achievement-${idx}-support-modal`}
         onConfirm={this.handleSubmit}
         openButtonIcon={<MoneyIcon />}
@@ -152,7 +152,7 @@ class SupportAchievement extends Component {
 
 SupportAchievement.propTypes = {
   achievement: T.object,
-  canPerformActions: T.bool,
+  isPrimaryWalletReady: T.bool,
   idx: T.number,
   supportAchievement: T.func,
   walletsBalances: T.object

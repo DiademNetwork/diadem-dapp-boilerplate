@@ -1,16 +1,10 @@
 import { connect } from 'react-redux'
 import A from 'modules/actions'
 import S from 'modules/selectors'
-import * as R from 'ramda'
 import blockchains from 'configurables/blockchains'
 
 const mapStateToProps = (state) => ({
-  accessToken: S.login.userAccessToken(state),
-  canPerformActions: R.allPass([
-    S.login.isLogged,
-    S.wallets.areAllReady
-  ])(state),
-  userID: S.login.userID(state),
+  isPrimaryWalletReady: S.wallets.isPrimaryReady(state),
   userAddress: S.wallets.address(blockchains.primary.key)(state)
 })
 

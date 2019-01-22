@@ -13,7 +13,6 @@ import Wallets from 'components/specialized/Wallets'
 import Networks from 'components/specialized/Networks'
 import Actions from 'components/specialized/Actions'
 import { PropTypes as T } from 'prop-types'
-import withContainer from './container'
 import { withStyles } from '@material-ui/core/styles'
 
 const styles = (theme) => ({
@@ -66,6 +65,5 @@ App.propTypes = {
 }
 
 export default R.compose(
-  withContainer,
   withStyles(styles)
 )(App)

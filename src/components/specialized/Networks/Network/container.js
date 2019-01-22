@@ -4,11 +4,11 @@ import A from 'modules/actions'
 import S from 'modules/selectors'
 
 const mapStateToProps = (state) => ({
-  isLogged: S.login.isLogged(state)
+  isLogged: S.network.isLogged(state)
 })
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  handleLoginSuccess: A.login.logged
+  handleLoginSuccess: A.network.logged
 }, dispatch)
 
 export default WrappedComponent =>

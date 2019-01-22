@@ -1,17 +1,15 @@
 import achievements from 'modules/achievements/types'
-import login from 'modules/login/types'
+import network from 'modules/network/types'
 import timeline from 'modules/timeline/types'
 import uiGeneral from 'modules/ui/general/types'
-import users from 'modules/users/types'
 import wallets from 'modules/wallets/types'
 
 export default {
   achievements,
-  login,
+  network,
   timeline,
   ui: {
     general: uiGeneral
   },
-  users,
   wallets
 }

@@ -6,11 +6,11 @@ import PeopleIcon from '@material-ui/icons/People'
 const PublishChallenge = () => (
   <Button
     aria-label="Challenge"
-    data-qa-id="deposit-reward-button"
+    data-qa-id="publish-challenge-button"
     disabled
     icon={<PeopleIcon />}
   >
-    Deposit reward
+    Publish challenge
   </Button>
 )
 

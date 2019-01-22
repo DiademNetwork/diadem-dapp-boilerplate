@@ -9,5 +9,5 @@ export default {
   fetchUser: createAsyncActions(T.FETCH_USER),
   received: createAction(T.RECEIVED),
   receivedUser: createAction(T.RECEIVED_USER),
-  suscribe: createAsyncActions(T.SUSCRIBE)
+  subscribe: createAsyncActions(T.SUBSCRIBE)
 }

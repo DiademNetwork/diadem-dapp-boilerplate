@@ -8,7 +8,6 @@ export default {
   load: createAsyncActions(T.LOAD),
   recover: createAsyncActions(T.RECOVER),
   generate: createAsyncActions(T.GENERATE),
-  refresh: createAsyncActions(T.REFRESH),
   connect: createAsyncActions(T.CONNECT),
   register: createAsyncActions(T.REGISTER),
   withdraw: createAsyncActions(T.WITHDRAW),

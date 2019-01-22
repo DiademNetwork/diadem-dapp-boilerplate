@@ -49,12 +49,11 @@ export const createStreamClient = (streamTool) => {
     return Object.freeze({ get })
   })()
 
-  async function suscribeWithCallBacks (feedName, group, successCallback) {
+  async function subscribeWithCallBacks (feedName, group, successCallback) {
     try {
       await feeds.get(feedName, group).subscribe(successCallback)
-      console.log(`Suscribed to getstream feed ${feedName}:${group}`)
     } catch (error) {
-      console.log(error)
+      throw new Error(`Subscribed to getstream feed ${feedName}:${group}`)
     }
   }
 
@@ -63,7 +62,6 @@ export const createStreamClient = (streamTool) => {
       limit: LIMIT,
       offset: LIMIT * (page - 1)
     })
-    console.log(`Fetch succeeded for ${feedName}:${group}`, results)
     return { results, hasMore: next !== '' }
   }
 
@@ -79,7 +77,7 @@ export const createStreamClient = (streamTool) => {
   return Object.freeze({
     fetchData,
     userToken,
-    suscribeWithCallBacks,
+    subscribeWithCallBacks,
     setUser,
     userClient
   })

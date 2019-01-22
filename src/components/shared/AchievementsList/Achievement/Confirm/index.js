@@ -13,20 +13,18 @@ import DoneIcon from '@material-ui/icons/Done'
 
 class ConfirmAchievement extends Component {
   handleConfirm = () => {
-    const { accessToken, confirmAchievement, achievement, userID, userAddress } = this.props
+    const { confirmAchievement, achievement, userAddress } = this.props
     confirmAchievement({
       userAddress,
       creatorAddress: U.achievement.getCreatorAddress(achievement),
-      link: U.achievement.getLink(achievement),
-      token: accessToken,
-      user: userID
+      link: U.achievement.getLink(achievement)
     })
   }
 
   render () {
     const {
       achievement,
-      canPerformActions,
+      isPrimaryWalletReady,
       idx,
       link,
       title,
@@ -38,7 +36,7 @@ class ConfirmAchievement extends Component {
       <Modal
         confirmButtonText="Confirm"
         data-qa-id={`achievement-${idx}-confirm-modal`}
-        disabled={hasUserAlreadyConfirmed || !canPerformActions}
+        disabled={hasUserAlreadyConfirmed || !isPrimaryWalletReady}
         name={`achievement-${idx}-confirm-button`}
         onConfirm={this.handleConfirm}
         openButtonIcon={<DoneIcon />}
@@ -69,14 +67,12 @@ class ConfirmAchievement extends Component {
 }
 
 ConfirmAchievement.propTypes = {
-  canPerformActions: T.bool,
   achievement: T.object,
-  accessToken: T.string,
   confirmAchievement: T.func,
   idx: T.number,
+  isPrimaryWalletReady: T.bool,
   link: T.string,
   title: T.string,
-  userID: T.string,
   userAddress: T.string
 }
 

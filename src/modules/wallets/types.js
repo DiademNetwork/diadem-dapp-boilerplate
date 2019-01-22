@@ -9,7 +9,6 @@ export default {
   LOAD: createAsyncTypes(`${namespace}/LOAD`),
   RECOVER: createAsyncTypes(`${namespace}/RECOVER`),
   GENERATE: createAsyncTypes(`${namespace}/GENERATE`),
-  REFRESH: createAsyncTypes(`${namespace}/REFRESH`),
   CHECK_REGISTRATIONS: createAsyncTypes(`${namespace}/CHECK_REGISTRATIONS`),
   CONNECT: createAsyncTypes(`${namespace}/CONNECT`),
   REGISTER: createAsyncTypes(`${namespace}/REGISTER`),

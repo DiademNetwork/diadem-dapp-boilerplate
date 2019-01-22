@@ -1,19 +1,17 @@
 import * as achievements from 'modules/achievements/selectors'
-import * as login from 'modules/login/selectors'
+import * as network from 'modules/network/selectors'
 import * as timeline from 'modules/timeline/selectors'
 import * as uiGeneral from 'modules/ui/general/selectors'
 import * as uiNotifications from 'modules/ui/notifications/selectors'
-import * as users from 'modules/users/selectors'
 import * as wallets from 'modules/wallets/selectors'
 
 export default {
   achievements,
-  login,
+  network,
   timeline,
   ui: {
     general: uiGeneral,
     notifications: uiNotifications
   },
-  users,
   wallets
 }

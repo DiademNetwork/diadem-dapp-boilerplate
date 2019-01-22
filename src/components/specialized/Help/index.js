@@ -108,7 +108,7 @@ class Help extends Component {
             </Typography>
             <Divider className={classes.divider} />
             <Typography color="textSecondary">
-              - {network.name} Login is required to perform most actions.
+              - {network.name} Login will make it possible to display your name and avatar instead of primary wallet address.
             </Typography >
             <Typography color="textSecondary">
               - Adblockers seems to cause a login bug. Please desactivate them to use DiademNetwork.

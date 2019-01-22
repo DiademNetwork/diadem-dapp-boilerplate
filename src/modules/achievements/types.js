@@ -10,5 +10,5 @@ export default {
   RECEIVED: `${namespace}/RECEIVED`,
   RECEIVED_USER: `${namespace}/RECEIVED_USER`,
   SUPPORT: createAsyncTypes(`${namespace}/SUPPORT`),
-  SUSCRIBE: createAsyncTypes(`${namespace}/SUSCRIBE`)
+  SUBSCRIBE: createAsyncTypes(`${namespace}/SUBSCRIBE`)
 }

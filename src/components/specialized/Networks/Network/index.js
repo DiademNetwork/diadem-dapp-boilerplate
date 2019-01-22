@@ -18,7 +18,7 @@ const styles = (theme) => ({
   }
 })
 
-const Login = ({ classes, isLogged, handleLoginSuccess }) => (
+const Network = ({ classes, isLogged, handleLoginSuccess }) => (
   <TableRow>
     <TableCell>
       <Avatar
@@ -50,7 +50,7 @@ const Login = ({ classes, isLogged, handleLoginSuccess }) => (
   </TableRow>
 )
 
-Login.propTypes = {
+Network.propTypes = {
   classes: T.object,
   handleLoginSuccess: T.func,
   isLogged: T.bool
@@ -59,4 +59,4 @@ Login.propTypes = {
 export default R.compose(
   withStyles(styles),
   withContainer
-)(Login)
+)(Network)

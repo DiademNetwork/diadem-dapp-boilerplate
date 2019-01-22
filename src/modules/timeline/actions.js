@@ -4,5 +4,5 @@ import T from './types'
 export default {
   fetch: createAsyncActions(T.FETCH),
   received: createAction(T.RECEIVED),
-  suscribe: createAsyncActions(T.SUSCRIBE)
+  subscribe: createAsyncActions(T.SUBSCRIBE)
 }

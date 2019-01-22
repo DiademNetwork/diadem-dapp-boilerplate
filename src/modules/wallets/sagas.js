@@ -10,9 +10,6 @@ import ownT from './types'
 import * as ownS from './selectors'
 import blockchains from 'configurables/blockchains'
 
-// const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
-// const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
-
 const userID = 'default'
 
 const checkRegistration = function * ({ blockchainKey, userID }) {
@@ -72,9 +69,9 @@ const registerWallet = function * ({ blockchainKey, data }) {
 const registerUser = function * () {
   try {
     const blockchainKey = blockchains.primary.key
-    const userAccessToken = yield select(S.login.userAccessToken)
-    const userName = yield select(S.login.userName)
-    const userID = yield select(S.login.userID)
+    const userAccessToken = yield select(S.network.userAccessToken)
+    const userName = yield select(S.network.userName)
+    const userID = yield select(S.network.userID)
     const walletAddress = yield select(S.wallets.address(blockchainKey))
     yield call(setUser)
     const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
@@ -182,14 +179,14 @@ const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrSt
 
 const setUser = function * () {
   const userAddress = yield select(ownS.primaryAddress)
-  const data = yield select(S.login.data)
+  const data = yield select(S.network.data)
   yield call(stream.setUser, { data, userAddress })
 }
 
 export default function * () {
   yield all([
     fork(checkRegistrations),
-    takeLatest(T.login.LOGGED, registerUser),
+    takeLatest(T.network.LOGGED, registerUser),
     takeLatest(ownT.CHECK_REGISTRATIONS.succeeded, loadWallets),
     takeLatest(ownT.GENERATE.requested, generateWallet),
     takeLatest(ownT.GENERATE.succeeded, registerWallet),

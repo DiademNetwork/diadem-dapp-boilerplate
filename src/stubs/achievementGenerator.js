@@ -18,7 +18,7 @@ const create = () => {
     time: `${faker.date.past()}`,
     title: faker.name.title(),
     verb: 'create',
-    wallet: faker.random.uuid() // Dev QTUM address better
+    wallet: faker.random.uuid()
   })
 }
 
@@ -44,7 +44,7 @@ const confirm = (base) => Object.freeze({
   time: `${faker.date.past()}`,
   verb: 'confirm',
   witness: `${faker.random.number()}`,
-  witnessAddress: faker.random.uuid(), // Dev QTUM address better
+  witnessAddress: faker.random.uuid(),
   witnessName: faker.name.findName()
 })
 
@@ -67,7 +67,7 @@ const deposit = (base) => Object.freeze({
   foreign_id: `deposit_${base.object}`,
   time: `${faker.date.past()}`,
   witness: `${faker.random.number()}`,
-  witnessAddress: faker.random.uuid(), // Dev QTUM address better
+  witnessAddress: faker.random.uuid(),
   witnessName: faker.name.findName()
 })
 

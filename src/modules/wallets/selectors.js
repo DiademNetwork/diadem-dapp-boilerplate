@@ -6,10 +6,8 @@ import { createBaseSelector } from 'modules/utils'
 
 const getWallets = createBaseSelector(['wallets'])
 const getWallet = name => createBaseSelector(['wallets', name])
+const getWalletData = name => createBaseSelector(['wallets', name, 'data'])
 const getAll = R.path(['wallets'])
-
-export const data = getWallets(['data'])
-export const util = getWallets(['util'])
 
 export const loadFailReason = (name) => getWallets(name)(['loadFailReason'])
 export const recoverFailReason = (name) => getWallet(name)(['recoverFailReason'])
@@ -18,18 +16,18 @@ export const recoverFailReason = (name) => getWallet(name)(['recoverFailReason']
 export const mnemonic = (name) => getWallet(name)(['mnemonic'])
 export const privateKey = (name) => getWallet(name)(['privateKey'])
 export const infoSaved = (name) => getWallet(name)(['infoSaved'])
-// export const hasPendingTx = getWallets(['hasPendingTx'])
 
 // registration
 export const isRegistered = (name) => getWallet(name)(['isRegistered'])
 export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
-export const primaryAddress = getWallet(blockchains.primary.key)(['addrStr'])
-export const address = (name) => getWallet(name)(['addrStr'])
-export const balance = (name) => getWallet(name)(['balance'])
-export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance'])
-export const balances = createSelector([getAll], R.mapObjIndexed(R.propOr(0, 'balance')))
+export const primaryAddress = getWalletData(blockchains.primary.key)(['addrStr'])
+export const data = (name) => getWalletData(name)()
+export const address = (name) => getWalletData(name)(['addrStr'])
+export const balance = (name) => getWalletData(name)(['balance'])
+export const unconfirmedBalance = (name) => getWalletData(name)(['unconfirmedBalance'])
+export const balances = createSelector([getAll], R.mapObjIndexed(R.pathOr(0, ['data', 'balance'])))
 
 // status
 export const status = (name) => getWallet(name)(['status'])

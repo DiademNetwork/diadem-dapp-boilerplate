@@ -102,5 +102,4 @@ CreateAchievement.propTypes = {
 
 export default R.compose(
   withContainer
-  // withStyles(styles)
 )(CreateAchievement)

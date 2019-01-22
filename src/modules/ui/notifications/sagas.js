@@ -1,10 +1,17 @@
 
-import { all, put, takeLatest } from 'redux-saga/effects'
+import { all, call, put, takeLatest } from 'redux-saga/effects'
 import T from 'modules/types'
 import ownA from './actions'
 
 const display = (actionName) => function * () {
   yield put(ownA[actionName])
+}
+
+const handleRefreshNotifications = function * ({ changes }) {
+  if (changes.tokensSent) { yield call(display, 'walletTokensSent') }
+  if (changes.okensReceived) { yield call(display, 'walletTokensReceived') }
+  if (changes.receivingTokens) { yield call(display, 'walletReceivingTokens') }
+  if (changes.sendingTokens) { yield call(display, 'walletSendingTokens') }
 }
 
 export default function * () {
@@ -27,6 +34,7 @@ export default function * () {
     takeLatest(T.wallets.REGISTER.failed, display('walletRegistrationError')),
     takeLatest(T.wallets.RECOVER.succeeded, display('walletRecoverSuccess')),
     takeLatest(T.wallets.RECOVER.errored, display('walletRecoverError')),
+    takeLatest(T.wallets.REFRESH.succeeded, handleRefreshNotifications),
     takeLatest(T.wallets.GENERATE.succeeded, display('walletGenerateSuccess')),
     takeLatest(T.wallets.GENERATE.errored, display('walletGenerateError')),
     takeLatest(T.wallets.WITHDRAW.succeeded, display('walletWithdrawSuccess')),

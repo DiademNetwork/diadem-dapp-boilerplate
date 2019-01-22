@@ -16,7 +16,7 @@ export const createAPI = (fetcher, baseURL) => {
     // blockchain-specific calls
     checkRegistration: (chain) => postToPath(`/${chain}/check`),
     createAchievement: (chain) => postToPath(`/${chain}/create`),
-    encodeSupport: (chain) => postToPath(`/${chain}/encode-support`),
+    prepareSupport: (chain) => postToPath(`/${chain}/encode-support`),
     registerUser: (chain) => postToPath(`/${chain}/register`),
     supportAchievement: (chain) => postToPath(`/${chain}/support`),
     // non-blockchain-specific calls

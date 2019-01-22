@@ -90,7 +90,13 @@ const subscribeUserAchievements = function * ({ userAddress }) {
 
 const support = function * ({ amount, blockchainKey, creatorAddress, fees, link }) {
   try {
-    const { address, encodedData } = yield call(api.encodeSupport(blockchainKey), { link })
+    const userAddress = yield select(S.wallets.primaryAddress)
+    const { address, encodedData } = yield call(api.prepareSupport(blockchainKey), {
+      amount,
+      creatorAddress,
+      fees,
+      userAddress
+    })
     const rawTx = blockchains.get(blockchainKey).generateContractSendTx({
       address,
       encodedData,
@@ -99,7 +105,7 @@ const support = function * ({ amount, blockchainKey, creatorAddress, fees, link 
     })
     yield call(api.supportAchievement(blockchainKey), {
       amount,
-      userAddress: yield select(S.wallets.primaryAddress),
+      userAddress,
       blockchain: blockchainKey,
       creatorAddress,
       link,

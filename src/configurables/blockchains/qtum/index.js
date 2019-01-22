@@ -1,5 +1,5 @@
 import logo from './logo.png'
-import qtumJSWallet from 'services/qtumjs-wallet'
+import qtumJSWallet from './qtumjs-wallet'
 const { networks, generateMnemonic } = qtumJSWallet
 const network = networks[process.env.ENV === 'mainnet' ? 'mainnet' : 'testnet']
 
@@ -15,28 +15,42 @@ export default (function qtum () {
 
   const registerWallet = () => ({ ok: true })
 
-  const initFromPrivateKey = (privateKey) => {
-    walletUtil = network.fromWIF(privateKey)
+  const initFromPrivateKey = async (privateKey) => {
+    walletUtil = await network.fromWIF(privateKey)
   }
 
-  const initFromMnemonic = (mnemonic) => {
-    walletUtil = network.fromMnemonic(mnemonic)
+  const initFromMnemonic = async (mnemonic) => {
+    walletUtil = await network.fromMnemonic(mnemonic)
   }
 
-  const needsWallet = fn => (...args) => {
+  const needsWallet = fn => async (...args) => {
     if (!walletUtil) {
       throw new Error('Wallet does not exist. Please initialize or generate it.')
     }
-    fn(...args)
+    const result = await fn(...args)
+    return result
   }
 
   const getPrivateKey = () => walletUtil.toWIF()
 
-  const getWalletData = async () => walletUtil.getInfo()
+  const getWalletData = async () => {
+    const data = await walletUtil.getInfo()
+    return data
+  }
 
   const withdraw = async ({ address, amount, fees = 0 }) => {
     walletUtil.send(address, amount * 1e8, { feeRate: Math.ceil(fees * 1e8 / 1024) })
   }
+
+  const generateContractSendTx = ({
+    address,
+    encodedData,
+    amount,
+    feeRate: fees
+  }) => walletUtil.generateContractSendTx(address, encodedData, {
+    amount: amount * 1e8,
+    feeRate: fees
+  })
 
   return Object.freeze({
     initFromMnemonic,
@@ -44,6 +58,7 @@ export default (function qtum () {
     key: 'qtum',
     logo,
     name: 'Qtum',
+    generateContractSendTx,
     getWalletData: needsWallet(getWalletData),
     generateWallet,
     registerWallet,

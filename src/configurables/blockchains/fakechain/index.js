@@ -47,7 +47,7 @@ export default (function fakeChain () {
     return { mnemonic, privateKey }
   }
 
-  const registerWallet = ({ addrStr }) => {
+  const registerWallet = () => {
     return new Promise(resolve => setTimeout(() => {
       resolve({ ok: true })
     }, 5000))
@@ -84,12 +84,15 @@ export default (function fakeChain () {
     balance.set('balance', balanceData.balance - amount)
   }
 
+  const generateContractSendTx = () => 'raxTxString'
+
   return Object.freeze({
     initFromMnemonic,
     initFromPrivateKey,
     key: 'fakechain',
     logo,
     name: 'Fakechain',
+    generateContractSendTx,
     getWalletData,
     generateWallet,
     registerWallet,

@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import isUrl from 'is-url'
 import LoginButton from './LoginButton'
+import logo from './logo.png'
 
 const MAX_LINK_CARACTERS = 91
 
@@ -25,7 +26,7 @@ export default Object.freeze({
       ])
     }
   },
-  name: 'facebook',
+  name: 'Facebook',
   // Mapping between info needed in app and data object received from network
   // Array given will be used in app selectors with Ramda to retrieve info in object
   dataPaths: {
@@ -34,6 +35,7 @@ export default Object.freeze({
     userPictureUrl: ['picture', 'data', 'url'],
     userID: ['userID']
   },
+  logo,
   texts: {
     linkHelp: 'To get your Facebook post link, click on time just below your name on your Facebook post to access to your post URL. Copy all link before "?'
   }

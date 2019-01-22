@@ -14,7 +14,7 @@ describe('Achievements', () => {
     })
   })
 
-  describe('Suscribe', () => {
+  describe('Subscribe', () => {
     it('Display new achievements received', () => {
       cy.get(`[data-qa-id^='achievement-item']`).should('have.length', INITIAL_ACHIEVEMENT_COUNT)
       cy.tick(FAKE_ACHIEVEMENT_TIMEOUT)

@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import * as U from 'utils'
+import blockchains from 'configurables/blockchains'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
@@ -24,6 +25,7 @@ export const isRegistered = (name) => getWallet(name)(['isRegistered'])
 export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
+export const primaryAddress = getWallet(blockchains.primary.key)(['addrStr'])
 export const address = (name) => getWallet(name)(['addrStr'])
 export const balance = (name) => getWallet(name)(['balance'])
 export const unconfirmedBalance = (name) => getWallet(name)(['unconfirmedBalance'])
@@ -32,6 +34,7 @@ export const balances = createSelector([getAll], R.mapObjIndexed(R.propOr(0, 'ba
 // status
 export const status = (name) => getWallet(name)(['status'])
 const isReadyStatus = U.oneOf(['loaded', 'recovered', 'recovery-info-saved'])
-export const isReady = (name) => createSelector([status(name)], isReadyStatus(status))
+export const isReady = (name) => createSelector([status(name)], isReadyStatus)
+export const isPrimaryReady = isReady(blockchains.primary.key)
 export const getOnesReady = createSelector([getAll], R.pickBy(({ status }) => isReadyStatus(status)))
 export const areAllReady = createSelector([getOnesReady, getAll], R.equals)

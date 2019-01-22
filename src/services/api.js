@@ -12,19 +12,11 @@ export const createAPI = (fetcher, baseURL) => {
   }
   const postToPath = path => R.partial(post, [path])
 
-  const get = async (path) => {
-    const { data: responseData } = await fetcher.get(getFullUrl(path))
-    return responseData
-  }
-  const getFromPath = path => R.partial(get, [path])
-
   return Object.freeze({
     // blockchain-specific calls
     checkRegistration: (chain) => postToPath(`/${chain}/check`),
-    checkWalletAddressMatchesRegisteredUser: (chain) => postToPath(`/${chain}/check-address`),
     createAchievement: (chain) => postToPath(`/${chain}/create`),
     encodeSupport: (chain) => postToPath(`/${chain}/encode-support`),
-    fetchUsers: (chain) => getFromPath(`/${chain}/users`),
     registerUser: (chain) => postToPath(`/${chain}/register`),
     supportAchievement: (chain) => postToPath(`/${chain}/support`),
     // non-blockchain-specific calls

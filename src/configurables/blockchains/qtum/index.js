@@ -1,5 +1,5 @@
 import logo from './logo.png'
-import qtumJSWallet from 'services/qtumjs-wallet'
+import qtumJSWallet from './qtumjs-wallet'
 const { networks, generateMnemonic } = qtumJSWallet
 const network = networks[process.env.ENV === 'mainnet' ? 'mainnet' : 'testnet']
 

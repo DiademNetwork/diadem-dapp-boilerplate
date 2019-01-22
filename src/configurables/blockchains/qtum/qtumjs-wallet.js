@@ -1,4 +1,4 @@
 import * as qtumJS from 'qtumjs-wallet'
-import qtumJSWalletMock from '../mocks/qtumjs-wallet'
+import qtumJSWalletMock from './qtumjs-wallet-mock'
 
 export default process.env.ENV === 'sandbox' ? qtumJSWalletMock : qtumJS

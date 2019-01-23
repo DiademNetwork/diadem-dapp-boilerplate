@@ -10,6 +10,7 @@ export default {
   generate: createAsyncActions(T.GENERATE),
   connect: createAsyncActions(T.CONNECT),
   register: createAsyncActions(T.REGISTER),
+  refresh: createAsyncActions(T.REFRESH),
   withdraw: createAsyncActions(T.WITHDRAW),
   getGetstreamToken: createAsyncActions(T.GET_GETSTREAM_TOKEN)
 }

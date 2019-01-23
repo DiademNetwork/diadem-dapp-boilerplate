@@ -1,5 +1,6 @@
 
 import { all, call, put, select, takeLatest, takeEvery, fork } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 import * as R from 'ramda'
 import api from 'services/api'
 import stream from 'services/stream'
@@ -11,6 +12,7 @@ import * as ownS from './selectors'
 import blockchains from 'configurables/blockchains'
 
 const userID = 'default'
+const AUTO_WALLET_REFRESH_INTERVAL = 6000
 
 const checkRegistration = function * ({ blockchainKey, userID }) {
   try {
@@ -183,6 +185,42 @@ const setUser = function * () {
   yield call(stream.setUser, { data, userAddress })
 }
 
+const refreshWallet = function * ({ blockchainKey }) {
+  while (true) {
+    yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
+    try {
+      const walletData = yield select(ownS.data(blockchainKey))
+      const newWalletData = yield call(blockchains.get(blockchainKey).getWalletData)
+      if (R.complement(R.equals)(walletData, newWalletData)) {
+        const changes = { }
+        const unconfirmedBalance = R.prop('unconfirmedBalance')(walletData)
+        const newUnconfirmedBalance = R.prop('unconfirmedBalance')(newWalletData)
+        if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
+          switch (true) {
+            case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+              changes.tokensSent = true
+              break
+            case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+              changes.tokensReceived = true
+              break
+            case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+              changes.receivingTokens = true
+              break
+            case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+              changes.sendingTokens = true
+              break
+            default:
+              break
+          }
+        }
+        yield put(ownA.refresh.succeeded({ changes, blockchainKey, data: walletData }))
+      }
+    } catch (error) {
+      yield put(ownA.refresh.errored({ error }))
+    }
+  }
+}
+
 export default function * () {
   yield all([
     fork(checkRegistrations),
@@ -197,6 +235,11 @@ export default function * () {
       ownT.LOAD.succeeded,
       ownT.RECOVER.succeeded
     ], getGetstreamTokenIfNecessary),
+    takeEvery([
+      ownT.GENERATE.succeeded,
+      ownT.LOAD.succeeded,
+      ownT.RECOVER.succeeded
+    ], refreshWallet),
     takeLatest(ownT.GET_GETSTREAM_TOKEN.succeeded, setUser)
   ])
 }

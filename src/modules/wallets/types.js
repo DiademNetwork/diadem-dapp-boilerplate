@@ -11,6 +11,7 @@ export default {
   GENERATE: createAsyncTypes(`${namespace}/GENERATE`),
   CHECK_REGISTRATIONS: createAsyncTypes(`${namespace}/CHECK_REGISTRATIONS`),
   CONNECT: createAsyncTypes(`${namespace}/CONNECT`),
+  REFRESH: createAsyncTypes(`${namespace}/REFRESH`),
   REGISTER: createAsyncTypes(`${namespace}/REGISTER`),
   WITHDRAW: createAsyncTypes(`${namespace}/WITHDRAW`)
 }

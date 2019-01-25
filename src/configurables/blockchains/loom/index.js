@@ -73,7 +73,8 @@ export default (function loom () {
   }
 
   const getWalletData = async () => {
-    const balanceString = await contracts.token.methods.balanceOf(wallet.address).call({ from: wallet.address })
+    const balanceWei = await contracts.token.methods.balanceOf(wallet.address).call()
+    const balanceString = web3.utils.fromWei(balanceWei)
     const balance = Number.parseInt(balanceString)
 
     return {
@@ -83,7 +84,9 @@ export default (function loom () {
   }
 
   const withdraw = async ({ address, amount, fees = 0 }) => {
-    await contracts.token.methods.transfer(address, new web3.utils.BN(amount)).send({ from: wallet.address })
+    const weiAmount = web3.utils.toWei(amount)
+    const receipt = await contracts.token.methods.transfer(address, weiAmount).send()
+    return receipt
   }
 
   const getPrivateKey = () => wallet.privateKey

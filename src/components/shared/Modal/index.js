@@ -1,14 +1,13 @@
 import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
-import Button from '@material-ui/core/Button'
+import Button from 'components/shared/Button'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
-import Hidden from '@material-ui/core/Hidden'
 
 class Modal extends Component {
   constructor (props) {
@@ -35,15 +34,14 @@ class Modal extends Component {
   render () {
     const {
       cancelButtonText,
-      className,
       confirmButtonText,
       confirmButtonDisabled,
       controlledOpen,
       disabled,
       fullScreen,
-      icon,
       name,
       noCancelButton,
+      openButtonIcon,
       openButtonText,
       maxWidth,
       render,
@@ -55,16 +53,12 @@ class Modal extends Component {
       <Fragment>
         <Button
           aria-label={name}
-          color="secondary"
-          className={className}
           data-qa-id={`${name}-open-button`}
           key={`${name}-button`}
           disabled={disabled}
           onClick={this.handleClickOpen}
-          size="small"
-          variant="contained"
+          icon={openButtonIcon}
         >
-          {icon && <Hidden smDown>{icon}</Hidden>}
           {openButtonText}
         </Button>
         <Dialog
@@ -120,18 +114,17 @@ Modal.defaultProps = {
 
 Modal.propTypes = {
   cancelButtonText: T.string,
-  className: T.string,
   confirmButtonText: T.string,
   confirmButtonDisabled: T.bool,
   controlledOpen: T.bool,
   disabled: T.bool,
   fullScreen: T.bool,
-  icon: T.node,
   startsOpen: T.bool,
   maxWidth: T.string,
   name: T.string,
-  onConfirm: T.func,
   noCancelButton: T.bool,
+  onConfirm: T.func,
+  openButtonIcon: T.node,
   openButtonText: T.string,
   render: T.func,
   title: T.string

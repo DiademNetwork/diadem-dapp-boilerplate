@@ -1,15 +1,17 @@
 import { connect } from 'react-redux'
 import S from 'modules/selectors'
 import A from 'modules/actions'
+import blockchains from 'configurables/blockchains'
 
 const mapStateToProps = (state) => ({
-  fetchStatus: S.transactions.fetchStatus(state),
-  hasMoreTransactions: S.transactions.hasMore(state),
-  transactions: S.transactions.list(state)
+  userAddress: S.wallets.address(blockchains.primary.key)(state),
+  fetchStatus: S.timeline.fetchStatus(state),
+  hasMore: S.timeline.hasMore(state),
+  timeline: S.timeline.list(state)
 })
 
 const mapDispatchToProps = {
-  fetchTransactions: A.transactions.fetch.requested
+  fetch: A.timeline.fetch.requested
 }
 
 export default WrappedComponent =>

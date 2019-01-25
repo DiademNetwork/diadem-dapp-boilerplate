@@ -47,6 +47,12 @@ export default (function fakeChain () {
     return { mnemonic, privateKey }
   }
 
+  const registerWallet = () => {
+    return new Promise(resolve => setTimeout(() => {
+      resolve({ ok: true })
+    }, 5000))
+  }
+
   const getWalletData = async () => {
     const { pendingTxID } = mocksController.get()
     if (pendingTxID !== '') {
@@ -78,14 +84,18 @@ export default (function fakeChain () {
     balance.set('balance', balanceData.balance - amount)
   }
 
+  const generateContractSendTx = () => 'raxTxString'
+
   return Object.freeze({
     initFromMnemonic,
     initFromPrivateKey,
     key: 'fakechain',
     logo,
     name: 'Fakechain',
+    generateContractSendTx,
     getWalletData,
     generateWallet,
+    registerWallet,
     getPrivateKey,
     symbol,
     withdraw,

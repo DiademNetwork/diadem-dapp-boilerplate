@@ -29,12 +29,12 @@ class WalletSaveRecoveryInfo extends Component {
         startsOpen
         noCancelButton
         maxWidth="lg"
-        title={`Save ${blockchain.name} wallet recovery info!`}
+        title={`Save your ${blockchain.name} wallet recovery info!`}
         render={() => (
           <Fragment>
             <Typography key="text" variant="body1">
-              Your mnemonic and privateKey will never be shown again.<br />
-              Those are for the {blockchain.name} hot wallet which was just created for you for Diadem Network. <br />
+              We just created for you a wallet to use on Diadem Network.<br />
+              Your mnemonic and privateKey below will never be shown again.<br />
               You will need them to recover your funds.
             </Typography>
             <List key="list">

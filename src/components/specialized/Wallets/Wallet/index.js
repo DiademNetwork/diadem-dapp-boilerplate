@@ -20,6 +20,9 @@ const styles = (theme) => ({
     display: 'inline-block',
     marginRight: theme.spacing.unit * 2,
     verticalAlign: 'middle'
+  },
+  button: {
+    marginRight: theme.spacing.unit
   }
 })
 
@@ -70,18 +73,23 @@ const Wallet = ({
         </TableCell>
       </Fragment>
     )}
-    <TableCell numeric>`
+    <TableCell numeric>
       {(() => {
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }
-        if (status === 'no-private-key' || status === 'address-not-matching') {
-          return <Recover blockchain={blockchain} />
+        if (isRegistered) {
+          return <Withdraw blockchain={blockchain} />
         }
-        if (!isRegistered && !isRegistrationPending && status !== 'registration-failed' && status !== 'initial') {
-          return <Register blockchain={blockchain} />
+        if (isRegistrationPending) {
+          return <Register blockchain={blockchain} pending />
         }
-        return <Withdraw blockchain={blockchain} />
+        return (
+          <Fragment>
+            <Register blockchain={blockchain} />
+            <Recover blockchain={blockchain} />
+          </Fragment>
+        )
       })()}
     </TableCell>
   </TableRow>

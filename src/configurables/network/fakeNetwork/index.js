@@ -1,6 +1,7 @@
 import * as R from 'ramda'
 import isUrl from 'is-url'
 import LoginButton from './LoginButton'
+import logo from './logo.png'
 
 const MAX_LINK_CARACTERS = 91
 
@@ -25,7 +26,8 @@ export default Object.freeze({
       ])
     }
   },
-  name: 'fake network',
+  logo,
+  name: 'Fake network',
   // Mapping between info needed in app and data object received from network
   // Array given will be used in app selectors with Ramda to retrieve info in object
   dataPaths: {

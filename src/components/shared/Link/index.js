@@ -1,4 +1,5 @@
 import React from 'react'
+import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
@@ -10,14 +11,14 @@ const styles = (theme) => ({
   }
 })
 
-const Link = ({ className, classes, href, text, typographyProps }) => (
+const Link = ({ className, classes, href, text, typographyProps, variant }) => (
   <Typography
     className={`${classes.link} ${className}`}
     color="primary"
     component="a"
     href={href}
     target="_blank"
-    variant="body2"
+    variant={variant}
     {...typographyProps}
   >
     {text}
@@ -25,7 +26,8 @@ const Link = ({ className, classes, href, text, typographyProps }) => (
 )
 
 Link.defaultProps = {
-  classes: {}
+  classes: {},
+  variant: 'body1'
 }
 
 Link.propTypes = {
@@ -38,4 +40,6 @@ Link.propTypes = {
 
 export const NackedComponent = Link
 
-export default withStyles(styles)(Link)
+export default R.compose(
+  withStyles(styles)
+)(Link)

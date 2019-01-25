@@ -12,12 +12,14 @@ class WalletRegister extends Component {
   }
 
   render () {
-    const { blockchain } = this.props
+    const { blockchain, pending } = this.props
+    const openButtonText = pending ? 'Waiting...' : 'Register'
     return (
       <Modal
         name={`${blockchain.name}-register-modal`}
         onConfirm={this.handleConfirm}
-        openButtonText="Register"
+        openButtonText={openButtonText}
+        disabled={pending}
         title={`Register to ${blockchain.name}`}
         render={() => (
           <Typography paragraph variant="body1">
@@ -31,7 +33,8 @@ class WalletRegister extends Component {
 
 WalletRegister.propTypes = {
   blockchain: T.object,
-  generateWallet: T.func
+  generateWallet: T.func,
+  pending: T.bool
 }
 
 export default R.compose(

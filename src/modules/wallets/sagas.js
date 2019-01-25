@@ -1,24 +1,23 @@
 
-import { all, call, put, select, takeLatest } from 'redux-saga/effects'
-// import { delay } from 'redux-saga'
+import { all, call, put, select, takeLatest, takeEvery, fork } from 'redux-saga/effects'
+import { delay } from 'redux-saga'
 import * as R from 'ramda'
 import api from 'services/api'
-// import insight from 'services/insight'
+import stream from 'services/stream'
 import T from 'modules/types'
 import S from 'modules/selectors'
 import ownA from './actions'
 import ownT from './types'
-// import * as ownS from './selectors'
-// import { oneOfTypes } from 'modules/utils'
+import * as ownS from './selectors'
 import blockchains from 'configurables/blockchains'
 
-// const AUTO_WALLET_REFRESH_INTERVAL = 6000 // in ms
-// const AUTO_CHECK_TRANSACTIONS_INTERVAL = 1000 // in ms
+const userID = 'default'
+const AUTO_WALLET_REFRESH_INTERVAL = 6000
 
 const checkRegistration = function * ({ blockchainKey, userID }) {
   try {
-    const { exists: isRegistered, pending: isRegistrationPending } = yield call(api.checkRegistration(blockchainKey), { user: userID })
-    return { isRegistered, isRegistrationPending, status: 'registration-checked' }
+    const privateKey = window.localStorage.getItem(`${blockchainKey}-privateKey-${userID}`)
+    return { isRegistered: !!privateKey, status: 'registration-checked' }
   } catch (error) {
     throw error
   }
@@ -27,7 +26,6 @@ const checkRegistration = function * ({ blockchainKey, userID }) {
 // Check all blokchain registrations
 const checkRegistrations = function * () {
   try {
-    const userID = yield select(S.login.userID)
     const registrationsData = yield all(
       blockchains.keys
         .map(blockchainKey => {
@@ -43,7 +41,6 @@ const checkRegistrations = function * () {
 // generate a new wallet locally
 const generateWallet = function * ({ blockchainKey }) {
   try {
-    const userID = yield select(S.login.userID)
     const { generateWallet, getWalletData } = blockchains.get(blockchainKey)
     const { mnemonic, privateKey } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
@@ -55,19 +52,12 @@ const generateWallet = function * ({ blockchainKey }) {
   }
 }
 
-// register a new wallet on blockchain
+// register wallet on blockchain
+// needed for EOS, Decent, and other blockchains that require creation of account
 const registerWallet = function * ({ blockchainKey, data }) {
+  const { registerWallet } = blockchains.get(blockchainKey)
   try {
-    const userAccessToken = yield select(S.login.userAccessToken)
-    const userName = yield select(S.login.userName)
-    const userID = yield select(S.login.userID)
-    const walletAddress = data.addrStr
-    const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
-      address: walletAddress,
-      name: userName,
-      user: userID,
-      token: userAccessToken
-    })
+    const { ok: registrationSucceeded } = yield call(registerWallet, data)
     if (registrationSucceeded) {
       yield put(ownA.register.succeeded({ blockchainKey }))
     } else {
@@ -78,9 +68,38 @@ const registerWallet = function * ({ blockchainKey, data }) {
   }
 }
 
+const registerUser = function * () {
+  try {
+    const blockchainKey = blockchains.primary.key
+    const userAccessToken = yield select(S.network.userAccessToken)
+    const userName = yield select(S.network.userName)
+    const userID = yield select(S.network.userID)
+    const walletAddress = yield select(S.wallets.address(blockchainKey))
+    yield call(setUser)
+    const { ok: registrationSucceeded } = yield call(api.registerUser(blockchainKey), {
+      address: walletAddress,
+      name: userName,
+      user: userID,
+      token: userAccessToken
+    })
+    if (registrationSucceeded) {
+      yield put(ownA.connect.succeeded({ userAddress: walletAddress, blockchainKey }))
+    } else {
+      yield put(ownA.connect.failed({ blockchainKey }))
+    }
+  } catch (error) {
+    yield put(ownA.connect.errored({ error }))
+  }
+}
+
 // initialize load wallet for all which are registered and not pending registration
+// initialize primary wallet automatically on first visit
 const loadWallets = function * ({ data: registrationsData }) {
   try {
+    const isPrimaryBlockchainRegistered = registrationsData[blockchains.primary.key].isRegistered
+    if (!isPrimaryBlockchainRegistered) {
+      yield call(generateWallet, { blockchainKey: blockchains.primary.key })
+    }
     yield all(
       Object.keys(registrationsData)
         .filter(blockchainKey => registrationsData[blockchainKey].isRegistered)
@@ -93,21 +112,8 @@ const loadWallets = function * ({ data: registrationsData }) {
   }
 }
 
-const checkIsWalletAddressTheOneRegistered = function * ({
-  blockchainKey,
-  userID,
-  walletAddress
-}) {
-  const { ok: isWalletAddressTheOneRegistered } = yield call(api.checkWalletAddressMatchesRegisteredUser(blockchainKey), {
-    user: userID,
-    walletAddress
-  })
-  return isWalletAddressTheOneRegistered
-}
-
 const loadWallet = function * ({ blockchainKey }) {
   try {
-    const userID = yield select(S.login.userID)
     const privateKey = window.localStorage.getItem(`${blockchainKey}-privateKey-${userID}`)
     if (!privateKey) {
       yield put(ownA.load.failed({ blockchainKey, status: 'no-private-key' }))
@@ -115,16 +121,7 @@ const loadWallet = function * ({ blockchainKey }) {
       const { initFromPrivateKey, getWalletData } = blockchains.get(blockchainKey)
       yield call(initFromPrivateKey, privateKey)
       const walletData = yield call(getWalletData)
-      const isWalletAddressTheOneRegistered = yield call(checkIsWalletAddressTheOneRegistered, {
-        blockchainKey,
-        userID,
-        walletAddress: walletData.addrStr
-      })
-      if (isWalletAddressTheOneRegistered) {
-        yield put(ownA.load.succeeded({ blockchainKey, data: walletData }))
-      } else {
-        yield put(ownA.load.failed({ blockchainKey, status: 'address-not-matching' }))
-      }
+      yield put(ownA.load.succeeded({ blockchainKey, data: walletData }))
     }
   } catch (error) {
     throw error
@@ -139,7 +136,6 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
       getPrivateKey,
       getWalletData
     } = blockchains.get(blockchainKey)
-    const userID = yield select(S.login.userID)
     if (privateKey) {
       yield call(initFromPrivateKey, privateKey)
     } else if (mnemonic) {
@@ -149,101 +145,12 @@ const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
       return
     }
     const walletData = yield call(getWalletData)
-    const isWalletAddressTheOneRegistered = yield call(checkIsWalletAddressTheOneRegistered, {
-      blockchainKey,
-      userID,
-      walletAddress: walletData.addrStr
-    })
-    if (isWalletAddressTheOneRegistered) {
-      window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, yield call(getPrivateKey))
-      yield put(ownA.recover.succeeded({ blockchainKey, data: walletData }))
-    } else {
-      yield put(ownA.recover.failed({ blockchainKey, status: 'address-not-matching' }))
-    }
+    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, yield call(getPrivateKey))
+    yield put(ownA.recover.succeeded({ blockchainKey, data: walletData }))
   } catch (error) {
     yield put(ownA.recover.errored({ error }))
   }
 }
-
-// const refresh = function * () {
-//   yield take(oneOfTypes([
-//     ownT.GENERATE.succeeded,
-//     ownT.LOAD.succeeded,
-//     ownT.RECOVER.succeeded
-//   ]))
-//   while (true) {
-//     try {
-//       const readyWalletsInfo = R.map(R.prop('walletInfo'))(yield select(ownS.getReadyWallets))
-//       const readyWalletsKeys = R.keys(readyWalletsInfo)
-//       const newReadyWalletsInfo = yield all(
-//         readyWalletsKeys.map(key => call(blockchains.get(key).getWalletData))
-//       )
-//       const formattedNewReadyWalletsinfo = R.compose(
-//         R.zipObj(readyWalletsKeys),
-//         R.map(R.objOf('walletInfo'))
-//       )(newReadyWalletsInfo)
-
-//       if (!R.equals(formattedNewReadyWalletsinfo, readyWalletsInfo)) {
-//         yield put(ownA.refresh.succeeded({ data: formattedNewReadyWalletsinfo }))
-//       }
-//       // if (R.complement(R.equals)(newWalletData, walletData)) {
-//       //   const changes = { }
-//       //   const { unconfirmedBalance } = walletData
-//       //   const { unconfirmedBalance: newUnconfirmedBalance } = newWalletData
-//       //   if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
-//       //     switch (true) {
-//       //       case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
-//       //         changes.tokensSent = true
-//       //         break
-//       //       case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
-//       //         changes.tokensReceived = true
-//       //         break
-//       //       case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
-//       //         changes.receivingTokens = true
-//       //         break
-//       //       case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
-//       //         changes.sendingTokens = true
-//       //         break
-//       //       default:
-//       //         break
-//       //     }
-//       //   }
-//       //   yield put(ownA.refresh.succeeded({ changes, walletData: newWalletData }))
-//       // }
-//     } catch (error) {
-//       yield put(ownA.refresh.errored({ error }))
-//     }
-//     yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
-//   }
-// }
-
-// const checkLastTx = function * () {
-//   yield takeEvery(oneOfTypes([
-//     T.login.LOGGED,
-//     T.transactions.FETCH.succeeded,
-//     T.transactions.RECEIVED
-//   ]), function * () {
-//     yield put(ownA.checkLastTx.requested())
-//     try {
-//       let hasPendingTx = false
-//       const userID = yield select(S.login.userID)
-//       if (userID) {
-//         const transactions = yield select(S.transactions.lastForUser(userID))
-//         if (transactions.length > 0) {
-//           // if at least one of transactions has no confirmation, hasPendingTx is true
-//           for (let transaction of transactions) {
-//             const { data: { confirmations } } = yield call(insight.checkTransactions, `insight-api/tx/${transaction}`)
-//             hasPendingTx = hasPendingTx || confirmations === 0
-//           }
-//         }
-//       }
-//       yield put(ownA.checkLastTx.succeeded({ hasPendingTx }))
-//       yield call(delay, AUTO_CHECK_TRANSACTIONS_INTERVAL)
-//     } catch (error) {
-//       yield put(ownA.checkLastTx.errored({ error }))
-//     }
-//   })
-// }
 
 const withdraw = function * ({ blockchainKey, ...payload }) {
   try {
@@ -255,15 +162,84 @@ const withdraw = function * ({ blockchainKey, ...payload }) {
   }
 }
 
+const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrStr: userAddress } }) {
+  if (blockchains.isPrimary(blockchains.get(blockchainKey))) {
+    try {
+      const { token } = yield call(api.getUserToken, { userAddress })
+      if (!token) {
+        yield put(ownA.getGetstreamToken.failed({ status: 'no-token' }))
+      } else {
+        yield call(stream.userToken.set, token)
+        yield call(stream.userClient.init)
+        yield put(ownA.getGetstreamToken.succeeded({ userAddress }))
+      }
+    } catch (error) {
+      yield put(ownA.getGetstreamToken.errored({ error }))
+    }
+  }
+}
+
+const setUser = function * () {
+  const userAddress = yield select(ownS.primaryAddress)
+  const data = yield select(S.network.data)
+  yield call(stream.setUser, { data, userAddress })
+}
+
+const refreshWallet = function * ({ blockchainKey }) {
+  while (true) {
+    yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
+    try {
+      const walletData = yield select(ownS.data(blockchainKey))
+      const newWalletData = yield call(blockchains.get(blockchainKey).getWalletData)
+      if (R.complement(R.equals)(walletData, newWalletData)) {
+        const changes = { }
+        const unconfirmedBalance = R.prop('unconfirmedBalance')(walletData)
+        const newUnconfirmedBalance = R.prop('unconfirmedBalance')(newWalletData)
+        if (newUnconfirmedBalance !== undefined && newUnconfirmedBalance !== unconfirmedBalance) {
+          switch (true) {
+            case unconfirmedBalance < 0 && newUnconfirmedBalance === 0: // token sent
+              changes.tokensSent = true
+              break
+            case unconfirmedBalance > 0 && newUnconfirmedBalance === 0: // token received
+              changes.tokensReceived = true
+              break
+            case unconfirmedBalance === 0 && newUnconfirmedBalance > 0: // token comming
+              changes.receivingTokens = true
+              break
+            case unconfirmedBalance === 0 && newUnconfirmedBalance < 0: // token sending
+              changes.sendingTokens = true
+              break
+            default:
+              break
+          }
+        }
+        yield put(ownA.refresh.succeeded({ changes, blockchainKey, data: walletData }))
+      }
+    } catch (error) {
+      yield put(ownA.refresh.errored({ error }))
+    }
+  }
+}
+
 export default function * () {
   yield all([
-    takeLatest(T.login.LOGGED, checkRegistrations),
+    fork(checkRegistrations),
+    takeLatest(T.network.LOGGED, registerUser),
     takeLatest(ownT.CHECK_REGISTRATIONS.succeeded, loadWallets),
     takeLatest(ownT.GENERATE.requested, generateWallet),
     takeLatest(ownT.GENERATE.succeeded, registerWallet),
     takeLatest(ownT.RECOVER.requested, recoverWallet),
-    takeLatest(ownT.WITHDRAW.requested, withdraw)
-    // fork(refresh)
-    // fork(checkLastTx)
+    takeLatest(ownT.WITHDRAW.requested, withdraw),
+    takeEvery([
+      ownT.GENERATE.succeeded,
+      ownT.LOAD.succeeded,
+      ownT.RECOVER.succeeded
+    ], getGetstreamTokenIfNecessary),
+    takeEvery([
+      ownT.GENERATE.succeeded,
+      ownT.LOAD.succeeded,
+      ownT.RECOVER.succeeded
+    ], refreshWallet),
+    takeLatest(ownT.GET_GETSTREAM_TOKEN.succeeded, setUser)
   ])
 }

@@ -9,11 +9,10 @@ import { eventChannel } from 'redux-saga'
 import blockchains from 'configurables/blockchains'
 
 const create = function * ({ link, title }) {
+  const { createAchievement } = blockchains.get(blockchains.primary.key)
   try {
-    yield call(api.createAchievement(blockchains.primary.key), {
-      userAddress: yield select(S.wallets.primaryAddress),
-      link,
-      title
+    yield call(createAchievement, {
+      link, title
     })
     yield put(ownA.create.succeeded())
   } catch (error) {
@@ -21,12 +20,58 @@ const create = function * ({ link, title }) {
   }
 }
 
-const confirm = function * (payload) {
+const confirm = function * ({ creatorAddress, link }) {
+  const { confirmAchievement } = blockchains.get(blockchains.primary.key)
   try {
-    yield call(api.confirmAchievement, payload)
+    yield call(confirmAchievement, {
+      creatorAddress, link
+    })
     yield put(ownA.confirm.succeeded())
   } catch (error) {
     yield put(ownA.confirm.errored({ error }))
+  }
+}
+
+const support = function * (payload) {
+  const { supportAchievement } = blockchains.get(blockchainKey)
+  try {
+    if (supportAchievement) {
+      yield call(supportAchievement, payload)
+    } else {
+      yield call(supportProxified, payload)
+    }
+    yield put(ownA.support.succeeded())
+  } catch (error) {
+    yield put(ownA.support.errored({ error }))
+  }
+}
+
+const supportProxified = function * ({ amount, blockchainKey, creatorAddress, fees, link }) {
+  try {
+    const userAddress = yield select(S.wallets.primaryAddress)
+    const { address, encodedData } = yield call(api.prepareSupport(blockchainKey), {
+      amount,
+      creatorAddress,
+      fees,
+      userAddress
+    })
+    const signedRawTx = blockchains.get(blockchainKey).generateContractSendTx({
+      address,
+      encodedData,
+      amount,
+      feeRate: fees
+    })
+    yield call(api.supportAchievement(blockchainKey), {
+      amount,
+      userAddress,
+      blockchain: blockchainKey,
+      creatorAddress,
+      link,
+      signedRawTx
+    })
+    yield put(ownA.support.succeeded())
+  } catch (error) {
+    yield put(ownA.support.errored({ error }))
   }
 }
 
@@ -85,35 +130,6 @@ const subscribeUserAchievements = function * ({ userAddress }) {
     }
   } catch (error) {
     yield put(ownA.subscribe.errored({ error }))
-  }
-}
-
-const support = function * ({ amount, blockchainKey, creatorAddress, fees, link }) {
-  try {
-    const userAddress = yield select(S.wallets.primaryAddress)
-    const { address, encodedData } = yield call(api.prepareSupport(blockchainKey), {
-      amount,
-      creatorAddress,
-      fees,
-      userAddress
-    })
-    const signedRawTx = blockchains.get(blockchainKey).generateContractSendTx({
-      address,
-      encodedData,
-      amount,
-      feeRate: fees
-    })
-    yield call(api.supportAchievement(blockchainKey), {
-      amount,
-      userAddress,
-      blockchain: blockchainKey,
-      creatorAddress,
-      link,
-      signedRawTx
-    })
-    yield put(ownA.support.succeeded())
-  } catch (error) {
-    yield put(ownA.support.errored({ error }))
   }
 }
 

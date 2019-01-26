@@ -2,11 +2,13 @@ import Web3 from 'web3'
 import { Client, LocalAddress, CryptoUtils, LoomProvider } from 'loom-js'
 
 import bip39 from './bip39.english.js'
-import DiademCoin from './Diadem.json'
+import DiademCoin from './DiademCoin.json'
+import Achievements from './Achievements.json'
 import logo from './diadem.png'
 
 const LOOM_URL = 'ws://diadem.host:46658'
-const COIN_ADDRESS = '0xB681FBf4b36c49e0811Ee640CcA1933aB57Be81e'
+const COIN_ADDRESS = '0x196BF6b1f68466121b99822cFde508fCc74ab3aB'
+const ACHIEVEMENTS_ADDRESS = '0xaCc7bC52599Ec656AA66cE31d8915ad123E8A693'
 
 const chainId = 'default'
 const writeUrl = `${LOOM_URL}/websocket`
@@ -70,6 +72,7 @@ export default (function loom () {
 
   const initContracts = async () => {
     contracts.token = new web3.eth.Contract(DiademCoin.abi, COIN_ADDRESS, { from: wallet.address })
+    contracts.achievements = new web3.eth.Contract(Achievements.abi, ACHIEVEMENTS_ADDRESS, { from: wallet.address })
   }
 
   const getWalletData = async () => {
@@ -83,10 +86,24 @@ export default (function loom () {
     }
   }
 
-  const withdraw = async ({ address, amount, fees = 0 }) => {
+  const withdraw = async ({ address, amount }) => {
     const weiAmount = web3.utils.toWei(amount)
     const receipt = await contracts.token.methods.transfer(address, weiAmount).send()
     return receipt
+  }
+
+  const supportAchievement = async ({ address, amount, link }) => {
+    const weiAmount = web3.utils.toWei(amount)
+    const receipt = await contracts.token.methods.supportAchievement(address, link, weiAmount).send()
+    return receipt
+  }
+
+  const createAchievement = async ({ link, title }) => {
+    await contracts.achievements.methods.create(link, title)
+  }
+
+  const confirmAchievement = async ({ creatorAddress, link }) => {
+    await contracts.achievements.methods.confirmAchievement(creatorAddress, link)
   }
 
   const getPrivateKey = () => wallet.privateKey
@@ -97,7 +114,7 @@ export default (function loom () {
     }
     return fn(...args)
   }
-
+  
   const needsContracts = fn => (...args) => {
     if (!contracts.token) {
       throw new Error('Contracts do not exists. Please initialize it.')
@@ -114,6 +131,9 @@ export default (function loom () {
     getPrivateKey: needsWallet(getPrivateKey),
     getWalletData: needsContracts(getWalletData),
     withdraw: needsContracts(withdraw),
+    createAchievement: needsContracts(createAchievement),
+    confirmAchievement: needsContracts(confirmAchievement),
+    supportAchievement: needsContracts(supportAchievement),
     ...metadata
   })
 })()

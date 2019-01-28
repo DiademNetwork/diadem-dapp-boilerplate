@@ -21,8 +21,7 @@ export default Object.freeze({
         R.complement(R.equals)(previousLink),
         R.compose(R.lte(R.__, MAX_LINK_CARACTERS), R.length),
         R.is(String),
-        isUrl,
-        R.test(/.*fakenetwork.*/)
+        isUrl
       ])
     }
   },

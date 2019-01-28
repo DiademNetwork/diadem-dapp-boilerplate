@@ -114,7 +114,7 @@ export default (function loom () {
     }
     return fn(...args)
   }
-  
+
   const needsContracts = fn => (...args) => {
     if (!contracts.token) {
       throw new Error('Contracts do not exists. Please initialize it.')

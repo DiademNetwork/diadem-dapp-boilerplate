@@ -33,6 +33,7 @@ const confirm = function * ({ creatorAddress, link }) {
 }
 
 const support = function * (payload) {
+  const { blockchainKey } = payload
   const { supportAchievement } = blockchains.get(blockchainKey)
   try {
     if (supportAchievement) {

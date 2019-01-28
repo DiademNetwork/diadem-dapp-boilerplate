@@ -3,17 +3,19 @@ import stream from 'getstream'
 import streamMock from 'mocks/stream'
 
 const LIMIT = 100
-const APP_KEY = process.env.STREAM_APP_KEY
-const APP_ID = process.env.STREAM_APPID
-const ACHIEVEMENT_COMMON_TOKEN = process.env.STREAM_ACHIEVEMENT_COMMON_TOKEN
+const {
+  GETSTREAM_APP_KEY,
+  GETSTREAM_APP_ID,
+  GETSTREAM_ACHIEVEMENT_COMMON_TOKEN
+} = process.env
 
 export const createStreamClient = (streamTool) => {
-  const client = streamTool.connect(APP_KEY, null, APP_ID)
+  const client = streamTool.connect(GETSTREAM_APP_KEY, null, GETSTREAM_APP_ID)
 
   const userClient = (function () {
     let userClient = null
     const get = () => userClient
-    const init = () => { userClient = streamTool.connect(APP_KEY, userToken.get(), APP_ID) }
+    const init = () => { userClient = streamTool.connect(GETSTREAM_APP_KEY, userToken.get(), GETSTREAM_APP_ID) }
     return Object.freeze({ get, init })
   })()
 
@@ -28,7 +30,7 @@ export const createStreamClient = (streamTool) => {
   const feeds = (function () {
     const data = {
       achievement_aggregated: {
-        common: client.feed('achievement_aggregated', 'common', ACHIEVEMENT_COMMON_TOKEN)
+        common: client.feed('achievement_aggregated', 'common', GETSTREAM_ACHIEVEMENT_COMMON_TOKEN)
       },
       timeline: {}
     }

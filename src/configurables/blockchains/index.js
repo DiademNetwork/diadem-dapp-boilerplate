@@ -1,5 +1,5 @@
 import loom from './loom'
-import qtum from './qtum'
+// import qtum from './qtum'
 import fakechain from './fakechain'
 import fakechain2 from './fakechain2'
 

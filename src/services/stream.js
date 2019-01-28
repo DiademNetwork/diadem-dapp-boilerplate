@@ -4,7 +4,7 @@ import streamMock from 'mocks/stream'
 
 const LIMIT = 100
 const APP_KEY = process.env.STREAM_APP_KEY
-const APP_ID = '46377'
+const APP_ID = process.env.STREAM_APPID
 const ACHIEVEMENT_COMMON_TOKEN = process.env.STREAM_ACHIEVEMENT_COMMON_TOKEN
 
 export const createStreamClient = (streamTool) => {

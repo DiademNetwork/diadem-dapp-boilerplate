@@ -3,11 +3,9 @@ import stream from 'getstream'
 import streamMock from 'mocks/stream'
 
 const LIMIT = 100
-const {
-  GETSTREAM_APP_KEY,
-  GETSTREAM_APP_ID,
-  GETSTREAM_ACHIEVEMENT_COMMON_TOKEN
-} = process.env
+const GETSTREAM_APP_KEY = process.env.GETSTREAM_APP_KEY
+const GETSTREAM_APP_ID = process.env.GETSTREAM_APP_ID
+const GETSTREAM_ACHIEVEMENT_COMMON_TOKEN = process.env.GETSTREAM_ACHIEVEMENT_COMMON_TOKEN
 
 export const createStreamClient = (streamTool) => {
   const client = streamTool.connect(GETSTREAM_APP_KEY, null, GETSTREAM_APP_ID)

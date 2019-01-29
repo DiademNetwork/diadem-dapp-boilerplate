@@ -10,9 +10,8 @@ const webpack = require('webpack')
 const chalk = require('chalk')
 const path = require('path')
 
-const args = process.argv.slice(2)
-const env = args[0] || 'development'
 const DEFAULT_ENV = 'development'
+const env = process.env.NODE_ENV || 'development'
 
 const getWebpackConfig = () => {
   let target = path.join(__dirname, `../webpackConfigs/webpack.${env}.js`)
@@ -25,7 +24,7 @@ const getWebpackConfig = () => {
   return require(target)
 }
 
-const buildWithWebpack = () => {
+(function buildWithWebpack () {
   const webpackConfig = getWebpackConfig()
   webpack(webpackConfig, (err, stats) => {
     if (err) {
@@ -48,6 +47,4 @@ const buildWithWebpack = () => {
 
     console.log(chalk.green(`Webpack build successful`))
   })
-}
-
-buildWithWebpack()
+})()

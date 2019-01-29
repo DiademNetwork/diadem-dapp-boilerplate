@@ -1,4 +1,4 @@
 import facebookNetwork from './facebook'
 import fakeNetwork from './fakeNetwork'
 
-export default process.env.ENV === 'sandbox' ? fakeNetwork : facebookNetwork
+export default process.env.NODE_ENV === 'sandbox' ? fakeNetwork : facebookNetwork

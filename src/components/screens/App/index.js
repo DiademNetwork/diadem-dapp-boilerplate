@@ -54,7 +54,7 @@ const App = ({
     </div>
     <Notifications />
     <Help />
-    {process.env.ENV === 'sandbox' && (
+    {process.env.NODE_ENV === 'sandbox' && (
       <SandboxConfigEditor />
     )}
   </div>

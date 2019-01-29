@@ -25,7 +25,7 @@ export const createAPI = (fetcher, baseURL) => {
   })
 }
 
-if (process.env.ENV === 'sandbox') {
+if (process.env.NODE_ENV === 'sandbox') {
   mockAxios()
 }
 

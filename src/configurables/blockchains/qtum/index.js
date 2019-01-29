@@ -1,7 +1,7 @@
 import logo from './logo.png'
 import qtumJSWallet from './qtumjs-wallet'
 const { networks, generateMnemonic } = qtumJSWallet
-const network = networks[process.env.ENV === 'mainnet' ? 'mainnet' : 'testnet']
+const network = networks[process.env.NODE_ENV === 'production' ? 'mainnet' : 'testnet']
 
 export default (function qtum () {
   let walletUtil = null

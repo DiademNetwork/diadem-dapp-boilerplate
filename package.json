@@ -8,11 +8,10 @@
     "copy-public": "./scripts/copy-public.js",
     "cypress:open": "npx cypress open",
     "lint": "eslint src/ scripts/ config/ --ignore-path src/configurables/blockchains/loom/bip39.english.js",
-    "prebuild": "yarn run lint && yarn run clean-dist && yarn run copy-public",
-    "build:mainnet": "yarn run prebuild && ./scripts/build.js mainnet",
-    "build:testnet": "yarn run prebuild && ./scripts/build.js testnet",
+    "prebuild": "yarn run clean-dist && yarn run copy-public",
+    "build": "./scripts/build.js",
     "build-storybook": "build-storybook",
-    "predeploy": "yarn build:mainnet",
+    "predeploy": "yarn build",
     "deploy": "gh-pages -d dist",
     "start": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.development.js --https",
     "start:sandbox": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js",
@@ -21,7 +20,6 @@
     "test:cypress": "npx cypress run --record=false"
   },
   "author": "Clement Bresson",
-  "homepage": "http://clement-bresson.github.io/react-modern-boilerplate",
   "license": "MIT",
   "devDependencies": {
     "@storybook/addon-actions": "^3.3.14",

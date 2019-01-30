@@ -6,7 +6,7 @@ import DiademCoin from './DiademCoin.json'
 import Achievements from './Achievements.json'
 import logo from './diadem.png'
 
-const LOOM_URL = 'ws://diadem.host:46658'
+const LOOM_URL = 'wss://diadem.host/loom'
 const COIN_ADDRESS = '0x196BF6b1f68466121b99822cFde508fCc74ab3aB'
 const ACHIEVEMENTS_ADDRESS = '0xaCc7bC52599Ec656AA66cE31d8915ad123E8A693'
 

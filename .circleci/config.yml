@@ -7,9 +7,6 @@ references:
       SUPPORT_CONTACT_EMAIL: "team@diadem.network"
 
   main_config: &main_config
-    branches:
-      ignore:
-        - gh-pages
     working_directory: ~/tmp
     docker:
       - image: circleci/node:10
@@ -39,6 +36,12 @@ references:
       branches:
         only:
           - master
+
+  filter_ignore_gh_pages: &filter_ignore_gh_pages
+    filters:
+      branches:
+        ignore:
+          - gh-pages
 
 jobs:
   checkout_code:
@@ -126,18 +129,22 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - checkout_code
+      - checkout_code:
+          <<: *filter_ignore_gh_pages
 
       - npm_dependencies:
+          <<: *filter_ignore_gh_pages
           requires:
             - checkout_code
 
       - lint_and_unit_tests:
+          <<: *filter_ignore_gh_pages
           requires:
             - checkout_code
             - npm_dependencies
 
       - deploy_staging:
+          <<: *filter_ignore_gh_pages
           requires:
             - checkout_code
             - npm_dependencies
@@ -146,6 +153,7 @@ workflows:
           # << : *filter_branch_master
 
       - deploy_production_hold:
+          <<: *filter_ignore_gh_pages
           type: approval
           requires:
             - checkout_code
@@ -155,6 +163,7 @@ workflows:
           # << : *filter_branch_master
 
       - deploy_production:
+          <<: *filter_ignore_gh_pages
           requires:
             - deploy_production_hold
           # << : *filter_branch_master

@@ -77,15 +77,15 @@ workflows:
       - deploy_staging:
           requires:
             - lint_and_unit_tests
-          << : *filter_branch_master
+          # << : *filter_branch_master
 
       - deploy_production_hold:
           type: approval
           requires:
             - deploy_staging
-          << : *filter_branch_master
+          # << : *filter_branch_master
 
       - deploy_production:
           requires:
             - deploy_production_hold
-          << : *filter_branch_master
+          # << : *filter_branch_master

@@ -158,7 +158,6 @@ workflows:
             - npm_dependencies
             - lint_and_unit_tests
 
-
       - deploy_production_hold:
           <<: *filter_out_branch_gh_pages
           # << : *filter_branch_master

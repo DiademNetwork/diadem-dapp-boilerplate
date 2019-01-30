@@ -1,40 +1,73 @@
-environment: &environment
-  environment:
-    SUPPORT_CONTACT_EMAIL: "team@diadem.network"
-
-defaults: &defaults
-  working_directory: ~/tmp
-  docker:
-    - image: circleci/node:10
-      <<: *environment
-
-filter_branch_master: &filter_branch_master
-  filters:
-    branches:
-      only:
-        - master
-
 version: 2
+
+references:
+  environment: &environment
+    environment:
+      SUPPORT_CONTACT_EMAIL: "team@diadem.network"
+
+  container_config: &container_config
+    working_directory: ~/tmp
+    docker:
+      - image: circleci/node:10
+        <<: *environment
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - v1-repo-{{ .Branch }}-{{ .Revision }}
+        - v1-repo-{{ .Branch }}
+        - v1-repo
+
+  npm_cache_key: &npm_cache_key
+    v1-dependency-npm-{{ checksum "package.json" }}
+
+  npm_backup_cache_key: &npm_backup_cache_key
+    v1-dependency-npm
+
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      keys:
+        - *npm_cache_key
+        - *npm_backup_cache_key
+
+  filter_branch_master: &filter_branch_master
+    filters:
+      branches:
+        only:
+          - master
+
 jobs:
-  lint_and_unit_tests:
-    <<: *defaults
+  checkout_code:
+    <<: *container_config
     steps:
+      - *restore_repo
       - checkout
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
-      - run:
-          name: Install dependencies
-          command: yarn install
       - save_cache:
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - .
+  npm_dependencies:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Install NPM dependencies
+          command: |
+            if [ ! -d node_modules ]; then
+              set -exu
+              yarn install
+            fi
+      - save_cache:
+          key: *npm_cache_key
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
-      - persist_to_workspace:
-          root: ~/tmp
-          paths:
-            - node_modules
+
+  lint_and_unit_tests:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
       - run:
           name: Lint check
           command: yarn lint
@@ -43,9 +76,10 @@ jobs:
           command: yarn test
 
   deploy_staging:
-    <<: *defaults
+    <<: *container_config
     steps:
-      - checkout
+      - *restore_repo
+      - *restore_node_modules
       - run:
           name: Build & Deploy Staging
           command: |
@@ -58,9 +92,10 @@ jobs:
             yarn deploy
 
   deploy_production:
-      <<: *defaults
+      <<: *container_config
       steps:
-        - checkout
+      - *restore_repo
+      - *restore_node_modules
         - run:
             name: Build & Deploy Production
             command: |
@@ -76,16 +111,31 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - lint_and_unit_tests
+      - checkout_code
+
+      - npm_dependencies:
+          requires:
+            - checkout_code
+
+      - lint_and_unit_tests:
+          requires:
+            - checkout_code
+            - npm_dependencies
 
       - deploy_staging:
           requires:
+            - checkout_code
+            - npm_dependencies
             - lint_and_unit_tests
+
           # << : *filter_branch_master
 
       - deploy_production_hold:
           type: approval
           requires:
+            - checkout_code
+            - npm_dependencies
+            - lint_and_unit_tests
             - deploy_staging
           # << : *filter_branch_master
 

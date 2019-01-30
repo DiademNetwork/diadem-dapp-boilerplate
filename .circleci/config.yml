@@ -37,7 +37,7 @@ references:
         only:
           - master
 
-  filter_ignore_gh_pages: &filter_ignore_gh_pages
+  filter_out_branch_gh_pages: &filter_out_branch_gh_pages
     filters:
       branches:
         ignore:
@@ -130,21 +130,21 @@ workflows:
   deploy:
     jobs:
       - checkout_code:
-          <<: *filter_ignore_gh_pages
+          <<: *filter_out_branch_gh_pages
 
       - npm_dependencies:
-          <<: *filter_ignore_gh_pages
+          <<: *filter_out_branch_gh_pages
           requires:
             - checkout_code
 
       - lint_and_unit_tests:
-          <<: *filter_ignore_gh_pages
+          <<: *filter_out_branch_gh_pages
           requires:
             - checkout_code
             - npm_dependencies
 
       - deploy_staging:
-          <<: *filter_ignore_gh_pages
+          <<: *filter_out_branch_gh_pages
           requires:
             - checkout_code
             - npm_dependencies
@@ -153,7 +153,7 @@ workflows:
           # << : *filter_branch_master
 
       - deploy_production_hold:
-          <<: *filter_ignore_gh_pages
+          <<: *filter_out_branch_gh_pages
           type: approval
           requires:
             - checkout_code
@@ -163,7 +163,7 @@ workflows:
           # << : *filter_branch_master
 
       - deploy_production:
-          <<: *filter_ignore_gh_pages
+          <<: *filter_out_branch_gh_pages
           requires:
             - deploy_production_hold
           # << : *filter_branch_master

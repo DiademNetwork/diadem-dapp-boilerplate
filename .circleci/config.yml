@@ -92,20 +92,20 @@ jobs:
             yarn deploy
 
   deploy_production:
-      <<: *container_config
-      steps:
-      - *restore_repo
-      - *restore_node_modules
-        - run:
-            name: Build & Deploy Production
-            command: |
-              export BACKEND_URL="${BACKEND_URL_PRODUCTION}"
-              export GETSTREAM_APP_KEY="${GETSTREAM_APP_KEY_PRODUCTION}"
-              export GETSTREAM_APP_ID="${GETSTREAM_APP_ID_PRODUCTION}"
-              export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_PRODUCTION}"
-              export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
-              export NODE_ENV="production"
-              yarn deploy
+    <<: *container_config
+    steps:
+    - *restore_repo
+    - *restore_node_modules
+      - run:
+          name: Build & Deploy Production
+          command: |
+            export BACKEND_URL="${BACKEND_URL_PRODUCTION}"
+            export GETSTREAM_APP_KEY="${GETSTREAM_APP_KEY_PRODUCTION}"
+            export GETSTREAM_APP_ID="${GETSTREAM_APP_ID_PRODUCTION}"
+            export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_PRODUCTION}"
+            export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
+            export NODE_ENV="production"
+            yarn deploy
 
 workflows:
   version: 2

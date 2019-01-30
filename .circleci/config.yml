@@ -31,6 +31,10 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: ~/tmp
+          paths:
+            - node_modules
       - run:
           name: Lint check
           command: yarn lint

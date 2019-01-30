@@ -7,7 +7,7 @@ module.exports = webpackConfigMerger(stagingWebpackConfig, {
   devtool: 'source-map',
   // In CI, env variables are passed directly
   // and so are not needed to be added
-  plugins: process.env.BACKEND_URL ? null : [
+  plugins: process.env.BACKEND_URL ? [] : [
     new Dotenv({ path: path.join(__dirname, '../envs/.production.env') })
   ]
 })

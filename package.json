@@ -115,6 +115,7 @@
     "redux-saga": "^0.16.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^3.0.1",
+    "rimraf": "^2.6.2",
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.3",
     "storybook-addon-material-ui": "^0.9.0-alpha.16",

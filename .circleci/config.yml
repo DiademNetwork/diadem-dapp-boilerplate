@@ -70,7 +70,7 @@ jobs:
 
 workflows:
   version: 2
-  configure_dns_cdn:
+  deploy:
     jobs:
       - lint_and_unit_tests
 

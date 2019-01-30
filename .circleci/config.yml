@@ -47,12 +47,6 @@ references:
         only:
           - master
 
-  filter_out_branch_gh_pages: &filter_out_branch_gh_pages
-    filters:
-      branches:
-        ignore:
-          - gh-pages
-
 jobs:
   checkout_code:
     <<: *main_config
@@ -137,23 +131,19 @@ workflows:
   version: 2
   deploy:
     jobs:
-      - checkout_code:
-          <<: *filter_out_branch_gh_pages
+      - checkout_code
 
       - npm_dependencies:
-          <<: *filter_out_branch_gh_pages
           requires:
             - checkout_code
 
       - lint_and_unit_tests:
-          <<: *filter_out_branch_gh_pages
           requires:
             - checkout_code
             - npm_dependencies
 
       - deploy_staging:
-          <<: *filter_out_branch_gh_pages
-          << : *filter_branch_master
+          <<: *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies

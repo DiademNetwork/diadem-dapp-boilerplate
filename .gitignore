@@ -9,6 +9,6 @@ cypress/videos
 cypress/screenshots/*
 coverage
 
-envs/.testnet.env
-envs/.mainnet.env
+envs/.production.env
+envs/.staging.env
 envs/.development.env

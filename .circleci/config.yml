@@ -1,0 +1,91 @@
+environment: &environment
+  environment:
+    SUPPORT_CONTACT_EMAIL: "team@diadem.network"
+
+defaults: &defaults
+  working_directory: ~/tmp
+  docker:
+    - image: circleci/node:10.15-alpine
+      <<: *environment
+
+filter_branch_master: &filter_branch_master
+  filters:
+    branches:
+      only:
+        - master
+
+version: 2
+jobs:
+  lint_and_unit_tests:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          - v1-dependencies-
+      - run:
+          name: Install dependencies
+          command: yarn install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Lint check
+          command: yarn lint
+      - run:
+          name: Unit tests
+          command: yarn test
+
+  deploy_staging:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Build & Deploy Staging
+          command: |
+            export BACKEND_URL="${BACKEND_URL_STAGING}"
+            export GETSTREAM_APP_KEY="${GETSTREAM_APP_KEY_STAGING}"
+            export GETSTREAM_APP_ID="${GETSTREAM_APP_ID_STAGING}"
+            export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_STAGING}"
+            export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
+            export NODE_ENV="staging"
+            yarn deploy
+
+  deploy_production:
+      <<: *defaults
+      steps:
+        - checkout
+        - run:
+            name: Build & Deploy Production
+            command: |
+              export BACKEND_URL="${BACKEND_URL_PRODUCTION}"
+              export GETSTREAM_APP_KEY="${GETSTREAM_APP_KEY_PRODUCTION}"
+              export GETSTREAM_APP_ID="${GETSTREAM_APP_ID_PRODUCTION}"
+              export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_PRODUCTION}"
+              export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
+              export NODE_ENV="production"
+              yarn deploy
+
+workflows:
+  version: 2
+  configure_dns_cdn:
+    jobs:
+      - lint_and_unit_tests
+
+      - deploy_staging:
+          requires:
+            - lint_and_unit_tests
+          << : *filter_branch_master
+
+      - deploy_production_hold:
+          type: approval
+          requires:
+            - deploy_staging
+          << : *filter_branch_master
+
+      - deploy_production:
+          requires:
+            - deploy_production_hold
+          << : *filter_branch_master

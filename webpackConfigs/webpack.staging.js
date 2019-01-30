@@ -1,4 +1,3 @@
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const webpackConfigMerger = require('./webpackConfigMerger')
 const TerserPlugin = require('terser-webpack-plugin')
 const Dotenv = require('dotenv-webpack')
@@ -26,7 +25,6 @@ module.exports = webpackConfigMerger(commonWebpackConfig, {
     }
   },
   plugins: [
-    new UglifyJsPlugin(),
     // In CI, env variables are passed directly
     // and so are not needed to be added
     process.env.BACKEND_URL ? new Dotenv({ path: path.join(__dirname, '../envs/.staging.env') }) : null

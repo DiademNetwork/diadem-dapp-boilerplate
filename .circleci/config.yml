@@ -112,25 +112,26 @@ jobs:
             git config --global user.name ${GH_NAME}
             yarn deploy
 
-  deploy_production:
-    <<: *main_config
-    steps:
-    - *restore_repo
-    - *restore_node_modules
-    - *github_ssh_keys
-    - *add_known_host_github
-    - run:
-        name: Build & Deploy Production
-        command: |
-          export BACKEND_URL="${BACKEND_URL_PRODUCTION}"
-          export GETSTREAM_APP_KEY="${GETSTREAM_APP_KEY_PRODUCTION}"
-          export GETSTREAM_APP_ID="${GETSTREAM_APP_ID_PRODUCTION}"
-          export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_PRODUCTION}"
-          export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
-          export NODE_ENV="production"
-          git config --global user.email ${GH_EMAIL}
-          git config --global user.name ${GH_NAME}
-          yarn deploy
+  # UNCOMMENT WHEN REAL STAGING/PRODUCTION LOGIC IS IMPLEMENTED
+  # deploy_production:
+  #   <<: *main_config
+  #   steps:
+  #   - *restore_repo
+  #   - *restore_node_modules
+  #   - *github_ssh_keys
+  #   - *add_known_host_github
+  #   - run:
+  #       name: Build & Deploy Production
+  #       command: |
+  #         export BACKEND_URL="${BACKEND_URL_PRODUCTION}"
+  #         export GETSTREAM_APP_KEY="${GETSTREAM_APP_KEY_PRODUCTION}"
+  #         export GETSTREAM_APP_ID="${GETSTREAM_APP_ID_PRODUCTION}"
+  #         export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_PRODUCTION}"
+  #         export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
+  #         export NODE_ENV="production"
+  #         git config --global user.email ${GH_EMAIL}
+  #         git config --global user.name ${GH_NAME}
+  #         yarn deploy
 
 workflows:
   version: 2
@@ -152,24 +153,25 @@ workflows:
 
       - deploy_staging:
           <<: *filter_out_branch_gh_pages
-          # << : *filter_branch_master
+          << : *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies
             - lint_and_unit_tests
 
-      - deploy_production_hold:
-          <<: *filter_out_branch_gh_pages
-          # << : *filter_branch_master
-          type: approval
-          requires:
-            - checkout_code
-            - npm_dependencies
-            - lint_and_unit_tests
-            - deploy_staging
+      # UNCOMMENT WHEN REAL STAGING/PRODUCTION LOGIC IS IMPLEMENTED
+      # - deploy_production_hold:
+      #     <<: *filter_out_branch_gh_pages
+      #     << : *filter_branch_master
+      #     type: approval
+      #     requires:
+      #       - checkout_code
+      #       - npm_dependencies
+      #       - lint_and_unit_tests
+      #       - deploy_staging
 
-      - deploy_production:
-          # << : *filter_branch_master
-          <<: *filter_out_branch_gh_pages
-          requires:
-            - deploy_production_hold
+      # - deploy_production:
+      #     # << : *filter_branch_master
+      #     <<: *filter_out_branch_gh_pages
+      #     requires:
+      #       - deploy_production_hold

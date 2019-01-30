@@ -1,11 +1,28 @@
 import * as U from './index'
 
 describe('Utils - achievement', () => {
-  const actor = {
+  const actorA = {
+    data: {
+      userName: 'john'
+    },
     id: '1'
   }
 
+  const actorB = {
+    id: '2'
+  }
+
   it('getAddress', () => {
-    expect(U.actor.getAddress(actor)).toEqual('1')
+    expect(U.actor.getAddress(actorA)).toEqual('1')
+  })
+
+  it('getUserNameOrAddress', () => {
+    expect(U.actor.getUserNameOrAddress(actorA)).toEqual('john')
+    expect(U.actor.getUserNameOrAddress(actorB)).toEqual('2')
+  })
+
+  it('is', () => {
+    expect(U.actor.is('2')(actorA)).toEqual(false)
+    expect(U.actor.is('1')(actorA)).toEqual(true)
   })
 })

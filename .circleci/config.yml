@@ -31,6 +31,10 @@ references:
         - *npm_cache_key
         - *npm_backup_cache_key
 
+  add_ssh_keys: &add_ssh_keys
+    fingerprints:
+      - "69:8e:db:91:55:2a:f0:cf:15:9e:ad:40:6e:98:95:1e"
+
   filter_branch_master: &filter_branch_master
     filters:
       branches:
@@ -87,17 +91,7 @@ jobs:
     steps:
       - *restore_repo
       - *restore_node_modules
-      - run:
-          name: Setup github known host
-          command: |
-            set -e
-            if [ "${HOME}" = "/" ]; then
-              export HOME=$(getent passwd $(id -un) | cut -d: -f6)
-            fi
-            mkdir -p ~/.ssh
-            echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" >> ~/.ssh/known_hosts
-            git config --global user.email ${GH_EMAIL}
-            git config --global user.name ${GH_NAME}
+      - *add_ssh_key
       - run:
           name: Build & Deploy Staging
           command: |
@@ -107,6 +101,8 @@ jobs:
             export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_STAGING}"
             export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
             export NODE_ENV="staging"
+            git config --global user.email ${GH_EMAIL}
+            git config --global user.name ${GH_NAME}
             yarn deploy
 
   deploy_production:
@@ -114,6 +110,7 @@ jobs:
     steps:
     - *restore_repo
     - *restore_node_modules
+    - *add_ssh_key
     - run:
         name: Build & Deploy Production
         command: |
@@ -123,6 +120,8 @@ jobs:
           export GETSTREAM_ACHIEVEMENT_COMMON_TOKEN="${GETSTREAM_ACHIEVEMENT_COMMON_TOKEN_PRODUCTION}"
           export SUPPORT_CONTACT_EMAIL="${SUPPORT_CONTACT_EMAIL}"
           export NODE_ENV="production"
+          git config --global user.email ${GH_EMAIL}
+          git config --global user.name ${GH_NAME}
           yarn deploy
 
 workflows:
@@ -145,25 +144,25 @@ workflows:
 
       - deploy_staging:
           <<: *filter_out_branch_gh_pages
+          # << : *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies
             - lint_and_unit_tests
 
-          # << : *filter_branch_master
 
       - deploy_production_hold:
           <<: *filter_out_branch_gh_pages
+          # << : *filter_branch_master
           type: approval
           requires:
             - checkout_code
             - npm_dependencies
             - lint_and_unit_tests
             - deploy_staging
-          # << : *filter_branch_master
 
       - deploy_production:
+          # << : *filter_branch_master
           <<: *filter_out_branch_gh_pages
           requires:
             - deploy_production_hold
-          # << : *filter_branch_master

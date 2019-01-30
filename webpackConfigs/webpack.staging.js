@@ -27,7 +27,7 @@ module.exports = webpackConfigMerger(commonWebpackConfig, {
   },
   // In CI, env variables are passed directly
   // and so are not needed to be added
-  plugins: process.env.BACKEND_URL ? [
+  plugins: !process.env.BACKEND_URL ? [
     new webpack.EnvironmentPlugin([
       'BACKEND_URL',
       'GETSTREAM_APP_KEY',

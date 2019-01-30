@@ -15,8 +15,6 @@ import Actions from 'components/specialized/Actions'
 import { PropTypes as T } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 
-console.log('App Key', process.env.GETSTREAM_APP_KEY)
-
 const styles = (theme) => ({
   sm9: {
     width: '100%',

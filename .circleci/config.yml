@@ -6,7 +6,10 @@ references:
     environment:
       SUPPORT_CONTACT_EMAIL: "team@diadem.network"
 
-  container_config: &container_config
+  main_config: &main_config
+    branches:
+      ignore:
+        - gh-pages
     working_directory: ~/tmp
     docker:
       - image: circleci/node:10
@@ -39,7 +42,7 @@ references:
 
 jobs:
   checkout_code:
-    <<: *container_config
+    <<: *main_config
     steps:
       - *restore_repo
       - checkout
@@ -48,7 +51,7 @@ jobs:
           paths:
             - .
   npm_dependencies:
-    <<: *container_config
+    <<: *main_config
     steps:
       - *restore_repo
       - *restore_node_modules
@@ -65,7 +68,7 @@ jobs:
             - node_modules
 
   lint_and_unit_tests:
-    <<: *container_config
+    <<: *main_config
     steps:
       - *restore_repo
       - *restore_node_modules
@@ -77,7 +80,7 @@ jobs:
           command: yarn test
 
   deploy_staging:
-    <<: *container_config
+    <<: *main_config
     steps:
       - *restore_repo
       - *restore_node_modules
@@ -90,6 +93,8 @@ jobs:
             fi
             mkdir -p ~/.ssh
             echo "github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==" >> ~/.ssh/known_hosts
+            git config --global user.email ${GH_EMAIL}
+            git config --global user.name ${GH_NAME}
       - run:
           name: Build & Deploy Staging
           command: |
@@ -102,7 +107,7 @@ jobs:
             yarn deploy
 
   deploy_production:
-    <<: *container_config
+    <<: *main_config
     steps:
     - *restore_repo
     - *restore_node_modules

@@ -2,7 +2,7 @@ import * as R from 'ramda'
 import { createSelector } from 'reselect'
 import { createBaseSelector } from 'modules/utils'
 
-const getData = createBaseSelector(['login', 'data'])
+const getData = createBaseSelector(['network', 'data'])
 
 // Simple targets
 export const data = getData()

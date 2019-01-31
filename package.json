@@ -99,7 +99,7 @@
     "husky": "^1.1.4",
     "image-webpack-loader": "^4.3.1",
     "is-url": "^1.2.4",
-    "loom-js": "^1.38.0",
+    "loom-js": "1.38.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "qtumcore-lib": "^0.0.1",
@@ -121,7 +121,7 @@
     "terser-webpack-plugin": "^1.2.1",
     "url-loader": "^1.1.1",
     "uuid": "^3.3.2",
-    "web3": "^1.0.0-beta.34"
+    "web3": "1.0.0-beta.34"
   },
   "husky": {
     "hooks": {

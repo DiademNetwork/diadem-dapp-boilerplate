@@ -20,16 +20,12 @@ references:
         - v1-repo
 
   npm_cache_key: &npm_cache_key
-    v1-dependency-npm-{{ checksum "package.json" }}-{{ .Branch }}-{{ .Revision }}
-
-  npm_backup_cache_key: &npm_backup_cache_key
-    v1-dependency-npm
+    v1-dependency-npm-{{ checksum "package.json" }}
 
   restore_node_modules: &restore_node_modules
     restore_cache:
       keys:
         - *npm_cache_key
-        - *npm_backup_cache_key
 
   github_ssh_keys: &github_ssh_keys
     add_ssh_keys:

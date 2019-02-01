@@ -20,7 +20,7 @@ references:
         - v1-repo
 
   npm_cache_key: &npm_cache_key
-    v1-dependency-npm-{{ checksum "package.json" }}
+    v1-dependency-npm-{{ checksum "package.json" }}-{{ .Branch }}-{{ .Revision }}
 
   npm_backup_cache_key: &npm_backup_cache_key
     v1-dependency-npm
@@ -161,7 +161,6 @@ workflows:
       #       - deploy_staging
 
       - deploy_production:
-          <<: *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies

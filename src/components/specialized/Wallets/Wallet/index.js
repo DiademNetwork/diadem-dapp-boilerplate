@@ -73,7 +73,7 @@ const Wallet = ({
         </TableCell>
       </Fragment>
     )}
-    <TableCell numeric>
+    <TableCell align='right'>
       {(() => {
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />

@@ -28,7 +28,7 @@ const Network = ({ classes, isLogged, handleLoginSuccess }) => (
       />
       {network.name}
     </TableCell>
-    <TableCell numeric>
+    <TableCell align='right'>
       {isLogged ? (
         <User />
       ) : (

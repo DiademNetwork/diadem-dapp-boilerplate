@@ -22,14 +22,10 @@ references:
   npm_cache_key: &npm_cache_key
     v1-dependency-npm-{{ checksum "package.json" }}
 
-  npm_backup_cache_key: &npm_backup_cache_key
-    v1-dependency-npm
-
   restore_node_modules: &restore_node_modules
     restore_cache:
       keys:
         - *npm_cache_key
-        - *npm_backup_cache_key
 
   github_ssh_keys: &github_ssh_keys
     add_ssh_keys:
@@ -161,7 +157,6 @@ workflows:
       #       - deploy_staging
 
       - deploy_production:
-          <<: *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies

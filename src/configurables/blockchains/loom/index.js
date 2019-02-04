@@ -108,18 +108,20 @@ export default (function loom () {
 
   const getPrivateKey = () => wallet.privateKey
 
-  const needsWallet = fn => (...args) => {
+  const needsWallet = fn => async (...args) => {
     if (!wallet.address) {
       throw new Error('Wallet does not exist. Please initialize or generate it.')
     }
-    return fn(...args)
+    const result = await fn(...args)
+    return result
   }
 
-  const needsContracts = fn => (...args) => {
+  const needsContracts = fn => async (...args) => {
     if (!contracts.token) {
       throw new Error('Contracts do not exists. Please initialize it.')
     }
-    return fn(...args)
+    const result = await fn(...args)
+    return result
   }
 
   return Object.freeze({

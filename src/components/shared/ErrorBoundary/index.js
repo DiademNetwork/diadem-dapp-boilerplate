@@ -39,7 +39,7 @@ class ErrorBoundary extends Component {
       return (
         <div className={classes.root}>
           <img className={classes.img} src={MerlinGif} />
-          <Typography variant="subheading" paragraph>Something went wrong! Please retry later</Typography>
+          <Typography variant="subtitle1" paragraph>Something went wrong! Please retry later</Typography>
           <Typography color="textSecondary" paragraph>Diadem Network team is really sorry you experienced this. The platform is still very much under development.</Typography>
           <Typography color="textSecondary" paragraph>Don't worry, if you have any funds, YOU DID NOT LOST ANYTHING as long as you still have your precious privateKey</Typography>
           <Typography color="textSecondary" paragraph>To help us improving the platform, it would be wonderful to tell us how you encountered this error at <a className={classes.link} target="_blank" href={`mailto:${process.env.SUPPORT_CONTACT_EMAIL}`}>{process.env.SUPPORT_CONTACT_EMAIL}</a></Typography>

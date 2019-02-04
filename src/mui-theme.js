@@ -14,5 +14,8 @@ export default createMuiTheme({
       dark: '#615D9E',
       contrastText: '#fff'
     }
+  },
+  typography: {
+    useNextVariants: true
   }
 })

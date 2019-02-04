@@ -61,7 +61,7 @@ class Nav extends Component {
       <AppBar position="static" color="primary">
         <Toolbar>
           <img className={classes.logo} alt="Diadem Network logo" src={LogoImage} />
-          <Typography variant="title" color="inherit" className={classes.flex}>
+          <Typography variant="h6" color="inherit" className={classes.flex}>
             Diadem Network
           </Typography>
           <Hidden mdUp>

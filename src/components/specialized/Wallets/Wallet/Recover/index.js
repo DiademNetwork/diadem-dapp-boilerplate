@@ -76,7 +76,7 @@ class WalletRecover extends Component {
                 <DialogContentText
                   key="failure-message-title"
                   paragraph
-                  variant="title"
+                  variant="h6"
                 >
                   Wallet found is not the one you registered with initially!
                 </DialogContentText>

@@ -6,12 +6,12 @@ import withContainer from './container'
 
 const UserName = ({ actor, userAddress, userName }) => (
   <span>
-    {userName || (U.actor.is(userAddress)(actor) ? 'you' : (U.actor.getUserNameOrAddress(actor) || 'test'))}
+    {userName || actor === 'Anonymous' ? 'Anonymous' : (U.actor.is(userAddress)(actor) ? 'you' : (U.actor.getUserNameOrAddress(actor)))}
   </span>
 )
 
 UserName.propTypes = {
-  actor: T.object,
+  actor: T.oneOfType([T.object, T.string]),
   userAddress: T.string,
   userName: T.string
 }

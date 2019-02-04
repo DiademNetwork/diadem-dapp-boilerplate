@@ -23,7 +23,7 @@ const UserAvatar = ({ actor, classes, className, pictureUrl }) => (
 )
 
 UserAvatar.propTypes = {
-  actor: T.object,
+  actor: T.oneOfType([T.object, T.string]),
   classes: T.object,
   className: T.string,
   pictureUrl: T.string

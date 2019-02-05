@@ -28,10 +28,14 @@ export default (function achievement () {
     getActivities(verb)
   )
 
-  const isCreator = (userAddress) => R.compose(
-    R.equals(userAddress),
-    R.prop('id'),
-    firstActor('create')
+  const isCreator = (userAddress) => R.ifElse(
+    R.always(R.isNil(userAddress)),
+    R.F,
+    R.compose(
+      R.equals(userAddress),
+      R.prop('id'),
+      firstActor('create')
+    )
   )
 
   const getAmount = verb => R.compose(

@@ -8,7 +8,7 @@ import Network from './Network'
 
 const Networks = () => (
   <Card>
-    <CardHeader title="Your social profiles" />
+    <CardHeader subheader="Your social profiles" />
     <CardContent>
       <Table>
         <TableBody>

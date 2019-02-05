@@ -94,7 +94,7 @@ export default (function loom () {
 
   const supportAchievement = async ({ address, amount, link }) => {
     const weiAmount = web3.utils.toWei(amount)
-    const receipt = await contracts.token.methods.supportAchievement(address, link, weiAmount).send()
+    const receipt = await contracts.token.methods.support(address, link, weiAmount).send()
     return receipt
   }
 
@@ -103,7 +103,7 @@ export default (function loom () {
   }
 
   const confirmAchievement = async ({ creatorAddress, link }) => {
-    await contracts.achievements.methods.confirmAchievement(creatorAddress, link)
+    await contracts.achievements.methods.confirm(creatorAddress, link)
   }
 
   const getPrivateKey = () => wallet.privateKey

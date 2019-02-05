@@ -38,6 +38,7 @@ describe('Utils - achievement', () => {
 
   it('isCreator', () => {
     expect(U.achievement.isCreator('2')(achievement)).toEqual(true)
+    expect(U.achievement.isCreator(undefined)(achievement)).toEqual(false)
     expect(U.achievement.isCreator('3')(achievement)).toEqual(false)
   })
 

@@ -46,16 +46,16 @@ const Achievement = ({
       <CardHeader
         avatar={<UserAvatar actor={creator} />}
         title={
-          <Typography key="achievement-title" variant="headline">
+          <Typography key="achievement-title" variant="h5">
             <Link
               className={classes.link}
               href={object}
               text={title}
-              variant="headline"
+              variant="h5"
             />
           </Typography>
         }
-        subheader={<Typography key="achievement-creator" variant="subheading" color="textSecondary">Created by <UserName actor={creator} /></Typography>}
+        subheader={<Typography key="achievement-creator" variant="subtitle1" color="textSecondary">Created by <UserName actor={creator} /></Typography>}
       />
       <Divider />
       <CardContent>

@@ -11,7 +11,7 @@ import blockchains from 'configurables/blockchains'
 const Wallets = () => {
   return (
     <Card>
-      <CardHeader title="Your cryptocurrency wallets" />
+      <CardHeader subheader="Your cryptocurrency wallets" />
       <CardContent>
         <Table>
           <TableBody>

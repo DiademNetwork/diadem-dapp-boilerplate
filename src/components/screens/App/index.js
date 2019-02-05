@@ -25,6 +25,9 @@ const styles = (theme) => ({
     [theme.breakpoints.up('lg')]: {
       width: '60%'
     }
+  },
+  space: {
+    margin: `${theme.spacing.unit * 2} auto`
   }
 })
 
@@ -33,10 +36,14 @@ const App = ({
 }) => (
   <div>
     <Nav />
+    <div className={classes.space} />
     <div className={classes.sm9}>
       <Wallets />
+      <div className={classes.space} />
       <Networks />
+      <div className={classes.space} />
       <Actions />
+      <div className={classes.space} />
       <Tabs tabs={[
         {
           label: 'Achievements',

@@ -8,7 +8,7 @@ import CardHeader from '@material-ui/core/CardHeader'
 
 const Actions = () => (
   <Card>
-    <CardHeader title="Send smart contract transaction" />
+    <CardHeader subheader="Send smart contract transaction" />
     <CardContent>
       <CreateAchievement />
       <DepositReward />

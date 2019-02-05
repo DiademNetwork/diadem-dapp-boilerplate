@@ -84,7 +84,7 @@ class SandboxConfigEditor extends Component {
               <Fragment key={`${blockchainKey}-sandbox-config`}>
                 <Typography
                   key={`${blockchainKey}-title`}
-                  variant="title"
+                  variant="h6"
                 >
                   {blockchainKey}
                 </Typography>

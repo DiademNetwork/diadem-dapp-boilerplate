@@ -30,7 +30,7 @@ const NetworkLinkHelp = ({ classes, fullScreen }) => fullScreen ? (
     <Typography
       className={classes.help}
       color="secondary"
-      variant="body2"
+      variant="body1"
     >
       How to get the link of your {network.name} post?
     </Typography>

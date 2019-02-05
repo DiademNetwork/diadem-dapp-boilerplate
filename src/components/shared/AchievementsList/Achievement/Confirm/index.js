@@ -26,7 +26,6 @@ class ConfirmAchievement extends Component {
       achievement,
       isPrimaryWalletReady,
       idx,
-      link,
       title,
       userAddress
     } = this.props
@@ -50,7 +49,7 @@ class ConfirmAchievement extends Component {
             </Typography>
             <Link
               text={`View achievement post on ${network.name} again`}
-              href={link}
+              href={U.achievement.getLink(achievement)}
               typographyProps={{
                 paragraph: true
               }}
@@ -71,7 +70,6 @@ ConfirmAchievement.propTypes = {
   confirmAchievement: T.func,
   idx: T.number,
   isPrimaryWalletReady: T.bool,
-  link: T.string,
   title: T.string,
   userAddress: T.string
 }

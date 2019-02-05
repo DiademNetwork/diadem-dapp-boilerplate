@@ -72,38 +72,38 @@ class Help extends Component {
               Diadem Network leverages blockchain technology from Blockchains and <a className={classes.link} target="_target" href={network.urls.website}>{network.name}</a>. You can be an achiever and/or a sponsor.
             </Typography>
             <Divider className={classes.divider} />
-            <Typography color="textPrimary" variant="title">
+            <Typography color="textPrimary" variant="h6">
               Achiever
             </Typography>
-            <Typography paragraph variant="body2">
+            <Typography paragraph variant="body1">
               Fighting for the planet? Helping people out? But you need a boost? Get financial support using Diadem Network!
             </Typography>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               1. Publish a {network.name} post explaining your achievement (with text, picture(s), video(s)).
             </Typography>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               2. CREATE YOUR ACHIEVEMENT on Diadem Network with the link to your {network.name} post.
             </Typography>
-            <Typography variant="subheading" paragraph>
+            <Typography variant="subtitle1" paragraph>
               3. WITHDRAW QTUM tokens you receive from others supporting your great actions!
             </Typography>
-            <Typography paragraph variant="subheading">
+            <Typography paragraph variant="subtitle1">
               Note you can UPDATE YOUR ACHIEVEMENT if it evolves. Available only if you created one.
             </Typography>
             <Divider className={classes.divider} />
-            <Typography variant="title">
+            <Typography variant="h6">
               Sponsor
             </Typography>
-            <Typography paragraph variant="body2">
+            <Typography paragraph variant="body1">
               You want to financially support people helping the world?
             </Typography>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               - CONFIRM achievements you know are real.
             </Typography>
-            <Typography variant="subheading">
+            <Typography variant="subtitle1">
               - You want to give immediate SUPPORT ? You can send QTUM tokens right away.
             </Typography>
-            <Typography paragraph variant="subheading">
+            <Typography paragraph variant="subtitle1">
               - You prefer waiting for someone you choose to confirm the achievement ? Then DEPOSIT QTUM tokens. They will not be transferred until he does.
             </Typography>
             <Divider className={classes.divider} />
@@ -131,7 +131,7 @@ class Help extends Component {
             <Typography color="textSecondary" paragraph>
               - NEVER EVER lose privateKey/mnemonic you are given at first login. If you lose it, you lose funds inside.
             </Typography>
-            <Typography paragraph variant="title">
+            <Typography paragraph variant="h6">
               #diademnetwork
             </Typography>
             <Typography variant="caption">

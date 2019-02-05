@@ -112,16 +112,14 @@ export default (function loom () {
     if (!wallet.address) {
       throw new Error('Wallet does not exist. Please initialize or generate it.')
     }
-    const result = await fn(...args)
-    return result
+    return fn(...args)
   }
 
   const needsContracts = fn => async (...args) => {
     if (!contracts.token) {
       throw new Error('Contracts do not exists. Please initialize it.')
     }
-    const result = await fn(...args)
-    return result
+    return fn(...args)
   }
 
   return Object.freeze({

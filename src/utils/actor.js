@@ -17,6 +17,7 @@ export default (function actor () {
 
   return Object.freeze({
     getAddress,
+    getUserName,
     getUserNameOrAddress,
     is
   })

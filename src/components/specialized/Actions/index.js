@@ -1,18 +1,20 @@
 import React from 'react'
 import CreateAchievement from './CreateAchievement'
-import DepositReward from './DepositReward'
-import PublishChallenge from './PublishChallenge'
+// import DepositReward from './DepositReward'
+// import PublishChallenge from './PublishChallenge'
 import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
-import CardHeader from '@material-ui/core/CardHeader'
 
 const Actions = () => (
   <Card>
-    <CardHeader subheader="Send smart contract transaction" />
     <CardContent>
       <CreateAchievement />
+
+      {/*
+      UNCOMMENT WHEN FUNCTIONNALITIES WILL BE AVAILABLE
       <DepositReward />
       <PublishChallenge />
+      */}
     </CardContent>
   </Card>
 )

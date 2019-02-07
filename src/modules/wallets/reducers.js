@@ -20,6 +20,7 @@ export default function createReducer (state, {
   switch (type) {
     case T.LOAD.succeeded: return merge()(state)({ [blockchainKey]: { data, loadFailReason: 'none', status: 'loaded' } })
     case T.LOAD.failed: return merge()(state)({ [blockchainKey]: { status } })
+    case T.GENERATE.requested: return merge()(state)({ [blockchainKey]: { status: 'is-generating' } })
     case T.GENERATE.succeeded: return merge()(state)({ [blockchainKey]: { mnemonic, privateKey, data, status: 'generated', isRegistered: false, isRegistrationPending: true } })
     case T.RECOVER.requested: return merge()(state)({ [blockchainKey]: { status: 'is-recovering' } })
     case T.RECOVER.succeeded: return merge()(state)({ [blockchainKey]: { data, status: 'recovered' } })

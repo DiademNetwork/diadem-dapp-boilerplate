@@ -7,13 +7,12 @@ import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
 import Recover from './Recover'
 import Register from './Register'
+import Refund from './Refund'
 import Withdraw from './Withdraw'
 import SaveRecoveryInfo from './SaveRecoveryInfo'
-import CopyToClipboardButton from 'components/shared/CopyToClipboardButton'
-import Tooltip from '@material-ui/core/Tooltip'
-import Zoom from '@material-ui/core/Zoom'
 import withContainer from './container'
 import blockchains from 'configurables/blockchains'
+import Typography from '@material-ui/core/Typography'
 
 const styles = (theme) => ({
   img: {
@@ -26,21 +25,7 @@ const styles = (theme) => ({
   }
 })
 
-const CopyToAddressToolip = ({ address }) => (
-  <Tooltip
-    TransitionComponent={Zoom}
-    title='Copy address to clipboard'
-  >
-    <CopyToClipboardButton variant="icon" textToCopy={address} name="address" />
-  </Tooltip>
-)
-
-CopyToAddressToolip.propTypes = {
-  address: T.string
-}
-
 const Wallet = ({
-  address,
   balance,
   blockchain,
   classes,
@@ -63,23 +48,21 @@ const Wallet = ({
         Registration failed. Please try later
       </TableCell>
     )}
-    {!status !== 'registration-failed' && (
-      <Fragment>
-        <TableCell key="address">
-          {address ? (<span>{address} <CopyToAddressToolip address={address} /></span>) : ''}
-        </TableCell>
-        <TableCell key="balance">
-          {`${balance} ${blockchains.get(blockchain.key).symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
-        </TableCell>
-      </Fragment>
-    )}
     <TableCell align='right'>
       {(() => {
+        if (status === 'is-generating') {
+          return <Typography>Generating wallet...</Typography>
+        }
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }
         if (isRegistered) {
-          return <Withdraw blockchain={blockchain} />
+          return (
+            <Fragment>
+              <Withdraw blockchain={blockchain} />
+              <Refund blockchain={blockchain} />
+            </Fragment>
+          )
         }
         if (isRegistrationPending) {
           return <Register blockchain={blockchain} pending />
@@ -92,6 +75,11 @@ const Wallet = ({
         )
       })()}
     </TableCell>
+    {!status !== 'registration-failed' && (
+      <TableCell key="balance" align='right'>
+        {`${balance} ${blockchains.get(blockchain.key).symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
+      </TableCell>
+    )}
   </TableRow>
 )
 
@@ -101,7 +89,6 @@ Wallet.defaultProps = {
 }
 
 Wallet.propTypes = {
-  address: T.string,
   balance: T.number,
   blockchain: T.object,
   classes: T.object,

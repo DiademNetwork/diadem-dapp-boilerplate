@@ -91,7 +91,6 @@ class Modal extends Component {
               data-qa-id={`${name}-confirm-button`}
               disabled={confirmButtonDisabled}
               onClick={this.handleConfirm}
-              variant="contained"
             >
               {confirmButtonText}
             </Button>

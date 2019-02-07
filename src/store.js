@@ -2,18 +2,23 @@ import { applyMiddleware, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import createSagaMiddleware from 'redux-saga'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import rootReducer from 'modules/reducers'
+import createRootReducer from 'modules/reducers'
 import rootSaga from 'modules/sagas'
+import { createBrowserHistory } from 'history'
+import { routerMiddleware } from 'connected-react-router'
+
+export const history = createBrowserHistory()
 
 const sagaMiddleware = createSagaMiddleware()
 
 export default (() => {
   const store = createStore(
-    rootReducer,
+    createRootReducer(history),
     composeWithDevTools(
       applyMiddleware(
-        thunkMiddleware,
-        sagaMiddleware
+        routerMiddleware(history),
+        sagaMiddleware,
+        thunkMiddleware
       )
     )
   )

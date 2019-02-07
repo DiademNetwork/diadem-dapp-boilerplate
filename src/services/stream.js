@@ -1,6 +1,6 @@
 
 import stream from 'getstream'
-import streamMock from 'mocks/stream'
+// import streamMock from 'mocks/stream'
 
 const LIMIT = 100
 const GETSTREAM_APP_KEY = process.env.GETSTREAM_APP_KEY
@@ -8,12 +8,12 @@ const GETSTREAM_APP_ID = process.env.GETSTREAM_APP_ID
 const GETSTREAM_ACHIEVEMENT_COMMON_TOKEN = process.env.GETSTREAM_ACHIEVEMENT_COMMON_TOKEN
 
 export const createStreamClient = (streamTool) => {
-  const client = streamTool.connect(GETSTREAM_APP_KEY, null, GETSTREAM_APP_ID)
+  const client = streamTool.connect(GETSTREAM_APP_KEY, null, GETSTREAM_APP_ID, {'location': 'eu-west'})
 
   const userClient = (function () {
     let userClient = null
     const get = () => userClient
-    const init = () => { userClient = streamTool.connect(GETSTREAM_APP_KEY, userToken.get(), GETSTREAM_APP_ID) }
+    const init = () => { userClient = streamTool.connect(GETSTREAM_APP_KEY, userToken.get(), GETSTREAM_APP_ID, {'location': 'eu-west'}) }
     return Object.freeze({ get, init })
   })()
 
@@ -84,7 +84,5 @@ export const createStreamClient = (streamTool) => {
 }
 
 export default createStreamClient(
-  process.env.NODE_ENV === 'sandbox'
-    ? streamMock
-    : stream
+  stream
 )

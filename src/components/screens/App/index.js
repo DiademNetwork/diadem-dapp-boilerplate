@@ -1,8 +1,7 @@
 
 import React from 'react'
 import * as R from 'ramda'
-import AllAchievements from 'components/specialized/Achievements/All'
-import UserAchievements from 'components/specialized/Achievements/User'
+import Achievements from 'components/specialized/Achievements'
 import Help from 'components/specialized/Help'
 import Nav from 'components/specialized/Nav'
 import Notifications from 'components/specialized/Notifications'
@@ -10,10 +9,14 @@ import SandboxConfigEditor from 'components/specialized/SandboxConfigEditor'
 import Tabs from 'components/shared/Tabs'
 import Timeline from 'components/specialized/Timeline'
 import Wallets from 'components/specialized/Wallets'
-import Networks from 'components/specialized/Networks'
-import Actions from 'components/specialized/Actions'
+import { Route, Switch } from 'react-router-dom'
 import { PropTypes as T } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
+import withRouter from 'components/hocs/withRouter'
+
+const NoMatch = () => (
+  <span>Page not found</span>
+)
 
 const styles = (theme) => ({
   sm9: {
@@ -32,32 +35,39 @@ const styles = (theme) => ({
 })
 
 const App = ({
+  pushHistory,
   classes
 }) => (
   <div>
     <Nav />
     <div className={classes.space} />
     <div className={classes.sm9}>
-      <Wallets />
-      <div className={classes.space} />
-      <Networks />
-      <div className={classes.space} />
-      <Actions />
-      <div className={classes.space} />
-      <Tabs tabs={[
-        {
-          label: 'Achievements',
-          component: <AllAchievements />
-        },
-        {
-          label: 'Your achievements',
-          component: <UserAchievements />
-        },
-        {
-          label: 'Your timeline',
-          component: <Timeline />
-        }
-      ]} />
+      <Tabs
+        onChange={(path) => pushHistory(path)}
+        tabs={[
+          {
+            label: 'Achievements',
+            path: '/',
+            component: <Achievements />
+          },
+          {
+            label: 'Your funds',
+            path: '/wallets',
+            component: <Wallets />
+          },
+          {
+            label: 'Notifications',
+            path: '/notifications',
+            component: <Timeline />
+          }
+        ]}
+      />
+      <Switch>
+        <Route exact path="/" component={Achievements} />
+        <Route path="/wallets" component={Wallets} />
+        <Route path="/notifications" component={Timeline} />
+        <Route component={NoMatch} />
+      </Switch>
     </div>
     <Notifications />
     <Help />
@@ -68,9 +78,11 @@ const App = ({
 )
 
 App.propTypes = {
-  classes: T.object
+  classes: T.object,
+  pushHistory: T.func
 }
 
 export default R.compose(
+  withRouter,
   withStyles(styles)
 )(App)

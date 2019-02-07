@@ -20,7 +20,7 @@ const styles = () => ({
     borderRadius: 0,
     position: 'fixed',
     left: 0,
-    top: '50%'
+    bottom: 0
   }
 })
 
@@ -62,7 +62,6 @@ class SandboxConfigEditor extends Component {
           data-qa-id="open-sandbox-config-button"
           key="open-sandbox-config"
           onClick={this.handleClickOpen}
-          variant="extendedFab"
         >
           <SettingsIcon />
         </Button>

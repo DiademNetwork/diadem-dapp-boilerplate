@@ -129,7 +129,8 @@ class SupportAchievement extends Component {
               error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
               margin="normal"
               id='amount'
-              label={`Amount in ${blockchainSymbol} - maximum ${walletsBalances[blockchainKey]} ${blockchainSymbol} minus fees)`}
+              helperText={`max ${walletsBalances[blockchainKey]} ${blockchainSymbol} minus fees)`}
+              label={`Amount in ${blockchainSymbol}`}
               value={amount}
               onChange={this.handleChange}
               type='number'

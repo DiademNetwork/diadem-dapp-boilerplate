@@ -41,6 +41,7 @@ class Modal extends Component {
       fullScreen,
       name,
       noCancelButton,
+      openButtonClassName,
       openButtonIcon,
       openButtonText,
       maxWidth,
@@ -54,6 +55,7 @@ class Modal extends Component {
         <Button
           aria-label={name}
           data-qa-id={`${name}-open-button`}
+          className={openButtonClassName}
           key={`${name}-button`}
           disabled={disabled}
           onClick={this.handleClickOpen}
@@ -123,6 +125,7 @@ Modal.propTypes = {
   name: T.string,
   noCancelButton: T.bool,
   onConfirm: T.func,
+  openButtonClassName: T.string,
   openButtonIcon: T.node,
   openButtonText: T.string,
   render: T.func,

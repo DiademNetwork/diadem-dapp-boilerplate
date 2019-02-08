@@ -8,6 +8,7 @@ import withContainer from './container'
 import Modal from 'components/shared/Modal'
 import NetworkLinkHelp from './NetworkLinkHelp'
 import StarIcon from '@material-ui/icons/Star'
+import { withStyles } from '@material-ui/core/styles'
 
 const LINK_INITIAL_VALUE = ''
 const TITLE_INITIAL_VALUE = ''
@@ -19,6 +20,30 @@ const initialForm = {
   link: LINK_INITIAL_VALUE,
   title: TITLE_INITIAL_VALUE
 }
+
+const styles = (theme) => ({
+  openButton: {
+    [theme.breakpoints.down('sm')]: {
+      color: '#FFF',
+      backgroundColor: theme.palette.primary.light,
+      borderRadius: '0',
+      position: 'fixed',
+      zIndex: 1,
+      width: '100%',
+      height: theme.spacing.unit * 7,
+      bottom: theme.spacing.unit * 6,
+      '&:hover': {
+        backgroundColor: theme.palette.primary.light
+      },
+      '&:active': {
+        backgroundColor: theme.palette.primary.light
+      },
+      '&:focus': {
+        backgroundColor: theme.palette.primary.light
+      }
+    }
+  }
+})
 
 class CreateAchievement extends Component {
   state = initialForm
@@ -45,17 +70,18 @@ class CreateAchievement extends Component {
 
   render () {
     const { isLinkValid, isTitleValid, link, title } = this.state
-    const { isPrimaryWalletReady } = this.props
+    const { classes, isPrimaryWalletReady } = this.props
     const isFormValid = isLinkValid && isTitleValid
     return (
       <Modal
         confirmButtonDisabled={!isFormValid}
         confirmButtonText="Create"
         disabled={!isPrimaryWalletReady}
-        name={`achivement-create-modal`}
+        name="achievement-create-modal"
         onConfirm={this.handleConfirm}
-        openButtonText="Create an achievement"
+        openButtonText="Create Achievement"
         openButtonIcon={<StarIcon />}
+        openButtonClassName={classes.openButton}
         title="Create an achievement"
         render={({ fullScreen }) => (
           <Fragment>
@@ -69,7 +95,7 @@ class CreateAchievement extends Component {
               error={link !== LINK_INITIAL_VALUE && !isLinkValid}
               margin="normal"
               id='link'
-              label={`Your achievement ${network.name} post link`}
+              label={`Your ${network.name} post link`}
               value={link}
               onChange={this.handleChange('link')}
               placeholder={network.inputs.link.placeholder}
@@ -96,10 +122,12 @@ class CreateAchievement extends Component {
 }
 
 CreateAchievement.propTypes = {
+  classes: T.object,
   isPrimaryWalletReady: T.bool,
   createAchievement: T.func
 }
 
 export default R.compose(
-  withContainer
+  withContainer,
+  withStyles(styles)
 )(CreateAchievement)

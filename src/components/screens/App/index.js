@@ -13,6 +13,9 @@ import { Route, Switch } from 'react-router-dom'
 import { PropTypes as T } from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
 import withRouter from 'components/hocs/withRouter'
+import StarIcon from '@material-ui/icons/Star'
+import MoneyIcon from '@material-ui/icons/AttachMoney'
+import NotificationsIcon from '@material-ui/icons/Notifications'
 
 const NoMatch = () => (
   <span>Page not found</span>
@@ -20,7 +23,7 @@ const NoMatch = () => (
 
 const styles = (theme) => ({
   sm9: {
-    width: '100%',
+    width: `calc(100% - ${2 * theme.spacing.unit})`,
     margin: `${theme.spacing.unit} auto`,
     [theme.breakpoints.up('md')]: {
       width: '80%'
@@ -40,28 +43,27 @@ const App = ({
 }) => (
   <div>
     <Nav />
-    <div className={classes.space} />
+    <Tabs
+      onChange={(path) => pushHistory(path)}
+      tabs={[
+        {
+          label: 'Achievements',
+          path: '/',
+          icon: <StarIcon />
+        },
+        {
+          label: 'Your funds',
+          path: '/wallets',
+          icon: <MoneyIcon />
+        },
+        {
+          label: 'Notifications',
+          path: '/notifications',
+          icon: <NotificationsIcon />
+        }
+      ]}
+    />
     <div className={classes.sm9}>
-      <Tabs
-        onChange={(path) => pushHistory(path)}
-        tabs={[
-          {
-            label: 'Achievements',
-            path: '/',
-            component: <Achievements />
-          },
-          {
-            label: 'Your funds',
-            path: '/wallets',
-            component: <Wallets />
-          },
-          {
-            label: 'Notifications',
-            path: '/notifications',
-            component: <Timeline />
-          }
-        ]}
-      />
       <Switch>
         <Route exact path="/" component={Achievements} />
         <Route path="/wallets" component={Wallets} />

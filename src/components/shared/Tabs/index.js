@@ -1,53 +1,59 @@
-import React, { Component } from 'react'
+import React from 'react'
 import withRouter from 'components/hocs/withRouter'
 import { PropTypes as T } from 'prop-types'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import { withStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import { makeStyles } from '@material-ui/styles'
 import * as R from 'ramda'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
-const styles = (theme) => ({
-  tabs: {
-    marginBottom: theme.spacing.unit * 2
-  },
-  tabBadge: {
-    padding: `0 ${theme.spacing.unit * 2}px`
+const useStyles = makeStyles(theme => ({
+  root: {
+    maxHeight: theme.spacing.unit * 6,
+    position: 'fixed',
+    bottom: '0',
+    top: 'auto',
+    [theme.breakpoints.up('md')]: {
+      position: 'static'
+    }
   }
-})
+}))
 
-class AppTabs extends Component {
-  handleChange = (e, tabIdx) => {
-    const { tabs, onChange } = this.props
-    onChange && onChange(tabs[tabIdx].path)
+const AppTabs = ({ fullScreen, tabs, onChange, pathname }) => {
+  const classes = useStyles()
+
+  function handleChange (event, idx) {
+    onChange && onChange(tabs[idx].path)
   }
 
-  render () {
-    const { classes, tabs, pathname } = this.props
-    const valueIdx = R.findIndex(R.propEq('path', pathname))(tabs)
-    return (
+  const idx = R.findIndex(R.propEq('path', pathname))(tabs)
+
+  return (
+    <AppBar color="default" className={classes.root}>
       <Tabs
-        className={classes.tabs}
-        key='tabs'
-        value={valueIdx !== -1 ? valueIdx : 0}
-        onChange={this.handleChange}
+        value={idx}
+        onChange={handleChange}
+        scrollButtons="off"
         indicatorColor="primary"
         textColor="primary"
         centered
       >
-        {R.map(({ label }) => (
+        {R.map(({ label, icon }) => (
           <Tab
             data-qa-id={`tab-${label.toLowerCase()}`}
             key={label}
-            label={label}
+            label={fullScreen ? undefined : label}
+            icon={fullScreen ? icon : undefined}
           />
         ), tabs)}
       </Tabs>
-    )
-  }
+    </AppBar>
+  )
 }
 
 AppTabs.propTypes = {
-  classes: T.object,
+  fullScreen: T.bool,
   onChange: T.func,
   pathname: T.string,
   tabs: T.array
@@ -55,5 +61,5 @@ AppTabs.propTypes = {
 
 export default R.compose(
   withRouter,
-  withStyles(styles)
+  withMobileDialog()
 )(AppTabs)

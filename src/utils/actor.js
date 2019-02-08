@@ -10,9 +10,13 @@ export default (function actor () {
     getAddress
   )
 
-  const is = (userAddress) => R.compose(
-    R.equals(userAddress),
-    getAddress
+  const is = (userAddress) => R.ifElse(
+    R.always(R.complement(R.isNil)(userAddress)),
+    R.compose(
+      R.equals(userAddress),
+      getAddress
+    ),
+    R.F
   )
 
   return Object.freeze({

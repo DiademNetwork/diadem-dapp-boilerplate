@@ -11,7 +11,6 @@ import Modal from 'components/shared/Modal'
 import Link from 'components/shared/Link'
 import FeesSelector from 'components/shared/FeesSelector'
 import blockchains from 'configurables/blockchains'
-import MoneyIcon from '@material-ui/icons/AttachMoney'
 import * as U from 'utils'
 
 const AMOUNT_INITIAL_VALUE = 0
@@ -87,7 +86,6 @@ class SupportAchievement extends Component {
         disabled={!isPrimaryWalletReady || noBalance}
         name={`achievement-${idx}-support-modal`}
         onConfirm={this.handleSubmit}
-        openButtonIcon={<MoneyIcon />}
         openButtonText={noBalance ? 'You need tokens to support' : 'Support'}
         title="Support"
         render={({ fullScreen }) => (
@@ -131,7 +129,8 @@ class SupportAchievement extends Component {
               error={amount !== AMOUNT_INITIAL_VALUE && !isAmountValid}
               margin="normal"
               id='amount'
-              label={`Amount in ${blockchainSymbol} - maximum ${walletsBalances[blockchainKey]} ${blockchainSymbol} minus fees)`}
+              helperText={`max ${walletsBalances[blockchainKey]} ${blockchainSymbol} minus fees)`}
+              label={`Amount in ${blockchainSymbol}`}
               value={amount}
               onChange={this.handleChange}
               type='number'

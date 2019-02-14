@@ -8,24 +8,22 @@ import T from 'modules/types'
 import { eventChannel } from 'redux-saga'
 import blockchains from 'configurables/blockchains'
 
-const create = function * ({ link, title }) {
-  const { createAchievement } = blockchains.get(blockchains.primary.key)
+const create = function * (payload) {
   try {
-    yield call(createAchievement, {
-      link, title
-    })
+    const userAddress = yield select(S.wallets.primaryAddress)
+    const { createAchievement } = blockchains.get(blockchains.primary.key)
+    yield call(createAchievement, { ...payload, userAddress })
     yield put(ownA.create.succeeded())
   } catch (error) {
     yield put(ownA.create.errored({ error }))
   }
 }
 
-const confirm = function * ({ creatorAddress, link }) {
-  const { confirmAchievement } = blockchains.get(blockchains.primary.key)
+const confirm = function * (payload) {
   try {
-    yield call(confirmAchievement, {
-      creatorAddress, link
-    })
+    const userAddress = yield select(S.wallets.primaryAddress)
+    const { confirmAchievement } = blockchains.get(blockchains.primary.key)
+    yield call(confirmAchievement, { ...payload, userAddress })
     yield put(ownA.confirm.succeeded())
   } catch (error) {
     yield put(ownA.confirm.errored({ error }))
@@ -33,13 +31,14 @@ const confirm = function * ({ creatorAddress, link }) {
 }
 
 const support = function * (payload) {
-  const { blockchainKey } = payload
-  const { supportAchievement } = blockchains.get(blockchainKey)
   try {
+    const { blockchainKey } = payload
+    const { supportAchievement } = blockchains.get(blockchainKey)
+    const userAddress = yield select(S.wallets.primaryAddress)
     if (supportAchievement) {
-      yield call(supportAchievement, payload)
+      yield call(supportAchievement, { ...payload, userAddress })
     } else {
-      yield call(supportProxified, payload)
+      yield call(supportProxified, { ...payload, userAddress })
     }
     yield put(ownA.support.succeeded())
   } catch (error) {
@@ -47,9 +46,8 @@ const support = function * (payload) {
   }
 }
 
-const supportProxified = function * ({ amount, blockchainKey, creatorAddress, fees, link }) {
+const supportProxified = function * ({ amount, blockchainKey, creatorAddress, fees, link, userAddress }) {
   try {
-    const userAddress = yield select(S.wallets.primaryAddress)
     const { address, encodedData } = yield call(api.prepareSupport(blockchainKey), {
       amount,
       creatorAddress,
@@ -110,7 +108,6 @@ const fetchUserAchievements = function * ({ page }) {
     const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', userAddress, page)
     yield put(ownA.fetchUser.succeeded({ list: items, hasMore }))
   } catch (error) {
-    console
     yield put(ownA.fetchUser.errored({ error }))
   }
 }

@@ -2,6 +2,7 @@ import logo from './logo.jpg'
 import faker from 'faker'
 import mocksController from '../../../mocks/controller'
 import * as R from 'ramda'
+import axios from 'axios'
 
 export default (function fakeChain () {
   const symbol = 'FKC'
@@ -86,7 +87,14 @@ export default (function fakeChain () {
 
   const generateContractSendTx = () => 'raxTxString'
 
+  // For fakechains, no blockchain exist, so createAchievement is a call to API (sandboxed with sandboxAPI)
+  const createAchievement = async (payload) => {
+    const { data } = await axios.post(`${process.env.BACKEND_URL}/achievements/create`, payload)
+    return data
+  }
+
   return Object.freeze({
+    createAchievement,
     initFromMnemonic,
     initFromPrivateKey,
     key: 'fakechain',

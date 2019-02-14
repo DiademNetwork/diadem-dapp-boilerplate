@@ -1,77 +1,65 @@
-import React, { Fragment, Component } from 'react'
+import React from 'react'
+import withRouter from 'components/hocs/withRouter'
 import { PropTypes as T } from 'prop-types'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
-import withComponentDidMountHook from 'components/hocs/withComponentDidMountHook'
-import Badge from '@material-ui/core/Badge'
-import { withStyles } from '@material-ui/core/styles'
+import AppBar from '@material-ui/core/AppBar'
+import { makeStyles } from '@material-ui/styles'
 import * as R from 'ramda'
+import withMobileDialog from '@material-ui/core/withMobileDialog'
 
-const styles = (theme) => ({
-  tabs: {
-    marginBottom: theme.spacing.unit * 2
-  },
-  tabBadge: {
-    padding: `0 ${theme.spacing.unit * 2}px`
+const useStyles = makeStyles(theme => ({
+  root: {
+    maxHeight: theme.spacing.unit * 6,
+    position: 'fixed',
+    bottom: '0',
+    top: 'auto',
+    [theme.breakpoints.up('md')]: {
+      position: 'static'
+    }
   }
-})
+}))
 
-class AppTabs extends Component {
-  state = {
-    tabIdx: 0
+const AppTabs = ({ fullScreen, tabs, onChange, pathname }) => {
+  const classes = useStyles()
+
+  function handleChange (event, idx) {
+    onChange && onChange(tabs[idx].path)
   }
 
-  handleChange = (e, tabIdx) => this.setState({ tabIdx })
+  const idx = R.findIndex(R.propEq('path', pathname))(tabs)
 
-  render () {
-    const { tabIdx } = this.state
-    const { classes, tabs } = this.props
-    const TabItem = withComponentDidMountHook(
-      ({ children }) => children,
-      tabs[tabIdx].onOpen
-    )
-    return (
-      <Fragment>
-        <Tabs
-          className={classes.tabs}
-          key='tabs'
-          value={tabIdx}
-          onChange={this.handleChange}
-          indicatorColor="primary"
-          textColor="primary"
-          centered
-        >
-          {R.map(({ badgeContent, label }) => (
-            <Tab
-              data-qa-id={`tab-${label.toLowerCase()}`}
-              key={label}
-              label={
-                badgeContent ? (
-                  <Badge
-                    className={classes.tabBadge}
-                    color="secondary"
-                    data-qa-id={`tab-badge-${label.toLowerCase()}`}
-                    badgeContent={badgeContent}
-                  >
-                    {label}
-                  </Badge>
-                ) : (
-                  label
-                )
-              } />
-          ), tabs)}
-        </Tabs>
-        <TabItem key='tab'>
-          {tabs[tabIdx].component}
-        </TabItem>
-      </Fragment>
-    )
-  }
+  return (
+    <AppBar color="default" className={classes.root}>
+      <Tabs
+        value={idx}
+        onChange={handleChange}
+        scrollButtons="off"
+        indicatorColor="primary"
+        textColor="primary"
+        centered
+      >
+        {R.map(({ label, icon }) => (
+          <Tab
+            data-qa-id={`tab-${label.toLowerCase()}`}
+            key={label}
+            label={fullScreen ? undefined : label}
+            icon={fullScreen ? icon : undefined}
+          />
+        ), tabs)}
+      </Tabs>
+    </AppBar>
+  )
 }
 
 AppTabs.propTypes = {
-  classes: T.object,
+  fullScreen: T.bool,
+  onChange: T.func,
+  pathname: T.string,
   tabs: T.array
 }
 
-export default withStyles(styles)(AppTabs)
+export default R.compose(
+  withRouter,
+  withMobileDialog()
+)(AppTabs)

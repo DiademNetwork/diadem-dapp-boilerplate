@@ -2,8 +2,6 @@ import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
 import Button from '@material-ui/core/Button'
-import IconButton from '@material-ui/core/IconButton'
-import Avatar from '@material-ui/core/Avatar'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
@@ -12,9 +10,6 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Typography from '@material-ui/core/Typography'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
 import { withStyles } from '@material-ui/core/styles'
-import HashtagImg from './hashtag.png'
-import SendIcon from '@material-ui/icons/SendOutlined'
-import Hidden from '@material-ui/core/Hidden'
 import MenuItem from '@material-ui/core/MenuItem'
 import Link from 'components/shared/Link'
 import network from 'configurables/network'
@@ -47,7 +42,7 @@ class Hashtag extends Component {
   }
 
   render () {
-    const { classes, fullScreen, mobile } = this.props
+    const { classes, fullScreen } = this.props
     const { modalOpen } = this.state
     const openButtonProps = {
       'aria-label': 'Hashtag',
@@ -55,22 +50,11 @@ class Hashtag extends Component {
       key: 'hashtag-button',
       onClick: this.handleClickOpen
     }
-    const openButton = mobile ? (
-      <MenuItem {...openButtonProps}>
-        #DiademNetwork
-      </MenuItem>
-    ) : (
-      <IconButton
-        {...openButtonProps}
-        variant="fab"
-        color="primary"
-      >
-        <Avatar className={classes.hastag} alt="Hashtag logo" src={HashtagImg} />
-      </IconButton>
-    )
     return (
       <Fragment>
-        {openButton}
+        <MenuItem {...openButtonProps}>
+          Community
+        </MenuItem>
         <Dialog
           data-qa-id='hashtag-modal'
           fullScreen={fullScreen}
@@ -109,12 +93,8 @@ class Hashtag extends Component {
               color="secondary"
               data-qa-id="close-hashtag-modal"
               onClick={this.handleClose}
-              variant={fullScreen ? 'contained' : 'extendedFab'}
             >
-              <Hidden smDown>
-                <SendIcon className={classes.icon} />
-              </Hidden>
-              Go back to Diadem Network
+              Back to Diadem Network
             </Button>
           </DialogActions>
         </Dialog>
@@ -125,8 +105,7 @@ class Hashtag extends Component {
 
 Hashtag.propTypes = {
   classes: T.object,
-  fullScreen: T.bool,
-  mobile: T.bool
+  fullScreen: T.bool
 }
 
 export default R.compose(

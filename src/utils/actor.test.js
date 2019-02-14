@@ -24,5 +24,6 @@ describe('Utils - achievement', () => {
   it('is', () => {
     expect(U.actor.is('2')(actorA)).toEqual(false)
     expect(U.actor.is('1')(actorA)).toEqual(true)
+    expect(U.actor.is(undefined)({})).toEqual(false)
   })
 })

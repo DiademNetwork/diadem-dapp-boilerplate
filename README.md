@@ -46,11 +46,8 @@ You can use it to switch mocks/stubs behaviour (For ex is user already registere
 * `cypress:open`: open cypress
 * `start` : start a development version on `localhost:9000`, in watch mode
 * `start:sandbox` : start a **sandboxed** development version on `localhost:9000`, in watch mode
-* `build`: build a development version in `dist` folder
-* `build:testnet`: build a testnet version of application in`dist` folder
-* `build:mainnet`: build a mainnet version of application in`dist` folder
-* `start`: start a `development` version of application (not minified + with hot reloading). Development is configured to speak with testnet.
-* `start:sandbox`: start a `sandbox` version of application (not minified + with hot reloading). This version is used for cypress acceptance test. Note that all services are mocked in this version. It is completely isolated.
+* `start:sandbox:server` : start a **fake** server api version on `localhost:3001`, in watch mode
+* `build`: build a development version in `dist` folder. Use `NODE_ENV` for desired env build
 * `storybook`. Run storybook on port `6006`
 * `lint` : run eslint for you project
 * `test`: run `jest` tests and create a `coverage` directory (you can then open file `/coverage/lcov-report/index.html` to see nice coverage report)
@@ -117,13 +114,3 @@ TIPS: to use facebook in development mode, you will need to:
 1 - If it's the first time you develop on application add `127.0.0.1 local.diadem.network` in your `/etc/hosts` file  
 2 - Go to `https://local.diadem.network:9000`
 Indeed, facebook force using https
-
-## TO DO (Technical)
-
-- Handling technical debt which resulted from fast coding for Hackathon :
-  - Separate components into smaller components
-  - Separate repetitive UI component into their own component + make use of storybook
-  - Add Typescript ? => TBD
-  - CI Integration
-  - Add mocked/stubbed scenarios (for ex failures) in sandbox env
-  

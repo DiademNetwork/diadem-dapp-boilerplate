@@ -10,11 +10,9 @@ import Divider from '@material-ui/core/Divider'
 import Button from '@material-ui/core/Button'
 import Typography from '@material-ui/core/Typography'
 import Checkbox from '@material-ui/core/Checkbox'
-import Hidden from '@material-ui/core/Hidden'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import { withStyles } from '@material-ui/core/styles'
 import withMobileDialog from '@material-ui/core/withMobileDialog'
-import SendIcon from '@material-ui/icons/SendOutlined'
 import withContainer from './container'
 import network from 'configurables/network'
 
@@ -157,12 +155,8 @@ class Help extends Component {
             aria-label="Go to application"
             color="secondary"
             onClick={this.handleClose}
-            variant={fullScreen ? 'contained' : 'extendedFab'}
           >
-            <Hidden smDown>
-              <SendIcon className={classes.icon} />
-            </Hidden>
-            {helpDisplay === 'welcome' ? ' Get me to Diadem Network' : 'Go back to Diadem Network'}
+            {helpDisplay === 'welcome' ? ' Go to Diadem Network' : 'Back to Diadem Network'}
           </Button>
         </DialogActions>
       </Dialog>

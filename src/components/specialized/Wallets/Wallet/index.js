@@ -1,46 +1,29 @@
 import React, { Fragment } from 'react'
 import * as R from 'ramda'
 import { PropTypes as T } from 'prop-types'
-import TableCell from '@material-ui/core/TableCell'
-import TableRow from '@material-ui/core/TableRow'
 import Avatar from '@material-ui/core/Avatar'
 import { withStyles } from '@material-ui/core/styles'
 import Recover from './Recover'
 import Register from './Register'
+import Refund from './Refund'
 import Withdraw from './Withdraw'
 import SaveRecoveryInfo from './SaveRecoveryInfo'
-import CopyToClipboardButton from 'components/shared/CopyToClipboardButton'
-import Tooltip from '@material-ui/core/Tooltip'
-import Zoom from '@material-ui/core/Zoom'
 import withContainer from './container'
 import blockchains from 'configurables/blockchains'
+import Card from '@material-ui/core/Card'
+import CardHeader from '@material-ui/core/CardHeader'
+import CardActions from '@material-ui/core/CardActions'
 
 const styles = (theme) => ({
-  img: {
-    display: 'inline-block',
-    marginRight: theme.spacing.unit * 2,
-    verticalAlign: 'middle'
+  root: {
+    marginBottom: theme.spacing.unit * 2
   },
-  button: {
-    marginRight: theme.spacing.unit
+  actions: {
+    justifyContent: 'flex-end'
   }
 })
 
-const CopyToAddressToolip = ({ address }) => (
-  <Tooltip
-    TransitionComponent={Zoom}
-    title='Copy address to clipboard'
-  >
-    <CopyToClipboardButton variant="icon" textToCopy={address} name="address" />
-  </Tooltip>
-)
-
-CopyToAddressToolip.propTypes = {
-  address: T.string
-}
-
 const Wallet = ({
-  address,
   balance,
   blockchain,
   classes,
@@ -49,37 +32,35 @@ const Wallet = ({
   status,
   unconfirmedBalance
 }) => (
-  <TableRow key={name}>
-    <TableCell component="th" scope="row">
-      <Avatar
-        className={classes.img}
-        alt={`${blockchain.name} logo`}
-        src={blockchain.logo}
-      />
-      {blockchain.name}
-    </TableCell>
-    {status === 'registration-failed' && (
-      <TableCell>
-        Registration failed. Please try later
-      </TableCell>
-    )}
-    {!status !== 'registration-failed' && (
-      <Fragment>
-        <TableCell key="address">
-          {address ? (<span>{address} <CopyToAddressToolip address={address} /></span>) : ''}
-        </TableCell>
-        <TableCell key="balance">
-          {`${balance} ${blockchains.get(blockchain.key).symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
-        </TableCell>
-      </Fragment>
-    )}
-    <TableCell align='right'>
+  <Card className={classes.root}>
+    <CardHeader
+      avatar={
+        <Avatar
+          alt={`${blockchain.name} logo`}
+          src={blockchain.logo}
+        />
+      }
+      title={`${blockchain.name} - ${balance} ${blockchains.get(blockchain.key).symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
+      subheader={
+        status === 'registration-failed'
+          ? 'Registration failed. Please try later'
+          : status === 'is-generating'
+            ? 'Generating wallet...'
+            : undefined
+      }
+    />
+    <CardActions className={classes.actions}>
       {(() => {
         if (status === 'generated') {
           return <SaveRecoveryInfo blockchain={blockchain} />
         }
         if (isRegistered) {
-          return <Withdraw blockchain={blockchain} />
+          return (
+            <Fragment>
+              <Withdraw blockchain={blockchain} />
+              <Refund blockchain={blockchain} />
+            </Fragment>
+          )
         }
         if (isRegistrationPending) {
           return <Register blockchain={blockchain} pending />
@@ -91,8 +72,8 @@ const Wallet = ({
           </Fragment>
         )
       })()}
-    </TableCell>
-  </TableRow>
+    </CardActions>
+  </Card>
 )
 
 Wallet.defaultProps = {
@@ -101,7 +82,6 @@ Wallet.defaultProps = {
 }
 
 Wallet.propTypes = {
-  address: T.string,
   balance: T.number,
   blockchain: T.object,
   classes: T.object,

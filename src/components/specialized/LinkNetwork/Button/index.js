@@ -7,7 +7,7 @@ const LoginButton = ({ name, onClick }) => (
     data-qa-id="login-button"
     onClick={onClick}
   >
-    Login
+    It's you! Make it known to others
   </Button>
 )
 

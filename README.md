@@ -1,23 +1,6 @@
-# qtum-dapp-client
+# diadem-dapp-boilerplate
 
-Client for Diadem Network application for Qtum Hackathon.
-
-If you do not know what Diadem Network is about, please [Check documentation](https://github.com/DiademNetwork/qtum-dapp-documentation)
-
-## Techs used
-
-* React 16
-* Redux
-* Material-UI
-* Qtumjs-wallet
-* Qtumjs
-* Getstream
-* Webpack 4
-* Babel
-* Eslint (Standard config)
-* Cypress
-* Jest/Enzyme
-* Storybook 3
+Decentralized application based on Diadem protocol.
 
 ## Develop (non-sandboxed version)
 

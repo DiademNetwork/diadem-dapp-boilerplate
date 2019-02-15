@@ -12,7 +12,7 @@
     "build": "./scripts/build.js",
     "build-storybook": "build-storybook",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d dist",
+    "deploy": "aws s3 sync dist/ s3://diadem.network --delete",
     "start": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.development.js --https",
     "start:sandbox": "yarn run clean-dist && yarn run copy-public && webpack-dev-server --config ./webpackConfigs/webpack.sandbox.js",
     "start:sandbox:server": "nodemon ./sandboxApi/index.js",

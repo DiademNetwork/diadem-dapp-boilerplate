@@ -99,11 +99,11 @@ export default (function loom () {
   }
 
   const createAchievement = async ({ link, title }) => {
-    await contracts.achievements.methods.create(link, title)
+    await contracts.achievements.methods.create(link, title).send()
   }
 
   const confirmAchievement = async ({ creatorAddress, link }) => {
-    await contracts.achievements.methods.confirm(creatorAddress, link)
+    await contracts.achievements.methods.confirm(creatorAddress, link).send()
   }
 
   const getPrivateKey = () => wallet.privateKey

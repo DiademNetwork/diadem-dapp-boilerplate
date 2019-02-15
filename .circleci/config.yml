@@ -53,6 +53,7 @@ jobs:
           key: v1-repo-{{ .Branch }}-{{ .Revision }}
           paths:
             - .
+
   npm_dependencies:
     <<: *main_config
     steps:
@@ -110,6 +111,13 @@ jobs:
     - *restore_node_modules
     - *github_ssh_keys
     - *add_known_host_github
+    - run:
+        name: Install AWS CLI
+        command: |
+          sudo apt-get update && sudo apt-get install -y python-dev
+          sudo curl -O https://bootstrap.pypa.io/get-pip.py
+          sudo python get-pip.py
+          sudo pip install awscli --upgrade
     - run:
         name: Build & Deploy Production
         command: |

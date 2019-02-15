@@ -53,6 +53,20 @@ jobs:
           key: v1-repo-{{ .Branch }}-{{ .Revision }}
           paths:
             - .
+
+  system_dependencies:
+    <<: *main_config
+    steps:
+      - *restore_repo
+      - *restore_node_modules
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt-get update && sudo apt-get install -y python-dev
+            sudo curl -O https://bootstrap.pypa.io/get-pip.py
+            sudo python get-pip.py
+            sudo pip install awscli --upgrade
+
   npm_dependencies:
     <<: *main_config
     steps:
@@ -156,11 +170,18 @@ workflows:
       #       - lint_and_unit_tests
       #       - deploy_staging
 
+      - system_dependencies:
+          requires:
+            - checkout_code
+            - npm_dependencies
+            - lint_and_unit_tests
+
       - deploy_production:
           <<: *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies
             - lint_and_unit_tests
+            - system_dependencies
             # UNCOMMENT WHEN HOLD LOGIC ADDED
             # - deploy_production_hold

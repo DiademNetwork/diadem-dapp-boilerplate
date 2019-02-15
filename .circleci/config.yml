@@ -157,6 +157,7 @@ workflows:
       #       - deploy_staging
 
       - deploy_production:
+          <<: *filter_branch_master
           requires:
             - checkout_code
             - npm_dependencies

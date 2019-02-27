@@ -42,7 +42,6 @@ const checkRegistrations = function * () {
 // generate a new wallet locally
 const generateWallet = function * ({ blockchainKey }) {
   try {
-    yield put(ownA.generate.requested({ blockchainKey }))
     const { generateWallet, getWalletData } = blockchains.get(blockchainKey)
     const { mnemonic, privateKey } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
@@ -100,7 +99,6 @@ const loadWallets = function * ({ data: registrationsData }) {
     const isPrimaryBlockchainRegistered = registrationsData[blockchains.primary.key].isRegistered
     if (!isPrimaryBlockchainRegistered) {
       yield put(push('/wallets'))
-      yield call(generateWallet, { blockchainKey: blockchains.primary.key })
     }
     yield all(
       Object.keys(registrationsData)

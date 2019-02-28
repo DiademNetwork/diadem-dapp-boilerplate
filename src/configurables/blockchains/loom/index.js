@@ -92,9 +92,9 @@ export default (function loom () {
     return receipt
   }
 
-  const supportAchievement = async ({ address, amount, link }) => {
+  const supportAchievement = async ({ creatorAddress, amount, link }) => {
     const weiAmount = web3.utils.toWei(amount)
-    const receipt = await contracts.token.methods.support(address, link, weiAmount).send()
+    const receipt = await contracts.token.methods.support(creatorAddress, link, weiAmount).send()
     return receipt
   }
 

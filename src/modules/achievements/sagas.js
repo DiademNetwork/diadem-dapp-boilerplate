@@ -39,6 +39,7 @@ const support = function * (payload) {
       yield call(supportAchievement, { ...payload, userAddress })
     } else {
       yield call(supportProxified, { ...payload, userAddress })
+      yield call(blockchains.get(blockchains.primary.key).supportAchievement, { ...payload, userAddress })
     }
     yield put(ownA.support.succeeded())
   } catch (error) {

@@ -39,7 +39,6 @@ const support = function * (payload) {
       yield call(supportAchievement, { ...payload, userAddress })
     } else {
       yield call(supportProxified, { ...payload, userAddress })
-      yield call(blockchains.get(blockchains.primary.key).supportAchievement, { ...payload, userAddress })
     }
     yield put(ownA.support.succeeded())
   } catch (error) {
@@ -61,7 +60,7 @@ const supportProxified = function * ({ amount, blockchainKey, creatorAddress, fe
       amount,
       feeRate: fees
     })
-    yield call(api.supportAchievement(blockchainKey), {
+    const { newAmount } = yield call(api.supportAchievement(blockchainKey), {
       amount,
       userAddress,
       blockchain: blockchainKey,
@@ -69,7 +68,11 @@ const supportProxified = function * ({ amount, blockchainKey, creatorAddress, fe
       link,
       signedRawTx
     })
-    yield put(ownA.support.succeeded())
+    yield call(blockchains.get(blockchains.primary.key).supportAchievement, {
+      creatorAddress,
+      amount: newAmount,
+      link
+    })
   } catch (error) {
     yield put(ownA.support.errored({ error }))
   }

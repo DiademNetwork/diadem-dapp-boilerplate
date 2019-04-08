@@ -7,7 +7,7 @@
     "clean-dist": "./scripts/clean-dist.js",
     "copy-public": "./scripts/copy-public.js",
     "cypress:open": "npx cypress open",
-    "lint": "eslint src/ scripts/ config/ --ignore-path src/configurables/blockchains/loom/bip39.english.js",
+    "lint": "eslint src/ scripts/ config/ --ignore-path src/configurables/blockchains/bip39.english.js",
     "prebuild": "yarn run clean-dist && yarn run copy-public",
     "build": "./scripts/build.js",
     "build-storybook": "build-storybook",
@@ -79,7 +79,10 @@
     "setupFiles": [
       "./setupTests.js"
     ],
-    "testURL": "http://localhost/"
+    "testURL": "http://localhost/",
+    "moduleNameMapper": {
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js"
+    }
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",

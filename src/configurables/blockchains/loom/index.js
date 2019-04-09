@@ -1,7 +1,7 @@
 import Web3 from 'web3'
 import { Client, LocalAddress, CryptoUtils, LoomProvider } from 'loom-js'
 
-import bip39 from './bip39.english.js'
+import bip39 from '../bip39.english.js'
 import DiademCoin from './DiademCoin.json'
 import Achievements from './Achievements.json'
 import logo from './diadem.png'

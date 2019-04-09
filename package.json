@@ -79,7 +79,10 @@
     "setupFiles": [
       "./setupTests.js"
     ],
-    "testURL": "http://localhost/"
+    "testURL": "http://localhost/",
+    "moduleNameMapper": {
+      "\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js"
+    }
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
@@ -90,6 +93,7 @@
     "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "bitcoinjs-lib": "^3.3.2",
     "bs58": "^4.0.1",
     "connected-react-router": "^6.2.0-beta.3",
     "copy-to-clipboard": "^3.0.8",

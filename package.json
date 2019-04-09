@@ -7,7 +7,7 @@
     "clean-dist": "./scripts/clean-dist.js",
     "copy-public": "./scripts/copy-public.js",
     "cypress:open": "npx cypress open",
-    "lint": "eslint src/ scripts/ config/ --ignore-path src/configurables/blockchains/loom/bip39.english.js",
+    "lint": "eslint src/ scripts/ config/ --ignore-path src/configurables/blockchains/bip39.english.js",
     "prebuild": "yarn run clean-dist && yarn run copy-public",
     "build": "./scripts/build.js",
     "build-storybook": "build-storybook",

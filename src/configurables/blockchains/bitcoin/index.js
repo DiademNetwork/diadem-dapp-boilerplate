@@ -78,6 +78,9 @@ export default (function bitcoin() {
   }
 
   const buildTransaction = async ({ from, to, amount, feeValue }) => {
+    const { privateKey } = wallet
+    const keyPair = btc.ECPair.fromWIF(privateKey, NETWORK)
+
     const tx = new btc.TransactionBuilder(NETWORK)
     const unspents = await fetchUnspents()
 

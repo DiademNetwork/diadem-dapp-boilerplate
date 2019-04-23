@@ -59,13 +59,24 @@ export default (function ethereum() {
     }
   }
 
+  const generateContractSendTx = async ({ address, amount }) => {
+    const { privateKey } = wallet
+    const weiAmount = web3.utils.toWei(amount)
+    const params = {
+      to: address,
+      value: weiAmount,
+      gas: 21000
+    }
+    const { rawTransaction } = await web3.eth.accounts.signTransaction(params, privateKey)
+    return rawTransaction
+  }
+
   const withdraw = async ({ address, amount, fees }) => {
     const { privateKey } = wallet
     const weiAmount = web3.utils.toWei(amount)
     const params = {
       to: address,
       value: weiAmount,
-      gasPrice: fees,
       gas: 21000
     }
     const { rawTransaction } = await web3.eth.accounts.signTransaction(params, privateKey)
@@ -86,6 +97,7 @@ export default (function ethereum() {
     initFromMnemonic,
     initFromPrivateKey,
     getWalletData,
+    generateContractSendTx,
     withdraw,
     ...metadata
   })

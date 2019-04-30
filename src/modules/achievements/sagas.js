@@ -80,7 +80,7 @@ const supportProxified = function * ({ amount, blockchainKey, creatorAddress, fe
 
 const fetch = function * ({ page }) {
   try {
-    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', 'common', page)
+    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_flat', 'common', page)
     yield put(ownA.fetch.succeeded({ list: items, hasMore }))
   } catch (error) {
     yield put(ownA.fetch.errored({ error }))
@@ -94,7 +94,7 @@ const subscribe = function * () {
     return () => {}
   })
   try {
-    yield call(stream.subscribeWithCallBacks, 'achievement_aggregated', 'common', callbackObj.call)
+    yield call(stream.subscribeWithCallBacks, 'achievement_flat', 'common', callbackObj.call)
     yield put(ownA.subscribe.succeeded())
     while (true) {
       yield take(channel)
@@ -109,7 +109,7 @@ const subscribe = function * () {
 const fetchUserAchievements = function * ({ page }) {
   try {
     const userAddress = yield select(S.wallets.primaryAddress)
-    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_aggregated', userAddress, page)
+    const { results: items, hasMore } = yield call(stream.fetchData, 'achievement_flat', userAddress, page)
     yield put(ownA.fetchUser.succeeded({ list: items, hasMore }))
   } catch (error) {
     yield put(ownA.fetchUser.errored({ error }))
@@ -123,7 +123,7 @@ const subscribeUserAchievements = function * ({ userAddress }) {
     return () => {}
   })
   try {
-    yield call(stream.subscribeWithCallBacks, 'achievement_aggregated', userAddress, callbackObj.call)
+    yield call(stream.subscribeWithCallBacks, 'achievement_flat', userAddress, callbackObj.call)
     yield put(ownA.subscribe.succeeded())
     while (true) {
       yield take(channel)

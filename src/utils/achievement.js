@@ -1,31 +1,24 @@
 import * as R from 'ramda'
 
 export default (function achievement () {
-  const getActivities = (verb) => R.compose(
-    R.filter(R.propEq('verb', verb)),
-    R.prop('activities')
-  )
+  const getReactions = (kind) => R.path(['latest_reactions', kind])
 
-  const getCreatorAddress = R.compose(
-    R.path(['actor', 'id']),
-    R.head,
-    getActivities('create')
-  )
+  const getCreatorAddress = R.prop('actor')
 
-  const getLink = R.prop('group')
+  const getLink = R.prop('object')
 
-  const hasAlready = (userAddress) => (verb) => R.compose(
+  const hasAlready = (userAddress) => (kind) => R.compose(
     R.complement(R.isEmpty),
     R.filter(
-      R.pathEq(['actor', 'id'], userAddress)
+      R.pathEq(['data', 'actor'], userAddress)
     ),
-    getActivities(verb)
+    getReactions(kind)
   )
 
-  const firstActor = (verb) => R.compose(
-    R.prop('actor'),
-    R.ifElse(R.is(Array), R.head, R.identity),
-    getActivities(verb)
+  const firstActor = (kind) => R.compose(
+    R.path(['data', 'actor']),
+    R.head,
+    getReactions(kind)
   )
 
   const isCreator = (userAddress) => R.ifElse(
@@ -33,21 +26,20 @@ export default (function achievement () {
     R.F,
     R.compose(
       R.equals(userAddress),
-      R.prop('id'),
-      firstActor('create')
+      R.prop('actor')
     )
   )
 
-  const getAmount = verb => R.compose(
+  const getAmount = kind => R.compose(
     R.sum,
-    R.map(R.prop('amount')),
-    getActivities(verb)
+    R.map(R.path(['data','amount'])),
+    getReactions(kind)
   )
 
   return Object.freeze({
+    getReactions,
     firstActor,
     getAmount,
-    getActivities,
     getCreatorAddress,
     getLink,
     hasAlready,

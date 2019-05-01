@@ -99,7 +99,6 @@ const loadWallets = function * ({ data: registrationsData }) {
     const isPrimaryBlockchainRegistered = registrationsData[blockchains.primary.key].isRegistered
     if (!isPrimaryBlockchainRegistered) {
       yield put(push('/wallets'))
-      yield call(generateWallet, { blockchainKey: blockchains.primary.key })
     }
     yield all(
       Object.keys(registrationsData)

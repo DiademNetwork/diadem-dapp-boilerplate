@@ -1,11 +1,8 @@
-import loom from './loom'
-// import qtum from './qtum'
-import fakechain from './fakechain'
-import fakechain2 from './fakechain2'
+import credits from './credits'
 
 export default (function blockchains () {
   // You can change blockchain for smart contracts here
-  const primary = process.env.NODE_ENV === 'sandbox' ? fakechain : loom
+  const primary = credits
 
   // You can add/change/remove blokchains for value transfers here
   const nonPrimary = process.env.NODE_ENV === 'sandbox' ? { fakechain2 } : { }

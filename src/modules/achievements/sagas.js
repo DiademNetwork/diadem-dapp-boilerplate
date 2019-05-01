@@ -11,8 +11,7 @@ import blockchains from 'configurables/blockchains'
 const create = function * (payload) {
   try {
     const userAddress = yield select(S.wallets.primaryAddress)
-    const { createAchievement } = blockchains.get(blockchains.primary.key)
-    yield call(createAchievement, { ...payload, userAddress })
+    yield call(api.createAchievement(blockchains.primary.key), { ...payload, userAddress })
     yield put(ownA.create.succeeded())
   } catch (error) {
     yield put(ownA.create.errored({ error }))
@@ -22,8 +21,7 @@ const create = function * (payload) {
 const confirm = function * (payload) {
   try {
     const userAddress = yield select(S.wallets.primaryAddress)
-    const { confirmAchievement } = blockchains.get(blockchains.primary.key)
-    yield call(confirmAchievement, { ...payload, userAddress })
+    yield call(api.confirmAchievement(blockchains.primary.key), { ...payload, userAddress })
     yield put(ownA.confirm.succeeded())
   } catch (error) {
     yield put(ownA.confirm.errored({ error }))

@@ -104,6 +104,15 @@ export default (function bitcoin() {
     return txRaw
   }
 
+  const generateContractSendTx = async ({ address, amount }) => {
+    return buildTransaction({
+      from: wallet.address,
+      to: address,
+      amount,
+      feeValue: 15000
+    })
+  }
+
   const fetchUnspents = () => {
     const { address } = wallet
     return axios.get(`${INSIGHT_URL}/addr/${address}/utxo`)
@@ -127,6 +136,7 @@ export default (function bitcoin() {
     registerWallet,
     initFromMnemonic,
     initFromPrivateKey,
+    generateContractSendTx,
     getWalletData: needsWallet(getWalletData),
     withdraw: needsWallet(withdraw),
     ...metadata

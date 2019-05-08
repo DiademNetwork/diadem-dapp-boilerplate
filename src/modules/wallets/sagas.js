@@ -44,8 +44,8 @@ const generateWallet = function * ({ blockchainKey }) {
   try {
     const { generateWallet, getWalletData } = blockchains.get(blockchainKey)
     const { mnemonic, privateKey } = generateWallet()
-    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
     const walletData = yield call(getWalletData)
+    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
     yield put(ownA.generate.succeeded({ blockchainKey, data: walletData, mnemonic, privateKey }))
   } catch (error) {
     yield put(ownA.generate.errored({ error }))

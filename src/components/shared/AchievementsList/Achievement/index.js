@@ -34,9 +34,9 @@ const Achievement = ({
   idx,
   userAddress
 }) => {
-  const { actor: creator, title, object } = U.achievement.getActivities('create')(achievement)[0]
-  const confirmActivities = U.achievement.getActivities('confirm')(achievement)
-  const supportActivities = U.achievement.getActivities('support')(achievement)
+  const { actor: creator, title, object } = U.achievement.getReactions('create')(achievement)[0]
+  const confirmReactions = U.achievement.getReactions('confirm')(achievement)
+  const supportReactions = U.achievement.getReactions('support')(achievement)
   return (
     <Card
       className={classes.item}
@@ -59,14 +59,14 @@ const Achievement = ({
       />
       <Divider />
       <CardContent>
-        {confirmActivities.length > 0 && (
+        {confirmReactions.length > 0 && (
           <Typography>
-            {`This achievement has been confirmed by ${U.actor.getUserNameOrAddress(U.achievement.firstActor('confirm')(achievement))}${confirmActivities.length - 1 > 0 ? `and ${confirmActivities.length - 1} other people.` : ''}`}
+            {`This achievement has been confirmed by ${U.actor.getUserNameOrAddress(U.achievement.firstActor('confirm')(achievement))}${confirmReactions.length - 1 > 0 ? `and ${confirmReactions.length - 1} other people.` : ''}`}
           </Typography>
         )}
-        {supportActivities.length > 0 && (
+        {supportReactions.length > 0 && (
           <Typography>
-            {`This achievement has been supported by ${U.actor.getUserNameOrAddress(U.achievement.firstActor('support')(achievement))}${supportActivities.length - 1 > 0 ? `and ${supportActivities.length - 1} other people.` : ''} for a total amount of ${U.achievement.getAmount('support')(achievement)}`}
+            {`This achievement has been supported by ${U.actor.getUserNameOrAddress(U.achievement.firstActor('support')(achievement))}${supportReactions.length - 1 > 0 ? `and ${supportReactions.length - 1} other people.` : ''} for a total amount of ${U.achievement.getAmount('support')(achievement)}`}
           </Typography>
         )}
       </CardContent>

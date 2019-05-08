@@ -1,7 +1,12 @@
 import * as R from 'ramda'
 
 export default (function actor () {
-  const getAddress = R.prop('id')
+  const getAddress = R.ifElse(
+    R.propSatisfies(R.complement(R.isNil), 'id'),
+    R.prop('id'),
+    R.identity
+  )
+
   const getUserName = R.path(['data', 'userName'])
 
   const getUserNameOrAddress = R.ifElse(

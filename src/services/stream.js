@@ -27,8 +27,8 @@ export const createStreamClient = (streamTool) => {
   // Feeds clients encapsulated
   const feeds = (function () {
     const data = {
-      achievement_aggregated: {
-        common: client.feed('achievement_aggregated', 'common', GETSTREAM_ACHIEVEMENT_COMMON_TOKEN)
+      achievement_flat: {
+        common: client.feed('achievement_flat', 'common', GETSTREAM_ACHIEVEMENT_COMMON_TOKEN)
       },
       timeline: {}
     }
@@ -60,7 +60,8 @@ export const createStreamClient = (streamTool) => {
   async function fetchData (feedName, group, page = 1) {
     const { results, next } = await feeds.get(feedName, group).get({
       limit: LIMIT,
-      offset: LIMIT * (page - 1)
+      offset: LIMIT * (page - 1),
+      reactions: { recent: true, counts: true }
     })
     return { results, hasMore: next !== '' }
   }

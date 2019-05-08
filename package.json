@@ -93,6 +93,7 @@
     "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "bitcoinjs-lib": "^3.3.2",
     "bs58": "^4.0.1",
     "connected-react-router": "^6.2.0-beta.3",
     "copy-to-clipboard": "^3.0.8",

@@ -1,6 +1,7 @@
 import loom from './loom'
 import fakechain from './fakechain'
 import fakechain2 from './fakechain2'
+import bitcoin from './bitcoin'
 import ethereum from './ethereum'
 
 export default (function blockchains () {
@@ -8,7 +9,7 @@ export default (function blockchains () {
   const primary = process.env.NODE_ENV === 'sandbox' ? fakechain : loom
 
   // You can add/change/remove blokchains for value transfers here
-  const nonPrimary = process.env.NODE_ENV === 'sandbox' ? { fakechain2 } : { ethereum }
+  const nonPrimary = process.env.NODE_ENV === 'sandbox' ? { fakechain2 } : { ethereum, bitcoin }
 
   const all = { [primary.key]: primary, ...nonPrimary }
 

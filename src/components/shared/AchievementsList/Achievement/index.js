@@ -34,7 +34,7 @@ const Achievement = ({
   idx,
   userAddress
 }) => {
-  const { actor: creator, title, object } = U.achievement.getReactions('create')(achievement)[0]
+  const { actor: creator, title, object } = achievement
   const confirmReactions = U.achievement.getReactions('confirm')(achievement)
   const supportReactions = U.achievement.getReactions('support')(achievement)
   return (

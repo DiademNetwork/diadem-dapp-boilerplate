@@ -47,7 +47,8 @@ export default (function loom () {
     initFromPrivateKey(privateKeyEncoded)
     return {
       mnemonic,
-      privateKey: privateKeyEncoded
+      privateKey: privateKeyEncoded,
+      address: wallet.address
     }
   }
 
@@ -55,7 +56,7 @@ export default (function loom () {
     const seed = bip39.mnemonicToSeed(mnemonic)
     const privateKeyRaw = CryptoUtils.generatePrivateKeyFromSeed(seed)
     const privateKeyEncoded = CryptoUtils.Uint8ArrayToB64(privateKeyRaw)
-    initFromPrivateKey(privateKeyEncoded)
+    return initFromPrivateKey(privateKeyEncoded)
   }
 
   const initFromPrivateKey = (privateKeyEncoded) => {
@@ -66,23 +67,25 @@ export default (function loom () {
     wallet.address = LocalAddress.fromPublicKey(publicKey).toString()
     web3 = new Web3(new LoomProvider(client, privateKeyRaw))
     initContracts()
+    return wallet
   }
 
   const registerWallet = () => ({ ok: true })
 
-  const initContracts = async () => {
+  const initContracts = () => {
     contracts.token = new web3.eth.Contract(DiademCoin.abi, COIN_ADDRESS, { from: wallet.address })
     contracts.achievements = new web3.eth.Contract(Achievements.abi, ACHIEVEMENTS_ADDRESS, { from: wallet.address })
   }
 
   const getWalletData = async () => {
-    const balanceWei = await contracts.token.methods.balanceOf(wallet.address).call()
+    const { address } = wallet
+    const balanceWei = await contracts.token.methods.balanceOf(address).call()
     const balanceString = web3.utils.fromWei(balanceWei)
     const balance = Number.parseInt(balanceString)
 
     return {
-      addrStr: wallet.address,
-      balance: balance
+      address,
+      balance
     }
   }
 
@@ -106,8 +109,6 @@ export default (function loom () {
     await contracts.achievements.methods.confirm(creatorAddress, link).send()
   }
 
-  const getPrivateKey = () => wallet.privateKey
-
   const needsWallet = fn => async (...args) => {
     if (!wallet.address) {
       throw new Error('Wallet does not exist. Please initialize or generate it.')
@@ -128,7 +129,6 @@ export default (function loom () {
     initFromMnemonic,
     initFromPrivateKey,
     initContracts: needsWallet(initContracts),
-    getPrivateKey: needsWallet(getPrivateKey),
     getWalletData: needsContracts(getWalletData),
     withdraw: needsContracts(withdraw),
     createAchievement: needsContracts(createAchievement),

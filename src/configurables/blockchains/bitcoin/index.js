@@ -1,7 +1,7 @@
 import btc from 'bitcoinjs-lib'
 import axios from 'axios'
+import { BigNumber } from 'bignumber.js'
 import bip39 from '../bip39.english.js'
-
 import logo from './bitcoin.png'
 
 const metadata = {
@@ -18,7 +18,7 @@ const metadata = {
 }
 
 const NETWORK = btc.networks.bitcoin
-const INSIGHT_URL = 'https://insight.bitpay.com/api'
+const API_URL = 'https://chain.so/api/v2'
 
 export default (function bitcoin() {
   let wallet = {
@@ -33,9 +33,11 @@ export default (function bitcoin() {
     const privateKeyRaw = hdMaster.derivePath('m/0')
     const privateKeyEncoded = privateKeyRaw.keyPair.toWIF()
     initFromPrivateKey(privateKeyEncoded)
+    const { address } = wallet
     return {
       mnemonic,
-      privateKey: privateKeyEncoded
+      privateKey: privateKeyEncoded,
+      address
     }
   }
 
@@ -44,24 +46,29 @@ export default (function bitcoin() {
     const hdMaster = btc.HDNode.fromSeedBuffer(Buffer.from(seed), NETWORK)
     const privateKeyRaw = hdMaster.derivePath('m/0')
     const privateKeyEncoded = privateKeyRaw.keyPair.toWIF()
-    initFromPrivateKey(privateKeyEncoded)
+    return initFromPrivateKey(privateKeyEncoded)
   }
 
   const initFromPrivateKey = (privateKey) => {
     const account = new btc.ECPair.fromWIF(privateKey, NETWORK)
     const address = account.getAddress()
     wallet = { privateKey, address }
+    return wallet
   }
 
   const registerWallet = () => ({ ok: true })
 
   const getWalletData = async () => {
     const { address } = wallet
-    const { balance, unconfirmedBalance } = await axios.get(`${INSIGHT_URL}/addr/${address}`)
-    return {
-      addrStr: address,
-      balance,
-      unconfirmedBalance
+    const { data: { status, data } } = await axios.get(`${API_URL}/get_address_balance/BTC/${address}`)
+    if (status === 'success') {
+      return {
+        address,
+        balance: Number.parseFloat(data.confirmed_balance),
+        unconfirmedBalance: Number.parseFloat(data.unconfirmed_balance)
+      }
+    } else {
+      return null
     }
   }
 
@@ -72,9 +79,9 @@ export default (function bitcoin() {
       from: wallet.address,
       to: address,
       feeValue: fees,
-      amount,
+      amount
     })
-    broadcastTransaction(rawTransaction.toHex())
+    return broadcastTransaction(rawTransaction.toHex())
   }
 
   const buildTransaction = async ({ from, to, amount, feeValue }) => {
@@ -82,13 +89,14 @@ export default (function bitcoin() {
     const keyPair = btc.ECPair.fromWIF(privateKey, NETWORK)
 
     const tx = new btc.TransactionBuilder(NETWORK)
+
     const unspents = await fetchUnspents()
 
     const fundValue     = new BigNumber(String(amount)).multipliedBy(1e8).integerValue().toNumber()
-    const totalUnspent  = unspents.reduce((summ, { satoshis }) => summ + satoshis, 0)
-    const skipValue     = totalUnspent - fundValue - feeValue
+    const totalUnspent  = unspents.reduce((summ, { value }) => new BigNumber(String(value)).multipliedBy(1e8).plus(summ), 0)
+    const skipValue     = totalUnspent.minus(fundValue).minus(feeValue).integerValue().toNumber()
 
-    unspents.forEach(({ txid, vout }) => tx.addInput(txid, vout, 0xfffffffe))
+    unspents.forEach(({ txid, output_no }) => tx.addInput(txid, output_no, 0xfffffffe))
     tx.addOutput(to, fundValue)
 
     if (skipValue > 546) {
@@ -109,19 +117,22 @@ export default (function bitcoin() {
       from: wallet.address,
       to: address,
       amount,
-      feeValue: 15000
+      feeValue: metadata.fees.initial
     })
   }
 
-  const fetchUnspents = () => {
+  const fetchUnspents = async () => {
     const { address } = wallet
-    return axios.get(`${INSIGHT_URL}/addr/${address}/utxo`)
+    const { data: { data: { txs } }} = await axios.get(`${API_URL}/get_tx_unspent/BTC/${address}`)
+    return txs
   }
 
-  const broadcastTransaction = (rawTransaction) => {
-    return axios.post(`${INSIGHT_URL}/tx/send`, {
-      rawTx: rawTransaction
+  const broadcastTransaction = async (rawTransaction) => {
+    const response = await axios.post(`${API_URL}/send_tx/BTC`, {
+      tx_hex: rawTransaction
     })
+    const { txid } = response
+    return txid
   }
 
   const needsWallet = fn => async (...args) => {

@@ -40,7 +40,7 @@ const Wallet = ({
           src={blockchain.logo}
         />
       }
-      title={`${blockchain.name} - ${balance} ${blockchains.get(blockchain.key).symbol}${unconfirmedBalance !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
+      title={`${blockchain.name} - ${balance} ${blockchains.get(blockchain.key).symbol}${Number(unconfirmedBalance) !== 0 ? ` (${unconfirmedBalance} pending)` : ''}`}
       subheader={
         status === 'registration-failed'
           ? 'Registration failed. Please try later'
@@ -52,7 +52,8 @@ const Wallet = ({
     <CardActions className={classes.actions}>
       {(() => {
         if (status === 'generated') {
-          return <SaveRecoveryInfo blockchain={blockchain} />
+          const startsOpen = blockchain.key == blockchains.primary.key ? false : true
+          return <SaveRecoveryInfo blockchain={blockchain} startsOpen={startsOpen} />
         }
         if (isRegistered) {
           return (

@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react'
 import * as R from 'ramda'
-import { PrivateKey } from 'qtumcore-lib'
 import { PropTypes as T } from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import DialogContentText from '@material-ui/core/DialogContentText'
@@ -26,7 +25,7 @@ class WalletRecover extends Component {
       const isMnemonicValid = this.isMnemonicValid(value)
       this.setState({ mnemonic: value, isMnemonicValid })
     } else if (name === 'privateKey') {
-      const isPrivateKeyValid = PrivateKey.isValid(value)
+      const isPrivateKeyValid = this.isPrivateKeyValid(value)
       this.setState({ privateKey: value, isPrivateKeyValid })
     }
   }
@@ -53,6 +52,8 @@ class WalletRecover extends Component {
     R.is(String),
     this.is12WordsLong
   ])
+
+  isPrivateKeyValid = (value) => this.isOnlyAlphaNumeric(value)
 
   render () {
     const { blockchain, status } = this.props

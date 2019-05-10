@@ -40,12 +40,13 @@ export default (function fakeChain () {
     return { get, set }
   })()
 
-  const base = Object.freeze({ addrStr: faker.random.uuid() })
+  const base = Object.freeze({ address: faker.random.uuid(), privateKey: 'PrIv4t3K3yF0rF4K3ch4In' })
 
   const generateWallet = () => {
     const mnemonic = 'Here is a mnemonic for Fakechain ... What did you expect?'
     const privateKey = 'PrIv4t3K3yF0rF4K3ch4In'
-    return { mnemonic, privateKey }
+    const { address } = base
+    return { mnemonic, privateKey, address }
   }
 
   const registerWallet = () => {
@@ -71,13 +72,13 @@ export default (function fakeChain () {
 
   const initFromPrivateKey = () => {
     console.log('Fakechain initialized')
+    return base
   }
 
   const initFromMnemonic = () => {
     console.log('Fakechain initialized')
+    return base
   }
-
-  const getPrivateKey = () => 'PrIv4t3K3yF0rF4K3ch4In'
 
   const withdraw = ({ amount }) => {
     console.log(`${amount} ${symbol} tokens withdrawn`)
@@ -104,7 +105,6 @@ export default (function fakeChain () {
     getWalletData,
     generateWallet,
     registerWallet,
-    getPrivateKey,
     symbol,
     withdraw,
     fees: {

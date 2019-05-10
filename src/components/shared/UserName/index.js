@@ -21,7 +21,7 @@ const UserName = ({ actor, loggedUserName, userAddress, userName }) => {
 }
 
 UserName.propTypes = {
-  actor: T.object,
+  actor: T.any,
   loggedUserName: T.string,
   userAddress: T.string,
   userName: T.string

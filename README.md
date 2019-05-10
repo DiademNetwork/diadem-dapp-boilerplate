@@ -1,14 +1,14 @@
 # diadem-dapp-boilerplate
 
-Decentralized application based on Diadem protocol.
+Boilerplate for decentralized applications based on Diadem protocol
 
 ## Develop (non-sandboxed version)
 
-1 - `git clone git@github.com:DiademNetwork/qtum-dapp-client.git`  
-2 - `cd qtum-dapp-client`  
-3 - `yarn install`  
+1 - `git clone git@github.com:DiademNetwork/diadem-dapp-boilerplate.git`
+2 - `cd diadem-dapp-boilerplate`
+3 - `yarn install`
 4 - Create a `.development.env` file (see `.env.example` for ex)
-5 - `yarn start`  
+5 - `yarn start`
 
 
 ## Develop (sandboxed version)
@@ -18,7 +18,7 @@ In the sandbox environment, external calls are mocked, and responses stubbed, so
 
 To start sandboxed app, after repository is cloned and dependencies installed:
 
-1 - `yarn start:sandbox`  
+1 - `yarn start:sandbox`
 2 - Go to `http://localhost:9000`
 
 You will notice a sandbox settings button appearing on left of screen in application.
@@ -94,6 +94,6 @@ Configured social networks:
 - facebook
 
 TIPS: to use facebook in development mode, you will need to:
-1 - If it's the first time you develop on application add `127.0.0.1 local.diadem.network` in your `/etc/hosts` file  
+1 - If it's the first time you develop on application add `127.0.0.1 local.diadem.network` in your `/etc/hosts` file
 2 - Go to `https://local.diadem.network:9000`
 Indeed, facebook force using https

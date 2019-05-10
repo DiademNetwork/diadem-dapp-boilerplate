@@ -22,9 +22,9 @@ export const isRegistered = (name) => getWallet(name)(['isRegistered'])
 export const isRegistrationPending = (name) => getWallet(name)(['isRegistrationPending'])
 
 // data
-export const primaryAddress = getWalletData(blockchains.primary.key)(['addrStr'])
+export const primaryAddress = getWalletData(blockchains.primary.key)(['address'])
 export const data = (name) => getWalletData(name)()
-export const address = (name) => getWalletData(name)(['addrStr'])
+export const address = (name) => getWalletData(name)(['address'])
 export const balance = (name) => getWalletData(name)(['balance'])
 export const unconfirmedBalance = (name) => getWalletData(name)(['unconfirmedBalance'])
 export const balances = createSelector([getAll], R.mapObjIndexed(R.pathOr(0, ['data', 'balance'])))

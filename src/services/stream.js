@@ -8,12 +8,12 @@ const GETSTREAM_APP_ID = process.env.GETSTREAM_APP_ID
 const GETSTREAM_ACHIEVEMENT_COMMON_TOKEN = process.env.GETSTREAM_ACHIEVEMENT_COMMON_TOKEN
 
 export const createStreamClient = (streamTool) => {
-  const client = streamTool.connect(GETSTREAM_APP_KEY, null, GETSTREAM_APP_ID, {'location': 'eu-west'})
+  const client = streamTool.connect(GETSTREAM_APP_KEY, null, GETSTREAM_APP_ID)
 
   const userClient = (function () {
     let userClient = null
     const get = () => userClient
-    const init = () => { userClient = streamTool.connect(GETSTREAM_APP_KEY, userToken.get(), GETSTREAM_APP_ID, {'location': 'eu-west'}) }
+    const init = () => { userClient = streamTool.connect(GETSTREAM_APP_KEY, userToken.get(), GETSTREAM_APP_ID) }
     return Object.freeze({ get, init })
   })()
 
@@ -61,6 +61,7 @@ export const createStreamClient = (streamTool) => {
     const { results, next } = await feeds.get(feedName, group).get({
       limit: LIMIT,
       offset: LIMIT * (page - 1),
+      enrich: true,
       reactions: { recent: true, counts: true }
     })
     return { results, hasMore: next !== '' }

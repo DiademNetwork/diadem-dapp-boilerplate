@@ -13,7 +13,7 @@ import blockchains from 'configurables/blockchains'
 import { push } from 'connected-react-router'
 
 const userID = 'default'
-const AUTO_WALLET_REFRESH_INTERVAL = 6000
+const AUTO_WALLET_REFRESH_INTERVAL = 15000
 
 const checkRegistration = function * ({ blockchainKey, userID }) {
   try {
@@ -42,11 +42,10 @@ const checkRegistrations = function * () {
 // generate a new wallet locally
 const generateWallet = function * ({ blockchainKey }) {
   try {
-    const { generateWallet, getWalletData } = blockchains.get(blockchainKey)
-    const { mnemonic, privateKey } = generateWallet()
-    const walletData = yield call(getWalletData)
+    const { generateWallet } = blockchains.get(blockchainKey)
+    const { mnemonic, privateKey, address } = generateWallet()
     window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
-    yield put(ownA.generate.succeeded({ blockchainKey, data: walletData, mnemonic, privateKey }))
+    yield put(ownA.generate.succeeded({ blockchainKey, data: { address }, mnemonic, privateKey }))
   } catch (error) {
     yield put(ownA.generate.errored({ error }))
   }
@@ -119,35 +118,33 @@ const loadWallet = function * ({ blockchainKey }) {
     if (!privateKey) {
       yield put(ownA.load.failed({ blockchainKey, status: 'no-private-key' }))
     } else {
-      const { initFromPrivateKey, getWalletData } = blockchains.get(blockchainKey)
-      yield call(initFromPrivateKey, privateKey)
-      const walletData = yield call(getWalletData)
-      yield put(ownA.load.succeeded({ blockchainKey, data: walletData }))
+      const { initFromPrivateKey } = blockchains.get(blockchainKey)
+      const { address } = yield call(initFromPrivateKey, privateKey)
+      yield put(ownA.load.succeeded({ blockchainKey, data: { address }, privateKey }))
     }
   } catch (error) {
     throw error
   }
 }
 
-const recoverWallet = function * ({ blockchainKey, mnemonic, privateKey }) {
+const recoverWallet = function * ({ blockchainKey, mnemonic: chosenMnemonic, privateKey: chosenPrivateKey }) {
   try {
     const {
       initFromPrivateKey,
-      initFromMnemonic,
-      getPrivateKey,
-      getWalletData
+      initFromMnemonic
     } = blockchains.get(blockchainKey)
-    if (privateKey) {
-      yield call(initFromPrivateKey, privateKey)
+    let recoveredWallet
+    if (chosenPrivateKey) {
+      recoveredWallet = yield call(initFromPrivateKey, chosenPrivateKey)
     } else if (mnemonic) {
-      yield call(initFromMnemonic, mnemonic)
+      recoveredWallet = yield call(initFromMnemonic, chosenMnemonic)
     } else {
       yield put(ownA.recover.failed({ blockchainKey, status: 'no-mnemonic-or-private-key' }))
       return
     }
-    const walletData = yield call(getWalletData)
-    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, yield call(getPrivateKey))
-    yield put(ownA.recover.succeeded({ blockchainKey, data: walletData }))
+    const { address, privateKey } = recoveredWallet
+    window.localStorage.setItem(`${blockchainKey}-privateKey-${userID}`, privateKey)
+    yield put(ownA.recover.succeeded({ blockchainKey, data: { address }, privateKey }))
   } catch (error) {
     yield put(ownA.recover.errored({ error }))
   }
@@ -163,7 +160,7 @@ const withdraw = function * ({ blockchainKey, ...payload }) {
   }
 }
 
-const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrStr: userAddress } }) {
+const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { address: userAddress } }) {
   if (blockchains.isPrimary(blockchains.get(blockchainKey))) {
     try {
       const { token } = yield call(api.getUserToken, { userAddress })
@@ -181,18 +178,22 @@ const getGetstreamTokenIfNecessary = function * ({ blockchainKey, data: { addrSt
 }
 
 const setUser = function * () {
-  const userAddress = yield select(ownS.primaryAddress)
-  const data = yield select(S.network.data)
-  yield call(stream.setUser, { data, userAddress })
+  try {
+    const userAddress = yield select(ownS.primaryAddress)
+    const data = yield select(S.network.data)
+    yield call(stream.setUser, { data, userAddress })
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 const refreshWallet = function * ({ blockchainKey }) {
   while (true) {
-    yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
     try {
+      console.log('REFRESH WALLET', { blockchainKey })
       const walletData = yield select(ownS.data(blockchainKey))
       const newWalletData = yield call(blockchains.get(blockchainKey).getWalletData)
-      if (R.complement(R.equals)(walletData, newWalletData)) {
+      if (R.both(R.has('address')(newWalletData), R.complement(R.equals)(walletData, newWalletData))) {
         const changes = { }
         const unconfirmedBalance = R.prop('unconfirmedBalance')(walletData)
         const newUnconfirmedBalance = R.prop('unconfirmedBalance')(newWalletData)
@@ -214,11 +215,12 @@ const refreshWallet = function * ({ blockchainKey }) {
               break
           }
         }
-        yield put(ownA.refresh.succeeded({ changes, blockchainKey, data: walletData }))
+        yield put(ownA.refresh.succeeded({ changes, blockchainKey, data: newWalletData }))
       }
     } catch (error) {
       yield put(ownA.refresh.errored({ error }))
     }
+    yield call(delay, AUTO_WALLET_REFRESH_INTERVAL)
   }
 }
 
@@ -230,6 +232,7 @@ export default function * () {
     takeLatest(ownT.GENERATE.requested, generateWallet),
     takeLatest(ownT.GENERATE.succeeded, registerWallet),
     takeLatest(ownT.RECOVER.requested, recoverWallet),
+    takeLatest(ownT.RECOVER.succeeded, registerWallet),
     takeLatest(ownT.WITHDRAW.requested, withdraw),
     takeEvery([
       ownT.GENERATE.succeeded,

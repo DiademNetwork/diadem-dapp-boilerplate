@@ -83,7 +83,7 @@ class Help extends Component {
               2. CREATE YOUR ACHIEVEMENT on Diadem Network with the link to your {network.name} post.
             </Typography>
             <Typography variant="subtitle1" paragraph>
-              3. WITHDRAW QTUM tokens you receive from others supporting your great actions!
+              3. WITHDRAW tokens you receive from others supporting your great actions!
             </Typography>
             <Typography paragraph variant="subtitle1">
               Note you can UPDATE YOUR ACHIEVEMENT if it evolves. Available only if you created one.
@@ -98,12 +98,6 @@ class Help extends Component {
             <Typography variant="subtitle1">
               - CONFIRM achievements you know are real.
             </Typography>
-            <Typography variant="subtitle1">
-              - You want to give immediate SUPPORT ? You can send QTUM tokens right away.
-            </Typography>
-            <Typography paragraph variant="subtitle1">
-              - You prefer waiting for someone you choose to confirm the achievement ? Then DEPOSIT QTUM tokens. They will not be transferred until he does.
-            </Typography>
             <Divider className={classes.divider} />
             <Typography color="textSecondary">
               - {network.name} Login will make it possible to display your name and avatar instead of primary wallet address.
@@ -111,21 +105,6 @@ class Help extends Component {
             <Typography color="textSecondary">
               - Adblockers seems to cause a login bug. Please desactivate them to use DiademNetwork.
             </Typography >
-            <Typography color="textSecondary">
-              - A hot wallet is used to manage QTUM transactions.
-            </Typography>
-            <Typography color="textSecondary">
-              - Please do not use hot wallet to store large amount of QTUM tokens.
-            </Typography>
-            <Typography color="textSecondary">
-              - Creating, Updating and Confirming achievements are free.
-            </Typography>
-            <Typography color="textSecondary">
-              - Supporting, Depositing and Withdrawing require QTUM tokens.
-            </Typography>
-            <Typography color="textSecondary">
-              - <a className={classes.link} target="_target" href="https://docs.qtum.site/en/">Check official QTUM user guide here</a> to know how to send QTUM tokens to your hot wallet.
-            </Typography>
             <Typography color="textSecondary" paragraph>
               - NEVER EVER lose privateKey/mnemonic you are given at first login. If you lose it, you lose funds inside.
             </Typography>

@@ -1,7 +1,7 @@
 {
-  "name": "modern-react-boilerplate",
-  "version": "1.0.0",
-  "description": "Modern boilerplate for React project",
+  "name": "diadem-dapp-boilerplate",
+  "version": "2.0.0",
+  "description": "React boilerplate for diadem dapps",
   "main": "index.js",
   "scripts": {
     "clean-dist": "./scripts/clean-dist.js",
@@ -93,6 +93,7 @@
     "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "bignumber.js": "^7.2.1",
     "bitcoinjs-lib": "^3.3.2",
     "bs58": "^4.0.1",
     "connected-react-router": "^6.2.0-beta.3",

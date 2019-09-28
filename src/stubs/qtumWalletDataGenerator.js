@@ -34,7 +34,7 @@ const transactions = (function () {
   return { get, set }
 })()
 
-const base = Object.freeze({ addrStr: faker.random.uuid() })
+const base = Object.freeze({ address: faker.random.uuid() })
 
 export default () => {
   const { pendingTxID } = mocksController.get()

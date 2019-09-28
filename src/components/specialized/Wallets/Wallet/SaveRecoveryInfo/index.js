@@ -19,14 +19,14 @@ class WalletSaveRecoveryInfo extends Component {
   }
 
   render () {
-    const { blockchain, mnemonic, privateKey } = this.props
+    const { blockchain, mnemonic, privateKey, startsOpen } = this.props
     return (
       <Modal
         name={`${blockchain.key}-recovery-info-modal`}
         onConfirm={this.handleConfirm}
         openButtonText="Save Recovery Info"
         confirmButtonText="I saved them somewhere safe"
-        startsOpen
+        startsOpen={startsOpen}
         noCancelButton
         maxWidth="lg"
         title={`Save your ${blockchain.name} wallet recovery info!`}
@@ -80,7 +80,8 @@ WalletSaveRecoveryInfo.propTypes = {
   blockchain: T.object,
   infoSaved: T.func,
   mnemonic: T.string,
-  privateKey: T.string
+  privateKey: T.string,
+  startsOpen: T.bool
 }
 
 export default R.compose(

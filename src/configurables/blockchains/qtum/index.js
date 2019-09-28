@@ -6,21 +6,32 @@ const network = networks[process.env.NODE_ENV === 'production' ? 'mainnet' : 'te
 export default (function qtum () {
   let walletUtil = null
 
+  const getPrivateKey = () => walletUtil.toWIF()
+
   const generateWallet = () => {
     const mnemonic = generateMnemonic()
     walletUtil = network.fromMnemonic(mnemonic)
-    const privateKey = walletUtil.toWIF()
-    return { mnemonic, privateKey }
+    const privateKey = getPrivateKey()
+    const address = walletUtil.addrStr
+    return { mnemonic, privateKey, address }
   }
 
   const registerWallet = () => ({ ok: true })
 
   const initFromPrivateKey = async (privateKey) => {
     walletUtil = await network.fromWIF(privateKey)
+    return {
+      privateKey: getPrivateKey(),
+      address: walletUtil.addrStr
+    }
   }
 
   const initFromMnemonic = async (mnemonic) => {
     walletUtil = await network.fromMnemonic(mnemonic)
+    return {
+      privateKey: getPrivateKey(),
+      address: walletUtil.addrStr
+    }
   }
 
   const needsWallet = fn => async (...args) => {
@@ -29,8 +40,6 @@ export default (function qtum () {
     }
     return fn(...args)
   }
-
-  const getPrivateKey = () => walletUtil.toWIF()
 
   const getWalletData = async () => walletUtil.getInfo()
 
@@ -58,7 +67,6 @@ export default (function qtum () {
     getWalletData: needsWallet(getWalletData),
     generateWallet,
     registerWallet,
-    getPrivateKey: needsWallet(getPrivateKey),
     symbol: 'QTUM',
     withdraw: needsWallet(withdraw),
     fees: {
